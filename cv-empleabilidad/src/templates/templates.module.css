@@ -1,0 +1,224 @@
+/* Página A4 a 96 dpi. Las plantillas usan la paleta institucional con
+   moderación: el CV es del usuario, no una pieza municipal. */
+.page {
+  width: 794px;
+  min-height: 1123px;
+  background: #fff;
+  color: var(--muni-gris-texto);
+  font-family: var(--muni-font-texto);
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.page h1,
+.page h2 {
+  font-family: var(--muni-font-titulos);
+  margin: 0;
+}
+
+.page p {
+  margin: 0;
+}
+
+.page ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+}
+
+.titular {
+  font-weight: 600;
+}
+
+.plain {
+  list-style: none;
+  padding: 0 !important;
+}
+
+.item {
+  margin-bottom: 12px;
+}
+
+.item header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 4px;
+  align-items: baseline;
+}
+
+.item header em {
+  margin-left: auto;
+  font-style: normal;
+  font-size: 12px;
+  color: #5b6870;
+}
+
+/* ---------- Clásico ---------- */
+.clasico {
+  padding: 56px 64px;
+}
+
+.clasicoHeader {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.clasicoHeader h1 {
+  font-size: 30px;
+  color: var(--muni-azul);
+  letter-spacing: 0.5px;
+}
+
+.clasicoHeader .titular {
+  font-size: 15px;
+  margin-top: 4px;
+}
+
+.contacto {
+  margin-top: 8px !important;
+  font-size: 12px;
+}
+
+.clasico section {
+  margin-bottom: 18px;
+}
+
+.clasico h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--muni-azul);
+  border-bottom: 1.5px solid var(--muni-azul);
+  padding-bottom: 4px;
+  margin-bottom: 10px;
+}
+
+/* ---------- Moderno ---------- */
+.moderno {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+}
+
+.modernoSide {
+  background: var(--muni-azul);
+  color: var(--muni-marfil);
+  padding: 48px 28px;
+  overflow-wrap: anywhere;
+}
+
+.modernoSide h1 {
+  font-size: 26px;
+  line-height: 1.15;
+  color: #fff;
+}
+
+.modernoSide .titular {
+  margin-top: 8px;
+  color: var(--muni-marfil);
+}
+
+.modernoSide h2 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #fff;
+  margin: 28px 0 8px;
+  padding-top: 12px;
+  border-top: 1px solid rgb(245 241 232 / 0.35);
+}
+
+.modernoSide li {
+  margin-bottom: 4px;
+}
+
+.modernoMain {
+  padding: 48px 40px;
+}
+
+.modernoMain section {
+  margin-bottom: 22px;
+}
+
+.modernoMain h2 {
+  font-size: 17px;
+  color: var(--muni-azul);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modernoMain h2::before {
+  content: '';
+  width: 24px;
+  height: 4px;
+  border-radius: var(--muni-radius-md);
+  background: var(--muni-verde);
+}
+
+/* ---------- Compacto ---------- */
+.compacto {
+  padding: 40px 48px;
+  font-size: 12px;
+}
+
+.compactoHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  border-left: 6px solid var(--muni-verde);
+  padding-left: 16px;
+  margin-bottom: 16px;
+}
+
+.compactoHeader h1 {
+  font-size: 24px;
+  color: var(--muni-gris-texto);
+}
+
+.compactoHeader .titular {
+  color: var(--muni-verde);
+}
+
+.compactoHeader ul {
+  text-align: right;
+  font-size: 11.5px;
+}
+
+.compactoPerfil {
+  background: var(--muni-gris-claro);
+  padding: 10px 14px;
+  border-radius: var(--muni-radius-md);
+  margin-bottom: 16px !important;
+}
+
+.compactoRow {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 16px;
+  padding: 10px 0;
+  border-top: 1px solid var(--muni-gris-claro);
+}
+
+.compactoRow h2 {
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--muni-verde);
+}
+
+.compacto .item {
+  margin-bottom: 8px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chips span {
+  border: 1px solid var(--muni-gris-claro);
+  border-radius: var(--muni-radius-sm);
+  padding: 1px 8px;
+}

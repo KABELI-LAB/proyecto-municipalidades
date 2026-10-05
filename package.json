@@ -1,0 +1,20 @@
+{
+  "name": "proyecto-municipalidades",
+  "private": true,
+  "description": "Plataforma web para municipalidades (Muni Hualañé). Monorepo con un módulo por pestaña del sitio.",
+  "workspaces": [
+    "design-system",
+    "cv-empleabilidad"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev:cv": "npm run dev -w cv-empleabilidad",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "check": "npm run typecheck && npm run lint && npm run test"
+  }
+}

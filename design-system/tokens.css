@@ -1,0 +1,62 @@
+/*
+ * Muni Hualañé · tokens del design system.
+ * Fuente de verdad: tokens.json (copiado del deck "Muni Hualañé · Design System").
+ * Paleta preliminar, pendiente de aprobación institucional.
+ */
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("./fonts/Montserrat-latin.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Sans 3";
+  src: url("./fonts/SourceSans3-latin.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Color — principales (azul ≈45 %, neutros ≈30 %, verde ≈15 %) */
+  --muni-azul: #174a6e;
+  --muni-verde: #4e7d52;
+  --muni-marfil: #f5f1e8;
+  --muni-blanco: #ffffff;
+
+  /* Color — secundarios (≈10 % combinados, solo acentos) */
+  --muni-celeste: #6ba8b8; /* nunca con texto blanco */
+  --muni-terracota: #b96545; /* texto blanco solo grande/negrita */
+  --muni-amarillo: #e5b84b; /* nunca con texto blanco */
+
+  /* Neutros */
+  --muni-gris-texto: #263238;
+  --muni-gris-claro: #e8edf0;
+
+  /* Tipografía */
+  --muni-font-titulos: Montserrat, "Aptos Display", Arial, sans-serif;
+  --muni-font-texto: "Source Sans 3", Aptos, Calibri, Arial, sans-serif;
+  --muni-text-h1: 44px;
+  --muni-text-h2: 29px;
+  --muni-text-h3: 20px;
+  --muni-text-cuerpo: 15px;
+  --muni-text-nota: 12px;
+
+  /* Espaciado */
+  --muni-space-1: 4px;
+  --muni-space-2: 8px;
+  --muni-space-4: 16px;
+  --muni-space-6: 24px;
+  --muni-space-8: 40px;
+
+  /* Radios: esquinas casi rectas */
+  --muni-radius-sm: 3px;
+  --muni-radius-md: 4px;
+  --muni-radius-full: 9999px;
+
+  /* Foco accesible */
+  --muni-focus: 0 0 0 3px var(--muni-amarillo);
+}
