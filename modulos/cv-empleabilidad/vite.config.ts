@@ -4,10 +4,8 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  server: {
-    // El design system vive fuera de este paquete (../design-system).
-    fs: { allow: ['..'] },
-  },
+  // 5173 es del sitio anfitrión; cada módulo usa su propio puerto.
+  server: { port: 5174 },
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],

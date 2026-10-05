@@ -1,8 +1,8 @@
 {
-  "name": "@muni/cv-empleabilidad",
+  "name": "@muni/__NOMBRE__",
   "version": "0.1.0",
   "private": true,
-  "description": "Pestaña 'Revisa tu CV': sube un CV (PDF/DOCX), recibe feedback y 3 diseños sugeridos.",
+  "description": "__LABEL__ · módulo del sitio municipal (responsable: __DUENO__).",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
@@ -21,8 +21,7 @@
     "react-dom": "^19.3.0"
   },
   "dependencies": {
-    "mammoth": "^1.13.0",
-    "pdfjs-dist": "^6.4.299"
+    "@muni/design-system": "*"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

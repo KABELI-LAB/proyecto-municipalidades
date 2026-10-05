@@ -1,0 +1,22 @@
+{
+  "name": "@muni/sitio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sitio anfitrión: inicio + navbar que monta las pestañas de cada módulo.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@muni/cv-empleabilidad": "^0.1.0",
+    "@muni/design-system": "^0.1.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-router-dom": "^7.18.4"
+  }
+}

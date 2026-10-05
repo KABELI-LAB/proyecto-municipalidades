@@ -1,0 +1,61 @@
+/* Estilos de la pestaña. Solo variables del design system (--muni-*). */
+
+.root {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--muni-space-8) var(--muni-space-4);
+  font-family: var(--muni-font-texto);
+  font-size: var(--muni-text-cuerpo);
+  line-height: 1.5;
+  color: var(--muni-gris-texto);
+  display: flex;
+  flex-direction: column;
+  gap: var(--muni-space-6);
+}
+
+.root h2 {
+  font-family: var(--muni-font-titulos);
+  font-size: var(--muni-text-h1);
+  line-height: 1.15;
+  color: var(--muni-azul);
+  margin: 0;
+}
+
+.root p {
+  margin: 0;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--muni-space-4);
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--muni-space-2);
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muni-azul);
+  font-size: 13px;
+}
+
+.eyebrowBar {
+  width: 32px;
+  height: 6px;
+  border-radius: var(--muni-radius-md);
+  background: var(--muni-verde);
+}
+
+.lead {
+  font-size: 18px;
+  max-width: 60ch;
+}
+
+.panel {
+  background: var(--muni-marfil);
+  border-radius: var(--muni-radius-md);
+  padding: var(--muni-space-6);
+}

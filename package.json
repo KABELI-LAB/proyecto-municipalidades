@@ -4,13 +4,16 @@
   "description": "Plataforma web para municipalidades (Muni Hualañé). Monorepo con un módulo por pestaña del sitio.",
   "workspaces": [
     "design-system",
-    "cv-empleabilidad"
+    "sitio",
+    "modulos/*"
   ],
   "engines": {
     "node": ">=22"
   },
   "scripts": {
-    "dev:cv": "npm run dev -w cv-empleabilidad",
+    "dev": "npm run dev -w sitio",
+    "dev:cv": "npm run dev -w @muni/cv-empleabilidad",
+    "nuevo-modulo": "node scripts/nuevo-modulo.mjs",
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
