@@ -1,4 +1,5 @@
 import { analyzeCv, AnalyzeError, MAX_TEXTO, readAiConfig } from './analyze.ts'
+import { json } from './http.ts'
 import { requestSchema } from './schema.ts'
 
 /**
@@ -41,11 +42,4 @@ export async function handleAnalyzeRequest(
     console.error('[cv-analyze] error inesperado', (err as Error).name)
     return json(500, { error: 'Ocurrió un problema al procesar su CV.' })
   }
-}
-
-function json(status: number, data: unknown): Response {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' },
-  })
 }

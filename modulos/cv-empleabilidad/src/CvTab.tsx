@@ -5,13 +5,15 @@ import { UploadZone } from './components/UploadZone'
 import { extractText } from './lib/extractText'
 import { validateCvFile } from './lib/validateFile'
 import { createDefaultAnalyzer } from './services/analyzer'
+import { createDefaultMailer, type CvMailer } from './services/mailer'
 import { AnalisisError, type CvAnalysis, type CvAnalyzer } from './services/types'
-import './styles/print.css'
 import s from './styles/ui.module.css'
 
 export interface CvTabProps {
   /** Analizador a usar. Por defecto: backend si VITE_CV_API_URL existe, si no el mock. */
   analyzer?: CvAnalyzer
+  /** Envío del CV por correo. Por defecto: backend si VITE_CV_API_URL existe, si no uno simulado. */
+  mailer?: CvMailer
 }
 
 type Estado =
@@ -27,8 +29,9 @@ const MIN_PALABRAS = 30
  * Pestaña "Revisa tu CV". Componente autocontenido: no asume router ni estilos
  * globales del sitio anfitrión, solo las variables CSS del design system.
  */
-export function CvTab({ analyzer }: CvTabProps) {
+export function CvTab({ analyzer, mailer }: CvTabProps) {
   const activeAnalyzer = useMemo(() => analyzer ?? createDefaultAnalyzer(), [analyzer])
+  const activeMailer = useMemo(() => mailer ?? createDefaultMailer(), [mailer])
   const [estado, setEstado] = useState<Estado>({ tipo: 'inicio' })
   const abortRef = useRef<AbortController | null>(null)
   const resultRef = useRef<HTMLHeadingElement>(null)
@@ -92,7 +95,7 @@ export function CvTab({ analyzer }: CvTabProps) {
         <ol className={s.steps}>
           <li><span>1</span>Suba su CV en PDF o Word</li>
           <li><span>2</span>Revise las sugerencias</li>
-          <li><span>3</span>Elija un diseño y descárguelo</li>
+          <li><span>3</span>Elija un diseño y recíbalo por correo</li>
         </ol>
       </header>
 
@@ -128,7 +131,7 @@ export function CvTab({ analyzer }: CvTabProps) {
           )}
           <div className={s.results}>
             <FeedbackPanel analysis={estado.analysis} />
-            <DesignGallery cv={estado.analysis.cvMejorado} />
+            <DesignGallery cv={estado.analysis.cvMejorado} mailer={activeMailer} />
           </div>
         </>
       )}

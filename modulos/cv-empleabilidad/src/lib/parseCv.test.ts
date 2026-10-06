@@ -8,7 +8,7 @@ describe('parseCv', () => {
   it('extrae nombre, titular y contacto', () => {
     expect(cv.nombre).toBe('María José Fuentes Rojas')
     expect(cv.titular).toBe('Técnico en Administración')
-    expect(cv.contacto.email).toBe('maria.fuentes@gmail.com')
+    expect(cv.contacto.email).toBe('maria.fuentes@example.com')
     expect(cv.contacto.telefono).toContain('8765')
   })
 

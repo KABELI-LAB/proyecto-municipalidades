@@ -1,6 +1,6 @@
 # Módulo cv-empleabilidad · "Revisa tu CV"
 
-Pestaña donde una persona sube su CV (PDF o DOCX), recibe feedback para mejorarlo y obtiene su CV reestructurado en **3 diseños** (Clásico, Moderno, Compacto) descargables en PDF.
+Pestaña donde una persona sube su CV (PDF o DOCX), recibe feedback para mejorarlo y obtiene su CV reestructurado en **3 diseños** (Clásico, Moderno, Compacto). Del diseño elegido puede descargar PDF y Word, o recibir ambos en su correo.
 
 ## Estado actual
 
@@ -10,7 +10,7 @@ Pestaña donde una persona sube su CV (PDF o DOCX), recibe feedback para mejorar
 
 ## Flujo
 
-`UploadZone` → `validateCvFile` → `extractText` → `CvAnalyzer.analyze()` → `FeedbackPanel` + `DesignGallery`
+`UploadZone` → `validateCvFile` → `extractText` → `CvAnalyzer.analyze()` → `FeedbackPanel` + `DesignGallery` → `generarArchivos()` (PDF + Word) → descarga o `EnvioCorreo` → `CvMailer.enviar()`
 
 El estado vive en `CvTab.tsx` como unión discriminada (`inicio | leyendo | analizando | listo | error`).
 
@@ -26,11 +26,14 @@ El estado vive en `CvTab.tsx` como unión discriminada (`inicio | leyendo | anal
 | `src/services/analyzer.ts` | Elige mock o HTTP según `VITE_CV_API_URL` |
 | `src/lib/parseCv.ts` | Estructura texto plano → `CvData` (heurístico) |
 | `src/lib/extractText.ts` | PDF/DOCX → texto |
-| `src/templates/` | Las 3 plantillas A4 (794×1123px). Registro en `templates/index.ts` |
-| `src/styles/ui.module.css` | Estilos de la UI; `print.css` es global a propósito (impresión) |
+| `src/templates/` | Las 3 plantillas A4 en HTML (vista previa, 794×1123px). Registro en `templates/index.ts` |
+| `src/export/` | Los mismos 3 diseños como PDF real (`pdf.tsx`, @react-pdf/renderer) y Word (`docx.ts`). Carga diferida |
+| `src/services/mailer.ts` | Cliente de envío por correo (`POST {VITE_CV_API_URL}/cv/enviar`) + mock |
+| `src/components/EnvioCorreo.tsx` | Formulario de correo (validación, honeypot, estados) |
+| `src/styles/ui.module.css` | Estilos de la UI |
 | `src/dev/` | Sitio anfitrión simulado, solo para `npm run dev`. No se exporta |
 | `src/test/fixtures.ts` | CVs ficticios para tests |
-| `server/` | Backend: handler, llamada al modelo, esquemas, prompt y plugin de Vite (ver docs/contrato-ia.md) |
+| `server/` | Backend: análisis (`handler.ts`, `analyze.ts`, `schema.ts`, `prompt.ts`), correo (`email.ts`) y plugin de Vite. Ver docs/contrato-ia.md |
 
 ## Comandos (desde esta carpeta)
 
@@ -39,7 +42,8 @@ El estado vive en `CvTab.tsx` como unión discriminada (`inicio | leyendo | anal
 ## Convenciones del módulo
 
 - Textos de UI en español con trato de usted (ver CLAUDE.md raíz).
-- Para agregar un 4º diseño: crear `src/templates/XTemplate.tsx`, usar las piezas de `parts.tsx`, registrarlo en `TEMPLATES` y añadir un caso al test de `CvTab`.
+- Un diseño existe en **tres lugares** que deben verse igual: `src/templates/` (HTML), `src/export/pdf.tsx` y `src/export/docx.ts`. Para agregar un 4º: implementarlo en los tres, registrarlo en `TEMPLATES` y en los mapas `PAGINAS`/`DISENOS`, y sumarlo a `export.test.tsx`.
+- En react-pdf, fija `lineHeight` en textos grandes: el heredado se calcula con el tamaño base y se superponen.
 - Para agregar una regla al mock: añadirla en `analizarTexto` con `add({...})` y cubrirla en `mockAnalyzer.test.ts`.
 - Las plantillas son el CV **del usuario**: usan la paleta con moderación y deben imprimirse bien en blanco y negro.
 - Verifica cambios visuales con `npm run dev` (o el plugin Playwright si está instalado), no solo con tests.
@@ -49,5 +53,5 @@ El estado vive en `CvTab.tsx` como unión discriminada (`inicio | leyendo | anal
 
 ## Próximos pasos conocidos
 
-1. Rate limiting del endpoint por IP.
-2. Exportar PDF real (hoy usa `window.print()`), y opcionalmente DOCX.
+1. Rate limiting por IP de `/api/cv/analyze` y `/api/cv/enviar`.
+2. CAPTCHA en el formulario de correo si aparece abuso.

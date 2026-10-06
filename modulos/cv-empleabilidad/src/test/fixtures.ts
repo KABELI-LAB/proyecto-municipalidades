@@ -2,7 +2,7 @@
 
 export const CV_COMPLETO = `María José Fuentes Rojas
 Técnico en Administración
-maria.fuentes@gmail.com | +56 9 8765 4321 | Hualañé
+maria.fuentes@example.com | +56 9 8765 4321 | Hualañé
 
 Perfil profesional
 Técnico en administración con cinco años de experiencia en atención de público, gestión documental y apoyo administrativo en servicios públicos. Me destaco por mi orden, trato cordial y manejo de herramientas ofimáticas.

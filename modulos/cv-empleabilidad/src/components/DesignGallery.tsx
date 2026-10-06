@@ -1,8 +1,10 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
+import { useLayoutEffect, useRef, useState } from 'react'
+import { descargar, generarArchivos, type ArchivoCv } from '../export'
+import type { CvMailer } from '../services/mailer'
 import type { CvData } from '../services/types'
 import s from '../styles/ui.module.css'
 import { TEMPLATES, type CvTemplate } from '../templates'
+import { EnvioCorreo } from './EnvioCorreo'
 
 const PAGE_WIDTH = 794
 
@@ -22,32 +24,45 @@ function useFitScale() {
   return { ref, scale }
 }
 
-export function DesignGallery({ cv }: { cv: CvData }) {
+export function DesignGallery({ cv, mailer }: { cv: CvData; mailer: CvMailer }) {
   const [activo, setActivo] = useState<CvTemplate['id']>('clasico')
-  const [imprimiendo, setImprimiendo] = useState(false)
+  const [preparando, setPreparando] = useState<'pdf' | 'docx' | null>(null)
+  const [errorDescarga, setErrorDescarga] = useState(false)
+  const cache = useRef(new Map<string, Promise<ArchivoCv[]>>())
   const { ref, scale } = useFitScale()
   const template = TEMPLATES.find((t) => t.id === activo)!
   const { Component } = template
 
-  // Imprime solo la plantilla: se monta en un portal y una clase en <body>
-  // oculta el resto del sitio anfitrión durante la impresión.
-  useEffect(() => {
-    if (!imprimiendo) return
-    document.body.classList.add('cv-print-mode')
-    const done = () => setImprimiendo(false)
-    window.addEventListener('afterprint', done)
-    const t = setTimeout(() => window.print(), 50)
-    return () => {
-      clearTimeout(t)
-      window.removeEventListener('afterprint', done)
-      document.body.classList.remove('cv-print-mode')
+  // Un mismo diseño se genera una sola vez, tanto para descargar como para enviar.
+  const generar = () => {
+    let p = cache.current.get(activo)
+    if (!p) {
+      p = generarArchivos(cv, activo)
+      p.catch(() => cache.current.delete(activo))
+      cache.current.set(activo, p)
     }
-  }, [imprimiendo])
+    return p
+  }
+
+  async function bajar(tipo: 'pdf' | 'docx') {
+    if (preparando) return
+    setPreparando(tipo)
+    setErrorDescarga(false)
+    try {
+      const archivo = (await generar()).find((a) => a.tipo === tipo)
+      if (archivo) descargar(archivo)
+    } catch (err) {
+      console.error('[cv-empleabilidad] exportación', err)
+      setErrorDescarga(true)
+    } finally {
+      setPreparando(null)
+    }
+  }
 
   return (
     <section className={s.panel} aria-labelledby="cv-designs-title">
       <h3 id="cv-designs-title">Su CV en 3 diseños</h3>
-      <p className={s.nota}>Revise el contenido sugerido, elija un diseño y descárguelo en PDF. Los textos entre [corchetes] debe completarlos usted.</p>
+      <p className={s.nota}>Elija un diseño, descárguelo o recíbalo por correo. Los textos entre [corchetes] debe completarlos usted: el archivo Word le permite editarlos.</p>
 
       <div className={s.designTabs} role="tablist" aria-label="Diseños de CV">
         {TEMPLATES.map((t) => (
@@ -74,19 +89,34 @@ export function DesignGallery({ cv }: { cv: CvData }) {
         </div>
       </div>
 
+      {/* aria-disabled (no disabled) para que el foco no se pierda mientras se prepara el archivo. */}
       <div className={s.actions}>
-        <button type="button" className={s.btnPrimary} onClick={() => setImprimiendo(true)}>
-          Descargar diseño {template.nombre} (PDF)
+        <button type="button" className={s.btnSecondary} onClick={() => bajar('docx')} aria-disabled={preparando !== null || undefined}>
+          {preparando === 'docx' ? 'Preparando…' : 'Descargar Word'}
+        </button>
+        <button type="button" className={s.btnPrimary} onClick={() => bajar('pdf')} aria-disabled={preparando !== null || undefined}>
+          {preparando === 'pdf' ? 'Preparando…' : 'Descargar PDF'}
         </button>
       </div>
+      <p aria-live="polite" className={s.nota}>
+        {preparando && `Preparando el archivo ${preparando === 'pdf' ? 'PDF' : 'Word'}…`}
+      </p>
+      {errorDescarga && (
+        <p className={s.alert} role="alert">
+          No pudimos preparar el archivo. Inténtelo nuevamente.
+        </p>
+      )}
 
-      {imprimiendo &&
-        createPortal(
-          <div className="cv-print-root">
-            <Component cv={cv} />
-          </div>,
-          document.body,
-        )}
+      {/* key: al cambiar de diseño, el formulario se reinicia con el nuevo nombre. */}
+      <EnvioCorreo
+        key={activo}
+        mailer={mailer}
+        diseno={activo}
+        nombreDiseno={template.nombre}
+        nombrePersona={cv.nombre}
+        emailSugerido={cv.contacto.email}
+        generar={generar}
+      />
     </section>
   )
 }

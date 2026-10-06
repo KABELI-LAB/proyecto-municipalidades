@@ -5,6 +5,7 @@
 export { CvTab, type CvTabProps } from './CvTab'
 export { mockAnalyzer } from './services/mockAnalyzer'
 export { createHttpAnalyzer } from './services/httpAnalyzer'
+export { createHttpMailer, mockMailer, type CvMailer } from './services/mailer'
 export { AnalisisError, type CvAnalysis, type CvAnalyzer, type CvData, type CvInput, type Sugerencia } from './services/types'
 
 /** Metadatos para registrar la pestaña en el sitio anfitrión. */

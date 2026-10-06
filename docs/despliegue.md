@@ -23,11 +23,19 @@ Si una clave se filtra por error: **rótela de inmediato** en el proveedor (Azur
    | `AZURE_OPENAI_ENDPOINT` | Endpoint de Azure AI Foundry (termina en `/openai/v1`) | Sí |
    | `AZURE_OPENAI_API_KEY` | API key del recurso | **Sí** |
    | `AZURE_OPENAI_DEPLOYMENT` | Nombre del deployment del modelo | No |
+   | `RESEND_API_KEY` | API key de [Resend](https://resend.com) para enviar correos | **Sí** |
+   | `CV_EMAIL_FROM` | Remitente con dominio verificado en Resend, ej. `Municipalidad de Hualañé <cv@su-dominio.cl>` | No |
 
    `VITE_CV_API_URL=/api` ya viene en `netlify.toml` (no es secreto).
 4. Haga un deploy y pruebe la pestaña "Revisa tu CV": el aviso bajo la zona de carga debe mencionar el servicio de inteligencia artificial y no debe aparecer el banner "Modo demostración".
 
-## Desarrollo local con IA
+## Resend (envío de correos)
+
+1. Cree una cuenta en https://resend.com con el correo del equipo.
+2. En **Domains**, agregue el dominio remitente (ej. un subdominio `cv.su-dominio.cl`) y cree en su DNS los registros que Resend indica (SPF, DKIM). Sin dominio verificado, Resend solo permite enviar a la dirección de la propia cuenta.
+3. En **API Keys**, cree una clave con permiso **Sending access** (solo envío) y péguela directamente en Netlify / `.env`.
+
+## Desarrollo local con IA y correo
 
 ```bash
 cp .env.example .env     # luego complete los valores en su editor
@@ -40,6 +48,7 @@ Sin `.env` (o sin `VITE_CV_API_URL`), el módulo de CV usa el analizador simulad
 
 | Ruta | Función | Módulo |
 |---|---|---|
-| `POST /api/cv/analyze` | `netlify/functions/cv-analyze.mts` | `modulos/cv-empleabilidad/server/` |
+| `POST /api/cv/analyze` | `netlify/functions/cv-analyze.mts` | `modulos/cv-empleabilidad/server/handler.ts` |
+| `POST /api/cv/enviar` | `netlify/functions/cv-enviar.mts` | `modulos/cv-empleabilidad/server/email.ts` |
 
 Para agregar un endpoint de otro módulo: ponga la lógica en `modulos/<nombre>/server/` como un handler `Request → Response`, cree un wrapper delgado en `netlify/functions/` con `config.path = '/api/<nombre>/...'` y documente sus variables en `.env.example` y en esta tabla.

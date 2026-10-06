@@ -1,8 +1,10 @@
-# Contrato del servicio de análisis de CV
+# Contratos de los servicios del módulo CV
+
+## 1. Análisis de CV
 
 Implementado en `server/` y publicado como función de Netlify (`netlify/functions/cv-analyze.mts`). El frontend lo usa cuando existe `VITE_CV_API_URL` (en Netlify: `/api`).
 
-## Endpoint
+### Endpoint
 
 `POST /api/cv/analyze`
 
@@ -39,7 +41,7 @@ Respuesta `200`: un `CvAnalysis` sin `origen` (fuente de verdad: `src/services/t
 
 Errores: `{ "error": "<mensaje para mostrar en pantalla>" }` con `400` (solicitud inválida), `405`, `413` (texto muy largo), `502` (el modelo falló o devolvió algo inválido), `503` (no configurado o límite de solicitudes del modelo), `504` (timeout).
 
-## Implementación
+### Implementación
 
 | Archivo | Rol |
 |---|---|
@@ -51,7 +53,7 @@ Errores: `{ "error": "<mensaje para mostrar en pantalla>" }` con `400` (solicitu
 
 Variables: `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_DEPLOYMENT` (ver `docs/despliegue.md` en la raíz).
 
-## Garantías
+### Garantías
 
 - La API key solo existe en el servidor (Netlify env vars / `.env` local).
 - El texto del CV y la respuesta del modelo **nunca se registran en logs**; solo códigos de error. Hay un test que lo verifica.
@@ -59,6 +61,35 @@ Variables: `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_DEPLOY
 - El modelo no debe inventar datos: lo que falta va entre `[corchetes]` para que la persona lo complete.
 - Timeout de 55 s (las funciones síncronas de Netlify cortan a los 60 s).
 
+## 2. Envío del CV por correo
+
+`POST /api/cv/enviar` (`server/email.ts`, función `netlify/functions/cv-enviar.mts`). El navegador genera el PDF y el Word del diseño elegido (`src/export/`) y los envía en base64:
+
+```json
+{
+  "email": "persona@example.com",
+  "nombre": "María José Fuentes",
+  "diseno": "moderno",
+  "adjuntos": [
+    { "nombre": "CV-Maria-Jose-Fuentes-moderno.pdf", "contenido": "<base64>" },
+    { "nombre": "CV-Maria-Jose-Fuentes-moderno.docx", "contenido": "<base64>" }
+  ],
+  "sitioWeb": ""
+}
+```
+
+Respuesta `200 { "ok": true }` o `{ "error": "<mensaje para mostrar>" }` con `400` (correo o adjuntos inválidos), `405`, `502`, `503` (sin configurar o límite de Resend).
+
+Protecciones contra abuso (el endpoint envía correos a direcciones arbitrarias):
+
+- Asunto y cuerpo **fijos** (`contenidoCorreo`); el nombre solo se usa para el saludo y se escapa en el HTML.
+- Máximo 2 adjuntos, 2 MB cada uno, uno PDF y uno DOCX, verificados por **firma de archivo** (`%PDF` / `PK`), no solo por la extensión.
+- Honeypot `sitioWeb`: si viene lleno, se responde `200` sin enviar.
+- No se guarda el correo ni el CV; los logs solo registran códigos de estado.
+
+Variables: `RESEND_API_KEY`, `CV_EMAIL_FROM`.
+
 ## Pendiente
 
-- Rate limiting por IP (hoy solo hay límite de tamaño). Evaluar las reglas de rate limit de Netlify o un contador en Netlify Blobs.
+- Rate limiting por IP en ambos endpoints (hoy hay límites de tamaño y honeypot). Evaluar las reglas de rate limit de Netlify o un contador en Netlify Blobs.
+- Si aparece abuso del envío: agregar un CAPTCHA (ej. Cloudflare Turnstile) al formulario de correo.

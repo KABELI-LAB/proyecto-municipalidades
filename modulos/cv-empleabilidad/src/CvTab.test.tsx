@@ -3,11 +3,21 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { CvTab } from './CvTab'
 import { analizarTexto } from './services/mockAnalyzer'
+import type { CvMailer } from './services/mailer'
 import type { CvAnalyzer } from './services/types'
 import { CV_COMPLETO } from './test/fixtures'
 
 vi.mock('./lib/extractText', () => ({
   extractText: vi.fn(async () => CV_COMPLETO),
+}))
+
+// La generación real de PDF/Word se prueba aparte; aquí basta con archivos falsos.
+vi.mock('./export', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('./export')>()),
+  generarArchivos: vi.fn(async () => [
+    { nombre: 'cv.pdf', tipo: 'pdf', blob: new Blob(['%PDF']) },
+    { nombre: 'cv.docx', tipo: 'docx', blob: new Blob(['PK']) },
+  ]),
 }))
 
 const instantAnalyzer: CvAnalyzer = { analyze: async (input) => analizarTexto(input) }
@@ -27,6 +37,32 @@ describe('<CvTab />', () => {
     await user.click(screen.getByRole('tab', { name: /Moderno/ }))
     expect(screen.getByRole('tab', { name: /Moderno/ })).toHaveAttribute('aria-selected', 'true')
     expect(screen.getAllByText('María José Fuentes Rojas').length).toBeGreaterThan(0)
+  })
+
+  it('envía el diseño elegido al correo indicado', async () => {
+    const user = userEvent.setup()
+    const enviar = vi.fn<CvMailer['enviar']>(async () => {})
+    render(<CvTab analyzer={instantAnalyzer} mailer={{ enviar }} />)
+    await user.upload(screen.getByTestId('cv-file-input'), new File(['%PDF'], 'mi-cv.pdf', { type: 'application/pdf' }))
+    await screen.findByText('Resultado del análisis')
+
+    await user.click(screen.getByRole('tab', { name: /Compacto/ }))
+    const campo = screen.getByLabelText('Correo electrónico')
+    expect(campo).toHaveValue('maria.fuentes@example.com') // sugerido desde el CV
+
+    await user.clear(campo)
+    await user.type(campo, 'no-es-correo')
+    await user.click(screen.getByRole('button', { name: 'Enviar a mi correo' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('Ingrese un correo válido')
+    expect(enviar).not.toHaveBeenCalled()
+
+    await user.clear(campo)
+    await user.type(campo, 'persona@example.com')
+    await user.click(screen.getByRole('button', { name: 'Enviar a mi correo' }))
+    expect(await screen.findByText(/Enviamos su CV a/)).toHaveTextContent('persona@example.com')
+    expect(enviar).toHaveBeenCalledWith(
+      expect.objectContaining({ email: 'persona@example.com', diseno: 'compacto', adjuntos: expect.arrayContaining([expect.objectContaining({ tipo: 'pdf' })]) }),
+    )
   })
 
   it('muestra un error con formatos no compatibles', async () => {
