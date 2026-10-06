@@ -5,7 +5,7 @@ import { UploadZone } from './components/UploadZone'
 import { extractText } from './lib/extractText'
 import { validateCvFile } from './lib/validateFile'
 import { createDefaultAnalyzer } from './services/analyzer'
-import type { CvAnalysis, CvAnalyzer } from './services/types'
+import { AnalisisError, type CvAnalysis, type CvAnalyzer } from './services/types'
 import './styles/print.css'
 import s from './styles/ui.module.css'
 
@@ -64,6 +64,10 @@ export function CvTab({ analyzer }: CvTabProps) {
       setEstado({ tipo: 'listo', archivo: file.name, analysis })
     } catch (err) {
       if (err instanceof DOMException && err.name === 'AbortError') return
+      if (err instanceof AnalisisError) {
+        setEstado({ tipo: 'error', mensaje: err.message })
+        return
+      }
       console.error('[cv-empleabilidad]', err)
       setEstado({ tipo: 'error', mensaje: 'Ocurrió un problema al procesar su CV. Inténtelo nuevamente en unos minutos.' })
     }
@@ -95,10 +99,7 @@ export function CvTab({ analyzer }: CvTabProps) {
       {estado.tipo !== 'listo' && (
         <>
           <UploadZone onFile={procesar} disabled={ocupado} />
-          <p className={s.nota}>
-            Su CV se procesa en su navegador y no se almacena.
-            {/* TODO(ia): al conectar el backend, actualizar este aviso: el texto se enviará al servicio de análisis. */}
-          </p>
+          <p className={s.nota}>{activeAnalyzer.avisoPrivacidad ?? 'Su CV no se almacena.'}</p>
         </>
       )}
 

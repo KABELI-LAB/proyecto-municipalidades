@@ -135,6 +135,7 @@ function mejorarCv(cv: CvData): CvData {
 }
 
 export const mockAnalyzer: CvAnalyzer = {
+  avisoPrivacidad: 'Su CV se procesa en su navegador y no se almacena.',
   async analyze(input, signal) {
     // Simula la latencia de la IA para poder diseñar los estados de carga.
     await new Promise<void>((resolve, reject) => {

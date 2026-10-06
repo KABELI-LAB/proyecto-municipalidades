@@ -13,11 +13,11 @@ design-system/        ← colores, fuentes y estilos de Muni Hualañé
 ## 1. Preparar tu computador (una sola vez)
 
 1. Instala **Node.js 24**. Recomendado con [nvm](https://github.com/nvm-sh/nvm): `nvm install 24`.
-2. Pide a Benjamín que te agregue como colaborador del repositorio en GitHub y acepta la invitación que llega a tu correo.
+2. Pide que te agreguen como colaborador del repositorio `KABELI-LAB/proyecto-municipalidades` y acepta la invitación que llega a tu correo. Usa **tu propia cuenta de GitHub**.
 3. Clona el repo e instala las dependencias:
 
    ```bash
-   git clone https://github.com/akabenjaboi/proyecto-municipalidades.git
+   git clone https://github.com/KABELI-LAB/proyecto-municipalidades.git
    cd proyecto-municipalidades
    nvm use
    npm install
@@ -57,7 +57,8 @@ Si usas **Claude Code**, también puedes pedirle: *"crea mi módulo con /nuevo-m
 3. Usa solo los colores, fuentes y espaciados de `design-system/tokens.css` (`var(--muni-...)`). **Nunca texto blanco sobre celeste ni amarillo.**
 4. Textos en español con trato de **usted**, frases breves, sin MAYÚSCULAS ni ¡¡signos repetidos!!
 5. Estilos con CSS Modules (`*.module.css`), nada de CSS global.
-6. Nunca subas API keys ni datos reales de personas. Usa `.env` (está ignorado por git).
+6. **Nunca subas ni pegues claves** (API keys, contraseñas) en el código, commits, PRs ni chats, incluidos los chats con IA. Van en `.env` local y en Netlify. Lee [docs/despliegue.md](docs/despliegue.md).
+7. Nunca uses datos reales de personas en tests o ejemplos.
 
 ## 4. Subir tus cambios
 

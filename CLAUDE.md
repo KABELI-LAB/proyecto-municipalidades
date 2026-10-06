@@ -11,7 +11,8 @@ modulos/
 design-system/        Tokens CSS, fuentes y tokens.json de Muni Hualañé (compartido: no editar sin acuerdo del equipo)
 plantillas/modulo/    Plantilla que usa `npm run nuevo-modulo` (no es un workspace; no se compila)
 scripts/              nuevo-modulo.mjs
-docs/                 Arquitectura y convenciones transversales
+netlify/functions/    Endpoints /api/* (wrappers delgados; la lógica vive en modulos/<nombre>/server/)
+docs/                 Arquitectura (arquitectura.md) y despliegue/secretos (despliegue.md)
 .claude/              Configuración compartida de Claude Code (agentes, skills, permisos)
 ```
 
@@ -34,13 +35,13 @@ Cada módulo tiene su propio `CLAUDE.md`: léelo antes de trabajar en él.
 3. **Design system**: solo colores, fuentes, espaciados y radios de `design-system/tokens.css`. Contraste: **nunca texto blanco sobre celeste (#6BA8B8) ni amarillo (#E5B84B)**; blanco sobre terracota solo en texto grande o negrita. Esquinas casi rectas (3–4px). Para revisar UI usa el subagente `revisor-design-system`.
 4. **Tono** (manual institucional): español de Chile, trato de **usted**, frases breves, directo, respetuoso y útil. Sin mayúsculas sostenidas, sin signos repetidos (¡¡!!), sin atribuir acciones a autoridades. Lenguaje inclusivo neutro ("le damos la bienvenida", no "bienvenido").
 5. **Accesibilidad**: WCAG 2.1 AA. Controles con nombre accesible, foco visible, `aria-live` para estados asíncronos, objetivos táctiles ≥ 44px, `prefers-reduced-motion`.
-6. **Secretos**: ninguna API key en el frontend ni en git (el repo es **público**). Las llamadas a IA pasan por un backend. `.env` está en `.gitignore`.
+6. **Secretos** (prioridad máxima; el repo es **público**): ninguna API key, contraseña ni endpoint privado en código, commits, `netlify.toml`, issues, PRs ni logs. Viven solo en las variables de entorno de Netlify y en `.env` local (en `.gitignore`). Los agentes **no leen ni imprimen `.env`**, no piden claves al usuario y usan valores ficticios en tests. Variables nuevas se documentan con placeholders en `.env.example`. Ver [docs/despliegue.md](docs/despliegue.md).
 7. **Datos personales**: datos de ciudadanos (CVs, etc.) no se guardan ni se registran en logs. Solo datos ficticios en tests y fixtures.
 8. TypeScript estricto, sin `any`. Tests con Vitest + Testing Library junto al archivo (`*.test.ts(x)`).
 
 ## Git
 
-- Repo público: https://github.com/akabenjaboi/proyecto-municipalidades. Rama principal `main`, protegida por Pull Requests.
+- Repo público: https://github.com/KABELI-LAB/proyecto-municipalidades. Rama principal `main`, cambios vía Pull Request. Despliegue automático en Netlify desde `main`.
 - Ramas `<modulo>/<descripcion>` (ej. `cv/integracion-ia`). Commits en español, imperativo, con prefijo de módulo: `cv: agrega filtro de sugerencias`.
 - Guía para el equipo: [CONTRIBUTING.md](CONTRIBUTING.md).
 

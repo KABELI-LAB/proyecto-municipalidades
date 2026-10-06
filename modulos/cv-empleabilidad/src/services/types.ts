@@ -72,4 +72,9 @@ export interface CvInput {
 
 export interface CvAnalyzer {
   analyze(input: CvInput, signal?: AbortSignal): Promise<CvAnalysis>
+  /** Texto que explica a la persona qué pasa con su CV. */
+  avisoPrivacidad?: string
 }
+
+/** Error con un mensaje apto para mostrar en pantalla. */
+export class AnalisisError extends Error {}
