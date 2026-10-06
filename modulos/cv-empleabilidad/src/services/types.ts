@@ -65,11 +65,24 @@ export interface CvAnalysis {
   origen: 'mock' | 'ia'
 }
 
+/**
+ * Resultado de revisar un documento: o es un CV (con su análisis) o no lo es.
+ * El sistema nunca inventa un análisis para algo que no es un currículum.
+ */
+export type CvResultado = ({ esCv: true } & CvAnalysis) | { esCv: false; motivo: string; origen: CvAnalysis['origen'] }
+
 export interface CvInput {
   texto: string
   nombreArchivo: string
+  /** Cantidad de imágenes del archivo (fotos, íconos, logos). Las imágenes no se envían. */
+  imagenes?: number
 }
 
 export interface CvAnalyzer {
-  analyze(input: CvInput, signal?: AbortSignal): Promise<CvAnalysis>
+  analyze(input: CvInput, signal?: AbortSignal): Promise<CvResultado>
+  /** Texto que explica a la persona qué pasa con su CV. */
+  avisoPrivacidad?: string
 }
+
+/** Error con un mensaje apto para mostrar en pantalla. */
+export class AnalisisError extends Error {}

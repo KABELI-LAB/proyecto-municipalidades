@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { CV_COMPLETO, CV_POBRE } from '../test/fixtures'
-import { analizarTexto } from './mockAnalyzer'
+import { CV_COMPLETO, CV_POBRE, RECETA } from '../test/fixtures'
+import { analizarTexto, evaluarDocumento, pareceCv } from './mockAnalyzer'
 
 const input = (texto: string) => ({ texto, nombreArchivo: 'cv.pdf' })
 
@@ -33,5 +33,23 @@ describe('analizarTexto (mock)', () => {
     expect(r.cvMejorado.perfil).toMatch(/^\[/)
     expect(r.cvMejorado.idiomas).toEqual(['Español (nativo)'])
     expect(r.origen).toBe('mock')
+  })
+})
+
+describe('evaluarDocumento (mock)', () => {
+  it('distingue un CV de un documento que no lo es', () => {
+    expect(pareceCv(CV_COMPLETO)).toBe(true)
+    expect(pareceCv(CV_POBRE)).toBe(true)
+    expect(pareceCv(RECETA)).toBe(false)
+    const r = evaluarDocumento(input(RECETA))
+    expect(r.esCv).toBe(false)
+    expect(!r.esCv && r.motivo).toBeTruthy()
+  })
+
+  it('sugiere revisar la imagen según cuántas tenga el CV', () => {
+    const titulos = (imagenes: number) => analizarTexto({ ...input(CV_COMPLETO), imagenes }).sugerencias.map((s) => s.titulo)
+    expect(titulos(0)).not.toContain('Revise la imagen de su CV')
+    expect(titulos(1)).toContain('Revise la imagen de su CV')
+    expect(titulos(4)).toContain('Reduzca las imágenes')
   })
 })

@@ -1,0 +1,21 @@
+# Despliegue en Netlify: sitio estático (Vite) + funciones en netlify/functions.
+# Las claves NO van aquí: se configuran en Netlify → Site configuration → Environment variables.
+
+[build]
+  command = "npm run build -w @muni/sitio"
+  publish = "sitio/dist"
+
+[build.environment]
+  NODE_VERSION = "24"
+  # No es secreto: ruta relativa al endpoint de análisis de CV (función cv-analyze).
+  VITE_CV_API_URL = "/api"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# SPA: cualquier ruta del sitio la resuelve React Router.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

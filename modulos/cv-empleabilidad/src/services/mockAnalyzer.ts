@@ -1,5 +1,5 @@
 import { parseCv } from '../lib/parseCv'
-import type { CvAnalysis, CvAnalyzer, CvData, CvInput, Prioridad, Sugerencia } from './types'
+import type { CvAnalysis, CvAnalyzer, CvData, CvInput, CvResultado, Prioridad, Sugerencia } from './types'
 
 /**
  * Analizador sin IA: reglas heurísticas sobre el texto extraído. Sirve para
@@ -21,7 +21,7 @@ function mejorarLogro(logro: string): string {
   return l.charAt(0).toUpperCase() + l.slice(1)
 }
 
-export function analizarTexto({ texto }: CvInput): CvAnalysis {
+export function analizarTexto({ texto, imagenes = 0 }: CvInput): CvAnalysis {
   const cv = parseCv(texto)
   const palabras = texto.split(/\s+/).filter(Boolean).length
   const sugerencias: Sugerencia[] = []
@@ -96,6 +96,13 @@ export function analizarTexto({ texto }: CvInput): CvAnalysis {
     add({ seccion: 'formato', prioridad: 'baja', titulo: 'Evite datos personales innecesarios', detalle: 'RUT, edad, estado civil o fecha de nacimiento no son necesarios en un CV y pueden generar sesgos. Inclúyalos solo si la postulación lo exige.' })
   }
 
+  // Imágenes: no se ven, solo se sabe cuántas hay.
+  if (imagenes === 1) {
+    add({ seccion: 'formato', prioridad: 'baja', titulo: 'Revise la imagen de su CV', detalle: 'Su CV incluye una imagen. Si es una foto suya, que sea tipo carnet, reciente y con fondo neutro; en Chile la foto es opcional. Si es otra imagen (mascotas, paisajes, decoración), quítela.' })
+  } else if (imagenes > 1) {
+    add({ seccion: 'formato', prioridad: 'media', titulo: 'Reduzca las imágenes', detalle: `Su CV tiene ${imagenes} imágenes. Íconos, logos y adornos distraen y pueden impedir que los sistemas de selección lean su CV. Deje como máximo una foto tipo carnet.` })
+  }
+
   const descuento = sugerencias.reduce((t, s) => t + PESO[s.prioridad], 0)
   const puntaje = Math.max(20, Math.min(96, 100 - descuento))
 
@@ -134,7 +141,36 @@ function mejorarCv(cv: CvData): CvData {
   }
 }
 
+/**
+ * ¿Parece un CV? Regla simple: debe tener al menos 2 señales típicas
+ * (contacto, experiencia, formación, habilidades, perfil). Una receta, un
+ * contrato o un apunte de clases no las tienen.
+ */
+export function pareceCv(texto: string): boolean {
+  const cv = parseCv(texto)
+  const señales = [
+    cv.contacto.email || cv.contacto.telefono,
+    cv.experiencia.length > 0,
+    cv.educacion.length > 0,
+    cv.habilidades.length > 0,
+    cv.perfil.length > 0,
+  ].filter(Boolean).length
+  return señales >= 2
+}
+
+export function evaluarDocumento(input: CvInput): CvResultado {
+  if (!pareceCv(input.texto)) {
+    return {
+      esCv: false,
+      motivo: 'No encontramos datos de contacto, experiencia laboral ni formación, que son las partes básicas de un currículum.',
+      origen: 'mock',
+    }
+  }
+  return { esCv: true, ...analizarTexto(input) }
+}
+
 export const mockAnalyzer: CvAnalyzer = {
+  avisoPrivacidad: 'Su CV se procesa en su navegador y no se almacena.',
   async analyze(input, signal) {
     // Simula la latencia de la IA para poder diseñar los estados de carga.
     await new Promise<void>((resolve, reject) => {
@@ -144,6 +180,6 @@ export const mockAnalyzer: CvAnalyzer = {
         reject(new DOMException('Cancelado', 'AbortError'))
       })
     })
-    return analizarTexto(input)
+    return evaluarDocumento(input)
   },
 }

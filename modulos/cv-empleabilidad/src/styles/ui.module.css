@@ -165,7 +165,9 @@
   background: #0f3753;
 }
 
-.btnPrimary:disabled {
+.btnPrimary:disabled,
+.btnPrimary[aria-disabled='true'],
+.btnSecondary[aria-disabled='true'] {
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -220,6 +222,23 @@
   background: var(--muni-marfil);
   padding: var(--muni-space-4);
   border-radius: var(--muni-radius-md);
+}
+
+.aviso {
+  border-left: 6px solid var(--muni-amarillo);
+  background: var(--muni-marfil);
+  padding: var(--muni-space-4);
+  border-radius: var(--muni-radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--muni-space-2);
+}
+
+.avisoTitulo {
+  font-family: var(--muni-font-titulos);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--muni-azul);
 }
 
 .mockBanner {
@@ -489,5 +508,79 @@
 
 .actions {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
+  gap: var(--muni-space-2);
+}
+
+.actions .btnPrimary {
+  margin-top: 0;
+}
+
+/* Envío por correo */
+.envio {
+  position: relative;
+  border-top: 1px solid var(--muni-gris-claro);
+  padding-top: var(--muni-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--muni-space-2);
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--muni-space-1);
+}
+
+.campo label {
+  font-weight: 600;
+}
+
+.campoFila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--muni-space-2);
+}
+
+.campoFila input {
+  flex: 1 1 240px;
+  min-height: 44px;
+  font: inherit;
+  padding: 8px 12px;
+  border: 2px solid #86939a; /* tinte de gris-texto: 3,16:1 sobre blanco (WCAG 1.4.11) */
+  border-radius: var(--muni-radius-md);
+  color: var(--muni-gris-texto);
+  background: var(--muni-blanco);
+}
+
+.campoFila input:focus-visible {
+  outline: none;
+  border-color: var(--muni-azul);
+  box-shadow: var(--muni-focus);
+}
+
+.campoFila input[aria-invalid='true'] {
+  border-color: var(--muni-terracota);
+}
+
+.campoFila .btnPrimary {
+  margin-top: 0;
+}
+
+.exito {
+  border-left: 6px solid var(--muni-verde);
+  background: var(--muni-marfil);
+  padding: var(--muni-space-2) var(--muni-space-4);
+  border-radius: var(--muni-radius-md);
+}
+
+.honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }

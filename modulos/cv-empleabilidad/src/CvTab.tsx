@@ -5,13 +5,15 @@ import { UploadZone } from './components/UploadZone'
 import { extractText } from './lib/extractText'
 import { validateCvFile } from './lib/validateFile'
 import { createDefaultAnalyzer } from './services/analyzer'
-import type { CvAnalysis, CvAnalyzer } from './services/types'
-import './styles/print.css'
+import { createDefaultMailer, type CvMailer } from './services/mailer'
+import { AnalisisError, type CvAnalysis, type CvAnalyzer } from './services/types'
 import s from './styles/ui.module.css'
 
 export interface CvTabProps {
   /** Analizador a usar. Por defecto: backend si VITE_CV_API_URL existe, si no el mock. */
   analyzer?: CvAnalyzer
+  /** Envío del CV por correo. Por defecto: backend si VITE_CV_API_URL existe, si no uno simulado. */
+  mailer?: CvMailer
 }
 
 type Estado =
@@ -19,6 +21,7 @@ type Estado =
   | { tipo: 'leyendo'; archivo: string }
   | { tipo: 'analizando'; archivo: string }
   | { tipo: 'listo'; archivo: string; analysis: CvAnalysis }
+  | { tipo: 'noCv'; archivo: string; motivo: string }
   | { tipo: 'error'; mensaje: string }
 
 const MIN_PALABRAS = 30
@@ -27,8 +30,9 @@ const MIN_PALABRAS = 30
  * Pestaña "Revisa tu CV". Componente autocontenido: no asume router ni estilos
  * globales del sitio anfitrión, solo las variables CSS del design system.
  */
-export function CvTab({ analyzer }: CvTabProps) {
+export function CvTab({ analyzer, mailer }: CvTabProps) {
   const activeAnalyzer = useMemo(() => analyzer ?? createDefaultAnalyzer(), [analyzer])
+  const activeMailer = useMemo(() => mailer ?? createDefaultMailer(), [mailer])
   const [estado, setEstado] = useState<Estado>({ tipo: 'inicio' })
   const abortRef = useRef<AbortController | null>(null)
   const resultRef = useRef<HTMLHeadingElement>(null)
@@ -51,7 +55,7 @@ export function CvTab({ analyzer }: CvTabProps) {
 
     try {
       setEstado({ tipo: 'leyendo', archivo: file.name })
-      const texto = await extractText(file, check.kind)
+      const { texto, imagenes } = await extractText(file, check.kind)
       if (texto.split(/\s+/).filter(Boolean).length < MIN_PALABRAS) {
         setEstado({
           tipo: 'error',
@@ -60,10 +64,18 @@ export function CvTab({ analyzer }: CvTabProps) {
         return
       }
       setEstado({ tipo: 'analizando', archivo: file.name })
-      const analysis = await activeAnalyzer.analyze({ texto, nombreArchivo: file.name }, ctrl.signal)
-      setEstado({ tipo: 'listo', archivo: file.name, analysis })
+      const resultado = await activeAnalyzer.analyze({ texto, nombreArchivo: file.name, imagenes }, ctrl.signal)
+      if (!resultado.esCv) {
+        setEstado({ tipo: 'noCv', archivo: file.name, motivo: resultado.motivo })
+        return
+      }
+      setEstado({ tipo: 'listo', archivo: file.name, analysis: resultado })
     } catch (err) {
       if (err instanceof DOMException && err.name === 'AbortError') return
+      if (err instanceof AnalisisError) {
+        setEstado({ tipo: 'error', mensaje: err.message })
+        return
+      }
       console.error('[cv-empleabilidad]', err)
       setEstado({ tipo: 'error', mensaje: 'Ocurrió un problema al procesar su CV. Inténtelo nuevamente en unos minutos.' })
     }
@@ -88,23 +100,29 @@ export function CvTab({ analyzer }: CvTabProps) {
         <ol className={s.steps}>
           <li><span>1</span>Suba su CV en PDF o Word</li>
           <li><span>2</span>Revise las sugerencias</li>
-          <li><span>3</span>Elija un diseño y descárguelo</li>
+          <li><span>3</span>Elija un diseño y recíbalo por correo</li>
         </ol>
       </header>
 
       {estado.tipo !== 'listo' && (
         <>
           <UploadZone onFile={procesar} disabled={ocupado} />
-          <p className={s.nota}>
-            Su CV se procesa en su navegador y no se almacena.
-            {/* TODO(ia): al conectar el backend, actualizar este aviso: el texto se enviará al servicio de análisis. */}
-          </p>
+          <p className={s.nota}>{activeAnalyzer.avisoPrivacidad ?? 'Su CV no se almacena.'}</p>
         </>
       )}
 
       <div aria-live="polite" className={s.status}>
         {estado.tipo === 'leyendo' && <p className={s.loading}>Leyendo {estado.archivo}…</p>}
         {estado.tipo === 'analizando' && <p className={s.loading}>Analizando su CV…</p>}
+        {estado.tipo === 'noCv' && (
+          <div className={s.aviso}>
+            <p className={s.avisoTitulo}>
+              “<span className={s.fileName}>{estado.archivo}</span>” no parece ser un currículum
+            </p>
+            <p>{estado.motivo}</p>
+            <p>Si es su CV, revise que incluya sus datos de contacto, su experiencia y su formación. También puede subir otro archivo.</p>
+          </div>
+        )}
         {estado.tipo === 'error' && (
           <div className={s.alert} role="alert">
             <strong>No pudimos analizar el archivo.</strong> {estado.mensaje}
@@ -127,7 +145,7 @@ export function CvTab({ analyzer }: CvTabProps) {
           )}
           <div className={s.results}>
             <FeedbackPanel analysis={estado.analysis} />
-            <DesignGallery cv={estado.analysis.cvMejorado} />
+            <DesignGallery cv={estado.analysis.cvMejorado} mailer={activeMailer} />
           </div>
         </>
       )}

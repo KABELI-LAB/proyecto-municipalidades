@@ -70,6 +70,13 @@ function parseExperiencia(lines: string[]): Experiencia[] {
       cur.logros.push(raw.replace(BULLET_RE, ''))
       continue
     }
+    // Viñeta partida en dos líneas por el ancho de columna: la continuación
+    // empieza en minúscula, número o signo.
+    const ultimo = cur?.logros.length ? cur.logros.length - 1 : -1
+    if (cur && ultimo >= 0 && /^[\p{Ll}\d%,.;)]/u.test(raw)) {
+      cur.logros[ultimo] = `${cur.logros[ultimo]} ${raw}`.replace(/\s+([%.,;])/g, (_m, p: string) => (p === '%' ? ' %' : p))
+      continue
+    }
     const { periodo, resto } = extractPeriod(raw)
     const startsNew = !cur || cur.logros.length > 0 || (cur.cargo && cur.organizacion && !periodo)
     if (startsNew) {
