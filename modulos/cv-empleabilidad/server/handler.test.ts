@@ -17,6 +17,8 @@ const ENV = {
 function respuestaModelo() {
   const { sugerencias, cvMejorado, puntaje, resumen, fortalezas } = analizarTexto({ texto: CV_COMPLETO, nombreArchivo: 'cv.pdf' })
   return {
+    esCv: true,
+    motivoNoCv: null,
     puntaje,
     resumen,
     fortalezas,
@@ -60,6 +62,21 @@ describe('handleAnalyzeRequest', () => {
     expect(body.model).toBe('modelo-de-prueba')
     expect(body.response_format.json_schema.strict).toBe(true)
     expect(body.messages[1].content).toContain('<cv>')
+  })
+
+  it('devuelve esCv: false con el motivo cuando el documento no es un CV', async () => {
+    const vacio = { ...respuestaModelo(), esCv: false, motivoNoCv: 'Parece una receta de cocina.', puntaje: 0, resumen: '', fortalezas: [], sugerencias: [] }
+    const res = await handleAnalyzeRequest(post({ texto: 'Pastel de choclo...' }), ENV, fakeFetch(vacio))
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({ esCv: false, motivo: 'Parece una receta de cocina.' })
+  })
+
+  it('informa al modelo la cantidad de imágenes, sin enviarlas', async () => {
+    const f = fakeFetch(respuestaModelo())
+    await handleAnalyzeRequest(post({ texto: CV_COMPLETO, imagenes: 3 }), ENV, f)
+    const body = JSON.parse((f as unknown as ReturnType<typeof vi.fn>).mock.calls[0]![1].body)
+    expect(body.messages[1].content).toMatch(/^Imágenes en el archivo: 3\n/)
+    expect(body.messages[1].content).not.toContain('image_url')
   })
 
   it('responde 503 si faltan variables de entorno', async () => {

@@ -39,3 +39,12 @@ Liceo de Hualañé
 RUT 12.345.678-9, estado civil soltero, fecha de nacimiento 01/01/1990.
 Me gusta trabajar y aprender cosas nuevas cada día en cualquier trabajo que me den.
 `
+
+/** Documento que no es un CV (para probar la detección). */
+export const RECETA = `Pastel de choclo
+Ingredientes para 6 personas
+1 kilo de carne molida, 3 cebollas picadas, 12 choclos desgranados, aceitunas, huevos duros y pasas.
+Preparación
+Sofría la cebolla con la carne y condimente con comino y ají de color. Muela los choclos con albahaca y cocínelos con leche hasta que espese.
+Arme el pastel en una fuente de greda: primero el pino, luego el pollo, los huevos y las aceitunas, y cubra con la pasta de choclo. Espolvoree azúcar y hornee 30 minutos.
+`

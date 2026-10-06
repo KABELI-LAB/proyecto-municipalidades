@@ -10,13 +10,16 @@ Implementado en `server/` y publicado como función de Netlify (`netlify/functio
 
 ```json
 // Request
-{ "texto": "María José Fuentes...\nPerfil profesional\n...", "nombreArchivo": "mi-cv.pdf" }
+{ "texto": "María José Fuentes...\nPerfil profesional\n...", "nombreArchivo": "mi-cv.pdf", "imagenes": 1 }
 ```
 
 - `texto`: obligatorio, máximo 20.000 caracteres (si no, `413`).
 - `nombreArchivo`: opcional; **no** se envía al modelo.
+- `imagenes`: opcional, cuántas imágenes tiene el archivo. Las imágenes **no** se envían: el modelo solo recibe el número y sugiere revisarlas (foto tipo carnet, quitar decoraciones).
 
-Respuesta `200`: un `CvAnalysis` sin `origen` (fuente de verdad: `src/services/types.ts`; el cliente agrega `origen: "ia"`):
+Si el documento no es un CV, la respuesta `200` es `{ "esCv": false, "motivo": "Parece una receta de cocina." }` y la UI no muestra puntaje ni diseños.
+
+Si es un CV, la respuesta `200` es `{ "esCv": true, ...CvAnalysis }` sin `origen` (fuente de verdad: `src/services/types.ts`; el cliente agrega `origen: "ia"`):
 
 ```json
 {

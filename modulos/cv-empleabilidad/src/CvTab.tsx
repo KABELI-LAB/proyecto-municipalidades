@@ -21,6 +21,7 @@ type Estado =
   | { tipo: 'leyendo'; archivo: string }
   | { tipo: 'analizando'; archivo: string }
   | { tipo: 'listo'; archivo: string; analysis: CvAnalysis }
+  | { tipo: 'noCv'; archivo: string; motivo: string }
   | { tipo: 'error'; mensaje: string }
 
 const MIN_PALABRAS = 30
@@ -54,7 +55,7 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
 
     try {
       setEstado({ tipo: 'leyendo', archivo: file.name })
-      const texto = await extractText(file, check.kind)
+      const { texto, imagenes } = await extractText(file, check.kind)
       if (texto.split(/\s+/).filter(Boolean).length < MIN_PALABRAS) {
         setEstado({
           tipo: 'error',
@@ -63,8 +64,12 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
         return
       }
       setEstado({ tipo: 'analizando', archivo: file.name })
-      const analysis = await activeAnalyzer.analyze({ texto, nombreArchivo: file.name }, ctrl.signal)
-      setEstado({ tipo: 'listo', archivo: file.name, analysis })
+      const resultado = await activeAnalyzer.analyze({ texto, nombreArchivo: file.name, imagenes }, ctrl.signal)
+      if (!resultado.esCv) {
+        setEstado({ tipo: 'noCv', archivo: file.name, motivo: resultado.motivo })
+        return
+      }
+      setEstado({ tipo: 'listo', archivo: file.name, analysis: resultado })
     } catch (err) {
       if (err instanceof DOMException && err.name === 'AbortError') return
       if (err instanceof AnalisisError) {
@@ -109,6 +114,15 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
       <div aria-live="polite" className={s.status}>
         {estado.tipo === 'leyendo' && <p className={s.loading}>Leyendo {estado.archivo}…</p>}
         {estado.tipo === 'analizando' && <p className={s.loading}>Analizando su CV…</p>}
+        {estado.tipo === 'noCv' && (
+          <div className={s.aviso}>
+            <p className={s.avisoTitulo}>
+              “<span className={s.fileName}>{estado.archivo}</span>” no parece ser un currículum
+            </p>
+            <p>{estado.motivo}</p>
+            <p>Si es su CV, revise que incluya sus datos de contacto, su experiencia y su formación. También puede subir otro archivo.</p>
+          </div>
+        )}
         {estado.tipo === 'error' && (
           <div className={s.alert} role="alert">
             <strong>No pudimos analizar el archivo.</strong> {estado.mensaje}

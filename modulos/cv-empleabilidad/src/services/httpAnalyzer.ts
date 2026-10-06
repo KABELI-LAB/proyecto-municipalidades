@@ -1,4 +1,4 @@
-import { AnalisisError, type CvAnalysis, type CvAnalyzer } from './types'
+import { AnalisisError, type CvAnalyzer, type CvResultado } from './types'
 
 /**
  * Cliente del backend de análisis (`POST {baseUrl}/cv/analyze`). En producción
@@ -20,7 +20,7 @@ export function createHttpAnalyzer(baseUrl: string): CvAnalyzer {
         const body = (await res.json().catch(() => null)) as { error?: string } | null
         throw new AnalisisError(body?.error ?? 'El servicio de análisis no está disponible.')
       }
-      const data = (await res.json()) as Omit<CvAnalysis, 'origen'>
+      const data = (await res.json()) as CvResultado
       return { ...data, origen: 'ia' }
     },
   }

@@ -6,7 +6,9 @@ Pestaña donde una persona sube su CV (PDF o DOCX), recibe feedback para mejorar
 
 - **IA real** (gpt-5.5 en Azure AI Foundry) vía `server/` → función de Netlify `POST /api/cv/analyze`. Contrato y garantías: [docs/contrato-ia.md](docs/contrato-ia.md).
 - Sin `VITE_CV_API_URL` (ej. sin `.env` local) se usa `mockAnalyzer` (reglas heurísticas) y la UI muestra "Modo demostración".
-- La extracción de texto ocurre en el navegador (pdfjs-dist / mammoth, cargados bajo demanda); al servidor solo viaja el texto.
+- La extracción de texto ocurre en el navegador (pdfjs-dist / mammoth, cargados bajo demanda) y **cuenta** las imágenes; al servidor solo viajan el texto y ese número, nunca las imágenes.
+- Antes de analizar se decide si el documento es un CV (`CvResultado` con `esCv`); si no lo es, la UI muestra el aviso "no parece ser un currículum" y no hay diseños.
+- Pendiente de decisión del equipo: leer CVs escaneados enviando las páginas como imagen al modelo (implica actualizar el aviso de privacidad).
 
 ## Flujo
 

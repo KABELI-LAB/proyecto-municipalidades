@@ -1,15 +1,15 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { CvTab } from './CvTab'
-import { analizarTexto } from './services/mockAnalyzer'
+import { evaluarDocumento } from './services/mockAnalyzer'
 import type { CvMailer } from './services/mailer'
 import type { CvAnalyzer } from './services/types'
-import { CV_COMPLETO } from './test/fixtures'
+import { CV_COMPLETO, RECETA } from './test/fixtures'
 
-vi.mock('./lib/extractText', () => ({
-  extractText: vi.fn(async () => CV_COMPLETO),
-}))
+const extractMock = vi.hoisted(() => vi.fn())
+vi.mock('./lib/extractText', () => ({ extractText: extractMock }))
+beforeEach(() => extractMock.mockResolvedValue({ texto: CV_COMPLETO, imagenes: 0 }))
 
 // La generación real de PDF/Word se prueba aparte; aquí basta con archivos falsos.
 vi.mock('./export', async (importOriginal) => ({
@@ -20,7 +20,7 @@ vi.mock('./export', async (importOriginal) => ({
   ]),
 }))
 
-const instantAnalyzer: CvAnalyzer = { analyze: async (input) => analizarTexto(input) }
+const instantAnalyzer: CvAnalyzer = { analyze: async (input) => evaluarDocumento(input) }
 
 describe('<CvTab />', () => {
   it('sube un CV y muestra feedback y los 3 diseños', async () => {
@@ -63,6 +63,18 @@ describe('<CvTab />', () => {
     expect(enviar).toHaveBeenCalledWith(
       expect.objectContaining({ email: 'persona@example.com', diseno: 'compacto', adjuntos: expect.arrayContaining([expect.objectContaining({ tipo: 'pdf' })]) }),
     )
+  })
+
+  it('avisa cuando el archivo no es un CV y no muestra diseños', async () => {
+    extractMock.mockResolvedValue({ texto: RECETA, imagenes: 2 })
+    const user = userEvent.setup()
+    render(<CvTab analyzer={instantAnalyzer} />)
+    await user.upload(screen.getByTestId('cv-file-input'), new File(['%PDF'], 'receta.pdf', { type: 'application/pdf' }))
+    expect(await screen.findByText(/no parece ser un currículum/)).toBeInTheDocument()
+    expect(screen.queryByText('Resultado del análisis')).not.toBeInTheDocument()
+    expect(screen.queryAllByRole('tab')).toHaveLength(0)
+    // Puede subir otro archivo de inmediato.
+    expect(screen.getByTestId('cv-file-input')).toBeInTheDocument()
   })
 
   it('muestra un error con formatos no compatibles', async () => {

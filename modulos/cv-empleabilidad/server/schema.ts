@@ -24,6 +24,9 @@ const obj = (properties: Record<string, unknown>) => ({
 })
 
 export const RESPONSE_JSON_SCHEMA = obj({
+  // Primero: ¿es un CV? Va al inicio para que el modelo lo decida antes de analizar.
+  esCv: { type: 'boolean' },
+  motivoNoCv: strONull,
   puntaje: { type: 'integer', minimum: 0, maximum: 100 },
   resumen: str,
   fortalezas: strArr,
@@ -56,8 +59,11 @@ const opcional = z
   .transform((v) => (v && v.trim() ? v : undefined))
 
 export const modelResponseSchema = z.object({
+  esCv: z.boolean(),
+  motivoNoCv: z.string().nullable(),
   puntaje: z.number().int().min(0).max(100),
-  resumen: z.string().min(1),
+  // Puede venir vacío cuando esCv es false; analyze.ts lo exige si es un CV.
+  resumen: z.string(),
   fortalezas: z.array(z.string()),
   sugerencias: z.array(
     z.object({
@@ -82,5 +88,6 @@ export const modelResponseSchema = z.object({
 
 export const requestSchema = z.object({
   texto: z.string().trim().min(1),
+  imagenes: z.number().int().min(0).max(1000).optional(),
   nombreArchivo: z.string().max(255).optional(),
 })

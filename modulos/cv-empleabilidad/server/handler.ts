@@ -32,7 +32,7 @@ export async function handleAnalyzeRequest(
   }
 
   try {
-    const result = await analyzeCv(input.data.texto, config, fetchImpl)
+    const result = await analyzeCv(input.data.texto, config, fetchImpl, input.data.imagenes)
     return json(200, result)
   } catch (err) {
     if (err instanceof AnalyzeError) {

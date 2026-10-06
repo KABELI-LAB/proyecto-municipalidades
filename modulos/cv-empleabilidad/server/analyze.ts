@@ -1,4 +1,4 @@
-import type { CvAnalysis } from '../src/services/types.ts'
+import type { CvResultado } from '../src/services/types.ts'
 import { SYSTEM_PROMPT, userMessage } from './prompt.ts'
 import { modelResponseSchema, RESPONSE_JSON_SCHEMA } from './schema.ts'
 
@@ -45,11 +45,17 @@ export function readAiConfig(env: Env): AiConfig | null {
   return { endpoint: endpoint.replace(/\/+$/, ''), apiKey, deployment }
 }
 
+/** Resultado sin `origen` (lo agrega el cliente). */
+export type ResultadoServidor =
+  | Omit<Extract<CvResultado, { esCv: true }>, 'origen'>
+  | Omit<Extract<CvResultado, { esCv: false }>, 'origen'>
+
 export async function analyzeCv(
   texto: string,
   config: AiConfig,
   fetchImpl: typeof fetch = fetch,
-): Promise<Omit<CvAnalysis, 'origen'>> {
+  imagenes = 0,
+): Promise<ResultadoServidor> {
   let res: Response
   try {
     res = await fetchImpl(`${config.endpoint}/chat/completions`, {
@@ -59,7 +65,7 @@ export async function analyzeCv(
         model: config.deployment,
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: userMessage(texto) },
+          { role: 'user', content: userMessage(texto, imagenes) },
         ],
         response_format: {
           type: 'json_schema',
@@ -104,8 +110,15 @@ export async function analyzeCv(
     throw new AnalyzeError(502, 'No pudimos analizar este CV.', `JSON inválido: ${parsed.error.issues.length} problemas`)
   }
 
-  const data = parsed.data
+  const { esCv, motivoNoCv, ...data } = parsed.data
+  if (!esCv) {
+    return { esCv: false, motivo: motivoNoCv?.trim() || 'El documento no tiene la información típica de un currículum.' }
+  }
+  if (!data.resumen.trim()) {
+    throw new AnalyzeError(502, 'No pudimos analizar este CV.', 'JSON inválido: resumen vacío')
+  }
   return {
+    esCv: true,
     ...data,
     sugerencias: data.sugerencias.map((s, i) => ({ ...s, id: `s${i + 1}` })),
   }

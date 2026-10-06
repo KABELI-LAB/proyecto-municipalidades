@@ -224,6 +224,23 @@
   border-radius: var(--muni-radius-md);
 }
 
+.aviso {
+  border-left: 6px solid var(--muni-amarillo);
+  background: var(--muni-marfil);
+  padding: var(--muni-space-4);
+  border-radius: var(--muni-radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--muni-space-2);
+}
+
+.avisoTitulo {
+  font-family: var(--muni-font-titulos);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--muni-azul);
+}
+
 .mockBanner {
   background: #fbf1d6;
   border-left: 6px solid var(--muni-amarillo);
