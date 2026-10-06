@@ -9,6 +9,10 @@
   NODE_VERSION = "24"
   # No es secreto: ruta relativa al endpoint de análisis de CV (función cv-analyze).
   VITE_CV_API_URL = "/api"
+  # El nombre del deployment del modelo (ej. "gpt-5.5") no es secreto y aparece
+  # en la documentación; el escáner de secretos de Netlify lo ignora. Las demás
+  # variables secretas (API keys, endpoint) se siguen escaneando.
+  SECRETS_SCAN_OMIT_KEYS = "AZURE_OPENAI_DEPLOYMENT"
 
 [functions]
   directory = "netlify/functions"
