@@ -30,6 +30,25 @@ describe('parseCv', () => {
     expect(cv.idiomas).toEqual(['Español nativo', 'Inglés básico'])
   })
 
+  it('une viñetas partidas en dos líneas (PDF a dos columnas)', () => {
+    const r = parseCv(`Ana Ruiz Soto
+Experiencia laboral
+Coordinadora de Proyectos
+Corporación del Maule · mar 2021 - actualidad
+• Lideré un programa para 320 emprendedores rurales,
+con 85 % de egreso.
+• Gestioné un presupuesto con ejecución del 98
+%.
+Analista
+Consultora Valle · 2018 - 2021
+• Formulé 14 proyectos.`)
+    expect(r.experiencia).toHaveLength(2)
+    expect(r.experiencia[0]!.logros).toEqual([
+      'Lideré un programa para 320 emprendedores rurales, con 85 % de egreso.',
+      'Gestioné un presupuesto con ejecución del 98 %.',
+    ])
+  })
+
   it('tolera CVs sin secciones reconocibles', () => {
     const pobre = parseCv(CV_POBRE)
     expect(pobre.nombre).toBe('Juan Pérez')
