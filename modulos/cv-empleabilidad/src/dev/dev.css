@@ -1,43 +1,11 @@
-.dev-host-header {
-  background: var(--muni-azul);
-  color: var(--muni-marfil);
-  padding: 0 var(--muni-space-4);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--muni-space-2) var(--muni-space-6);
+/* Anfitrión de desarrollo: reproduce el header del sitio con las clases del design system. */
+.dev-host .hds-header__in {
+  min-height: 72px;
+  padding: 0 16px;
 }
 
-.dev-host-brand {
-  display: flex;
-  align-items: center;
-  gap: var(--muni-space-2);
-  font-family: var(--muni-font-titulos);
-  font-weight: 700;
-  padding: var(--muni-space-4) 0;
-}
-
-.dev-host-escudo {
-  width: 28px;
-  height: 32px;
-  background: var(--muni-marfil);
-  border-radius: 4px 4px 14px 14px;
-}
-
-.dev-host-header nav {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.dev-host-header nav a {
-  color: var(--muni-marfil);
-  text-decoration: none;
-  padding: var(--muni-space-4) var(--muni-space-2);
-  border-bottom: 4px solid transparent;
-}
-
-.dev-host-header nav a[aria-current='page'] {
-  border-bottom-color: var(--muni-amarillo);
-  font-weight: 600;
+.dev-host .hds-header__link[aria-current='page'] {
+  color: var(--color-primary);
+  box-shadow: inset 0 -3px 0 var(--color-primary);
+  border-radius: 0;
 }

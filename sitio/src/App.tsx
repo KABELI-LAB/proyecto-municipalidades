@@ -1,3 +1,4 @@
+import { Logo } from '@muni/design-system'
 import { useEffect, useRef } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import { Header } from './componentes/Header'
@@ -31,7 +32,7 @@ export function App() {
       <a href="#contenido" className={s.skip}>
         Saltar al contenido
       </a>
-      <Header nombreSitio={NOMBRE_SITIO} />
+      <Header />
       <main id="contenido" ref={mainRef} tabIndex={-1} className={s.main}>
         <Routes>
           <Route path="/" element={<Inicio />} />
@@ -42,7 +43,16 @@ export function App() {
         </Routes>
       </main>
       <footer className={s.footer}>
-        <p>{NOMBRE_SITIO} · Sitio en desarrollo</p>
+        <div className={s.footerIn}>
+          <Logo variant="combined" inverse height={120} />
+          <p>Sitio en desarrollo</p>
+        </div>
+        <div className={s.footerBase}>
+          <div className={s.footerIn}>
+            <span>© 2026 Ilustre Municipalidad de Hualañé</span>
+            <span>Hualañé somos tod@s</span>
+          </div>
+        </div>
       </footer>
     </div>
   )

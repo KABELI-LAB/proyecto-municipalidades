@@ -16,19 +16,19 @@ export async function handleAnalyzeRequest(
   const config = readAiConfig(env)
   if (!config) {
     console.error('[cv-analyze] faltan variables AZURE_OPENAI_*')
-    return json(503, { error: 'El servicio de análisis no está configurado.' })
+    return json(503, { error: 'La revisión de CV no está disponible en este momento.' })
   }
 
   let body: unknown
   try {
     body = await req.json()
   } catch {
-    return json(400, { error: 'Solicitud inválida.' })
+    return json(400, { error: 'No pudimos procesar la solicitud. Inténtalo de nuevo.' })
   }
   const input = requestSchema.safeParse(body)
-  if (!input.success) return json(400, { error: 'Solicitud inválida.' })
+  if (!input.success) return json(400, { error: 'No pudimos procesar la solicitud. Inténtalo de nuevo.' })
   if (input.data.texto.length > MAX_TEXTO) {
-    return json(413, { error: 'El CV es demasiado extenso para analizarlo. Redúzcalo a 2 páginas e inténtelo de nuevo.' })
+    return json(413, { error: 'Tu CV es demasiado largo para revisarlo. Acórtalo a 2 páginas y súbelo de nuevo.' })
   }
 
   try {
@@ -40,6 +40,6 @@ export async function handleAnalyzeRequest(
       return json(err.status, { error: err.mensajeUsuario })
     }
     console.error('[cv-analyze] error inesperado', (err as Error).name)
-    return json(500, { error: 'Ocurrió un problema al procesar su CV.' })
+    return json(500, { error: 'Tuvimos un problema al revisar tu CV. Inténtalo de nuevo.' })
   }
 }

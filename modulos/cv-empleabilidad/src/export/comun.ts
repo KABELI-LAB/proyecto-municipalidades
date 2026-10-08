@@ -5,15 +5,15 @@ export type DisenoId = CvTemplate['id']
 
 /**
  * Colores para los archivos exportados. react-pdf y docx no leen variables
- * CSS, así que se copian de design-system/tokens.css (mantener en sincronía).
+ * CSS, así que se copian de design-system/tokens/colors.css (mantener en sincronía).
  */
 export const COLOR = {
-  azul: '#174A6E', // --muni-azul
-  verde: '#4E7D52', // --muni-verde
-  marfil: '#F5F1E8', // --muni-marfil
-  grisTexto: '#263238', // --muni-gris-texto
-  grisClaro: '#E8EDF0', // --muni-gris-claro
-  grisMedio: '#5B6870', // tinte de gris-texto para fechas
+  azul: '#253786', // --blue-700
+  verde: '#316B2C', // --green-700
+  marfil: '#D9E4F5', // --blue-100 (texto claro sobre azul)
+  grisTexto: '#1A1F2C', // --neutral-900
+  grisClaro: '#ECEEF2', // --neutral-100
+  grisMedio: '#585F70', // --neutral-600 (fechas)
 } as const
 
 export function contacto(cv: CvData): string[] {

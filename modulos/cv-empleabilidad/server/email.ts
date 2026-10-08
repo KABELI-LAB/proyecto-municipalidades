@@ -40,20 +40,20 @@ export function contenidoCorreo(nombre: string, diseno: keyof typeof DISENOS) {
   const saludo = limpio ? `Hola, ${limpio}:` : 'Hola:'
   const lineas = [
     saludo,
-    `Adjuntamos su currículum en el diseño ${DISENOS[diseno]}, en formato PDF y Word.`,
-    'Antes de postular, abra el archivo Word y complete los textos que aparecen entre [corchetes]. Luego puede guardarlo como PDF.',
-    'Le deseamos éxito en su búsqueda de empleo.',
+    `Te enviamos tu currículum en el diseño ${DISENOS[diseno]}, en PDF y en Word.`,
+    'Antes de postular, abre el archivo Word y completa los textos que aparecen entre [corchetes]. Después puedes guardarlo como PDF.',
+    'Te deseamos mucho éxito en tu búsqueda de empleo.',
     'Municipalidad de Hualañé',
   ]
-  const pie = 'Recibió este correo porque lo solicitó en el sitio de la Municipalidad de Hualañé. No guardamos su CV ni su correo. Por favor, no responda este mensaje.'
-  // Correo HTML: sin variables CSS. #263238 = gris-texto, #174A6E = azul,
-  // #5B6870 = tinte de gris-texto para el pie (5,7:1 sobre blanco).
+  const pie = 'Te llegó este correo porque lo pediste en el sitio de la Municipalidad de Hualañé. No guardamos tu CV ni tu correo. Por favor, no respondas este mensaje.'
+  // Correo HTML: sin variables CSS. #0E121B = neutral-950 (texto), #253786 = blue-700,
+  // #585F70 = neutral-600 para el pie (6,5:1 sobre blanco).
   return {
-    subject: 'Su currículum · Municipalidad de Hualañé',
+    subject: 'Tu currículum · Municipalidad de Hualañé',
     text: [...lineas, '', pie].join('\n\n'),
-    html: `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#263238;max-width:560px">
-${lineas.map((l, i) => `<p style="margin:0 0 14px${i === lineas.length - 1 ? ';font-weight:bold;color:#174A6E' : ''}">${escapeHtml(l)}</p>`).join('\n')}
-<p style="margin:24px 0 0;font-size:12px;color:#5B6870">${escapeHtml(pie)}</p></div>`,
+    html: `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#0E121B;max-width:560px">
+${lineas.map((l, i) => `<p style="margin:0 0 14px${i === lineas.length - 1 ? ';font-weight:bold;color:#253786' : ''}">${escapeHtml(l)}</p>`).join('\n')}
+<p style="margin:24px 0 0;font-size:14px;color:#585F70">${escapeHtml(pie)}</p></div>`,
   }
 }
 
@@ -64,19 +64,19 @@ export async function handleEnviarRequest(req: Request, env: Env, fetchImpl: typ
   const from = env.CV_EMAIL_FROM?.trim()
   if (!apiKey || !from) {
     console.error('[cv-enviar] faltan variables RESEND_API_KEY / CV_EMAIL_FROM')
-    return json(503, { error: 'El envío por correo no está disponible en este momento.' })
+    return json(503, { error: 'El envío por correo no está disponible en este momento. Usa Descargar PDF o Descargar Word.' })
   }
 
   let body: unknown
   try {
     body = await req.json()
   } catch {
-    return json(400, { error: 'No pudimos procesar la solicitud. Inténtelo nuevamente.' })
+    return json(400, { error: 'No pudimos procesar la solicitud. Inténtalo de nuevo.' })
   }
   const parsed = envioSchema.safeParse(body)
   if (!parsed.success) {
     const emailMalo = parsed.error.issues.some((i) => i.path[0] === 'email')
-    return json(400, { error: emailMalo ? 'Revise el correo ingresado.' : 'No pudimos procesar la solicitud. Inténtelo nuevamente.' })
+    return json(400, { error: emailMalo ? 'Revisa el correo que escribiste.' : 'No pudimos procesar la solicitud. Inténtalo de nuevo.' })
   }
   const { email, nombre, diseno, adjuntos, sitioWeb } = parsed.data
 
@@ -88,7 +88,7 @@ export async function handleEnviarRequest(req: Request, env: Env, fetchImpl: typ
     const bytes = Buffer.from(a.contenido, 'base64')
     const extension = a.nombre.split('.').pop()
     if (bytes.length === 0 || bytes.length > MAX_ADJUNTO || tipoReal(bytes) !== extension || tipos.has(extension)) {
-      return json(400, { error: 'Los archivos adjuntos no son válidos.' })
+      return json(400, { error: 'No pudimos adjuntar tu CV. Vuelve a elegir el diseño e inténtalo de nuevo.' })
     }
     tipos.add(extension)
   }
@@ -108,14 +108,14 @@ export async function handleEnviarRequest(req: Request, env: Env, fetchImpl: typ
     })
   } catch (err) {
     console.error('[cv-enviar] error de red', (err as Error).name)
-    return json(502, { error: 'No pudimos enviar el correo. Inténtelo nuevamente.' })
+    return json(502, { error: 'No pudimos enviar el correo. Inténtalo de nuevo.' })
   }
 
   if (!res.ok) {
     console.error(`[cv-enviar] Resend respondió ${res.status}`)
-    if (res.status === 422) return json(400, { error: 'Revise el correo ingresado.' })
-    if (res.status === 429) return json(503, { error: 'Hay muchas solicitudes en este momento. Inténtelo en unos minutos.' })
-    return json(502, { error: 'No pudimos enviar el correo. Inténtelo nuevamente.' })
+    if (res.status === 422) return json(400, { error: 'Revisa el correo que escribiste.' })
+    if (res.status === 429) return json(503, { error: 'Hay muchas solicitudes en este momento. Inténtalo en unos minutos.' })
+    return json(502, { error: 'No pudimos enviar el correo. Inténtalo de nuevo.' })
   }
   return json(200, { ok: true })
 }

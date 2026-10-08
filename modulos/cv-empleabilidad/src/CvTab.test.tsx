@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { CvTab } from './CvTab'
@@ -10,6 +10,11 @@ import { CV_COMPLETO, RECETA } from './test/fixtures'
 const extractMock = vi.hoisted(() => vi.fn())
 vi.mock('./lib/extractText', () => ({ extractText: extractMock }))
 beforeEach(() => extractMock.mockResolvedValue({ texto: CV_COMPLETO, imagenes: 0 }))
+
+// La vista del archivo original usa canvas/pdfjs: aquí se simula.
+vi.mock('./lib/renderOriginal', () => ({
+  renderOriginal: vi.fn(async () => ({ tipo: 'pdf', paginas: ['data:image/png;base64,AAAA', 'data:image/png;base64,BBBB'] })),
+}))
 
 // La generación real de PDF/Word se prueba aparte; aquí basta con archivos falsos.
 vi.mock('./export', async (importOriginal) => ({
@@ -53,16 +58,33 @@ describe('<CvTab />', () => {
     await user.clear(campo)
     await user.type(campo, 'no-es-correo')
     await user.click(screen.getByRole('button', { name: 'Enviar a mi correo' }))
-    expect(await screen.findByRole('alert')).toHaveTextContent('Ingrese un correo válido')
+    expect(await screen.findByRole('alert')).toHaveTextContent('Escribe un correo válido')
     expect(enviar).not.toHaveBeenCalled()
 
     await user.clear(campo)
     await user.type(campo, 'persona@example.com')
     await user.click(screen.getByRole('button', { name: 'Enviar a mi correo' }))
-    expect(await screen.findByText(/Enviamos su CV a/)).toHaveTextContent('persona@example.com')
+    expect(await screen.findByText(/Lo enviamos a/)).toHaveTextContent('persona@example.com')
     expect(enviar).toHaveBeenCalledWith(
       expect.objectContaining({ email: 'persona@example.com', diseno: 'compacto', adjuntos: expect.arrayContaining([expect.objectContaining({ tipo: 'pdf' })]) }),
     )
+  })
+
+  it('compara el CV original con el diseño elegido', async () => {
+    const user = userEvent.setup()
+    render(<CvTab analyzer={instantAnalyzer} />)
+    await user.upload(screen.getByTestId('cv-file-input'), new File(['%PDF'], 'mi-cv.pdf', { type: 'application/pdf' }))
+    await screen.findByText('Resultado del análisis')
+
+    await user.click(screen.getByRole('tab', { name: /Moderno/ }))
+    await user.click(screen.getByRole('button', { name: 'Comparar con mi CV original' }))
+
+    const dialogo = screen.getByRole('dialog', { name: 'Compara tu CV' })
+    expect(await within(dialogo).findByAltText('Página 1 de 2 de tu CV original')).toBeInTheDocument()
+    expect(within(dialogo).getByRole('region', { name: 'Diseño Moderno sugerido' })).toBeInTheDocument()
+
+    await user.click(within(dialogo).getByRole('button', { name: 'Cerrar comparación' }))
+    expect(screen.queryByRole('dialog', { name: 'Compara tu CV' })).not.toBeInTheDocument()
   })
 
   it('avisa cuando el archivo no es un CV y no muestra diseños', async () => {
@@ -81,6 +103,6 @@ describe('<CvTab />', () => {
     const user = userEvent.setup({ applyAccept: false })
     render(<CvTab analyzer={instantAnalyzer} />)
     await user.upload(screen.getByTestId('cv-file-input'), new File(['x'], 'foto.png', { type: 'image/png' }))
-    expect(await screen.findByRole('alert')).toHaveTextContent('Formato no compatible')
+    expect(await screen.findByRole('alert')).toHaveTextContent('No podemos leer este formato')
   })
 })

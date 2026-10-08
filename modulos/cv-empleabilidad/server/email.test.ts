@@ -43,7 +43,7 @@ describe('handleEnviarRequest', () => {
   it('rechaza correos inválidos con un mensaje claro', async () => {
     const res = await handleEnviarRequest(post({ ...valido, email: 'no-es-correo' }), ENV, resend())
     expect(res.status).toBe(400)
-    expect((await res.json()).error).toBe('Revise el correo ingresado.')
+    expect((await res.json()).error).toBe('Revisa el correo que escribiste.')
   })
 
   it('rechaza adjuntos cuyo contenido no es PDF/DOCX real, duplicados o con otra extensión', async () => {

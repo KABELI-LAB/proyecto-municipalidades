@@ -54,11 +54,12 @@ Si usas **Claude Code**, también puedes pedirle: *"crea mi módulo con /nuevo-m
 
 1. **No edites carpetas de otros** ni `design-system/`. Si necesitas un cambio compartido, coméntalo en el grupo.
 2. En `sitio/` solo toca la línea de tu módulo en `sitio/src/modulos.ts` (el orden del arreglo es el orden del navbar).
-3. Usa solo los colores, fuentes y espaciados de `design-system/tokens.css` (`var(--muni-...)`). **Nunca texto blanco sobre celeste ni amarillo.**
-4. Textos en español con trato de **usted**, frases breves, sin MAYÚSCULAS ni ¡¡signos repetidos!!
-5. Estilos con CSS Modules (`*.module.css`), nada de CSS global.
-6. **Nunca subas ni pegues claves** (API keys, contraseñas) en el código, commits, PRs ni chats, incluidos los chats con IA. Van en `.env` local y en Netlify. Lee [docs/despliegue.md](docs/despliegue.md).
-7. Nunca uses datos reales de personas en tests o ejemplos.
+3. Usa los componentes del design system (`import { Button, Alert } from '@muni/design-system'`) y, en CSS, solo sus variables (`var(--color-primary)`, `var(--space-4)`…). Lee [design-system/GUIA.md](design-system/GUIA.md). El amarillo **nunca** va como texto sobre blanco.
+4. Textos en español con trato de **tú** (nunca "usted"), con el verbo primero en los botones ("Descargar PDF") y frases cortas, sin MAYÚSCULAS ni ¡¡signos repetidos!!
+5. Revisa tu sección en el celular: debe verse bien a 390px de ancho.
+6. Estilos con CSS Modules (`*.module.css`), nada de CSS global.
+7. **Nunca subas ni pegues claves** (API keys, contraseñas) en el código, commits, PRs ni chats, incluidos los chats con IA. Van en `.env` local y en Netlify. Lee [docs/despliegue.md](docs/despliegue.md).
+8. Nunca uses datos reales de personas en tests o ejemplos.
 
 ## 4. Subir tus cambios
 

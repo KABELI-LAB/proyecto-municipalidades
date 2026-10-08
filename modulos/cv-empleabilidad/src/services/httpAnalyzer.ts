@@ -8,7 +8,7 @@ import { AnalisisError, type CvAnalyzer, type CvResultado } from './types'
 export function createHttpAnalyzer(baseUrl: string): CvAnalyzer {
   return {
     avisoPrivacidad:
-      'Para analizarlo, el texto de su CV se envía a un servicio de inteligencia artificial. No se almacena ni se usa para otros fines.',
+      'Para revisarlo, enviamos el texto de tu CV a un servicio de inteligencia artificial. No lo guardamos ni lo usamos para otros fines.',
     async analyze(input, signal) {
       const res = await fetch(`${baseUrl.replace(/\/$/, '')}/cv/analyze`, {
         method: 'POST',

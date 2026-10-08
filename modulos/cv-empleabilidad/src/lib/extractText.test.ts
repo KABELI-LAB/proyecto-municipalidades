@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { Document, ImageRun, Packer, Paragraph, TextRun } from 'docx'
 import { describe, expect, it } from 'vitest'
-import { extractText } from './extractText'
+import { extractText, htmlATexto } from './extractText'
 
 // PNG de 1×1 px.
 const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64')
@@ -26,3 +26,11 @@ describe('extractText (docx)', () => {
     expect((await extractText(await docxCon(2), 'docx')).imagenes).toBe(2)
   })
 })
+
+describe('htmlATexto', () => {
+  it('conserva saltos de línea suaves y marca las viñetas', () => {
+    const html = '<p>Técnico en Mecánica<br />diego@example.com</p><ul><li>Encargado de mantención</li><li>Atención de clientes &amp; ventas</li></ul>'
+    expect(htmlATexto(html)).toBe('Técnico en Mecánica\ndiego@example.com\n\n• Encargado de mantención\n\n• Atención de clientes & ventas')
+  })
+})
+

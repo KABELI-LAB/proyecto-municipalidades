@@ -1,3 +1,4 @@
+import { Icon } from '@muni/design-system'
 import { useId, useRef, useState, type DragEvent } from 'react'
 import s from '../styles/ui.module.css'
 
@@ -6,6 +7,7 @@ interface Props {
   disabled?: boolean
 }
 
+/** Zona de carga con el estilo .hds-upload del design system (arrastrar o elegir). */
 export function UploadZone({ onFile, disabled }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [over, setOver] = useState(false)
@@ -20,23 +22,34 @@ export function UploadZone({ onFile, disabled }: Props) {
 
   return (
     <div
-      className={`${s.drop} ${over ? s.dropOver : ''}`}
+      className={`hds-upload ${s.drop} ${over && !disabled ? s.dropOver : ''}`}
+      aria-busy={disabled || undefined}
       onDragOver={(e) => {
         e.preventDefault()
-        setOver(true)
+        if (!disabled) setOver(true)
       }}
       onDragLeave={() => setOver(false)}
       onDrop={onDrop}
     >
-      <svg className={s.dropIcon} viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M12 16V4m0 0-4 4m4-4 4 4M5 20h14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-      <p className={s.dropTitle}>Arrastre su CV aquí</p>
-      <p id={hintId} className={s.nota}>
-        PDF o Word (.docx), hasta 5 MB
+      <span className="hds-tile-icon hds-tile-icon--blue">
+        <Icon name="file-up" size={26} />
+      </span>
+      <p className={s.dropTitle}>
+        <strong>Elige tu CV</strong>
+        <span className={s.soloEscritorio}> o arrástralo aquí</span>
       </p>
-      <button type="button" className={s.btnPrimary} disabled={disabled} onClick={() => inputRef.current?.click()} aria-describedby={hintId}>
-        Seleccionar archivo
+      <p id={hintId} className={s.dropHint}>
+        PDF o Word (.docx). Máximo 5 MB.
+      </p>
+      <button
+        type="button"
+        className="hds-btn hds-btn--primary hds-btn--lg"
+        aria-disabled={disabled || undefined}
+        onClick={() => !disabled && inputRef.current?.click()}
+        aria-describedby={hintId}
+      >
+        <Icon name="upload" size={22} />
+        <span>Subir mi CV</span>
       </button>
       <input
         ref={inputRef}

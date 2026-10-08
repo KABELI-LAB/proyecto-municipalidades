@@ -32,7 +32,7 @@ export function createHttpMailer(baseUrl: string): CvMailer {
       })
       if (!res.ok) {
         const data = (await res.json().catch(() => null)) as { error?: string } | null
-        throw new AnalisisError(data?.error ?? 'No pudimos enviar el correo. Inténtelo nuevamente.')
+        throw new AnalisisError(data?.error ?? 'No pudimos enviar el correo. Inténtalo de nuevo.')
       }
     },
   }
