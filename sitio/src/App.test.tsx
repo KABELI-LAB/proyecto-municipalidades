@@ -28,7 +28,7 @@ describe('<App />', () => {
     renderEn('/')
     const nav = screen.getByRole('navigation', { name: 'Secciones del sitio' })
     await user.click(within(nav).getByRole('link', { name: 'Revisa tu CV' }))
-    expect(screen.getByRole('heading', { name: 'Revise y mejore su currículum' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Revisa y mejora tu currículum' })).toBeInTheDocument()
   })
 
   it('las rutas de los módulos son únicas', () => {

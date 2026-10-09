@@ -1,29 +1,25 @@
+import '@muni/design-system/base.css'
+import { Logo } from '@muni/design-system'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import '@muni/design-system/base.css'
 import { CvTab, cvTabMeta } from '..'
 import './dev.css'
 
 /**
- * Sitio anfitrión simulado, solo para desarrollo. Reproduce el contexto en que
- * la pestaña vivirá dentro del sitio completo. No se exporta.
+ * Anfitrión mínimo para desarrollar el módulo aislado (`npm run dev` en esta
+ * carpeta). Para verlo dentro del sitio completo: `npm run dev` en la raíz.
  */
-const TABS = ['Inicio', 'Trámites', cvTabMeta.label, 'Noticias', 'Contacto']
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <header className="dev-host-header">
-      <div className="dev-host-brand">
-        <span className="dev-host-escudo" aria-hidden="true" />
-        <span>Municipalidad de Hualañé</span>
-      </div>
-      <nav aria-label="Secciones del sitio">
-        {TABS.map((t) => (
-          <a key={t} href="#" aria-current={t === cvTabMeta.label ? 'page' : undefined}>
-            {t}
+    <header className="hds-header dev-host">
+      <div className="hds-header__in">
+        <Logo variant="citizen" height={40} />
+        <nav className="hds-header__nav" aria-label="Secciones del sitio">
+          <a href="#" className="hds-header__link" aria-current="page">
+            {cvTabMeta.label}
           </a>
-        ))}
-      </nav>
+        </nav>
+      </div>
     </header>
     <main>
       <CvTab />

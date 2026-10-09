@@ -1,34 +1,3 @@
-/*
- * Estilos base opcionales. Solo los importa la app anfitriona (o el dev server
- * de cada módulo). Los módulos NO deben importar este archivo dentro de su
- * componente exportado, para no pisar estilos globales del sitio completo.
- */
-@import "./tokens.css";
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  background: var(--muni-blanco);
-  color: var(--muni-gris-texto);
-  font-family: var(--muni-font-texto);
-  font-size: var(--muni-text-cuerpo);
-  line-height: 1.5;
-}
-
-h1,
-h2,
-h3 {
-  font-family: var(--muni-font-titulos);
-  color: var(--muni-azul);
-  margin: 0;
-}
-
-:focus-visible {
-  outline: none;
-  box-shadow: var(--muni-focus);
-}
+/* Estilos base globales. Solo para el sitio anfitrión y los dev servers de cada módulo. */
+@import './tokens.css';
+@import './tokens/base.css';

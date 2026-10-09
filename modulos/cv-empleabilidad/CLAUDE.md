@@ -1,6 +1,6 @@
 # Módulo cv-empleabilidad · "Revisa tu CV"
 
-Pestaña donde una persona sube su CV (PDF o DOCX), recibe feedback para mejorarlo y obtiene su CV reestructurado en **3 diseños** (Clásico, Moderno, Compacto). Del diseño elegido puede descargar PDF y Word, o recibir ambos en su correo.
+Pestaña donde una persona sube su CV (PDF o DOCX), recibe feedback para mejorarlo y obtiene su CV reestructurado en **3 diseños** (Clásico, Moderno, Compacto). Del diseño elegido puede descargar PDF y Word, recibir ambos en su correo, y **compararlo con el CV original** que subió.
 
 ## Estado actual
 
@@ -13,6 +13,8 @@ Pestaña donde una persona sube su CV (PDF o DOCX), recibe feedback para mejorar
 ## Flujo
 
 `UploadZone` → `validateCvFile` → `extractText` → `CvAnalyzer.analyze()` → `FeedbackPanel` + `DesignGallery` → `generarArchivos()` (PDF + Word) → descarga o `EnvioCorreo` → `CvMailer.enviar()`
+
+`DesignGallery` → botón "Comparar con mi CV original" → `Comparacion` (diálogo: lado a lado en escritorio, pestañas en móvil) → `renderOriginal()` (PDF a imágenes con pdfjs; Word a HTML en iframe `sandbox`). El archivo subido vive solo en memoria, en el estado `listo` de `CvTab`.
 
 El estado vive en `CvTab.tsx` como unión discriminada (`inicio | leyendo | analizando | listo | error`).
 
@@ -27,7 +29,10 @@ El estado vive en `CvTab.tsx` como unión discriminada (`inicio | leyendo | anal
 | `src/services/httpAnalyzer.ts` | Cliente del backend (`POST {VITE_CV_API_URL}/cv/analyze`) |
 | `src/services/analyzer.ts` | Elige mock o HTTP según `VITE_CV_API_URL` |
 | `src/lib/parseCv.ts` | Estructura texto plano → `CvData` (heurístico) |
-| `src/lib/extractText.ts` | PDF/DOCX → texto |
+| `src/lib/extractText.ts` | PDF/DOCX → texto + cantidad de imágenes. El Word se lee desde el HTML de mammoth (`htmlATexto`) para no perder saltos de línea ni viñetas |
+| `src/lib/renderOriginal.ts` | Vista del archivo original para la comparación |
+| `src/lib/useFitScale.ts` | Escala una página A4 al ancho disponible |
+| `src/components/Comparacion.tsx` | Diálogo de comparación original vs. diseño sugerido |
 | `src/templates/` | Las 3 plantillas A4 en HTML (vista previa, 794×1123px). Registro en `templates/index.ts` |
 | `src/export/` | Los mismos 3 diseños como PDF real (`pdf.tsx`, @react-pdf/renderer) y Word (`docx.ts`). Carga diferida |
 | `src/services/mailer.ts` | Cliente de envío por correo (`POST {VITE_CV_API_URL}/cv/enviar`) + mock |
@@ -43,7 +48,8 @@ El estado vive en `CvTab.tsx` como unión discriminada (`inicio | leyendo | anal
 
 ## Convenciones del módulo
 
-- Textos de UI en español con trato de usted (ver CLAUDE.md raíz).
+- Textos de UI en español con trato de **tú** y verbo primero en botones (ver GUIA.md del design system). El prompt de la IA (`server/prompt.ts`) también pide tú.
+- Usa los componentes de `@muni/design-system` (`Button`, `Alert`, `Badge`, `Loader`, `Tabs`, `Icon`…). Para elementos propios, las clases `.hds-*`; en `ui.module.css`, solo tokens.
 - Un diseño existe en **tres lugares** que deben verse igual: `src/templates/` (HTML), `src/export/pdf.tsx` y `src/export/docx.ts`. Para agregar un 4º: implementarlo en los tres, registrarlo en `TEMPLATES` y en los mapas `PAGINAS`/`DISENOS`, y sumarlo a `export.test.tsx`.
 - En react-pdf, fija `lineHeight` en textos grandes: el heredado se calcula con el tamaño base y se superponen.
 - Para agregar una regla al mock: añadirla en `analizarTexto` con `add({...})` y cubrirla en `mockAnalyzer.test.ts`.

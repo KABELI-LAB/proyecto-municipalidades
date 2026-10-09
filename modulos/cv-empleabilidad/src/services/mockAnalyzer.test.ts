@@ -15,7 +15,7 @@ describe('analizarTexto (mock)', () => {
 
   it('detecta frases débiles y propone verbos de acción', () => {
     const r = analizarTexto(input(CV_COMPLETO))
-    const sug = r.sugerencias.find((s) => s.titulo === 'Use verbos de acción')
+    const sug = r.sugerencias.find((s) => s.titulo === 'Usa verbos de acción')
     expect(sug?.ejemplo).toMatch(/^Gestioné /)
     expect(r.cvMejorado.experiencia[0]!.logros[0]).toMatch(/^Gestioné recepción/)
   })
@@ -23,8 +23,8 @@ describe('analizarTexto (mock)', () => {
   it('marca contacto faltante y datos sensibles en un CV pobre', () => {
     const r = analizarTexto(input(CV_POBRE))
     const titulos = r.sugerencias.map((s) => s.titulo)
-    expect(titulos).toContain('Agregue un correo electrónico')
-    expect(titulos).toContain('Evite datos personales innecesarios')
+    expect(titulos).toContain('Agrega un correo electrónico')
+    expect(titulos).toContain('Quita datos personales innecesarios')
     expect(r.sugerencias[0]!.prioridad).toBe('alta')
   })
 
@@ -48,8 +48,8 @@ describe('evaluarDocumento (mock)', () => {
 
   it('sugiere revisar la imagen según cuántas tenga el CV', () => {
     const titulos = (imagenes: number) => analizarTexto({ ...input(CV_COMPLETO), imagenes }).sugerencias.map((s) => s.titulo)
-    expect(titulos(0)).not.toContain('Revise la imagen de su CV')
-    expect(titulos(1)).toContain('Revise la imagen de su CV')
-    expect(titulos(4)).toContain('Reduzca las imágenes')
+    expect(titulos(0)).not.toContain('Revisa la imagen de tu CV')
+    expect(titulos(1)).toContain('Revisa la imagen de tu CV')
+    expect(titulos(4)).toContain('Reduce las imágenes')
   })
 })

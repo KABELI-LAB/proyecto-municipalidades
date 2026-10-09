@@ -79,7 +79,7 @@ export async function analyzeCv(
     const timeout = err instanceof DOMException && err.name === 'TimeoutError'
     throw new AnalyzeError(
       timeout ? 504 : 502,
-      timeout ? 'El análisis está tardando más de lo esperado. Inténtelo nuevamente.' : 'No pudimos conectar con el servicio de análisis.',
+      timeout ? 'La revisión está tardando más de lo normal. Inténtalo de nuevo.' : 'No pudimos conectar con el servicio de revisión. Inténtalo de nuevo.',
       timeout ? 'timeout del modelo' : `error de red: ${(err as Error).name}`,
     )
   }
@@ -88,7 +88,7 @@ export async function analyzeCv(
     const status = res.status === 429 ? 503 : 502
     throw new AnalyzeError(
       status,
-      res.status === 429 ? 'El servicio está recibiendo muchas solicitudes. Inténtelo en unos minutos.' : 'El servicio de análisis no está disponible.',
+      res.status === 429 ? 'Hay muchas personas usando el servicio. Inténtalo en unos minutos.' : 'La revisión de CV no está disponible en este momento.',
       `modelo respondió ${res.status}`,
     )
   }
@@ -96,18 +96,18 @@ export async function analyzeCv(
   const body = (await res.json()) as { choices?: { message?: { content?: string | null; refusal?: string | null } }[] }
   const message = body.choices?.[0]?.message
   if (!message?.content) {
-    throw new AnalyzeError(502, 'No pudimos analizar este CV.', message?.refusal ? 'el modelo rechazó la solicitud' : 'respuesta vacía del modelo')
+    throw new AnalyzeError(502, 'No pudimos revisar este CV. Inténtalo de nuevo.', message?.refusal ? 'el modelo rechazó la solicitud' : 'respuesta vacía del modelo')
   }
 
   let json: unknown
   try {
     json = JSON.parse(message.content)
   } catch {
-    throw new AnalyzeError(502, 'No pudimos analizar este CV.', 'el modelo no devolvió JSON')
+    throw new AnalyzeError(502, 'No pudimos revisar este CV. Inténtalo de nuevo.', 'el modelo no devolvió JSON')
   }
   const parsed = modelResponseSchema.safeParse(json)
   if (!parsed.success) {
-    throw new AnalyzeError(502, 'No pudimos analizar este CV.', `JSON inválido: ${parsed.error.issues.length} problemas`)
+    throw new AnalyzeError(502, 'No pudimos revisar este CV. Inténtalo de nuevo.', `JSON inválido: ${parsed.error.issues.length} problemas`)
   }
 
   const { esCv, motivoNoCv, ...data } = parsed.data
@@ -115,7 +115,7 @@ export async function analyzeCv(
     return { esCv: false, motivo: motivoNoCv?.trim() || 'El documento no tiene la información típica de un currículum.' }
   }
   if (!data.resumen.trim()) {
-    throw new AnalyzeError(502, 'No pudimos analizar este CV.', 'JSON inválido: resumen vacío')
+    throw new AnalyzeError(502, 'No pudimos revisar este CV. Inténtalo de nuevo.', 'JSON inválido: resumen vacío')
   }
   return {
     esCv: true,

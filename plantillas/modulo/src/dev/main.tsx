@@ -1,6 +1,7 @@
+import '@muni/design-system/base.css'
+import { Logo } from '@muni/design-system'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import '@muni/design-system/base.css'
 import { __Nombre__Tab, __nombre__TabMeta } from '..'
 import './dev.css'
 
@@ -10,16 +11,15 @@ import './dev.css'
  */
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <header className="dev-host-header">
-      <div className="dev-host-brand">
-        <span className="dev-host-escudo" aria-hidden="true" />
-        <span>Municipalidad de Hualañé</span>
+    <header className="hds-header dev-host">
+      <div className="hds-header__in">
+        <Logo variant="citizen" height={40} />
+        <nav className="hds-header__nav" aria-label="Secciones del sitio">
+          <a href="#" className="hds-header__link" aria-current="page">
+            {__nombre__TabMeta.label}
+          </a>
+        </nav>
       </div>
-      <nav aria-label="Secciones del sitio">
-        <a href="#" aria-current="page">
-          {__nombre__TabMeta.label}
-        </a>
-      </nav>
     </header>
     <main>
       <__Nombre__Tab />

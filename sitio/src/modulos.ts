@@ -15,6 +15,10 @@ export interface ModuloMeta {
   path: string
   /** Una frase para la tarjeta del inicio. */
   descripcion: string
+  /** Ícono Lucide de la tarjeta del inicio (ej. 'file-user'). Por defecto 'file-text'. */
+  icono?: string
+  /** Color de la tarjeta según la lógica de color del design system. Por defecto 'blue'. */
+  tono?: 'blue' | 'green' | 'yellow' | 'red'
 }
 
 export interface Modulo {

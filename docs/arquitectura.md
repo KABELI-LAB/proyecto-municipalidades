@@ -28,7 +28,7 @@ A partir de `MODULOS`, el sitio genera automáticamente:
 Cada módulo es un workspace npm `@muni/<nombre>` en `modulos/<nombre>/` que:
 
 1. **Exporta** desde `src/index.ts`:
-   - `<Nombre>Tab`: componente React sin props obligatorias,
+   - `<Nombre>Tab`: componente React sin props obligatorias, que aporta el `<h1>` de su página (el sitio no agrega otro),
    - `<nombre>TabMeta = { id, label, path, descripcion }` (`path` absoluto y único),
    - sus tipos públicos, si los tiene.
 2. **Se distribuye como código fuente** (`"exports": { ".": "./src/index.ts" }`): el sitio lo compila con Vite. No hay build de librería.
@@ -50,11 +50,12 @@ Si cambias la estructura común de los módulos, actualiza también `plantillas/
 
 `design-system/` es el paquete `@muni/design-system`:
 
-- `tokens.json`: fuente de verdad (copiada del deck del design system)
-- `tokens.css`: variables `--muni-*` y `@font-face`. Los módulos usan **solo** estas variables.
+- `GUIA.md`: marca, voz, color, tipografía, forma e íconos (la referencia para diseñar)
+- `index.js`: componentes React (`import { Button, Alert, Icon } from '@muni/design-system'`)
+- `tokens.css`: variables (`--color-*`, `--space-*`, `--radius-*`, `--type-*`…), fuentes y clases `.hds-*`. Los módulos usan **solo** estos tokens.
 - `base.css`: reset y tipografía base. Lo importan **solo** el sitio y los dev servers de cada módulo.
 
-Los cambios al design system se acuerdan en equipo; actualizar `tokens.json` y `tokens.css` juntos.
+Los cambios al design system se acuerdan en equipo. Ver en `design-system/README.md` las adaptaciones hechas sobre el export de Claude Design.
 
 ## Backend / IA
 

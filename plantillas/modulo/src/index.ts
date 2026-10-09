@@ -10,4 +10,7 @@ export const __nombre__TabMeta = {
   label: '__LABEL__',
   path: '/__NOMBRE__',
   descripcion: '__DESCRIPCION__',
+  // Opcional: ícono Lucide y color de la tarjeta del inicio.
+  icono: 'file-text',
+  tono: 'blue',
 } as const

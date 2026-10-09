@@ -1,9 +1,10 @@
+import { Alert, Button, Loader } from '@muni/design-system'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { DesignGallery } from './components/DesignGallery'
 import { FeedbackPanel } from './components/FeedbackPanel'
 import { UploadZone } from './components/UploadZone'
 import { extractText } from './lib/extractText'
-import { validateCvFile } from './lib/validateFile'
+import { validateCvFile, type CvFileKind } from './lib/validateFile'
 import { createDefaultAnalyzer } from './services/analyzer'
 import { createDefaultMailer, type CvMailer } from './services/mailer'
 import { AnalisisError, type CvAnalysis, type CvAnalyzer } from './services/types'
@@ -20,7 +21,8 @@ type Estado =
   | { tipo: 'inicio' }
   | { tipo: 'leyendo'; archivo: string }
   | { tipo: 'analizando'; archivo: string }
-  | { tipo: 'listo'; archivo: string; analysis: CvAnalysis }
+  /** original: el archivo subido se conserva en memoria solo para compararlo. */
+  | { tipo: 'listo'; archivo: string; analysis: CvAnalysis; original: { archivo: File; tipo: CvFileKind } }
   | { tipo: 'noCv'; archivo: string; motivo: string }
   | { tipo: 'error'; mensaje: string }
 
@@ -28,7 +30,7 @@ const MIN_PALABRAS = 30
 
 /**
  * Pestaña "Revisa tu CV". Componente autocontenido: no asume router ni estilos
- * globales del sitio anfitrión, solo las variables CSS del design system.
+ * globales del sitio anfitrión; usa los tokens y componentes del design system.
  */
 export function CvTab({ analyzer, mailer }: CvTabProps) {
   const activeAnalyzer = useMemo(() => analyzer ?? createDefaultAnalyzer(), [analyzer])
@@ -36,6 +38,7 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
   const [estado, setEstado] = useState<Estado>({ tipo: 'inicio' })
   const abortRef = useRef<AbortController | null>(null)
   const resultRef = useRef<HTMLHeadingElement>(null)
+  // El módulo aporta el <h1> de su página: el sitio anfitrión no agrega otro.
 
   useEffect(() => () => abortRef.current?.abort(), [])
 
@@ -59,7 +62,7 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
       if (texto.split(/\s+/).filter(Boolean).length < MIN_PALABRAS) {
         setEstado({
           tipo: 'error',
-          mensaje: 'No pudimos leer texto en el archivo. Si es un documento escaneado o una imagen, súbalo en Word o como PDF generado desde un procesador de texto.',
+          mensaje: 'No encontramos texto en tu archivo. Si es un documento escaneado o una foto, súbelo en Word o como PDF creado desde un procesador de texto.',
         })
         return
       }
@@ -69,7 +72,7 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
         setEstado({ tipo: 'noCv', archivo: file.name, motivo: resultado.motivo })
         return
       }
-      setEstado({ tipo: 'listo', archivo: file.name, analysis: resultado })
+      setEstado({ tipo: 'listo', archivo: file.name, analysis: resultado, original: { archivo: file, tipo: check.kind } })
     } catch (err) {
       if (err instanceof DOMException && err.name === 'AbortError') return
       if (err instanceof AnalisisError) {
@@ -77,7 +80,7 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
         return
       }
       console.error('[cv-empleabilidad]', err)
-      setEstado({ tipo: 'error', mensaje: 'Ocurrió un problema al procesar su CV. Inténtelo nuevamente en unos minutos.' })
+      setEstado({ tipo: 'error', mensaje: 'Tuvimos un problema al revisar tu CV. Inténtalo de nuevo en unos minutos.' })
     }
   }
 
@@ -91,61 +94,63 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
   return (
     <div className={s.root}>
       <header className={s.intro}>
-        <p className={s.eyebrow}>
-          <span className={s.eyebrowBar} aria-hidden="true" />
-          Empleabilidad
-        </p>
-        <h2>Revise y mejore su currículum</h2>
-        <p className={s.lead}>Suba su CV y reciba sugerencias concretas para mejorarlo, junto con tres diseños listos para descargar.</p>
+        <p className="hds-overline">Empleabilidad</p>
+        <h1>Revisa y mejora tu currículum</h1>
+        <p className={s.lead}>Sube tu CV y recibe sugerencias concretas para mejorarlo, junto con tres diseños listos para descargar.</p>
         <ol className={s.steps}>
-          <li><span>1</span>Suba su CV en PDF o Word</li>
-          <li><span>2</span>Revise las sugerencias</li>
-          <li><span>3</span>Elija un diseño y recíbalo por correo</li>
+          <li>
+            <span aria-hidden="true">1</span>Sube tu CV en PDF o Word
+          </li>
+          <li>
+            <span aria-hidden="true">2</span>Revisa las sugerencias
+          </li>
+          <li>
+            <span aria-hidden="true">3</span>Elige un diseño y recíbelo por correo
+          </li>
         </ol>
       </header>
 
       {estado.tipo !== 'listo' && (
         <>
           <UploadZone onFile={procesar} disabled={ocupado} />
-          <p className={s.nota}>{activeAnalyzer.avisoPrivacidad ?? 'Su CV no se almacena.'}</p>
+          <p className={s.nota}>{activeAnalyzer.avisoPrivacidad ?? 'No guardamos tu CV.'}</p>
         </>
       )}
 
-      <div aria-live="polite" className={s.status}>
-        {estado.tipo === 'leyendo' && <p className={s.loading}>Leyendo {estado.archivo}…</p>}
-        {estado.tipo === 'analizando' && <p className={s.loading}>Analizando su CV…</p>}
+      {/* Loader y Alert ya anuncian su contenido (role=status / role=alert). */}
+      <div className={s.status}>
+        {estado.tipo === 'leyendo' && <Loader label={`Leyendo ${estado.archivo}…`} />}
+        {estado.tipo === 'analizando' && <Loader label="Revisando tu CV. Puede tardar hasta un minuto…" />}
         {estado.tipo === 'noCv' && (
-          <div className={s.aviso}>
-            <p className={s.avisoTitulo}>
-              “<span className={s.fileName}>{estado.archivo}</span>” no parece ser un currículum
-            </p>
-            <p>{estado.motivo}</p>
-            <p>Si es su CV, revise que incluya sus datos de contacto, su experiencia y su formación. También puede subir otro archivo.</p>
-          </div>
+          <Alert tone="warning" title={`“${estado.archivo}” no parece ser un currículum`}>
+            {estado.motivo} Si es tu CV, revisa que tenga tus datos de contacto, tu experiencia y tu formación. También puedes subir otro archivo.
+          </Alert>
         )}
         {estado.tipo === 'error' && (
-          <div className={s.alert} role="alert">
-            <strong>No pudimos analizar el archivo.</strong> {estado.mensaje}
-          </div>
+          <Alert tone="error" title="No pudimos revisar tu archivo">
+            {estado.mensaje}
+          </Alert>
         )}
       </div>
 
       {estado.tipo === 'listo' && (
         <>
           <div className={s.resultBar}>
-            <h3 ref={resultRef} tabIndex={-1}>
+            <h2 ref={resultRef} tabIndex={-1}>
               Resultados para <span className={s.fileName}>{estado.archivo}</span>
-            </h3>
-            <button type="button" className={s.btnSecondary} onClick={reiniciar}>
-              Analizar otro CV
-            </button>
+            </h2>
+            <Button variant="secondary" iconLeft="rotate-ccw" onClick={reiniciar}>
+              Revisar otro CV
+            </Button>
           </div>
           {estado.analysis.origen === 'mock' && (
-            <p className={s.mockBanner}>Modo demostración: el análisis usa reglas automáticas, no inteligencia artificial.</p>
+            <Alert tone="info" title="Modo demostración">
+              Este análisis usa reglas automáticas, no inteligencia artificial.
+            </Alert>
           )}
           <div className={s.results}>
             <FeedbackPanel analysis={estado.analysis} />
-            <DesignGallery cv={estado.analysis.cvMejorado} mailer={activeMailer} />
+            <DesignGallery cv={estado.analysis.cvMejorado} mailer={activeMailer} original={estado.original} />
           </div>
         </>
       )}

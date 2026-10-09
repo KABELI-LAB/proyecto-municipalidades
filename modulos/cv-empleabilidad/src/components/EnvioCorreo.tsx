@@ -1,3 +1,4 @@
+import { Alert, Icon } from '@muni/design-system'
 import { useId, useState, type FormEvent } from 'react'
 import type { ArchivoCv, DisenoId } from '../export'
 import type { CvMailer } from '../services/mailer'
@@ -20,8 +21,7 @@ type Estado =
   /** campo: el error es del correo ingresado (se marca el input como inválido). */
   | { tipo: 'error'; mensaje: string; campo: boolean }
 
-const MENSAJE_EMAIL_SERVIDOR = 'Revise el correo ingresado.'
-
+const MENSAJE_EMAIL_SERVIDOR = 'Revisa el correo que escribiste.'
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
 /** Paso final: la persona deja su correo y recibe el diseño elegido en PDF y Word. */
@@ -29,7 +29,7 @@ export function EnvioCorreo({ mailer, diseno, nombreDiseno, nombrePersona, email
   const [email, setEmail] = useState(emailSugerido ?? '')
   const [sitioWeb, setSitioWeb] = useState('')
   const [estado, setEstado] = useState<Estado>({ tipo: 'editando' })
-  const ids = { email: useId(), ayuda: useId(), error: useId() }
+  const ids = { titulo: useId(), email: useId(), ayuda: useId(), error: useId() }
 
   const enviando = estado.tipo === 'enviando'
   const errorCampo = estado.tipo === 'error' && estado.campo
@@ -39,7 +39,7 @@ export function EnvioCorreo({ mailer, diseno, nombreDiseno, nombrePersona, email
     if (enviando) return
     const destino = email.trim()
     if (!EMAIL_RE.test(destino)) {
-      setEstado({ tipo: 'error', mensaje: 'Ingrese un correo válido, por ejemplo nombre@correo.cl.', campo: true })
+      setEstado({ tipo: 'error', mensaje: 'Escribe un correo válido, por ejemplo nombre@correo.cl.', campo: true })
       return
     }
     setEstado({ tipo: 'enviando' })
@@ -48,23 +48,28 @@ export function EnvioCorreo({ mailer, diseno, nombreDiseno, nombrePersona, email
       await mailer.enviar({ email: destino, nombre: nombrePersona, diseno, adjuntos, sitioWeb })
       setEstado({ tipo: 'enviado', email: destino })
     } catch (err) {
-      const mensaje = err instanceof AnalisisError ? err.message : 'No pudimos enviar el correo. Inténtelo nuevamente.'
+      const mensaje = err instanceof AnalisisError ? err.message : 'No pudimos enviar el correo. Inténtalo de nuevo.'
       setEstado({ tipo: 'error', mensaje, campo: mensaje === MENSAJE_EMAIL_SERVIDOR })
     }
   }
 
   return (
-    <form className={s.envio} onSubmit={enviar} noValidate aria-labelledby={`${ids.email}-titulo`}>
-      <h4 id={`${ids.email}-titulo`}>Reciba su CV por correo</h4>
-      <p>
-        Le enviaremos el diseño <strong>{nombreDiseno}</strong> en PDF y en Word, para que pueda editarlo.
-      </p>
+    <form className={s.envio} onSubmit={enviar} noValidate aria-labelledby={ids.titulo}>
+      <div>
+        <h3 id={ids.titulo}>Recibe tu CV por correo</h3>
+        <p className={s.textoSecundario}>
+          Te enviamos el diseño <strong>{nombreDiseno}</strong> en PDF y en Word, para que puedas editarlo.
+        </p>
+      </div>
 
-      <div className={s.campo}>
-        <label htmlFor={ids.email}>Correo electrónico</label>
+      <div className="hds-field">
+        <label htmlFor={ids.email} className="hds-label">
+          Correo electrónico
+        </label>
         <div className={s.campoFila}>
           <input
             id={ids.email}
+            className="hds-input"
             type="email"
             inputMode="email"
             autoComplete="email"
@@ -79,17 +84,24 @@ export function EnvioCorreo({ mailer, diseno, nombreDiseno, nombrePersona, email
             required
           />
           {/* aria-disabled (no disabled) para que el foco no se pierda durante el envío. */}
-          <button type="submit" className={s.btnPrimary} aria-disabled={enviando || undefined}>
-            {enviando ? 'Enviando…' : 'Enviar a mi correo'}
+          <button type="submit" className="hds-btn hds-btn--primary" aria-disabled={enviando || undefined} aria-busy={enviando || undefined}>
+            {enviando ? <span className="hds-spinner" aria-hidden="true" /> : <Icon name="send" size={20} />}
+            <span>{enviando ? 'Enviando…' : 'Enviar a mi correo'}</span>
           </button>
         </div>
-        <p id={ids.ayuda} className={s.nota}>
-          Usaremos su correo solo para enviarle este CV. No lo guardamos.
-        </p>
+        {errorCampo ? (
+          <span id={ids.error} className="hds-error-msg" role="alert">
+            <Icon name="circle-alert" size={18} />
+            {estado.mensaje}
+          </span>
+        ) : null}
+        <span id={ids.ayuda} className="hds-hint">
+          Usamos tu correo solo para enviarte este CV. No lo guardamos.
+        </span>
       </div>
 
       {/* Honeypot: invisible para personas; si un bot lo completa, no se envía nada. */}
-      <div className={s.honeypot} aria-hidden="true">
+      <div className="hds-visually-hidden" aria-hidden="true">
         <label>
           Sitio web
           <input type="text" tabIndex={-1} autoComplete="off" value={sitioWeb} onChange={(e) => setSitioWeb(e.target.value)} />
@@ -97,23 +109,22 @@ export function EnvioCorreo({ mailer, diseno, nombreDiseno, nombrePersona, email
       </div>
 
       <div aria-live="polite">
-        {enviando && <p className={s.nota}>Preparando y enviando su CV…</p>}
-        {estado.tipo === 'enviado' && (
-          <p className={s.exito}>
-            {mailer.demo ? (
-              <>Modo demostración: el correo no se envió. Con el servicio configurado, llegaría a {estado.email}.</>
-            ) : (
-              <>
-                Listo. Enviamos su CV a <strong>{estado.email}</strong>. Si no lo ve en unos minutos, revise la carpeta de correo no deseado.
-              </>
-            )}
-          </p>
-        )}
+        {enviando && <p className={s.nota}>Preparando y enviando tu CV…</p>}
+        {estado.tipo === 'enviado' &&
+          (mailer.demo ? (
+            <Alert tone="info" title="Modo demostración">
+              El correo no se envió. Con el servicio configurado, llegaría a {estado.email}.
+            </Alert>
+          ) : (
+            <Alert tone="success" title="Listo, te enviamos tu CV">
+              Lo enviamos a <strong>{estado.email}</strong>. Si no lo ves en unos minutos, revisa la carpeta de correo no deseado.
+            </Alert>
+          ))}
       </div>
-      {estado.tipo === 'error' && (
-        <p id={ids.error} className={s.alert} role="alert">
+      {estado.tipo === 'error' && !estado.campo && (
+        <Alert tone="error" title="No pudimos enviar el correo">
           {estado.mensaje}
-        </p>
+        </Alert>
       )}
     </form>
   )

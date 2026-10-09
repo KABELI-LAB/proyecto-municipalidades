@@ -48,18 +48,30 @@ async function extractDocx(buffer: ArrayBuffer): Promise<Extraccion> {
   // se pasan ambos para que funcione en los dos (Node se usa en los tests).
   const entrada: { arrayBuffer: ArrayBuffer } = Object.assign({ arrayBuffer: buffer }, { buffer: new Uint8Array(buffer) })
   let imagenes = 0
-  const [raw] = await Promise.all([
-    mammoth.extractRawText(entrada),
-    // Solo para contar imágenes: el HTML resultante se descarta.
-    mammoth.convertToHtml(
-      entrada,
-      {
-        convertImage: mammoth.images.imgElement(async () => {
-          imagenes++
-          return { src: '' }
-        }),
-      },
-    ),
-  ])
-  return { texto: raw.value, imagenes }
+  // Se usa el HTML (no extractRawText) porque conserva los saltos de línea
+  // suaves y las viñetas: el texto plano los pierde y junta líneas
+  // ("Técnico en Mecánica" + "correo@…" → "Mecánicacorreo@…").
+  const { value } = await mammoth.convertToHtml(entrada, {
+    convertImage: mammoth.images.imgElement(async () => {
+      imagenes++
+      return { src: '' }
+    }),
+  })
+  return { texto: htmlATexto(value), imagenes }
+}
+
+const ENTIDADES: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'", apos: "'", nbsp: ' ' }
+
+/** HTML simple de mammoth → texto con un salto por línea y "• " en las viñetas. */
+export function htmlATexto(html: string): string {
+  return html
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<li[^>]*>/gi, '\n• ')
+    .replace(/<\/(p|h[1-6]|li|tr|div|table|ul|ol)>/gi, '\n')
+    .replace(/<\/t[dh]>/gi, ' ')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&(#?\w+);/g, (m, e: string) => ENTIDADES[e] ?? (e.startsWith('#') ? String.fromCodePoint(Number(e.slice(1))) : m))
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
 }

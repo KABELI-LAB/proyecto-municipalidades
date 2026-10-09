@@ -14,7 +14,7 @@ Recién creado desde la plantilla. Actualiza esta sección a medida que avances:
 |---|---|
 | `src/index.ts` | **API pública**: `__Nombre__Tab` y `__nombre__TabMeta` (label, ruta y descripción que usa el sitio) |
 | `src/__Nombre__Tab.tsx` | Componente raíz de la pestaña |
-| `src/styles/ui.module.css` | Estilos (solo variables `--muni-*`) |
+| `src/styles/ui.module.css` | Estilos (solo tokens del design system: `--color-*`, `--space-*`…) |
 | `src/dev/` | Anfitrión mínimo para `npm run dev`. No se exporta |
 
 ## Comandos (desde esta carpeta)

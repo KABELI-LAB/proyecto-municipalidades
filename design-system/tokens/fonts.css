@@ -1,0 +1,12 @@
+/* Atkinson Hyperlegible Next + Mono — Braille Institute, OFL.
+   Elegida por legibilidad en baja visión: I/l/1 y O/0 inconfundibles, aperturas abiertas, español completo.
+   Adaptación del proyecto: las fuentes se sirven desde el propio sitio (@fontsource) en vez de Google Fonts,
+   solo con el subconjunto latino (cubre ñ, tildes, ¿ y ¡). */
+@import '@fontsource/atkinson-hyperlegible-next/latin-400.css';
+@import '@fontsource/atkinson-hyperlegible-next/latin-400-italic.css';
+@import '@fontsource/atkinson-hyperlegible-next/latin-600.css';
+@import '@fontsource/atkinson-hyperlegible-next/latin-700.css';
+@import '@fontsource/atkinson-hyperlegible-next/latin-800.css';
+@import '@fontsource/atkinson-hyperlegible-mono/latin-400.css';
+@import '@fontsource/atkinson-hyperlegible-mono/latin-500.css';
+@import '@fontsource/atkinson-hyperlegible-mono/latin-600.css';

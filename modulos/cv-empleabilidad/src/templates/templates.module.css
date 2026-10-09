@@ -1,11 +1,12 @@
-/* Página A4 a 96 dpi. Las plantillas usan la paleta institucional con
-   moderación: el CV es del usuario, no una pieza municipal. */
+/* Página A4 a 96 dpi. Las plantillas usan la paleta del design system con
+   moderación: el CV es de la persona, no una pieza municipal. Tipografía
+   Helvetica/Arial para que la vista previa calce con el PDF y el Word exportados. */
 .page {
   width: 794px;
   min-height: 1123px;
   background: #fff;
-  color: var(--muni-gris-texto);
-  font-family: var(--muni-font-texto);
+  color: var(--neutral-900);
+  font-family: Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 1.45;
   text-align: left;
@@ -13,7 +14,7 @@
 
 .page h1,
 .page h2 {
-  font-family: var(--muni-font-titulos);
+  font-family: Helvetica, Arial, sans-serif;
   margin: 0;
 }
 
@@ -50,7 +51,7 @@
   margin-left: auto;
   font-style: normal;
   font-size: 12px;
-  color: #5b6870;
+  color: var(--neutral-600);
 }
 
 /* ---------- Clásico ---------- */
@@ -65,7 +66,7 @@
 
 .clasicoHeader h1 {
   font-size: 30px;
-  color: var(--muni-azul);
+  color: var(--blue-700);
   letter-spacing: 0.5px;
 }
 
@@ -87,8 +88,8 @@
   font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: var(--muni-azul);
-  border-bottom: 1.5px solid var(--muni-azul);
+  color: var(--blue-700);
+  border-bottom: 1.5px solid var(--blue-700);
   padding-bottom: 4px;
   margin-bottom: 10px;
 }
@@ -100,8 +101,8 @@
 }
 
 .modernoSide {
-  background: var(--muni-azul);
-  color: var(--muni-marfil);
+  background: var(--blue-700);
+  color: var(--blue-100);
   padding: 48px 28px;
   overflow-wrap: anywhere;
 }
@@ -114,7 +115,7 @@
 
 .modernoSide .titular {
   margin-top: 8px;
-  color: var(--muni-marfil);
+  color: var(--blue-100);
 }
 
 .modernoSide h2 {
@@ -124,7 +125,7 @@
   color: #fff;
   margin: 28px 0 8px;
   padding-top: 12px;
-  border-top: 1px solid rgb(245 241 232 / 0.35);
+  border-top: 1px solid rgb(255 255 255 / 0.3);
 }
 
 .modernoSide li {
@@ -141,7 +142,7 @@
 
 .modernoMain h2 {
   font-size: 17px;
-  color: var(--muni-azul);
+  color: var(--blue-700);
   margin-bottom: 10px;
   display: flex;
   align-items: center;
@@ -152,8 +153,8 @@
   content: '';
   width: 24px;
   height: 4px;
-  border-radius: var(--muni-radius-md);
-  background: var(--muni-verde);
+  border-radius: var(--radius-small);
+  background: var(--green-700);
 }
 
 /* ---------- Compacto ---------- */
@@ -166,18 +167,18 @@
   display: flex;
   justify-content: space-between;
   gap: 24px;
-  border-left: 6px solid var(--muni-verde);
+  border-left: 6px solid var(--green-700);
   padding-left: 16px;
   margin-bottom: 16px;
 }
 
 .compactoHeader h1 {
   font-size: 24px;
-  color: var(--muni-gris-texto);
+  color: var(--neutral-900);
 }
 
 .compactoHeader .titular {
-  color: var(--muni-verde);
+  color: var(--green-700);
 }
 
 .compactoHeader ul {
@@ -186,9 +187,9 @@
 }
 
 .compactoPerfil {
-  background: var(--muni-gris-claro);
+  background: var(--neutral-100);
   padding: 10px 14px;
-  border-radius: var(--muni-radius-md);
+  border-radius: var(--radius-small);
   margin-bottom: 16px !important;
 }
 
@@ -197,14 +198,14 @@
   grid-template-columns: 120px 1fr;
   gap: 16px;
   padding: 10px 0;
-  border-top: 1px solid var(--muni-gris-claro);
+  border-top: 1px solid var(--neutral-100);
 }
 
 .compactoRow h2 {
   font-size: 11.5px;
   text-transform: uppercase;
   letter-spacing: 1.2px;
-  color: var(--muni-verde);
+  color: var(--green-700);
 }
 
 .compacto .item {
@@ -218,7 +219,7 @@
 }
 
 .chips span {
-  border: 1px solid var(--muni-gris-claro);
-  border-radius: var(--muni-radius-sm);
+  border: 1px solid var(--neutral-100);
+  border-radius: var(--radius-small);
   padding: 1px 8px;
 }

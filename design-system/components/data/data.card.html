@@ -1,0 +1,19 @@
+<!-- @dsCard group="Components" viewport="700x620" name="Data visualization" subtitle="Metric, bar, line, donut, progress, timeline, table" -->
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{padding:24px;background:var(--color-surface)}.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}.col{display:flex;flex-direction:column;gap:16px}.lab{font:700 12px/1 var(--font-sans);letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-muted);margin:4px 0 -4px}.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}</style>
+</head><body><div id="root"></div><script type="text/babel">
+const NS = window.HualaDesignSystem_c0b80f;
+const {MetricCard,BarChart,LineChart,DonutChart,ProgressBar,Timeline,DataTable,StatusBadge}=NS;
+function App(){return <div className="col">
+<div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:12}}><MetricCard icon="laptop" label="Trámites en línea" value="1.284" delta="+18%" caption="vs. sept."/><MetricCard icon="clock" label="Tiempo de respuesta" value="2,4" unit="días" delta="−0,6" trend="down" upIsGood={false}/><MetricCard icon="construction" label="Ejecución obras" value="68" unit="%" progress={68}/></div>
+<div className="g2"><div style={{border:'1px solid var(--color-border)',borderRadius:20,padding:20}}><LineChart labels={['May','Jun','Jul','Ago','Sep','Oct']} series={[{name:'En línea',values:[420,510,640,760,980,1284]},{name:'Presencial',values:[1900,1820,1760,1650,1500,1380]}]}/></div>
+<div style={{border:'1px solid var(--color-border)',borderRadius:20,padding:20,display:'grid',placeItems:'center'}}><DonutChart size={150} centerLabel="presupuesto" centerValue="M$8.240" data={[{label:'Salud',value:38},{label:'Educación',value:34},{label:'Gestión',value:16},{label:'Comunidad',value:12}]}/></div></div>
+<div className="g2"><div className="col"><BarChart data={[{label:'Hualañé centro',value:412,highlight:true},{label:'La Huerta',value:198},{label:'Quilpoco',value:121},{label:'Los Coipos',value:86}]}/><ProgressBar label="Pavimentación calle Libertad" value={68} tone="green"/></div>
+<Timeline steps={[{title:'Solicitud recibida',meta:'3 oct · 10:14',state:'done'},{title:'En revisión',meta:'Oficina de Partes',state:'current'},{title:'Lista para retiro',state:'pending'}]}/></div>
+<DataTable columns={[{key:'n',label:'Proyecto'},{key:'s',label:'Estado',render:r=><StatusBadge size="sm" status={r.s}/>},{key:'m',label:'Monto',numeric:true}]} rows={[{n:'Sede vecinal Quilpoco',s:'operativo',m:'$ 84.000.000'},{n:'Luminarias LED',s:'finalizado',m:'$ 126.500.000'}]}/>
+</div>}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);</script></body></html>
