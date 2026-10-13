@@ -60,11 +60,18 @@ describe('handleEnviarRequest', () => {
     expect(m.to).toBe('persona@example.com')
     expect(m.from).toBe('"Municipalidad de Hualañé" <cv@example.com>')
     expect(m.replyTo).toBe('contacto@example.com')
-    expect(m.attachments.map((a) => [a.filename, a.contentType])).toEqual([
+    const cvs = m.attachments.filter((a) => !a.cid)
+    expect(cvs.map((a) => [a.filename, a.contentType])).toEqual([
       ['CV-Maria-moderno.pdf', 'application/pdf'],
       ['CV-Maria-moderno.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
     ])
-    expect(m.attachments[0]!.content.subarray(0, 4).toString()).toBe('%PDF')
+    // Logo incrustado (CID) y referenciado desde el HTML.
+    const logo = m.attachments.find((a) => a.cid === 'logo-hualane')
+    expect(logo?.content.subarray(1, 4).toString()).toBe('PNG')
+    expect(m.html).toContain('src="cid:logo-hualane"')
+    expect(m.html).toContain('CV-Maria-moderno.pdf')
+    expect(m.text).toContain('Si tienes dudas, responde este mensaje.')
+    expect(cvs[0]!.content.subarray(0, 4).toString()).toBe('%PDF')
     expect(m.text).toContain('Hola, María:')
     expect(m.text).toContain('Moderno')
   })
@@ -107,6 +114,10 @@ describe('handleEnviarRequest', () => {
     expect((await handleEnviarRequest(post(valido), ENV, enviador({ code: 'ETIMEDOUT' }).fn)).status).toBe(502)
     // Privacidad: los logs no incluyen la dirección de destino.
     expect(JSON.stringify(error.mock.calls)).not.toContain('persona@example.com')
+  })
+
+  it('sin dirección de respuesta pide no responder', () => {
+    expect(contenidoCorreo('Ana', 'clasico').text).toContain('no respondas este mensaje')
   })
 
   it('escapa el nombre en el HTML y omite marcadores [..]', () => {
