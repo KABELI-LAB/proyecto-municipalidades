@@ -23,17 +23,23 @@ Si una clave se filtra por error: **rótela de inmediato** en el proveedor (Azur
    | `AZURE_OPENAI_ENDPOINT` | Endpoint de Azure AI Foundry (termina en `/openai/v1`) | Sí |
    | `AZURE_OPENAI_API_KEY` | API key del recurso | **Sí** |
    | `AZURE_OPENAI_DEPLOYMENT` | Nombre del deployment del modelo | No |
-   | `RESEND_API_KEY` | API key de [Resend](https://resend.com) para enviar correos | **Sí** |
-   | `CV_EMAIL_FROM` | Remitente con dominio verificado en Resend, ej. `Municipalidad de Hualañé <cv@su-dominio.cl>` | No |
+   | `SMTP_HOST` | Servidor SMTP, ej. `smtp.gmail.com` | No |
+   | `SMTP_PORT` | `465` (TLS directo) o `587` (STARTTLS) | No |
+   | `SMTP_USER` | Cuenta que envía, ej. `cv@su-dominio.cl`. Es también la dirección del remitente | No |
+   | `SMTP_PASS` | Contraseña de aplicación de esa cuenta | **Sí** |
+   | `CV_EMAIL_FROM_NAME` | (Opcional) nombre visible del remitente. Por defecto "Municipalidad de Hualañé" | No |
+   | `CV_EMAIL_REPLY_TO` | (Opcional) dirección que recibe las respuestas | No |
 
    `VITE_CV_API_URL=/api` ya viene en `netlify.toml` (no es secreto).
 4. Haga un deploy y pruebe la pestaña "Revisa tu CV": el aviso bajo la zona de carga debe mencionar el servicio de inteligencia artificial y no debe aparecer el banner "Modo demostración".
 
-## Resend (envío de correos)
+## Correo (SMTP con Gmail / Google Workspace)
 
-1. Cree una cuenta en https://resend.com con el correo del equipo.
-2. En **Domains**, agregue el dominio remitente (ej. un subdominio `cv.su-dominio.cl`) y cree en su DNS los registros que Resend indica (SPF, DKIM). Sin dominio verificado, Resend solo permite enviar a la dirección de la propia cuenta.
-3. En **API Keys**, cree una clave con permiso **Sending access** (solo envío) y péguela directamente en Netlify / `.env`.
+1. La cuenta que envía (`SMTP_USER`) debe tener **verificación en dos pasos** activada.
+2. En esa cuenta: **Cuenta de Google → Seguridad → Contraseñas de aplicaciones**, crea una para "CV Hualañé". Pégala directamente en Netlify (`SMTP_PASS`, marcada como secreta) y en tu `.env`. Los espacios que muestra Google no importan.
+3. El remitente siempre es `SMTP_USER` (Gmail no permite enviar como otra dirección). `CV_EMAIL_FROM_NAME` solo cambia el nombre visible.
+4. Límites de Gmail: ~500 correos al día en cuentas gratuitas y ~2.000 en Workspace. Si se supera, el sitio responde "Inténtalo en unos minutos".
+5. Si la contraseña de aplicación se filtra: **revócala** en la misma pantalla, crea otra y actualízala en Netlify.
 
 ## Desarrollo local con IA y correo
 

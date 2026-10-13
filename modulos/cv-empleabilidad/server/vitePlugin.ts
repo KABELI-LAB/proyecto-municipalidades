@@ -20,7 +20,7 @@ export function cvApiDevPlugin(envDir: string): Plugin {
     name: 'muni-cv-api-dev',
     apply: 'serve',
     configureServer(server) {
-      const env = loadEnv(server.config.mode, envDir, ['AZURE_OPENAI_', 'RESEND_', 'CV_EMAIL_'])
+      const env = loadEnv(server.config.mode, envDir, ['AZURE_OPENAI_', 'SMTP_', 'CV_EMAIL_'])
       for (const [ruta, handler] of Object.entries(RUTAS)) {
         server.middlewares.use(ruta, (req, res) => {
           void forward(req, res, ruta, handler, env)
