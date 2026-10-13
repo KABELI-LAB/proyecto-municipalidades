@@ -1,0 +1,54 @@
+/* Mapa base (Leaflet) con el sistema de diseño: un solo radio, sin sombras,
+   tipografía y colores de los tokens. Clases globales de Leaflet. */
+.leaflet-container {
+  isolation: isolate; /* las capas de Leaflet quedan bajo el encabezado y la franja de demostración */
+  z-index: 0;
+  background: var(--gris-claro);
+  font-family: var(--font-textos);
+}
+.leaflet-bar {
+  border: var(--borde-filete) solid var(--gris-claro) !important;
+  border-radius: var(--radio-base) !important;
+  box-shadow: none !important;
+}
+.leaflet-bar a {
+  width: var(--espacio-10) !important;
+  height: var(--espacio-10) !important;
+  line-height: var(--espacio-10) !important;
+  color: var(--azul-institucional) !important;
+}
+.leaflet-control-attribution {
+  font-size: var(--tipo-impresion-nota-tamano);
+}
+.etiqueta-mapa {
+  padding: var(--espacio-1) var(--espacio-2);
+  background: var(--blanco);
+  border: var(--borde-filete) solid var(--gris-claro);
+  border-radius: var(--radio-base);
+  box-shadow: none;
+  color: var(--gris-texto);
+  font-family: var(--font-textos);
+  font-size: var(--tipo-impresion-cuerpo-tamano);
+  line-height: 1.25;
+}
+.etiqueta-mapa b {
+  color: var(--azul-institucional);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+/* Etiqueta de sector en el mapa en miniatura de la portada: letra de nota. */
+.etiqueta-mini {
+  padding: 0 var(--espacio-1);
+  font-size: var(--tipo-impresion-nota-tamano);
+}
+.etiqueta-mapa::before {
+  display: none;
+}
+/* Cambio de capa o de mes con fundido breve. */
+.leaflet-overlay-pane path {
+  transition: fill-opacity 200ms ease, stroke-opacity 200ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .leaflet-overlay-pane path {
+    transition: none;
+  }
+}

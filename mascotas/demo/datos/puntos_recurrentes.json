@@ -1,0 +1,41 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "datos": [
+    {
+      "ref": "orilla-de-valdes",
+      "tipo": "abandono",
+      "sector": "la-huerta",
+      "peso": 5,
+      "nota": "Camino rural: abandono recurrente (ficticio)"
+    },
+    {
+      "ref": "estadio-municipal-de-hualane",
+      "tipo": "jauria",
+      "sector": "hualane",
+      "peso": 4,
+      "nota": "Jauría en horario nocturno (ficticio)"
+    },
+    {
+      "ref": "remolino",
+      "tipo": "atropello",
+      "sector": "la-huerta",
+      "peso": 3,
+      "nota": "Tramo de ruta con atropellos (ficticio)"
+    },
+    {
+      "ref": "plaza-de-armas-de-hualane",
+      "tipo": "animal comunitario sin atencion",
+      "sector": "hualane",
+      "peso": 3,
+      "nota": "Perros comunitarios sin control (ficticio)"
+    },
+    {
+      "ref": "caone",
+      "tipo": "abandono",
+      "sector": "los-coipos",
+      "peso": 2,
+      "nota": "Abandono de camadas (ficticio)"
+    }
+  ]
+}

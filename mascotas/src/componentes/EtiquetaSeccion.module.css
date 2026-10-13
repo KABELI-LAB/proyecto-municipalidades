@@ -1,0 +1,28 @@
+.etiqueta {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-4);
+  margin: 0;
+  font-family: var(--tipo-presentacion-etiqueta-seccion-familia);
+  font-size: var(--tipo-impresion-cuerpo-tamano);
+  font-weight: var(--tipo-presentacion-etiqueta-seccion-peso);
+  line-height: var(--tipo-presentacion-etiqueta-seccion-interlineado);
+  letter-spacing: var(--tipo-presentacion-etiqueta-seccion-espaciado);
+  text-transform: uppercase;
+  color: var(--azul-institucional);
+}
+.etiqueta::before {
+  content: "";
+  flex: none;
+  width: var(--espacio-12);
+  height: var(--espacio-2);
+  border-radius: var(--radio-base);
+  background: var(--verde-territorio);
+}
+
+.sobreAzul {
+  color: var(--marfil-institucional);
+}
+.sobreAzul::before {
+  background: var(--amarillo-senal);
+}

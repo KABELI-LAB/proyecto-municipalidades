@@ -1,0 +1,39 @@
+.pagina {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-6);
+}
+.grilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: var(--espacio-6);
+}
+.esqueleto {
+  display: block;
+  width: 100%;
+  background: var(--blanco);
+  border-radius: var(--radio-base);
+  animation: latido 1.2s ease-in-out infinite alternate;
+}
+.linea {
+  height: var(--espacio-5);
+}
+.titulo {
+  height: var(--espacio-10);
+}
+.bloque {
+  height: var(--espacio-16);
+}
+.tarjeta {
+  height: var(--espacio-40);
+}
+@keyframes latido {
+  to {
+    opacity: 0.5;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .esqueleto {
+    animation: none;
+  }
+}

@@ -1,0 +1,35 @@
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  padding: var(--espacio-1) var(--espacio-2);
+  border-radius: var(--radio-base);
+  font-family: var(--font-textos);
+  font-size: var(--tipo-impresion-cuerpo-tamano);
+  font-weight: var(--tipo-impresion-h2-peso);
+  line-height: var(--tipo-impresion-h3-interlineado);
+  white-space: nowrap;
+}
+
+/* Combinaciones del README: gris-texto sobre celeste y amarillo; blanco sobre verde y azul. */
+.recibido,
+.cerrado {
+  background: var(--gris-claro);
+  color: var(--gris-texto);
+}
+.informacion {
+  background: var(--celeste-rio);
+  color: var(--gris-texto);
+}
+.espera {
+  background: var(--amarillo-senal);
+  color: var(--gris-texto);
+}
+.confirmado {
+  background: var(--verde-territorio);
+  color: var(--blanco);
+}
+.finalizado {
+  background: var(--azul-institucional);
+  color: var(--blanco);
+}

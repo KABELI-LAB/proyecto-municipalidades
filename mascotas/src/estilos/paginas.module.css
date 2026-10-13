@@ -1,0 +1,362 @@
+/* Estilos compartidos por las páginas del portal. */
+
+.pagina {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-6);
+}
+
+.cabecera {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  max-width: 760px;
+}
+.cabecera p {
+  font-size: var(--tipo-impresion-h3-tamano);
+  line-height: var(--tipo-impresion-cuerpo-interlineado);
+}
+
+.seccion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+.tituloSeccion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espacio-2) var(--espacio-6);
+}
+
+.grilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: var(--espacio-6);
+}
+.grillaDos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: var(--espacio-6);
+  align-items: start;
+}
+
+/* Las cinco acciones de inicio: botones grandes. */
+.acciones {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: var(--espacio-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.accion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  height: 100%;
+  padding: var(--espacio-6);
+  background: var(--blanco);
+  border: var(--borde-filete) solid var(--blanco);
+  border-radius: var(--radio-base);
+  color: var(--gris-texto);
+  text-decoration: none;
+}
+.accion:hover {
+  border-color: var(--azul-institucional);
+}
+.accion svg {
+  color: var(--azul-institucional);
+}
+.accion b {
+  font-family: var(--font-titulos);
+  font-size: var(--tipo-impresion-h3-tamano);
+  font-weight: var(--tipo-impresion-h2-peso);
+  line-height: var(--tipo-impresion-h3-interlineado);
+  color: var(--azul-institucional);
+}
+
+.enlacesSecundarios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-2) var(--espacio-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.enlacesSecundarios a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+
+.vacio,
+.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-4);
+  padding: var(--espacio-8);
+  background: var(--blanco);
+  border-radius: var(--radio-base);
+}
+
+/* Filtros por GET: funcionan sin JavaScript. */
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--espacio-4);
+  padding: var(--espacio-5) var(--espacio-6);
+  background: var(--blanco);
+  border-radius: var(--radio-base);
+}
+.filtros label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+.filtros select {
+  min-height: var(--espacio-12);
+  min-width: 200px;
+  padding: var(--espacio-2) var(--espacio-3);
+  border: var(--borde-filete) solid var(--gris-claro);
+  border-radius: var(--radio-base);
+  background: var(--blanco);
+  color: var(--gris-texto);
+  font: inherit;
+}
+
+/* Ficha de detalle: datos en dos columnas. */
+.datos {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--espacio-2) var(--espacio-6);
+  margin: 0;
+}
+.datos dt {
+  font-weight: var(--tipo-impresion-h2-peso);
+  color: var(--azul-institucional);
+}
+.datos dd {
+  margin: 0;
+}
+@media (max-width: 480px) {
+  .datos {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .datos dd {
+    margin-bottom: var(--espacio-2);
+  }
+}
+
+.volver {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+.volver svg {
+  transform: scaleX(-1);
+}
+
+.foto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-2);
+  aspect-ratio: 4 / 3;
+  background: var(--gris-claro);
+  border-radius: var(--radio-base);
+  color: var(--gris-texto);
+}
+
+/* Panel cuyo contenido ocupa todo el ancho (gráficos, tablas). */
+.panelAncho {
+  align-items: stretch;
+}
+
+/* Agrupa un par dt/dd sin romper la grilla de .datos. */
+.grupoDatos {
+  display: contents;
+}
+
+/* Controles plegados: «Filtrar» muestra el filtro activo y abre el formulario. */
+.plegable summary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  min-height: var(--espacio-12);
+  padding-inline: var(--espacio-4);
+  background: var(--blanco);
+  border: var(--borde-filete) solid var(--azul-institucional);
+  border-radius: var(--radio-base);
+  color: var(--azul-institucional);
+  font-weight: var(--tipo-impresion-h2-peso);
+  cursor: pointer;
+}
+.plegable[open] summary {
+  margin-bottom: var(--espacio-3);
+}
+
+/* Título y acciones en una sola fila; en pantallas angostas, las acciones bajan. */
+.barraTitulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3) var(--espacio-6);
+}
+.barraTitulo h1,
+.barraTitulo h2 {
+  margin: 0;
+}
+/* El subtítulo nunca más grande que el título de la página. */
+.barraTitulo h2 {
+  font-size: var(--tipo-impresion-h3-tamano);
+}
+/* Al abrir los filtros, ocupan su propia línea bajo el título y el botón. */
+.barraTitulo > :has(.plegable[open]) {
+  flex-basis: 100%;
+}
+.barraTitulo .plegable[open] {
+  order: 1;
+  flex-basis: 100%;
+}
+/* En celular, filtro y botón caben en una línea: el filtro activo se ve al abrirlo. */
+@media (max-width: 639px) {
+  .barraTitulo .accionesCabecera {
+    gap: var(--espacio-2);
+  }
+  .barraTitulo .plegable:not([open]) .filtroActivo {
+    display: none;
+  }
+}
+
+/* Acción principal y, al lado, un enlace secundario. */
+.accionesCabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-3) var(--espacio-6);
+}
+
+/* Pestañas: una vista a la vez, sin recargar la página entera. */
+.pestanas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-2) var(--espacio-6);
+  border-bottom: var(--borde-filete) solid var(--gris-claro);
+}
+.pestanas a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--espacio-12);
+  border-bottom: var(--espacio-1) solid transparent;
+  color: var(--gris-texto);
+  font-weight: var(--tipo-impresion-h2-peso);
+  text-decoration: none;
+  transition: border-color 200ms ease, color 200ms ease;
+}
+.pestanas a[aria-current="page"] {
+  border-bottom-color: var(--azul-institucional);
+  color: var(--azul-institucional);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pestanas a {
+    transition: none;
+  }
+}
+
+/* Lista en filas: texto a la izquierda, estado a la derecha. */
+.listaFilas {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--blanco);
+  border-radius: var(--radio-base);
+}
+.listaFilas li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2) var(--espacio-6);
+  padding: var(--espacio-4) var(--espacio-6);
+  border-top: var(--borde-filete) solid var(--gris-claro);
+}
+.listaFilas li:first-child {
+  border-top: 0;
+}
+.listaFilas li > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+/* Fotos adicionales de una ficha, bajo la principal. */
+.galeriaChica {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--espacio-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Llamado secundario dentro de una página (por ejemplo, «Dar en adopción» en el catálogo). */
+.llamado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-4) var(--espacio-8);
+  padding: var(--espacio-5) var(--espacio-6);
+  background: var(--blanco);
+  border-left: var(--espacio-1) solid var(--verde-territorio);
+  border-radius: var(--radio-base);
+}
+.llamado h2 {
+  font-size: var(--tipo-impresion-h3-tamano);
+}
+
+/* Lista breve con separadores (por ejemplo, un historial). */
+.listaSimple {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.listaSimple li {
+  padding-block: var(--espacio-2);
+  border-top: var(--borde-filete) solid var(--gris-claro);
+}
+.listaSimple li:first-child {
+  border-top: 0;
+}
+.listaSimple b {
+  color: var(--azul-institucional);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+
+/* Texto libre escrito por un vecino: respeta sus saltos de línea. */
+.textoLibre {
+  white-space: pre-line;
+}
+
+/* «Más detalles»: datos plegados dentro de una tarjeta compacta. */
+.masDetalles summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--espacio-12);
+  color: var(--azul-institucional);
+  font-weight: var(--tipo-impresion-h2-peso);
+  cursor: pointer;
+}

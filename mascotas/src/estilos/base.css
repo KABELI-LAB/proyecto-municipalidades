@@ -1,0 +1,121 @@
+@import "./tokens.css";
+
+/*
+  Escala de pantalla: usa los estilos del grupo «Impresión» en px.
+  En pantallas angostas h1 baja a 32 px (tamaño de h2). Propuesta pendiente
+  de validación: tokens.json no define todavía una escala web.
+*/
+:root {
+  --web-h1-tamano: var(--tipo-impresion-h1-tamano);
+}
+@media (max-width: 640px) {
+  :root {
+    --web-h1-tamano: var(--tipo-impresion-h2-tamano);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--marfil-institucional);
+  color: var(--gris-texto);
+  font-family: var(--tipo-impresion-cuerpo-familia);
+  font-size: var(--tipo-impresion-cuerpo-tamano);
+  line-height: var(--tipo-impresion-cuerpo-interlineado);
+  font-weight: var(--tipo-impresion-cuerpo-peso);
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  color: var(--azul-institucional);
+}
+h1 {
+  font-family: var(--tipo-impresion-h1-familia);
+  font-size: var(--web-h1-tamano);
+  line-height: var(--tipo-impresion-h1-interlineado);
+  font-weight: var(--tipo-impresion-h1-peso);
+}
+h2 {
+  font-family: var(--tipo-impresion-h2-familia);
+  font-size: var(--tipo-impresion-h2-tamano);
+  line-height: var(--tipo-impresion-h2-interlineado);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+h3 {
+  font-family: var(--tipo-impresion-h3-familia);
+  font-size: var(--tipo-impresion-h3-tamano);
+  line-height: var(--tipo-impresion-h3-interlineado);
+  font-weight: var(--tipo-impresion-h3-peso);
+}
+p {
+  margin: 0;
+}
+
+.nota {
+  font-family: var(--tipo-impresion-nota-familia);
+  font-size: var(--tipo-impresion-nota-tamano);
+  line-height: var(--tipo-impresion-nota-interlineado);
+  font-weight: var(--tipo-impresion-nota-peso);
+}
+
+:focus-visible {
+  outline: var(--borde-filete) solid var(--azul-institucional);
+  outline-offset: var(--borde-filete);
+}
+
+/* ── Utilidades del portal ── */
+.contenedor {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-inline: var(--espacio-6);
+}
+@media (max-width: 640px) {
+  .contenedor {
+    padding-inline: var(--espacio-4);
+  }
+}
+
+a {
+  color: var(--azul-institucional);
+  text-underline-offset: var(--espacio-1);
+}
+
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.saltar {
+  position: absolute;
+  left: var(--espacio-4);
+  top: calc(-1 * var(--espacio-16));
+  z-index: 20;
+  padding: var(--espacio-2) var(--espacio-4);
+  background: var(--blanco);
+  border-radius: var(--radio-base);
+}
+.saltar:focus {
+  top: var(--espacio-4);
+}
+
+/* La franja de demostración es fija: lo enfocado no debe quedar bajo ella. */
+:focus,
+:target {
+  scroll-margin-top: var(--espacio-32);
+}

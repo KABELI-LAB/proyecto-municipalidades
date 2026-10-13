@@ -1,0 +1,37 @@
+/* Bandeja de reportes de SOS Mascotas. */
+
+.etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-2);
+}
+
+.foto {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+.foto img {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radio-base);
+  background: var(--gris-claro);
+}
+
+.historial summary {
+  cursor: pointer;
+  font-weight: var(--tipo-impresion-h2-peso);
+  color: var(--azul-institucional);
+}
+.historial ol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  margin: var(--espacio-2) 0 0;
+  padding-left: var(--espacio-5);
+}

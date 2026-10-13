@@ -1,0 +1,100 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "datos": {
+    "tipos_reporte": [
+      {
+        "id": "animal herido",
+        "nombre": "Animal herido o enfermo",
+        "publico": false
+      },
+      {
+        "id": "maltrato o abandono",
+        "nombre": "Posible maltrato o abandono",
+        "publico": false
+      },
+      {
+        "id": "animal agresivo",
+        "nombre": "Animal agresivo o en peligro",
+        "publico": false
+      },
+      {
+        "id": "animal comunitario sin atencion",
+        "nombre": "Perro comunitario que necesita atención",
+        "publico": false
+      },
+      {
+        "id": "animal atrapado",
+        "nombre": "Animal atrapado o en una situación de riesgo",
+        "publico": false
+      },
+      {
+        "id": "otro",
+        "nombre": "Otra situación de bienestar animal",
+        "publico": false
+      },
+      {
+        "id": "abandono",
+        "nombre": "Abandono",
+        "publico": false,
+        "activo": false
+      },
+      {
+        "id": "jauria",
+        "nombre": "Jauría",
+        "publico": false,
+        "activo": false
+      },
+      {
+        "id": "atropello",
+        "nombre": "Atropello",
+        "publico": false,
+        "activo": false
+      },
+      {
+        "id": "maltrato",
+        "nombre": "Maltrato",
+        "publico": false,
+        "activo": false
+      }
+    ],
+    "servicios": [
+      {
+        "id": "esterilizacion",
+        "nombre": "Esterilización"
+      },
+      {
+        "id": "vacunacion",
+        "nombre": "Vacunación"
+      },
+      {
+        "id": "microchip",
+        "nombre": "Microchip"
+      }
+    ],
+    "colores_perro": [
+      "café",
+      "negro",
+      "blanco",
+      "amarillo",
+      "negro con blanco",
+      "café con blanco",
+      "gris",
+      "atigrado"
+    ],
+    "colores_gato": [
+      "negro",
+      "blanco",
+      "naranjo",
+      "gris",
+      "tricolor",
+      "atigrado",
+      "blanco con negro"
+    ],
+    "tamanos": [
+      "pequeño",
+      "mediano",
+      "grande"
+    ]
+  }
+}

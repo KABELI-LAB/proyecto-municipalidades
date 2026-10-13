@@ -1,0 +1,122 @@
+/* Barra superior: solo la firma institucional y «Mis solicitudes». */
+.encabezado {
+  background: var(--azul-institucional);
+  color: var(--marfil-institucional);
+}
+.barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-4);
+  padding-block: var(--espacio-2);
+}
+.inicio {
+  display: inline-flex;
+  text-decoration: none;
+  border-radius: var(--radio-base);
+}
+.inicio:focus-visible {
+  outline-color: var(--marfil-institucional);
+}
+/* Escudo algo más chico en el encabezado: una barra más limpia. */
+.inicio img {
+  height: var(--espacio-12);
+}
+
+.solicitudes {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--espacio-2);
+  min-height: var(--espacio-12);
+  padding-inline: var(--espacio-4);
+  border: var(--borde-filete) solid var(--marfil-institucional);
+  border-radius: var(--radio-base);
+  color: var(--marfil-institucional);
+  font-weight: var(--tipo-impresion-h2-peso);
+  text-decoration: none;
+}
+.solicitudes:hover {
+  text-decoration: underline;
+}
+.solicitudes:focus-visible {
+  outline-color: var(--marfil-institucional);
+}
+/* En celular, firma más compacta y botón en dos líneas para que todo quepa en una fila. */
+@media (max-width: 640px) {
+  .inicio span {
+    font-size: var(--tipo-impresion-cuerpo-tamano);
+  }
+  .solicitudes {
+    max-width: 9em;
+    padding-inline: var(--espacio-3);
+    line-height: 1.15;
+  }
+}
+
+.principal {
+  padding-block: var(--espacio-4) var(--espacio-16);
+}
+/* Títulos de página moderados: el contenido se ve sin desplazarse. */
+.principal :global(h1) {
+  font-size: var(--tipo-impresion-h2-tamano);
+}
+@media (max-width: 640px) {
+  .principal :global(h1) {
+    font-size: var(--tipo-impresion-h3-tamano);
+  }
+}
+
+/* Sin subrayados en la web de vecinos: los enlaces se distinguen por color y
+   peso (y por el contorno de foco al navegar con teclado). */
+.principal :global(a),
+.pie :global(a) {
+  text-decoration: none;
+}
+.principal :global(p a) {
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+
+/* Pie mínimo: solo la institución. */
+.pie {
+  padding-block: var(--espacio-6);
+  border-top: var(--borde-filete) solid var(--gris-claro);
+}
+.pie b {
+  color: var(--azul-institucional);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+.filaPie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2) var(--espacio-6);
+}
+/* Acceso al panel: presente pero discreto (no compite con las funciones de vecinos). */
+.accesoPanel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  min-height: var(--espacio-12);
+  color: var(--gris-texto);
+  font-size: var(--tipo-impresion-cuerpo-tamano);
+}
+.accesoPanel:hover {
+  color: var(--azul-institucional);
+}
+
+/* El portal usa todo el ancho de la ventana, con márgenes laterales generosos.
+   Los textos largos mantienen su propio ancho máximo para seguir siendo legibles. */
+.encabezado :global(.contenedor),
+.principal :global(.contenedor),
+.pie :global(.contenedor) {
+  max-width: none;
+}
+@media (min-width: 900px) {
+  .encabezado :global(.contenedor),
+  .principal :global(.contenedor),
+  .pie :global(.contenedor) {
+    padding-inline: var(--espacio-10);
+  }
+}

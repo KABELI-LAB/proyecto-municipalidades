@@ -1,0 +1,659 @@
+/* Inicio del portal según la maqueta aprobada: bienvenida y collage, tres
+   funciones protagonistas, las demás funciones debajo y tres tarjetas.
+   Pensado primero para celular. Solo colores y
+   medidas de los tokens: un radio, sin sombras ni degradados. */
+
+.pagina {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-6);
+  margin-top: calc(-1 * var(--espacio-2));
+}
+
+/* ───── 1. Bienvenida y collage ───── */
+
+.portada {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-6);
+  align-items: center;
+}
+@media (min-width: 900px) {
+  .portada {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: var(--espacio-10);
+  }
+}
+.mensaje {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+.antetitulo {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+.antetitulo svg {
+  color: var(--azul-institucional);
+}
+/* Tamaño de h2 (32 px), el de la portada anterior. */
+.mensaje h1 {
+  font-family: var(--font-titulos);
+  font-size: var(--tipo-impresion-h2-tamano);
+  font-weight: var(--tipo-impresion-h1-peso);
+  line-height: var(--tipo-impresion-h1-interlineado);
+  color: var(--azul-institucional);
+}
+/* En escritorio, el título en dos líneas como en la maqueta. */
+@media (min-width: 900px) {
+  .salto {
+    display: block;
+  }
+}
+.mensaje > p:last-child {
+  font-size: var(--tipo-impresion-h3-tamano);
+  line-height: var(--tipo-impresion-cuerpo-interlineado);
+}
+@media (max-width: 639px) {
+  .mensaje > p:last-child {
+    font-size: var(--tipo-impresion-cuerpo-tamano);
+  }
+}
+
+/* Collage: franja deslizable en celular; en escritorio una foto grande, dos
+   medianas arriba y cuatro chicas abajo. Cada foto conserva su frase. */
+.mosaico {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 60%;
+  gap: var(--espacio-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+}
+.mosaico li {
+  scroll-snap-align: start;
+}
+.mosaico a,
+.mosaico li > div {
+  position: relative;
+  display: block;
+  height: 100%;
+  border-radius: var(--radio-base);
+  overflow: hidden;
+}
+.mosaico img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  transition: transform 250ms ease;
+}
+.mosaico a:hover img {
+  transform: scale(1.03);
+}
+.mosaico a:focus-visible {
+  outline-offset: calc(-1 * var(--espacio-1));
+}
+.etiquetaFoto {
+  position: absolute;
+  left: var(--espacio-2);
+  bottom: var(--espacio-2);
+  max-width: calc(100% - var(--espacio-4));
+  padding: var(--espacio-1) var(--espacio-2);
+  background: var(--blanco);
+  border-radius: var(--radio-base);
+  color: var(--azul-institucional);
+  font-weight: var(--tipo-impresion-h2-peso);
+  line-height: 1.25;
+}
+@media (min-width: 640px) {
+  .mosaico {
+    grid-auto-columns: 40%;
+  }
+}
+@media (min-width: 900px) {
+  .mosaico {
+    grid-auto-flow: row;
+    grid-template-columns: 2fr repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(2, 150px);
+    overflow: visible;
+  }
+  .mosaico img {
+    aspect-ratio: auto;
+  }
+  .mosaico li:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1 / 3;
+  }
+  .mosaico li:nth-child(2) {
+    grid-column: 2 / 4;
+    grid-row: 1;
+  }
+  .mosaico li:nth-child(3) {
+    grid-column: 4 / 6;
+    grid-row: 1;
+  }
+  /* En las fotos chicas, la frase en letra de nota para que quepa. */
+  .mosaico li:nth-child(n + 4) .etiquetaFoto {
+    left: var(--espacio-1);
+    bottom: var(--espacio-1);
+    max-width: calc(100% - var(--espacio-2));
+    font-size: var(--tipo-impresion-nota-tamano);
+  }
+}
+@media (min-width: 1400px) {
+  .mosaico {
+    grid-template-rows: repeat(2, 170px);
+  }
+}
+
+/* En celular, primero las tres funciones y las demás; el collage va después. */
+@media (max-width: 899px) {
+  .portada {
+    display: contents;
+  }
+  .mensaje {
+    order: 1;
+  }
+  .principales {
+    order: 2;
+  }
+  .otros {
+    order: 3;
+  }
+  .mosaico {
+    order: 4;
+  }
+  .fila {
+    order: 5;
+  }
+}
+@media (max-width: 639px) {
+  .mensaje > p:last-child {
+    display: none;
+  }
+}
+
+/* ───── 2. Tres funciones protagonistas ───── */
+
+.principales {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 900px) {
+  .principales {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.principales li {
+  display: flex;
+}
+/* Todo el bloque es el enlace: sin botones adentro. */
+.principal {
+  flex: 1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--espacio-4);
+  min-height: 180px;
+  border: var(--borde-filete) solid transparent;
+  border-radius: var(--radio-base);
+  overflow: hidden;
+  text-decoration: none;
+  transition: border-color 200ms ease;
+}
+.principalAzul:hover,
+.principalSos:hover {
+  border-color: var(--blanco);
+}
+.principalClaro:hover {
+  border-color: var(--azul-institucional);
+}
+.principalIcono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--espacio-16);
+  height: var(--espacio-16);
+  margin: var(--espacio-6) 0 0 var(--espacio-6);
+  border-radius: var(--radio-base);
+}
+.principalTexto {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-3);
+  padding: var(--espacio-6) var(--espacio-6) var(--espacio-6) 0;
+}
+/* Adornos: un grupo pequeño en el rincón inferior derecho de cada tarjeta,
+   en un tono suave del color de la tarjeta (sin contraste fuerte). */
+.principal {
+  position: relative;
+}
+.principal > :not(.adornos) {
+  position: relative;
+  z-index: 1;
+}
+.adornos {
+  position: absolute;
+  right: var(--espacio-4);
+  bottom: var(--espacio-3);
+  width: 140px;
+  height: 100px;
+  pointer-events: none;
+}
+/* Azul: huellas en azul filete, apenas más claro que el fondo. */
+.principalAzul .adornos {
+  color: var(--azul-filete);
+}
+/* Fondo claro: huellas blancas. */
+.principalClaro .adornos {
+  color: var(--blanco);
+}
+/* Terracota: blanco muy translúcido. */
+.principalSos .adornos {
+  color: var(--blanco);
+  opacity: 0.2;
+}
+@media (max-width: 639px) {
+  .adornos {
+    right: var(--espacio-2);
+    bottom: var(--espacio-2);
+    width: 84px;
+    height: 60px;
+  }
+}
+
+.principalTitulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-2) var(--espacio-3);
+}
+.principal h2 {
+  font-family: var(--font-titulos);
+  font-size: var(--tipo-impresion-h3-tamano);
+  font-weight: var(--tipo-impresion-h1-peso);
+  line-height: var(--tipo-impresion-h3-interlineado);
+}
+
+/* Operativos: azul con texto blanco (9 : 1). */
+.principalAzul {
+  background: var(--azul-institucional);
+  color: var(--blanco);
+}
+.principalAzul h2 {
+  color: var(--blanco);
+}
+.principalAzul .principalIcono {
+  background: var(--blanco);
+  color: var(--azul-institucional);
+}
+.distintivo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  padding: var(--espacio-1) var(--espacio-2);
+  background: var(--blanco);
+  border-radius: var(--radio-base);
+  color: var(--azul-institucional);
+  font-size: var(--tipo-impresion-nota-tamano);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+
+/* Mascotas: el título lleva a los avisos; dos accesos directos para informar. */
+.enlaceTitulo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  min-height: var(--espacio-12);
+  color: inherit;
+  text-decoration: none;
+}
+.enlaceTitulo svg {
+  flex: none;
+  transition: transform 200ms ease;
+}
+.enlaceTitulo:hover svg {
+  transform: translateX(var(--espacio-1));
+}
+/* Atajos uno al lado del otro, a lo ancho de la tarjeta (bajo el ícono y el título). */
+.atajosMascota {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--espacio-2);
+  align-self: start;
+  padding: 0 var(--espacio-6) var(--espacio-6);
+}
+.atajoMascota {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-2);
+  min-height: var(--espacio-12);
+  padding: var(--espacio-2);
+  text-align: center;
+  background: var(--blanco);
+  border: var(--borde-filete) solid var(--blanco);
+  border-radius: var(--radio-base);
+  color: var(--azul-institucional);
+  font-weight: var(--tipo-impresion-h1-peso);
+  text-decoration: none;
+  transition: border-color 200ms ease;
+}
+.atajoMascota:hover {
+  border-color: var(--azul-institucional);
+}
+
+/* Mascotas: fondo claro con acento azul. */
+.principalClaro {
+  background: var(--gris-claro);
+  color: var(--gris-texto);
+}
+.principalClaro h2 {
+  color: var(--azul-institucional);
+}
+.principalClaro .principalIcono {
+  background: var(--azul-institucional);
+  color: var(--blanco);
+}
+
+/* SOS: sobre terracota (4,2 : 1) el texto blanco va siempre grande y en negrita. */
+.principalSos {
+  background: var(--terracota);
+  color: var(--blanco);
+}
+.principalSos h2 {
+  color: var(--blanco);
+}
+.principalSos .principalIcono {
+  background: var(--blanco);
+  color: var(--terracota);
+}
+.sosMensaje {
+  font-size: var(--tipo-impresion-h3-tamano);
+  font-weight: var(--tipo-impresion-h1-peso);
+  line-height: var(--tipo-impresion-h3-interlineado);
+}
+
+/* En celular, tarjetas compactas para ver las tres al entrar. */
+@media (max-width: 639px) {
+  .principalIcono {
+    width: var(--espacio-12);
+    height: var(--espacio-12);
+    margin: var(--espacio-4) 0 0 var(--espacio-4);
+  }
+  .principalTexto {
+    gap: var(--espacio-2);
+    padding: var(--espacio-4) var(--espacio-4) var(--espacio-4) 0;
+  }
+  .principal {
+    min-height: 0;
+  }
+  .atajosMascota {
+    padding: 0 var(--espacio-4) var(--espacio-4);
+  }
+}
+
+/* ───── 3. Las demás funciones ───── */
+
+.otros ul {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 640px) {
+  .otros ul {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.otros li {
+  display: flex;
+}
+.otro {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  min-height: var(--espacio-12);
+  padding: var(--espacio-3) var(--espacio-4);
+  background: var(--blanco);
+  border: var(--borde-filete) solid var(--blanco);
+  border-radius: var(--radio-base);
+  color: var(--azul-institucional);
+  text-decoration: none;
+  transition: border-color 200ms ease;
+}
+.otro svg {
+  flex: none;
+}
+.otro > span {
+  display: flex;
+  flex-direction: column;
+}
+.otro .nota {
+  color: var(--gris-texto);
+}
+.otro b {
+  font-weight: var(--tipo-impresion-h2-peso);
+  line-height: var(--tipo-impresion-h3-interlineado);
+}
+.otro:hover {
+  border-color: var(--celeste-rio);
+}
+
+/* ───── 4. Cuatro tarjetas ───── */
+
+.fila {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-4);
+}
+@media (min-width: 640px) {
+  .fila {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1200px) {
+  .fila {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 3fr) minmax(0, 3fr);
+  }
+}
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  padding: var(--espacio-5);
+  background: var(--blanco);
+  border-radius: var(--radio-base);
+}
+.tituloBloque {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--espacio-3);
+}
+.tituloBloque > svg {
+  color: var(--azul-institucional);
+}
+.tituloBloque h2 {
+  font-family: var(--font-titulos);
+  font-size: var(--tipo-impresion-cuerpo-tamano);
+  font-weight: var(--tipo-impresion-h1-peso);
+  line-height: var(--tipo-impresion-h3-interlineado);
+  color: var(--azul-institucional);
+}
+.tituloBloque > a {
+  font-size: var(--tipo-impresion-nota-tamano);
+  font-weight: var(--tipo-impresion-h2-peso);
+  white-space: nowrap;
+}
+
+/* Mapa */
+.miniMapa {
+  width: 100%;
+  height: 220px;
+  border-radius: var(--radio-base);
+  overflow: hidden;
+  cursor: pointer;
+}
+.par {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  color: var(--gris-texto);
+  text-decoration: none;
+}
+.par > span:last-child {
+  display: flex;
+  flex-direction: column;
+}
+.par b {
+  color: var(--azul-institucional);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+.par:hover b {
+  color: var(--azul-filete);
+}
+.miniaturas {
+  display: flex;
+  flex: none;
+  gap: var(--espacio-1);
+}
+.miniaturas img {
+  display: block;
+  width: var(--espacio-10);
+  height: var(--espacio-10);
+  object-fit: cover;
+  border-radius: var(--radio-base);
+}
+
+/* Retrato */
+.cifras {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espacio-2);
+  margin: 0;
+}
+.cifras div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-1);
+  padding: var(--espacio-3) var(--espacio-2);
+  background: var(--marfil-institucional);
+  border-radius: var(--radio-base);
+  text-align: center;
+}
+.cifras dt {
+  order: 2;
+  font-size: var(--tipo-impresion-nota-tamano);
+  line-height: var(--tipo-impresion-nota-interlineado);
+}
+.cifras dd {
+  margin: 0;
+}
+.cifras .cifra {
+  order: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--tipo-presentacion-cifra-familia);
+  font-size: var(--tipo-impresion-h3-tamano);
+  font-weight: var(--tipo-presentacion-cifra-peso);
+  line-height: var(--tipo-impresion-h1-interlineado);
+  color: var(--azul-institucional);
+}
+
+/* Atenciones por servicio, en una línea que se parte si no cabe. */
+.desglose {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-1) var(--espacio-4);
+  padding-top: var(--espacio-3);
+  border-top: var(--borde-filete) solid var(--gris-claro);
+}
+.desglose b {
+  color: var(--azul-institucional);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+
+/* Avisos */
+.avisos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espacio-3);
+  min-height: var(--espacio-12);
+  padding: var(--espacio-2);
+  border-left: var(--espacio-1) solid transparent;
+  color: var(--gris-texto);
+  text-decoration: none;
+}
+.aviso:hover b {
+  color: var(--azul-filete);
+}
+/* Alerta: barra de amarillo-senal como llamado, siempre con texto e ícono. */
+.avisoAlerta {
+  border-left-color: var(--amarillo-senal);
+}
+.aviso > span:last-child {
+  display: flex;
+  flex-direction: column;
+}
+.aviso b {
+  color: var(--azul-institucional);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+.avisoIcono {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--espacio-10);
+  height: var(--espacio-10);
+  background: var(--azul-institucional);
+  border-radius: var(--radio-base);
+  color: var(--blanco);
+}
+
+.vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .otro,
+  .principal,
+  .atajoMascota,
+  .enlaceTitulo svg,
+  .mosaico img {
+    transition: none;
+  }
+  .mosaico a:hover img {
+    transform: none;
+  }
+}

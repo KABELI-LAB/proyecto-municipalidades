@@ -1,0 +1,21 @@
+/* Llamado de atención fijo: amarillo-senal como franja delgada, texto gris-texto (7,1:1). */
+.franja {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-2);
+  padding: var(--espacio-2) var(--espacio-4);
+  background: var(--amarillo-senal);
+  color: var(--gris-texto);
+  font-size: var(--tipo-impresion-cuerpo-tamano);
+  line-height: var(--tipo-impresion-cuerpo-interlineado);
+}
+.franja svg {
+  flex: none;
+}
+.franja b {
+  font-weight: var(--tipo-impresion-h2-peso);
+}

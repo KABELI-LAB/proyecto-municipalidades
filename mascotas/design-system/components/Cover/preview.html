@@ -1,0 +1,47 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Muni Hualañé</title>
+<style>
+  html, body { margin:0; height:100%; }
+  body { background:var(--azul-institucional); color:var(--marfil-institucional); font-family:var(--font-textos); overflow:hidden; }
+  .cover { position:relative; height:288px; overflow:hidden; }
+  .art { position:absolute; top:0; left:480px; width:480px; height:288px; overflow:hidden; }
+  .art svg { display:block; width:480px; height:288px; }
+  .verde { fill:var(--verde-territorio); }
+  .terra { fill:var(--terracota); }
+  .amarillo { fill:var(--amarillo-senal); }
+  .marfil { fill:var(--marfil-institucional); }
+  .blk { rx:var(--radio-base); }
+  .onda { fill:none; stroke:var(--celeste-rio); stroke-width:12px; stroke-linecap:butt; }
+  .words { position:absolute; left:var(--espacio-10); bottom:var(--espacio-10); max-width:440px; }
+  .name { margin:0; font-family:var(--font-titulos); font-size:96px; line-height:.95; font-weight:700; letter-spacing:-.01em; color:var(--marfil-institucional); }
+  .tag { margin:var(--espacio-3) 0 0 4px; font-size:14px; line-height:20px; color:var(--marfil-institucional); }
+</style>
+</head>
+<body>
+<div class="cover">
+<div class="art" aria-hidden="true">
+<svg viewBox="0 0 480 288" width="480" height="288">
+<!--
+  blocks      verde-territorio 160×112 bled off the top · terracota 128×48 · amarillo-senal 48×16 · marfil-institucional 240×56 bled off the bottom-right · on the azul-institucional ground — the portada's own five fields, ≈35% of 960×288
+  arrangement the portada's composition, re-cut for the half box: tall verde slab with satellites top-left, terracota/amarillo stacked to its right, marfil slab low right
+  pattern     the escudo's river waves ("Ondas del río, motivo del escudo"): four celeste-rio strokes across the box at an espacio-6 (24px) pitch, between the top blocks and the marfil slab
+  scales      sides in espacio-4/espacio-6 multiples; gutters espacio-6; wave pitch espacio-6, stroke espacio-3; corners radio-base (4px)
+-->
+<rect class="verde blk" x="24" y="-8" width="160" height="112" rx="4"/>
+<rect class="amarillo blk" x="208" y="24" width="48" height="16" rx="4"/>
+<rect class="terra blk" x="208" y="56" width="128" height="48" rx="4"/>
+<path class="onda" d="M0 136 C 80 120, 160 152, 240 136 S 400 120, 480 136"/><path class="onda" d="M0 160 C 80 144, 160 176, 240 160 S 400 144, 480 160"/><path class="onda" d="M0 184 C 80 168, 160 200, 240 184 S 400 168, 480 184"/><path class="onda" d="M0 208 C 80 192, 160 224, 240 208 S 400 192, 480 208"/>
+<rect class="marfil blk" x="256" y="240" width="240" height="56" rx="4"/>
+</svg>
+</div>
+<div class="words">
+  <h1 class="name">Muni<br>Hualañé</h1>
+  <p class="tag">Territorio que conecta</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,130 @@
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  background: var(--blanco);
+  border-radius: var(--radio-base);
+  padding: var(--espacio-6);
+}
+
+/* Alerta: barra de amarillo-senal como llamado, nunca como fondo dominante. */
+.alerta {
+  border-left: var(--espacio-2) solid var(--amarillo-senal);
+}
+
+.antetitulo {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  color: var(--azul-institucional);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+.antetitulo svg,
+.lugar svg {
+  flex: none;
+}
+
+.enlaceTitulo {
+  color: inherit;
+  text-decoration: none;
+}
+.enlaceTitulo:hover {
+  text-decoration: underline;
+}
+
+.lugar {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+}
+
+.cupos {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.cupos li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--espacio-1) var(--espacio-4);
+  padding-block: var(--espacio-2);
+  border-top: var(--borde-filete) solid var(--gris-claro);
+}
+.cupos b {
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+
+/* Perdida / encontrada: color + ícono + texto. */
+.tipoMascota {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: var(--espacio-1);
+  padding: var(--espacio-1) var(--espacio-2);
+  border-radius: var(--radio-base);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+.perdida {
+  background: var(--azul-institucional);
+  color: var(--blanco);
+}
+.encontrada {
+  background: var(--verde-territorio);
+  color: var(--blanco);
+}
+
+/* Señas en texto libre: se recortan a tres líneas en la tarjeta. */
+.senas {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+}
+
+/* Foto o marcador neutro: misma proporción para que la grilla no salte. */
+.foto,
+.sinFoto {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radio-base);
+}
+.foto {
+  display: block;
+  height: auto;
+  object-fit: cover;
+}
+.sinFoto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espacio-2);
+  background: var(--marfil-institucional);
+  color: var(--gris-texto);
+}
+
+/* Marca de posible coincidencia: color + ícono + texto. */
+.coincidencia {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: var(--espacio-1);
+  padding: var(--espacio-1) var(--espacio-2);
+  background: var(--celeste-rio);
+  border-radius: var(--radio-base);
+  color: var(--gris-texto);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+
+/* Texto libre de una ficha: en la tarjeta, como máximo tres líneas. */
+.resumenTexto {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+}

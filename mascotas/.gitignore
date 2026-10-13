@@ -1,0 +1,18 @@
+node_modules/
+.next/
+next-env.d.ts
+*.tsbuildinfo
+# Generados desde design-system/ por scripts/sincronizar-diseno.mjs
+src/estilos/tokens.css
+public/ds/
+# Base de datos local y cliente generado
+prisma/*.db
+prisma/*.db-journal
+src/generated/
+
+# Variables locales (vea .env.example); .env.produccion apunta a la base publicada
+.env
+.env.produccion
+
+# Fotos subidas por la ciudadanía (privadas; vea ALMACEN_DIR en .env.example)
+almacen/

@@ -1,0 +1,25 @@
+/* Bandeja de propuestas de adopción. */
+
+.fotos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--espacio-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.fotos img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--radio-base);
+  background: var(--gris-claro);
+}
+
+.motivo {
+  padding: var(--espacio-3) var(--espacio-4);
+  border-left: var(--espacio-1) solid var(--gris-claro);
+  background: var(--marfil-institucional);
+  border-radius: var(--radio-base);
+}

@@ -1,0 +1,1184 @@
+// Modelo de datos de la plataforma (docs/concepto.md, sección 1).
+//
+// Ejes comunes: todo registro operativo queda asociado a sector, fecha,
+// especie y servicio cuando corresponde.
+//
+// Configuración (municipio, territorio y catálogos) se carga desde
+// demo/datos/ como configuración: no se borra con la demo.
+//
+// Datos de demostración: las entidades raíz llevan `loteDemoId`. Es null para
+// los datos reales. Las entidades hijas (capacidades, coincidencias, mensajes,
+// resultados, sectores de un aviso) se borran en cascada con su padre.
+// Los registros cargados desde demo/datos/ conservan su id original (ope-05,
+// pub-047…) para que la carga sea trazable.
+//
+// Nunca se guarda una dirección exacta: la ubicación mínima es la localidad o
+// un lugar de referencia público, con coordenadas aproximadas.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ───────────────────────── Configuración ─────────────────────────
+
+model Municipio {
+  id               String  @id // clave de config/municipios/<id>.json
+  nombre           String
+  nombreOficial    String
+  sitioWeb         String?
+  // Pesos del índice de prioridad (sección 12); deben sumar 1.
+  pesoDemanda      Float   @default(0.4)
+  pesoReportes     Float   @default(0.25)
+  pesoTiempo       Float   @default(0.2)
+  pesoNoCubierta   Float   @default(0.15)
+  limitePorHogar   Int     @default(2)
+  /// Solo para pruebas: permite publicar en Instagram contenido de demostración (la pieza lleva la marca).
+  redesIncluirDemo Boolean @default(false)
+
+  sectores     Sector[]
+  servicios    Servicio[]
+  usuarios     UsuarioMunicipal[]
+  personas     Persona[]
+  tiposReporte TipoReporte[]
+  colores      ColorCatalogo[]
+}
+
+model Sector {
+  id                String     @id @default(cuid())
+  municipioId       String
+  clave             String
+  nombre            String
+  tipo              TipoSector
+  centroLat         Float?
+  centroLng         Float?
+  estadoCoordenadas String? // «promedio de sus localidades», «aproximada»…
+  viviendas         Int?
+  poblacion         Int?
+  orden             Int        @default(0)
+
+  municipio     Municipio            @relation(fields: [municipioId], references: [id])
+  localidades   Localidad[]
+  lugares       Lugar[]
+  personas      Persona[]
+  solicitudes   SolicitudServicio[]
+  reportes      ReporteCiudadano[]
+  publicaciones PublicacionMascota[]
+  operativos    Operativo[]
+  atenciones    Atencion[]
+  avisos        AvisoSector[]
+  adopciones    FichaAdopcion[]      @relation("sectorAdoptante")
+  fichas        FichaAdopcion[]      @relation("sectorFicha")
+  decisiones    DecisionPrioridad[]
+  comunitarios  PerroComunitario[]
+
+  @@unique([municipioId, clave])
+}
+
+/// Localidad de un sector: ubica solicitudes, publicaciones y reportes.
+model Localidad {
+  id                String  @id @default(cuid())
+  sectorId          String
+  clave             String  @unique
+  nombre            String
+  lat               Float?
+  lng               Float?
+  estadoCoordenadas String?
+  orden             Int     @default(0)
+
+  sector        Sector               @relation(fields: [sectorId], references: [id])
+  lugares       Lugar[]
+  personas      Persona[]
+  solicitudes   SolicitudServicio[]
+  reportes      ReporteCiudadano[]
+  publicaciones PublicacionMascota[] @relation("ubicacion")
+  resguardos    PublicacionMascota[] @relation("resguardo")
+  fichas        FichaAdopcion[]
+}
+
+/// Lugar público de referencia (plaza, escuela, recinto): nunca un domicilio.
+model Lugar {
+  id                String  @id @default(cuid())
+  sectorId          String
+  localidadId       String
+  clave             String  @unique
+  nombre            String
+  tipo              String
+  lat               Float?
+  lng               Float?
+  estadoCoordenadas String?
+
+  sector       Sector             @relation(fields: [sectorId], references: [id])
+  localidad    Localidad          @relation(fields: [localidadId], references: [id])
+  operativos   Operativo[]
+  reportes     ReporteCiudadano[]
+  atenciones   Atencion[]
+  comunitarios PerroComunitario[]
+}
+
+model Servicio {
+  id          String  @id @default(cuid())
+  municipioId String
+  clave       String // esterilizacion, vacunacion, microchip
+  nombre      String
+  activo      Boolean @default(true)
+
+  municipio    Municipio             @relation(fields: [municipioId], references: [id])
+  solicitudes  SolicitudServicio[]
+  capacidades  CapacidadServicio[]
+  cupos        Cupo[]
+  atenciones   Atencion[]
+  invitaciones InvitacionOperativo[]
+
+  @@unique([municipioId, clave])
+}
+
+/// Catálogo de tipos de reporte (demo/datos/catalogos.json). Ninguno es público.
+model TipoReporte {
+  id          String  @id @default(cuid())
+  municipioId String
+  clave       String // abandono, jauria, otro…
+  nombre      String
+  publico     Boolean @default(false)
+  orden       Int     @default(0)
+  /// Inactivo: ya no se ofrece en SOS Mascotas, pero sigue clasificando los reportes antiguos.
+  activo      Boolean @default(true)
+
+  municipio Municipio          @relation(fields: [municipioId], references: [id])
+  reportes  ReporteCiudadano[]
+
+  @@unique([municipioId, clave])
+}
+
+/// Colores que se ofrecen al publicar una mascota, por especie.
+model ColorCatalogo {
+  id          String  @id @default(cuid())
+  municipioId String
+  especie     Especie
+  nombre      String
+  orden       Int     @default(0)
+
+  municipio Municipio @relation(fields: [municipioId], references: [id])
+
+  @@unique([municipioId, especie, nombre])
+}
+
+model UsuarioMunicipal {
+  id             String  @id @default(cuid())
+  municipioId    String
+  nombre         String
+  correo         String  @unique
+  hashContrasena String
+  rol            Rol
+  activo         Boolean @default(true)
+  loteDemoId     String?
+
+  municipio             Municipio              @relation(fields: [municipioId], references: [id])
+  loteDemo              LoteDemo?              @relation(fields: [loteDemoId], references: [id])
+  asignaciones          AsignacionTerreno[]
+  atenciones            Atencion[]
+  operativos            Operativo[]
+  avisos                Aviso[]
+  decisiones            DecisionPrioridad[]
+  historialReportes     HistorialReporte[]
+  fichasRevisadas       FichaAdopcion[]
+  fichasComunitarias    PerroComunitario[]     @relation("fichasComunitarias")
+  cuidadoresAutorizados CuidadorAutorizado[]   @relation("cuidadoresAutorizados")
+  novedadesRevisadas    NovedadComunitario[]   @relation("novedadesRevisadas")
+  historialComunitario  HistorialComunitario[] @relation("historialComunitario")
+  redesRevisadas        PublicacionRed[]       @relation("redesRevisadas")
+  eventosRedes          EventoPublicacionRed[]
+
+  @@index([loteDemoId])
+}
+
+// ───────────────────────── Datos de demostración ─────────────────────────
+
+/// Cada carga de demo/datos/ crea un lote. Borrar la demo elimina todos los
+/// registros que apuntan a un lote y luego los lotes.
+model LoteDemo {
+  id          String    @id @default(cuid())
+  descripcion String
+  /// Fecha de corte de los datos de origen (resumen.json) y días que se trasladaron.
+  fechaCorte  DateTime?
+  desfaseDias Int       @default(0)
+  creadoEn    DateTime  @default(now())
+
+  usuarios       UsuarioMunicipal[]
+  personas       Persona[]
+  animales       Animal[]
+  solicitudes    SolicitudServicio[]
+  reportes       ReporteCiudadano[]
+  publicaciones  PublicacionMascota[]
+  fichas         FichaAdopcion[]
+  postulaciones  PostulacionAdopcion[]
+  operativos     Operativo[]
+  cupos          Cupo[]
+  atenciones     Atencion[]
+  avisos         Aviso[]
+  decisiones     DecisionPrioridad[]
+  notificaciones Notificacion[]
+  comunitarios   PerroComunitario[]
+  redes          PublicacionRed[]
+}
+
+// ───────────────────────── Ciudadanía ─────────────────────────
+
+/// Sin campo de dirección: la ubicación es la localidad y su sector.
+model Persona {
+  id          String   @id @default(cuid())
+  municipioId String
+  rut         String? // normalizado, sin puntos y con guion: 12345678-5; vacío en trámites que no lo piden (SOS, avistamiento, novedad)
+  nombre      String
+  telefono    String?
+  correo      String?
+  sectorId    String
+  localidadId String?
+  creadaEn    DateTime @default(now())
+  loteDemoId  String?
+
+  municipio     Municipio             @relation(fields: [municipioId], references: [id])
+  sector        Sector                @relation(fields: [sectorId], references: [id])
+  localidad     Localidad?            @relation(fields: [localidadId], references: [id])
+  loteDemo      LoteDemo?             @relation(fields: [loteDemoId], references: [id])
+  animales      Animal[]
+  solicitudes   SolicitudServicio[]
+  reportes      ReporteCiudadano[]
+  publicaciones PublicacionMascota[]
+  postulaciones PostulacionAdopcion[]
+  cupos         Cupo[]
+  adopciones    FichaAdopcion[]
+  propuestas    FichaAdopcion[]       @relation("propuestas")
+  cuidados      CuidadorAutorizado[]
+  novedades     NovedadComunitario[]
+  invitaciones  InvitacionOperativo[]
+  codigosAcceso CodigoAcceso[]
+
+  @@unique([municipioId, rut])
+  @@index([loteDemoId])
+}
+
+model Animal {
+  id             String   @id @default(cuid())
+  especie        Especie
+  nombre         String?
+  sexo           Sexo     @default(DESCONOCIDO)
+  edadAproxMeses Int?
+  colorPrincipal String?
+  tamano         Tamano?
+  rasgos         String? // rasgo visible principal, texto libre
+  esterilizado   Boolean?
+  vacunasAlDia   Boolean?
+  microchip      Boolean?
+  foto           String? // ruta dentro de demo/fotos/ (o de subidas reales)
+  personaId      String?
+  creadoEn       DateTime @default(now())
+  loteDemoId     String?
+
+  persona       Persona?              @relation(fields: [personaId], references: [id])
+  loteDemo      LoteDemo?             @relation(fields: [loteDemoId], references: [id])
+  solicitudes   SolicitudServicio[]
+  cupos         Cupo[]
+  atenciones    Atencion[]
+  publicaciones PublicacionMascota[]
+  fichaAdopcion FichaAdopcion?
+  comunitario   PerroComunitario?
+  invitaciones  InvitacionOperativo[]
+
+  @@index([loteDemoId])
+}
+
+/// Demanda: existe aunque no haya operativo (sección 9).
+model SolicitudServicio {
+  id            String          @id @default(cuid())
+  codigo        String          @unique // TR-NNNN
+  personaId     String
+  animalId      String
+  servicioId    String
+  sectorId      String
+  localidadId   String?
+  estado        EstadoSolicitud @default(RECIBIDA)
+  origen        OrigenSolicitud @default(PORTAL)
+  creadaEn      DateTime        @default(now())
+  actualizadaEn DateTime        @updatedAt
+  loteDemoId    String?
+
+  persona      Persona               @relation(fields: [personaId], references: [id])
+  animal       Animal                @relation(fields: [animalId], references: [id])
+  servicio     Servicio              @relation(fields: [servicioId], references: [id])
+  sector       Sector                @relation(fields: [sectorId], references: [id])
+  localidad    Localidad?            @relation(fields: [localidadId], references: [id])
+  loteDemo     LoteDemo?             @relation(fields: [loteDemoId], references: [id])
+  cupos        Cupo[]
+  invitaciones InvitacionOperativo[]
+
+  @@index([sectorId, estado])
+  @@index([loteDemoId])
+}
+
+/// Ningún reporte es público (sección 14): se ven solo en el panel.
+model ReporteCiudadano {
+  id           String            @id @default(cuid())
+  codigo       String?           @unique // TR-NNNN; los reportes de la demo no traen código
+  tipoId       String
+  especie      Especie?
+  cantidad     CantidadAnimales?
+  sigueEnLugar SiNoNoSe? // solo abandono o animal herido
+  sectorId     String
+  localidadId  String?
+  lugarId      String?
+  lat          Float? // posición aproximada, para el mapa de calor del panel
+  lng          Float?
+  descripcion  String
+  /// Urgencia que percibe quien reporta (SOS Mascotas). Orienta la revisión; no es un compromiso de atención.
+  urgencia     UrgenciaReporte?
+  /// Foto opcional, guardada fuera de la carpeta pública (ver src/servidor/archivos.ts). Solo la ve el panel.
+  fotoArchivo  String?
+  estado       EstadoReporte     @default(ABIERTO)
+  // Identidad del denunciante: acceso restringido (sección 14).
+  personaId    String?
+  creadoEn     DateTime          @default(now())
+  cerradoEn    DateTime?
+  loteDemoId   String?
+
+  tipo      TipoReporte        @relation(fields: [tipoId], references: [id])
+  sector    Sector             @relation(fields: [sectorId], references: [id])
+  localidad Localidad?         @relation(fields: [localidadId], references: [id])
+  lugar     Lugar?             @relation(fields: [lugarId], references: [id])
+  persona   Persona?           @relation(fields: [personaId], references: [id])
+  loteDemo  LoteDemo?          @relation(fields: [loteDemoId], references: [id])
+  historial HistorialReporte[]
+
+  @@index([sectorId, creadoEn])
+  @@index([loteDemoId])
+}
+
+/// Cada cambio de estado de un reporte: quién (si fue el equipo municipal) y cuándo.
+model HistorialReporte {
+  id        String        @id @default(cuid())
+  reporteId String
+  estado    EstadoReporte
+  usuarioId String? // null: lo registró la persona que reportó
+  creadoEn  DateTime      @default(now())
+
+  reporte ReporteCiudadano  @relation(fields: [reporteId], references: [id], onDelete: Cascade)
+  usuario UsuarioMunicipal? @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
+
+  @@index([reporteId, creadoEn])
+}
+
+model PublicacionMascota {
+  id                         String            @id @default(cuid())
+  codigo                     String?           @unique // TR-NNNN; las publicaciones de la demo no traen código
+  tipo                       TipoPublicacion
+  animalId                   String? // animal registrado (foto y rasgos)
+  especie                    Especie
+  sexo                       Sexo              @default(DESCONOCIDO)
+  tamano                     Tamano?
+  colorPrincipal             String
+  nombreAnimal               String? // solo «Perdí»: nombre al que responde
+  collar                     SiNoNoSe?
+  colorCollar                String?
+  microchip                  SiNoNoSe? // solo «Perdí»: quien encuentra no puede saberlo
+  senas                      String? // señas particulares, texto libre
+  fotoUrl                    String?
+  sectorId                   String
+  localidadId                String?
+  lat                        Float? // posición aproximada (el mapa público agrupa por sector)
+  lng                        Float?
+  fechaEvento                DateTime
+  resguardada                Boolean? // solo para «Encontré»
+  /// Avistada y resguardada: con quien informa o retenida en otro lugar (veterinaria, local, vecino).
+  resguardo                  TipoResguardo?
+  /// Localidad donde está resguardada (se muestra con su sector; nunca una dirección).
+  resguardoLocalidadId       String?
+  /// Qué lugar es, en pocas palabras («en una veterinaria del centro»). Sin direcciones ni teléfonos.
+  resguardoDetalle           String?
+  estado                     EstadoPublicacion @default(ABIERTA)
+  moderacion                 EstadoModeracion  @default(PENDIENTE)
+  personaId                  String
+  vigenteHasta               DateTime
+  /// Cuándo se pidió a la persona confirmar que el aviso sigue vigente (sección 6, paso 6).
+  vigenciaPedidaEn           DateTime?
+  reencuentroPorCoincidencia Boolean?
+  creadaEn                   DateTime          @default(now())
+  resueltaEn                 DateTime?
+  loteDemoId                 String?
+
+  animal                  Animal?            @relation(fields: [animalId], references: [id])
+  sector                  Sector             @relation(fields: [sectorId], references: [id])
+  localidad               Localidad?         @relation("ubicacion", fields: [localidadId], references: [id])
+  resguardoLocalidad      Localidad?         @relation("resguardo", fields: [resguardoLocalidadId], references: [id])
+  persona                 Persona            @relation(fields: [personaId], references: [id])
+  loteDemo                LoteDemo?          @relation(fields: [loteDemoId], references: [id])
+  coincidenciasPerdida    Coincidencia[]     @relation("perdida")
+  coincidenciasEncontrada Coincidencia[]     @relation("encontrada")
+  mensajes                MensajeProtegido[]
+
+  @@index([tipo, estado, especie])
+  @@index([loteDemoId])
+}
+
+/// Posible coincidencia entre una publicación «Perdí» y una «Encontré».
+model Coincidencia {
+  id           String             @id @default(cuid())
+  perdidaId    String
+  encontradaId String
+  puntaje      Float
+  motivos      String // texto explicable, separado por «;»
+  estado       EstadoCoincidencia @default(SUGERIDA)
+  creadaEn     DateTime           @default(now())
+
+  perdida    PublicacionMascota @relation("perdida", fields: [perdidaId], references: [id], onDelete: Cascade)
+  encontrada PublicacionMascota @relation("encontrada", fields: [encontradaId], references: [id], onDelete: Cascade)
+
+  @@unique([perdidaId, encontradaId])
+}
+
+/// Contacto protegido: los mensajes pasan por la plataforma sin exponer teléfonos.
+model MensajeProtegido {
+  id                String   @id @default(cuid())
+  publicacionId     String
+  remitenteNombre   String
+  remitenteContacto String // privado: nunca se muestra al otro ciudadano
+  texto             String
+  creadoEn          DateTime @default(now())
+
+  publicacion PublicacionMascota @relation(fields: [publicacionId], references: [id], onDelete: Cascade)
+}
+
+/// Las publica el municipio, propias o propuestas por vecinos tras revisarlas (sección 7).
+model FichaAdopcion {
+  id                 String           @id @default(cuid())
+  animalId           String           @unique
+  caracter           String?
+  conviveConNinos    Boolean?
+  conviveConAnimales Boolean?
+  estado             EstadoAdopcion   @default(DISPONIBLE)
+  publicadaEn        DateTime         @default(now())
+  adoptadaEn         DateTime?
+  adoptanteId        String?
+  sectorAdoptanteId  String?
+  loteDemoId         String?
+  /// Revisión municipal: solo las APROBADA se ven en el catálogo público.
+  /// Las fichas que publica el municipio nacen aprobadas.
+  revision           RevisionAdopcion @default(APROBADA)
+  creadaEn           DateTime         @default(now())
+
+  // ── Propuesta de un vecino («Dar en adopción», sección 7, paso 0) ──
+  codigo           String?         @unique // TR-NNNN
+  proponenteId     String?
+  relacion         RelacionAnimal?
+  autorizaPublicar Boolean         @default(false)
+  saludTexto       String? // antecedentes sanitarios conocidos
+  hogarTexto       String? // información útil para encontrarle hogar
+  sectorId         String? // dónde está el animal (nunca una dirección)
+  localidadId      String?
+  /// Fotos subidas, guardadas fuera de public/ (src/servidor/archivos.ts), separadas por coma.
+  fotos            String          @default("")
+  /// Huella (sha256) de cada foto subida: evita publicar dos veces el mismo animal.
+  huellasFotos     String          @default("")
+  motivoRevision   String? // correcciones pedidas o motivo de rechazo u ocultamiento
+  revisadaEn       DateTime?
+  revisadoPorId    String?
+  /// Cierre por parte de quien propuso: ENCONTRO_HOGAR o YA_NO_APLICA.
+  cierre           String?
+
+  animal          Animal                @relation(fields: [animalId], references: [id])
+  adoptante       Persona?              @relation(fields: [adoptanteId], references: [id])
+  sectorAdoptante Sector?               @relation("sectorAdoptante", fields: [sectorAdoptanteId], references: [id])
+  loteDemo        LoteDemo?             @relation(fields: [loteDemoId], references: [id])
+  postulaciones   PostulacionAdopcion[]
+  proponente      Persona?              @relation("propuestas", fields: [proponenteId], references: [id])
+  sector          Sector?               @relation("sectorFicha", fields: [sectorId], references: [id])
+  localidad       Localidad?            @relation(fields: [localidadId], references: [id])
+  revisadoPor     UsuarioMunicipal?     @relation(fields: [revisadoPorId], references: [id], onDelete: SetNull)
+
+  @@index([loteDemoId])
+  @@index([revision])
+}
+
+model PostulacionAdopcion {
+  id                   String            @id @default(cuid())
+  codigo               String?           @unique // TR-NNNN; las postulaciones de la demo no traen código
+  fichaId              String
+  personaId            String
+  tipoVivienda         String
+  experienciaPrevia    Boolean
+  otrosAnimales        Boolean
+  otrosAnimalesDetalle String?
+  /// Animal propuesto por un vecino: quien postula acepta que, si le eligen, se compartan los contactos de ambos.
+  compartirContacto    Boolean           @default(false)
+  estado               EstadoPostulacion @default(RECIBIDA)
+  creadaEn             DateTime          @default(now())
+  loteDemoId           String?
+
+  ficha    FichaAdopcion @relation(fields: [fichaId], references: [id])
+  persona  Persona       @relation(fields: [personaId], references: [id])
+  loteDemo LoteDemo?     @relation(fields: [loteDemoId], references: [id])
+
+  @@index([loteDemoId])
+}
+
+/// Perro comunitario: lo cuidan vecinos en un lugar público (nunca un domicilio).
+model PerroComunitario {
+  id                 String    @id @default(cuid())
+  animalId           String    @unique
+  apodo              String
+  sectorId           String
+  lugarId            String
+  cuidadores         String
+  ultimoControl      DateTime?
+  necesitaAtencion   Boolean   @default(false)
+  lat                Float?
+  lng                Float?
+  fotos              String    @default("") // rutas separadas por coma; la primera es la principal
+  loteDemoId         String?
+  /// Última vez que se actualizaron los datos de la ficha (su cuidador o el municipio).
+  fichaRevisadaEn    DateTime?
+  /// Funcionario que la actualizó; nulo si fue su cuidador.
+  fichaRevisadaPorId String?
+  /// Oculta por el municipio (o dada de baja por su cuidador): no se muestra en el portal.
+  oculto             Boolean   @default(false)
+
+  animal                Animal                 @relation(fields: [animalId], references: [id])
+  sector                Sector                 @relation(fields: [sectorId], references: [id])
+  lugar                 Lugar                  @relation(fields: [lugarId], references: [id])
+  loteDemo              LoteDemo?              @relation(fields: [loteDemoId], references: [id])
+  fichaRevisadaPor      UsuarioMunicipal?      @relation("fichasComunitarias", fields: [fichaRevisadaPorId], references: [id], onDelete: SetNull)
+  cuidadoresAutorizados CuidadorAutorizado[]
+  novedades             NovedadComunitario[]
+  historial             HistorialComunitario[]
+
+  @@index([loteDemoId])
+}
+
+/// Cuidador autorizado por el municipio: comunica novedades con su RUT y su código.
+/// Sus datos nunca son públicos; la ficha solo dice si hay un cuidador registrado.
+model CuidadorAutorizado {
+  id              String    @id @default(cuid())
+  perroId         String
+  personaId       String
+  codigo          String    @unique // TR-NNNN: con su RUT, identifica al cuidador en el portal
+  activo          Boolean   @default(true)
+  autorizadoPorId String?
+  creadoEn        DateTime  @default(now())
+  revocadoEn      DateTime?
+
+  perro         PerroComunitario     @relation(fields: [perroId], references: [id], onDelete: Cascade)
+  persona       Persona              @relation(fields: [personaId], references: [id])
+  autorizadoPor UsuarioMunicipal?    @relation("cuidadoresAutorizados", fields: [autorizadoPorId], references: [id], onDelete: SetNull)
+  novedades     NovedadComunitario[]
+
+  @@unique([perroId, personaId])
+}
+
+/// Novedad sobre un perro comunitario (de un vecino o de un cuidador autorizado).
+/// Queda pendiente de revisión: nunca cambia sola la ficha oficial.
+model NovedadComunitario {
+  id            String        @id @default(cuid())
+  codigo        String        @unique // TR-NNNN para seguirla en Mis solicitudes
+  perroId       String
+  tipo          TipoNovedad
+  texto         String
+  fotoArchivo   String? // privada, en ALMACEN_DIR/comunitarios
+  personaId     String
+  cuidadorId    String? // si la envió un cuidador autorizado
+  estado        EstadoNovedad @default(PENDIENTE)
+  respuesta     String? // lo que el municipio le responde a quien informó
+  revisadaEn    DateTime?
+  revisadaPorId String?
+  creadaEn      DateTime      @default(now())
+  loteDemoId    String?
+
+  perro       PerroComunitario    @relation(fields: [perroId], references: [id], onDelete: Cascade)
+  persona     Persona             @relation(fields: [personaId], references: [id])
+  cuidador    CuidadorAutorizado? @relation(fields: [cuidadorId], references: [id], onDelete: SetNull)
+  revisadaPor UsuarioMunicipal?   @relation("novedadesRevisadas", fields: [revisadaPorId], references: [id], onDelete: SetNull)
+
+  @@index([perroId, estado])
+}
+
+/// Historial de cambios de una ficha comunitaria. `publico`: controles y atenciones
+/// que se muestran en la ficha del portal; el resto solo lo ve el equipo.
+model HistorialComunitario {
+  id        String   @id @default(cuid())
+  perroId   String
+  accion    String
+  detalle   String?
+  publico   Boolean  @default(false)
+  usuarioId String?
+  creadoEn  DateTime @default(now())
+
+  perro   PerroComunitario  @relation(fields: [perroId], references: [id], onDelete: Cascade)
+  usuario UsuarioMunicipal? @relation("historialComunitario", fields: [usuarioId], references: [id], onDelete: SetNull)
+
+  @@index([perroId, creadoEn])
+}
+
+// ───────────────────────── Operación ─────────────────────────
+
+model Operativo {
+  id          String          @id @default(cuid())
+  nombre      String?
+  sectorId    String
+  lugarId     String // lugar público de referencia: nunca un domicilio
+  fecha       DateTime
+  horaInicio  String // «09:00»
+  horaFin     String
+  requisitos  String          @default("")
+  estado      EstadoOperativo @default(BORRADOR)
+  origen      OrigenOperativo @default(DESDE_CERO)
+  fotos       String          @default("") // galería: rutas separadas por coma
+  creadoPorId String?
+  creadoEn    DateTime        @default(now())
+  publicadoEn DateTime?
+  cerradoEn   DateTime?
+  loteDemoId  String?
+
+  sector       Sector                @relation(fields: [sectorId], references: [id])
+  lugar        Lugar                 @relation(fields: [lugarId], references: [id])
+  creadoPor    UsuarioMunicipal?     @relation(fields: [creadoPorId], references: [id])
+  loteDemo     LoteDemo?             @relation(fields: [loteDemoId], references: [id])
+  capacidades  CapacidadServicio[]
+  cupos        Cupo[]
+  atenciones   Atencion[]
+  resultado    ResultadoOperativo?
+  avisos       Aviso[]
+  asignaciones AsignacionTerreno[]
+  invitaciones InvitacionOperativo[]
+
+  @@index([sectorId, estado])
+  @@index([loteDemoId])
+}
+
+model CapacidadServicio {
+  operativoId String
+  servicioId  String
+  cupos       Int
+
+  operativo Operativo @relation(fields: [operativoId], references: [id], onDelete: Cascade)
+  servicio  Servicio  @relation(fields: [servicioId], references: [id])
+
+  @@id([operativoId, servicioId])
+}
+
+/// Inscripción en un operativo concreto (sección 9).
+model Cupo {
+  id             String     @id @default(cuid())
+  codigo         String     @unique // TR-NNNN
+  operativoId    String
+  servicioId     String
+  personaId      String
+  animalId       String
+  solicitudId    String? // solicitud de servicio que originó la invitación
+  estado         EstadoCupo @default(CONFIRMADO)
+  posicionEspera Int?
+  confirmado48h  Boolean    @default(false)
+  creadoEn       DateTime   @default(now())
+  loteDemoId     String?
+
+  operativo  Operativo            @relation(fields: [operativoId], references: [id])
+  servicio   Servicio             @relation(fields: [servicioId], references: [id])
+  persona    Persona              @relation(fields: [personaId], references: [id])
+  animal     Animal               @relation(fields: [animalId], references: [id])
+  solicitud  SolicitudServicio?   @relation(fields: [solicitudId], references: [id])
+  loteDemo   LoteDemo?            @relation(fields: [loteDemoId], references: [id])
+  atencion   Atencion?
+  invitacion InvitacionOperativo?
+
+  @@index([operativoId, servicioId, estado])
+  @@index([loteDemoId])
+}
+
+/// Invitación prioritaria a un operativo para una solicitud de servicio pendiente
+/// (sección 5, paso 4). Mientras está abierta retiene un cupo, pero no es una
+/// reserva: si la persona confirma interés, el sistema le asigna el cupo efectivo.
+/// Guarda cada hito: envío, plazo, respuesta, asignación y cierre.
+model InvitacionOperativo {
+  id           String           @id @default(cuid())
+  codigo       String           @unique // TR-NNNN: con su RUT, la persona la responde en Mis solicitudes
+  operativoId  String
+  servicioId   String
+  solicitudId  String
+  personaId    String
+  animalId     String
+  estado       EstadoInvitacion @default(ENVIADA)
+  /// Prioridad dentro del operativo y servicio: menor primero (mismo sector, luego antigüedad).
+  orden        Int
+  venceEn      DateTime
+  creadaEn     DateTime         @default(now())
+  respondidaEn DateTime?
+  asignadaEn   DateTime?
+  cerradaEn    DateTime?
+  motivoCierre String?
+  cupoId       String?          @unique
+  loteDemoId   String?
+
+  operativo Operativo         @relation(fields: [operativoId], references: [id], onDelete: Cascade)
+  servicio  Servicio          @relation(fields: [servicioId], references: [id])
+  solicitud SolicitudServicio @relation(fields: [solicitudId], references: [id])
+  persona   Persona           @relation(fields: [personaId], references: [id])
+  animal    Animal            @relation(fields: [animalId], references: [id])
+  cupo      Cupo?             @relation(fields: [cupoId], references: [id])
+
+  @@unique([operativoId, solicitudId])
+  @@index([operativoId, servicioId, estado])
+  @@index([estado, venceEn])
+}
+
+/// Atención realizada. Es un registro agregado: puede no tener operativo
+/// (atención en dependencias municipales) ni animal identificado.
+model Atencion {
+  id            String            @id @default(cuid())
+  operativoId   String?
+  cupoId        String?           @unique // null en atenciones espontáneas o agregadas
+  animalId      String?
+  servicioId    String
+  especie       Especie
+  sectorId      String
+  lugarId       String?
+  resultado     ResultadoAtencion @default(REALIZADA)
+  observaciones String?
+  funcionarioId String?
+  realizadaEn   DateTime          @default(now())
+  loteDemoId    String?
+
+  operativo   Operativo?        @relation(fields: [operativoId], references: [id])
+  cupo        Cupo?             @relation(fields: [cupoId], references: [id])
+  animal      Animal?           @relation(fields: [animalId], references: [id])
+  servicio    Servicio          @relation(fields: [servicioId], references: [id])
+  sector      Sector            @relation(fields: [sectorId], references: [id])
+  lugar       Lugar?            @relation(fields: [lugarId], references: [id])
+  funcionario UsuarioMunicipal? @relation(fields: [funcionarioId], references: [id])
+  loteDemo    LoteDemo?         @relation(fields: [loteDemoId], references: [id])
+
+  @@index([operativoId])
+  @@index([sectorId, realizadaEn])
+  @@index([loteDemoId])
+}
+
+/// Calculado al cerrar el operativo; alimenta el factor E de la prioridad.
+model ResultadoOperativo {
+  operativoId           String   @id
+  inscritos             Int
+  asistentes            Int
+  atenciones            Int
+  atencionesPorServicio String // JSON { clave: cantidad }
+  /// JSON { clave: { cupos, inscritos, asistieron } }, cuando se conoce por servicio.
+  detallePorServicio    String?
+  demandaNoCubierta     Int
+  calculadoEn           DateTime @default(now())
+
+  operativo Operativo @relation(fields: [operativoId], references: [id], onDelete: Cascade)
+}
+
+model AsignacionTerreno {
+  usuarioId   String
+  operativoId String
+
+  usuario   UsuarioMunicipal @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  operativo Operativo        @relation(fields: [operativoId], references: [id], onDelete: Cascade)
+
+  @@id([usuarioId, operativoId])
+}
+
+model Aviso {
+  id           String      @id @default(cuid())
+  tipo         TipoAviso
+  titulo       String
+  texto        String
+  vigenteDesde DateTime
+  vigenteHasta DateTime
+  estado       EstadoAviso @default(BORRADOR)
+  destacado    Boolean     @default(false)
+  operativoId  String?
+  /// Mes de riesgo de la alerta preventiva que propuso este aviso («2027-01»).
+  alertaMes    String?
+  autorId      String?
+  creadoEn     DateTime    @default(now())
+  loteDemoId   String?
+
+  operativo Operativo?        @relation(fields: [operativoId], references: [id])
+  autor     UsuarioMunicipal? @relation(fields: [autorId], references: [id])
+  loteDemo  LoteDemo?         @relation(fields: [loteDemoId], references: [id])
+  sectores  AvisoSector[] // sin sectores = toda la comuna
+
+  @@index([estado, vigenteHasta])
+  @@index([loteDemoId])
+}
+
+model AvisoSector {
+  avisoId  String
+  sectorId String
+
+  aviso  Aviso  @relation(fields: [avisoId], references: [id], onDelete: Cascade)
+  sector Sector @relation(fields: [sectorId], references: [id], onDelete: Cascade)
+
+  @@id([avisoId, sectorId])
+}
+
+/// «Marcar como evaluado» y otras decisiones sobre la prioridad: auditable.
+model DecisionPrioridad {
+  id         String          @id @default(cuid())
+  sectorId   String
+  puntaje    Float
+  nivel      NivelPrioridad
+  motivos    String
+  accion     AccionPrioridad
+  usuarioId  String?
+  creadaEn   DateTime        @default(now())
+  loteDemoId String?
+
+  sector   Sector            @relation(fields: [sectorId], references: [id])
+  usuario  UsuarioMunicipal? @relation(fields: [usuarioId], references: [id])
+  loteDemo LoteDemo?         @relation(fields: [loteDemoId], references: [id])
+
+  @@index([loteDemoId])
+}
+
+/// En el MVP las notificaciones no se envían: quedan registradas como simuladas.
+// ───────────────────────── Redes sociales ─────────────────────────
+
+/// Publicación para Instagram preparada a partir de contenido ya público
+/// (operativo, ficha de adopción, aviso de mascota). «Contenido generado» no es
+/// «publicación realizada»: solo PUBLICADO tiene confirmación de la API.
+/// `version` evita duplicados: un mismo origen tiene una sola publicación,
+/// salvo que un funcionario pida expresamente una nueva.
+model PublicacionRed {
+  id                      String               @id @default(cuid())
+  municipioId             String
+  tipo                    TipoPublicacionRed
+  origenId                String
+  version                 Int                  @default(1)
+  estado                  EstadoPublicacionRed @default(BORRADOR)
+  texto                   String
+  textoGenerado           String
+  textoAlternativo        String
+  /// Pieza gráfica generada, guardada fuera de public/ (almacen/redes).
+  imagen                  String
+  creadaEn                DateTime             @default(now())
+  actualizadaEn           DateTime             @updatedAt
+  /// Responsable de la revisión: quien aprobó o canceló.
+  revisadoPorId           String?
+  aprobadaEn              DateTime?
+  aprobadaAutomaticamente Boolean              @default(false)
+  publicadaEn             DateTime?
+  /// Contenedor creado en Instagram: se reutiliza al reintentar, para no duplicar.
+  contenedorId            String?
+  igMediaId               String?
+  igPermalink             String?
+  error                   String?
+  intentos                Int                  @default(0)
+  loteDemoId              String?
+
+  revisadoPor UsuarioMunicipal?      @relation("redesRevisadas", fields: [revisadoPorId], references: [id], onDelete: SetNull)
+  loteDemo    LoteDemo?              @relation(fields: [loteDemoId], references: [id])
+  eventos     EventoPublicacionRed[]
+
+  @@unique([tipo, origenId, version])
+  @@index([estado])
+  @@index([loteDemoId])
+}
+
+/// Bitácora auditable de cada publicación para redes: generación, ediciones,
+/// aprobación, intentos de publicación y su resultado.
+model EventoPublicacionRed {
+  id            String   @id @default(cuid())
+  publicacionId String
+  accion        String
+  detalle       String?
+  usuarioId     String?
+  creadoEn      DateTime @default(now())
+
+  publicacion PublicacionRed    @relation(fields: [publicacionId], references: [id], onDelete: Cascade)
+  usuario     UsuarioMunicipal? @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
+
+  @@index([publicacionId])
+}
+
+/// Código de un solo uso para entrar a Mis solicitudes sin recordar un código
+/// de trámite: llega al correo que la persona dejó. Se guarda solo su huella
+/// (sha256), vence a los 10 minutos y admite pocos intentos.
+model CodigoAcceso {
+  id        String    @id @default(cuid())
+  personaId String
+  huella    String
+  venceEn   DateTime
+  intentos  Int       @default(0)
+  usadoEn   DateTime?
+  creadoEn  DateTime  @default(now())
+
+  persona Persona @relation(fields: [personaId], references: [id], onDelete: Cascade)
+
+  @@index([personaId])
+}
+
+model Notificacion {
+  id           String             @id @default(cuid())
+  destinatario String
+  canal        CanalNotificacion
+  asunto       String
+  contenido    String
+  estado       EstadoNotificacion @default(SIMULADA)
+  creadaEn     DateTime           @default(now())
+  /// Cuándo salió por correo (solo con el envío configurado) y, si falló, por qué.
+  enviadaEn    DateTime?
+  error        String?
+  loteDemoId   String?
+
+  loteDemo LoteDemo? @relation(fields: [loteDemoId], references: [id])
+
+  @@index([loteDemoId])
+}
+
+// ───────────────────────── Enumeraciones ─────────────────────────
+
+enum TipoSector {
+  URBANO
+  RURAL
+  URBANO_RURAL
+}
+
+enum Rol {
+  TERRENO
+  COORDINADOR
+  COMUNICACIONES
+  DIRECTIVO
+  ADMINISTRADOR
+}
+
+enum Especie {
+  PERRO
+  GATO
+  OTRA
+}
+
+enum Sexo {
+  MACHO
+  HEMBRA
+  DESCONOCIDO
+}
+
+enum Tamano {
+  PEQUENO
+  MEDIANO
+  GRANDE
+}
+
+enum EstadoSolicitud {
+  RECIBIDA
+  INVITADO
+  CUPO_CONFIRMADO
+  EN_LISTA_ESPERA
+  ATENDIDA
+  NO_ASISTIO
+  CANCELADA_PERSONA
+  CANCELADA_MUNICIPIO
+}
+
+enum OrigenSolicitud {
+  PORTAL
+  COMPROMISO_ADOPCION
+  MUNICIPIO
+}
+
+enum EstadoReporte {
+  ABIERTO
+  EN_REVISION
+  CERRADO
+}
+
+enum UrgenciaReporte {
+  PUEDE_ESPERAR
+  PRONTO
+  URGENTE
+}
+
+enum CantidadAnimales {
+  UNO
+  DOS_A_CINCO
+  MAS_DE_CINCO
+}
+
+enum TipoResguardo {
+  CON_QUIEN_INFORMA
+  OTRO_LUGAR
+}
+
+enum TipoPublicacionRed {
+  OPERATIVO
+  ADOPCION
+  PERDIDA
+  AVISTADA
+}
+
+/// Sin «Programado»: el prototipo no implementa programación real.
+enum EstadoPublicacionRed {
+  BORRADOR
+  PENDIENTE_REVISION
+  APROBADO
+  PUBLICANDO
+  PUBLICADO
+  ERROR
+  CANCELADO
+}
+
+enum SiNoNoSe {
+  SI
+  NO
+  NO_SE
+}
+
+enum TipoPublicacion {
+  PERDIDA
+  ENCONTRADA
+}
+
+enum EstadoPublicacion {
+  ABIERTA
+  REENCONTRADA
+  YA_NO_APLICA
+  ARCHIVADA
+}
+
+enum EstadoModeracion {
+  PENDIENTE
+  APROBADA
+  OCULTA
+}
+
+enum EstadoCoincidencia {
+  SUGERIDA
+  VALIDADA
+  DESCARTADA
+}
+
+enum TipoNovedad {
+  SALUD
+  NO_ESTA
+  ALIMENTACION
+  CORRECCION
+  ATENCION
+  OTRA
+}
+
+enum EstadoNovedad {
+  PENDIENTE
+  ACEPTADA
+  DESCARTADA
+}
+
+enum EstadoAdopcion {
+  DISPONIBLE
+  EN_PROCESO
+  ADOPTADO
+}
+
+enum RevisionAdopcion {
+  PENDIENTE
+  CORRECCIONES
+  APROBADA
+  RECHAZADA
+  OCULTA
+  RETIRADA
+}
+
+/// Relación de quien propone con el animal que da en adopción.
+enum RelacionAnimal {
+  PROPIO
+  RESCATADO
+  HOGAR_TEMPORAL
+  COMUNITARIO
+  OTRA
+}
+
+enum EstadoPostulacion {
+  RECIBIDA
+  EN_EVALUACION
+  APROBADA
+  NO_SELECCIONADA
+}
+
+enum EstadoOperativo {
+  BORRADOR
+  PUBLICADO
+  INSCRIPCIONES_CERRADAS
+  EN_CURSO
+  CERRADO
+  CANCELADO
+}
+
+enum OrigenOperativo {
+  RECOMENDACION
+  FICHA_SECTOR
+  DESDE_CERO
+}
+
+enum EstadoInvitacion {
+  ENVIADA
+  INTERESADA
+  ASIGNADA
+  RECHAZADA
+  VENCIDA
+  CANCELADA
+}
+
+enum EstadoCupo {
+  INVITADO
+  CONFIRMADO
+  EN_LISTA_ESPERA
+  ASISTIO
+  NO_ASISTIO
+  CANCELADO_PERSONA
+  CANCELADO_MUNICIPIO
+}
+
+enum ResultadoAtencion {
+  REALIZADA
+  NO_REALIZADA
+  DERIVADA
+}
+
+enum TipoAviso {
+  OPERATIVO
+  CAMBIO
+  CAMPANA
+  ALERTA
+  INFORMACION
+}
+
+enum EstadoAviso {
+  BORRADOR
+  PUBLICADO
+}
+
+enum NivelPrioridad {
+  ALTA
+  MEDIA
+  BAJA
+}
+
+enum AccionPrioridad {
+  MARCADO_EVALUADO
+  OPERATIVO_CREADO
+}
+
+enum CanalNotificacion {
+  CORREO
+  SMS
+  PANTALLA
+}
+
+/// SIMULADA: solo registrada (sin envío configurado o datos de demostración).
+/// PENDIENTE: en cola para salir por correo. FALLIDA: el proveedor la rechazó.
+enum EstadoNotificacion {
+  SIMULADA
+  PENDIENTE
+  ENVIADA
+  FALLIDA
+}

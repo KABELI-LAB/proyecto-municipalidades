@@ -1,0 +1,168 @@
+/* ── Nivel de prioridad ── */
+.nivel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  padding: var(--espacio-1) var(--espacio-2);
+  border-radius: var(--radio-base);
+  font-weight: var(--tipo-impresion-h2-peso);
+  white-space: nowrap;
+}
+/* Alta es un llamado: amarillo-senal con gris-texto (7,1:1), en una etiqueta pequeña. */
+.alta {
+  background: var(--amarillo-senal);
+  color: var(--gris-texto);
+}
+.media {
+  background: var(--celeste-rio);
+  color: var(--gris-texto);
+}
+.baja {
+  background: var(--gris-claro);
+  color: var(--gris-texto);
+}
+
+/* ── Indicadores ── */
+.indicadores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: var(--espacio-4);
+}
+.indicador {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  padding: var(--espacio-6);
+  background: var(--blanco);
+  border-radius: var(--radio-base);
+}
+.tituloIndicador {
+  font-weight: var(--tipo-impresion-h2-peso);
+  color: var(--azul-institucional);
+}
+.cifra {
+  font-family: var(--tipo-presentacion-cifra-familia);
+  font-size: var(--tipo-presentacion-cifra-tamano);
+  font-weight: var(--tipo-presentacion-cifra-peso);
+  line-height: var(--tipo-impresion-h1-interlineado);
+  color: var(--azul-institucional);
+}
+
+/* ── Ocupación ── */
+.ocupacion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.filaOcupacion {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--espacio-1) var(--espacio-4);
+}
+.filaOcupacion b {
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+.medidor {
+  height: var(--espacio-2);
+  margin-top: var(--espacio-1);
+  border-radius: var(--radio-base);
+  background: var(--gris-claro);
+  overflow: hidden;
+}
+.medidor span {
+  display: block;
+  height: 100%;
+  border-radius: var(--radio-base);
+  background: var(--azul-institucional);
+}
+
+/* ── Tarjeta de prioridad ── */
+.prioridad {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  padding: var(--espacio-6);
+  background: var(--blanco);
+  border-radius: var(--radio-base);
+}
+.encabezadoPrioridad {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-2) var(--espacio-4);
+}
+.motivos {
+  margin: var(--espacio-1) 0 0;
+  padding-left: var(--espacio-5);
+}
+.prioridad b {
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-3);
+}
+
+/* ── Bandeja ── */
+.bandeja {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.bandeja li {
+  display: grid;
+  grid-template-columns: var(--espacio-6) var(--espacio-10) 1fr;
+  align-items: center;
+  gap: var(--espacio-3);
+  padding-block: var(--espacio-3);
+  border-top: var(--borde-filete) solid var(--gris-claro);
+}
+.bandeja li:first-child {
+  border-top: 0;
+}
+.bandeja svg {
+  color: var(--azul-institucional);
+}
+.cantidadBandeja {
+  font-family: var(--font-titulos);
+  font-size: var(--tipo-impresion-h3-tamano);
+  font-weight: var(--tipo-impresion-h1-peso);
+  color: var(--azul-institucional);
+  text-align: right;
+}
+
+/* ── Tablas del panel (TablaDatos) ── */
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--blanco);
+}
+.tabla th,
+.tabla td {
+  padding: var(--espacio-2) var(--espacio-3);
+  border: var(--borde-filete) solid var(--tabla-borde);
+  text-align: left;
+  vertical-align: top;
+}
+.tabla thead th {
+  background: var(--tabla-encabezado);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+.tabla tbody tr:nth-child(even) > * {
+  background: var(--gris-claro);
+}
+.numero {
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+}
+.desplazable {
+  overflow-x: auto;
+}

@@ -1,0 +1,19 @@
+/* Las dos publicaciones lado a lado para compararlas. */
+.par {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: var(--espacio-6);
+  width: 100%;
+}
+.lado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  padding: var(--espacio-5);
+  border: var(--borde-filete) solid var(--gris-claro);
+  border-radius: var(--radio-base);
+}
+.lado img,
+.lado [role="img"] {
+  max-width: 320px;
+}

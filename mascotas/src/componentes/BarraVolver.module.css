@@ -1,0 +1,21 @@
+/* Enlaces livianos con ícono: ocupan poco alto, pero conservan un área
+   táctil de 44 px (principios de interfaz). */
+.barra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--espacio-5);
+  margin-bottom: var(--espacio-2);
+}
+.boton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  min-height: var(--espacio-12);
+  padding: 0;
+  color: var(--azul-institucional);
+  font-weight: var(--tipo-impresion-h2-peso);
+  text-decoration: none;
+}
+.boton:hover {
+  color: var(--azul-filete);
+}

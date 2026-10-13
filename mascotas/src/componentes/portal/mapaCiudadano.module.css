@@ -1,0 +1,189 @@
+/* Mapa ciudadano: mapa y ficha lateral en escritorio; en celular, la ficha bajo el mapa. */
+
+.cuerpo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-4);
+}
+@media (min-width: 900px) {
+  .cuerpo {
+    grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+    align-items: start;
+  }
+}
+
+/* Alto fijo para que la página no salte al cargar. */
+.mapa {
+  width: 100%;
+  height: 380px;
+  border-radius: var(--radio-base);
+  overflow: hidden;
+}
+@media (min-width: 900px) {
+  .mapa {
+    height: 560px;
+  }
+}
+
+.ficha {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  padding: var(--espacio-5);
+  background: var(--blanco);
+  border-radius: var(--radio-base);
+  scroll-margin-top: var(--espacio-4);
+}
+@media (min-width: 900px) {
+  .ficha {
+    max-height: 560px;
+    overflow-y: auto;
+  }
+}
+.ficha h2 {
+  font-family: var(--font-titulos);
+  font-size: var(--tipo-impresion-h3-tamano);
+  font-weight: var(--tipo-impresion-h1-peso);
+  line-height: var(--tipo-impresion-h3-interlineado);
+  color: var(--azul-institucional);
+}
+
+.encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espacio-2) var(--espacio-4);
+}
+.volver {
+  min-height: var(--espacio-12);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--azul-institucional);
+  font: inherit;
+  font-weight: var(--tipo-impresion-h2-peso);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Lista de lugares cuando no hay uno elegido: botones de al menos 44 px. */
+.lugares {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lugares li + li {
+  border-top: var(--borde-filete) solid var(--gris-claro);
+}
+.lugares button {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--espacio-1) var(--espacio-4);
+  width: 100%;
+  min-height: var(--espacio-12);
+  padding: var(--espacio-3) 0;
+  border: 0;
+  background: none;
+  color: var(--gris-texto);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.lugares b {
+  color: var(--azul-institucional);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+.lugares button:hover b {
+  text-decoration: underline;
+}
+
+.cifras {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--espacio-3) var(--espacio-4);
+  margin: 0;
+}
+.cifras div {
+  display: flex;
+  flex-direction: column;
+}
+.cifras dd {
+  order: 1;
+  margin: 0;
+  font-family: var(--font-titulos);
+  font-size: var(--tipo-impresion-h2-tamano);
+  font-weight: var(--tipo-impresion-h1-peso);
+  line-height: var(--tipo-impresion-h1-interlineado);
+  color: var(--azul-institucional);
+}
+.cifras dt {
+  order: 2;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.items li + li {
+  border-top: var(--borde-filete) solid var(--gris-claro);
+}
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espacio-3);
+  padding-block: var(--espacio-3);
+  color: var(--gris-texto);
+  text-decoration: none;
+}
+.item img {
+  flex: none;
+  width: var(--espacio-16);
+  height: var(--espacio-16);
+  object-fit: cover;
+  border-radius: var(--radio-base);
+}
+.item > span {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+.item b {
+  color: var(--azul-institucional);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+.item:hover b {
+  text-decoration: underline;
+}
+/* Siempre texto: nunca solo color. */
+.etiqueta {
+  align-self: flex-start;
+  padding: 0 var(--espacio-2);
+  border-left: var(--espacio-1) solid var(--celeste-rio);
+  background: var(--gris-claro);
+  border-radius: var(--radio-base);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+
+.enlaces {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-3);
+}
+.enlaces a:not([class]) {
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+
+.vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-4);
+}

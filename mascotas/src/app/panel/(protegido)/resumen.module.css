@@ -1,0 +1,120 @@
+.cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--espacio-4) var(--espacio-8);
+}
+.llevar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-3) var(--espacio-6);
+}
+
+/* La recomendación es el titular: el bloque con más peso de la pantalla. */
+.recomendacion {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-3);
+  padding: var(--espacio-8);
+  background: var(--blanco);
+  border-left: var(--espacio-2) solid var(--azul-institucional);
+  border-radius: var(--radio-base);
+}
+.recomendacion h2 {
+  max-width: 820px;
+}
+.encabezadoRecomendacion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espacio-2) var(--espacio-4);
+}
+.sector {
+  font-size: var(--tipo-impresion-h3-tamano);
+  font-family: var(--font-titulos);
+  font-weight: var(--tipo-impresion-h2-peso);
+  color: var(--azul-institucional);
+}
+.motivos {
+  margin: 0;
+  padding-left: var(--espacio-6);
+  font-size: var(--tipo-impresion-h3-tamano);
+  line-height: var(--tipo-impresion-cuerpo-interlineado);
+}
+
+/* Pendientes: filas con su acción a la derecha. */
+.pendientes {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--blanco);
+  border-radius: var(--radio-base);
+}
+.pendientes li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3) var(--espacio-6);
+  padding: var(--espacio-5) var(--espacio-6);
+  border-top: var(--borde-filete) solid var(--gris-claro);
+}
+.pendientes li:first-child {
+  border-top: 0;
+}
+.pendientes li > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  max-width: 640px;
+}
+.pendientes b {
+  color: var(--azul-institucional);
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+.accion {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-4);
+}
+.contadores {
+  font-weight: var(--tipo-impresion-h2-peso);
+}
+
+/* Cuatro cifras por fila como máximo. */
+.cifras {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: var(--espacio-4);
+  margin: 0;
+}
+.cifras > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  padding: var(--espacio-5) var(--espacio-6);
+  background: var(--blanco);
+  border-radius: var(--radio-base);
+}
+.cifras dt {
+  order: 2;
+  font-weight: var(--tipo-impresion-h2-peso);
+  color: var(--azul-institucional);
+}
+.cifras dd {
+  order: 3;
+  margin: 0;
+}
+.cifras .cifra {
+  order: 1;
+  font-family: var(--tipo-presentacion-cifra-familia);
+  font-size: var(--tipo-presentacion-cifra-tamano);
+  font-weight: var(--tipo-presentacion-cifra-peso);
+  line-height: var(--tipo-impresion-h1-interlineado);
+  color: var(--azul-institucional);
+}

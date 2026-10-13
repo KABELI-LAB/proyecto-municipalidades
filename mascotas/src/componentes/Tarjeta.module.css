@@ -1,0 +1,25 @@
+.tarjeta {
+  background: var(--blanco);
+  border-radius: var(--radio-base);
+  padding: var(--espacio-10);
+}
+/* Sobre fondo blanco la tarjeta necesita filete para separarse. */
+.sobreBlanco {
+  border: var(--borde-filete) solid var(--gris-claro);
+}
+@media (max-width: 640px) {
+  .tarjeta {
+    padding: var(--espacio-6);
+  }
+}
+
+.bloque {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+.bloque + .bloque {
+  margin-top: var(--espacio-5);
+  padding-top: var(--espacio-5);
+  border-top: var(--borde-filete) solid var(--gris-claro);
+}

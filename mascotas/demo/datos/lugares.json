@@ -1,0 +1,107 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "datos": [
+    {
+      "id": "plaza-de-armas-de-hualane",
+      "nombre": "Plaza de Armas de Hualañé",
+      "tipo": "plaza",
+      "sector_id": "hualane",
+      "localidad_id": "hualane",
+      "lat": -34.976,
+      "lng": -71.805,
+      "coordenadas_estado": "aproximada (coordenada de la localidad)"
+    },
+    {
+      "id": "municipalidad-de-hualane",
+      "nombre": "Municipalidad de Hualañé",
+      "tipo": "edificio-municipal",
+      "sector_id": "hualane",
+      "localidad_id": "hualane",
+      "lat": -34.976,
+      "lng": -71.805,
+      "coordenadas_estado": "aproximada (coordenada de la localidad)"
+    },
+    {
+      "id": "estadio-municipal-de-hualane",
+      "nombre": "Estadio Municipal de Hualañé",
+      "tipo": "recinto-deportivo",
+      "sector_id": "hualane",
+      "localidad_id": "hualane",
+      "lat": -34.976,
+      "lng": -71.805,
+      "coordenadas_estado": "aproximada (coordenada de la localidad)"
+    },
+    {
+      "id": "liceo-bicentenario-de-hualane",
+      "nombre": "Liceo Bicentenario de Hualañé",
+      "tipo": "establecimiento-educacional",
+      "sector_id": "hualane",
+      "localidad_id": "hualane",
+      "lat": -34.976,
+      "lng": -71.805,
+      "coordenadas_estado": "aproximada (coordenada de la localidad)"
+    },
+    {
+      "id": "escuela-monsenor-manuel-larrain-errazuriz",
+      "nombre": "Escuela Monseñor Manuel Larraín Errázuriz",
+      "tipo": "escuela",
+      "sector_id": "hualane",
+      "localidad_id": "hualane",
+      "lat": -34.976,
+      "lng": -71.805,
+      "coordenadas_estado": "aproximada (coordenada de la localidad)"
+    },
+    {
+      "id": "escuela-la-huerta-de-mataquito",
+      "nombre": "Escuela La Huerta de Mataquito",
+      "tipo": "escuela",
+      "sector_id": "la-huerta",
+      "localidad_id": "la-huerta",
+      "lat": -35.0895,
+      "lng": -71.6557,
+      "coordenadas_estado": "aproximada (coordenada de la localidad)"
+    },
+    {
+      "id": "escuela-orilla-de-navarro",
+      "nombre": "Escuela Orilla de Navarro",
+      "tipo": "escuela",
+      "sector_id": "la-huerta",
+      "localidad_id": "orilla-de-navarro",
+      "lat": -35.067,
+      "lng": -71.617,
+      "coordenadas_estado": "aproximada (coordenada de la localidad)"
+    },
+    {
+      "id": "escuela-carlos-correa-nunez-mira-rio",
+      "nombre": "Escuela Carlos Correa Núñez – Mira Río",
+      "tipo": "escuela",
+      "sector_id": "hualane",
+      "localidad_id": "mira-rio",
+      "lat": -34.92,
+      "lng": -71.85,
+      "coordenadas_estado": "aproximada (coordenada de la localidad)"
+    },
+    {
+      "id": "escuela-caone",
+      "nombre": "Escuela Caone",
+      "tipo": "escuela",
+      "sector_id": "los-coipos",
+      "localidad_id": "caone",
+      "lat": -34.967,
+      "lng": -71.65,
+      "coordenadas_estado": "aproximada (coordenada de la localidad)"
+    },
+    {
+      "id": "sala-multiproposito",
+      "nombre": "Sala Multipropósito",
+      "tipo": "espacio-comunitario",
+      "sector_id": "hualane",
+      "localidad_id": "hualane",
+      "lat": -34.976,
+      "lng": -71.805,
+      "coordenadas_estado": "aproximada (coordenada de la localidad)",
+      "nota": "Sector asignado por defecto a Hualañé; confirmar ubicación."
+    }
+  ]
+}
