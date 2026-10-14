@@ -39,6 +39,9 @@ model Municipio {
   limitePorHogar   Int     @default(2)
   /// Solo para pruebas: permite publicar en Instagram contenido de demostración (la pieza lleva la marca).
   redesIncluirDemo Boolean @default(false)
+  /// Al aprobar un aviso o una adopción, o al publicar un operativo, también se publica en Instagram.
+  /// Apagado: solo en el portal; se publica en Instagram con el botón de cada contenido.
+  redesPublicarAuto Boolean @default(true)
 
   sectores     Sector[]
   servicios    Servicio[]

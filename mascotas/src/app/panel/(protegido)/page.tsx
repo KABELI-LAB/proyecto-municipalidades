@@ -16,6 +16,7 @@ const OTROS: { href: string; titulo: string; detalle: string; icono: NombreIcono
   { href: "/panel/vecinos", titulo: "Lo que piden los vecinos", detalle: "Solicitudes y temas frecuentes", icono: "huella", tono: "verde", permiso: "verIndicadores" },
   { href: "/panel/mapa", titulo: "Mapa", detalle: "Avisos y reportes por sector", icono: "ubicacion", tono: "azul", permiso: "verInteligencia" },
   { href: "/panel/avisos", titulo: "Avisos a vecinos", detalle: "Publicar y quitar avisos", icono: "megafono", tono: "amarillo", permiso: "gestionarAvisos" },
+  { href: "/panel/configuracion", titulo: "Configuración", detalle: "Publicación en Instagram", icono: "ajustes", tono: "azul", permiso: "configurarRedes" },
 ];
 
 const capitalizar = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);

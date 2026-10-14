@@ -220,7 +220,7 @@ export async function publicar(id: string) {
     return `Publicamos el operativo. Enviamos ${invitadas === 1 ? "1 invitación prioritaria" : `${invitadas} invitaciones prioritarias`} a solicitudes pendientes (mismo servicio, del sector o cercanas); sus cupos quedan retenidos hasta que respondan. Dejamos un aviso en borrador para comunicaciones.`;
   });
   if (!r.ok) return r;
-  const instagram = await difundirEnInstagram("OPERATIVO", id, (await gestor())?.id ?? null);
+  const instagram = await difundirEnInstagram("OPERATIVO", id, (await gestor())?.id ?? null, { automatico: true });
   return { ...r, mensaje: r.mensaje + notaInstagram(instagram) };
 }
 

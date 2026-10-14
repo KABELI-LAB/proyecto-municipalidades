@@ -1,0 +1,71 @@
+/* Switch del sistema (components/forms/Switch): 56 × 32, verde al encender. */
+.interruptor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  min-height: var(--target-min);
+  cursor: pointer;
+}
+.texto {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.texto b {
+  font-weight: var(--weight-bold);
+}
+.texto span {
+  font-size: var(--type-body-sm-size);
+  line-height: var(--type-body-sm-lh);
+  color: var(--color-text-secondary);
+}
+.control {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-3);
+}
+/* El estado también en palabras: nunca solo color. */
+.estado {
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-secondary);
+}
+.control input {
+  position: relative;
+  flex: none;
+  width: 56px;
+  height: 32px;
+  margin: 0;
+  border-radius: var(--radius-full);
+  background: var(--neutral-400);
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: background-color var(--duration-standard) var(--ease-flow);
+}
+.control input::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-small);
+  transition: transform var(--duration-standard) var(--ease-flow);
+}
+.control input:checked {
+  background: var(--color-secondary);
+}
+.control input:checked::after {
+  transform: translateX(24px);
+}
+.control input:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+.control input:disabled {
+  cursor: progress;
+}

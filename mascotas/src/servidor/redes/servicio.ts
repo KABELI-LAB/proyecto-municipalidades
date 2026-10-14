@@ -21,6 +21,12 @@ import { generarPieza, type DatosPieza } from "./pieza";
 export type Respuesta = { ok: boolean; mensaje: string; id?: string };
 
 /** ¿Se permite publicar en Instagram contenido de demostración? Solo para pruebas (Configuración). */
+/** Si al aprobar o publicar un contenido también sale en Instagram (configuración del panel). */
+export async function publicacionAutomatica() {
+  const m = await db.municipio.findUnique({ where: { id: municipioActivo().id }, select: { redesPublicarAuto: true } });
+  return m?.redesPublicarAuto ?? true;
+}
+
 export async function demoEnInstagram() {
   const m = await db.municipio.findUnique({ where: { id: municipioActivo().id }, select: { redesIncluirDemo: true } });
   return m?.redesIncluirDemo ?? false;
@@ -63,10 +69,14 @@ export async function cargarOrigen(tipo: TipoRed, id: string): Promise<Origen | 
     return {
       pieza: {
         tipo,
+        antetitulo: "Tenencia responsable de mascotas",
         titulo: `Operativo en ${o.sector.nombre}`,
-        lineas: [mayuscula(fecha), `De ${o.horaInicio} a ${o.horaFin} horas`, `${o.lugar.nombre}, ${o.lugar.localidad.nombre}`],
-        lista: servicios,
-        llamado: "Inscríbete en el portal municipal. Los cupos son limitados por servicio.",
+        detalles: [
+          { icono: "fecha", texto: `${mayuscula(fecha)} · ${o.horaInicio} a ${o.horaFin}` },
+          { icono: "lugar", texto: `${o.lugar.nombre}, ${o.lugar.localidad.nombre}` },
+          ...(servicios.length ? [{ icono: "servicio" as const, texto: mayuscula(servicios.join(", ").toLocaleLowerCase("es-CL")) }] : []),
+          { icono: "llamado", texto: "Inscríbete en el portal: cupos limitados" },
+        ],
         foto: null,
       },
       texto,
@@ -93,8 +103,10 @@ export async function cargarOrigen(tipo: TipoRed, id: string): Promise<Origen | 
       pieza: {
         tipo,
         titulo: f.animal.nombre ? `${f.animal.nombre} busca hogar` : "Busca hogar",
-        lineas: [[mayuscula(datos.especie), datos.tamano ? `tamaño ${datos.tamano}` : null, donde].filter(Boolean).join(" · ")],
-        llamado: "Revisa su ficha oficial y postula en el portal municipal.",
+        detalles: [
+          { icono: "animal", texto: [mayuscula(datos.especie), datos.tamano ? `tamaño ${datos.tamano}` : null, donde].filter(Boolean).join(" · ") },
+          { icono: "llamado", texto: "Revisa su ficha y postula en el portal" },
+        ],
         foto,
       },
       texto,
@@ -136,9 +148,12 @@ export async function cargarOrigen(tipo: TipoRed, id: string): Promise<Origen | 
   return {
     pieza: {
       tipo,
-      titulo: perdida ? (datos.nombre ? `Se busca a ${datos.nombre}` : `Se busca: ${g.sustantivo} ${datos.color}`) : `¿Reconoces a ${g.este} ${g.sustantivo}?`,
-      lineas: [rasgos.length > 110 ? `${rasgos.slice(0, 107).trimEnd()}…` : rasgos, perdida ? `Se perdió el ${datos.fecha} en ${donde}.` : `${mayuscula(g.visto)} el ${datos.fecha} en ${donde}.`],
-      llamado: perdida ? `¿${mayuscula(g.lo)} viste? Avisa a través del aviso oficial. No publiques datos personales.` : "Si es tuyo, revisa el aviso oficial e informa una coincidencia.",
+      titulo: perdida ? `¿Has visto a ${datos.nombre ?? `${g.este} ${g.sustantivo}`}?` : `¿Reconoces a ${g.este} ${g.sustantivo}?`,
+      detalles: [
+        { icono: "animal", texto: rasgos.length > 90 ? `${rasgos.slice(0, 87).trimEnd()}…` : rasgos },
+        { icono: "lugar", texto: perdida ? `Se perdió el ${datos.fecha} en ${donde}` : `${mayuscula(g.visto)} el ${datos.fecha} en ${donde}` },
+        { icono: "llamado", texto: perdida ? `¿${mayuscula(g.lo)} viste? Avisa en el portal` : "¿Es tuyo? Revisa el aviso en el portal" },
+      ],
       foto,
     },
     texto,
@@ -156,7 +171,7 @@ async function generarImagen(o: Origen) {
 }
 
 export type Difusion = {
-  estado: "publicado" | "ya-publicado" | "error" | "sin-integracion" | "demo" | "no-publico";
+  estado: "publicado" | "ya-publicado" | "error" | "sin-integracion" | "demo" | "no-publico" | "manual";
   mensaje: string;
   permalink?: string | null;
 };
@@ -165,9 +180,12 @@ export type Difusion = {
  * Publica en Instagram un contenido recién publicado o aceptado. No duplica:
  * si ya está publicado, no hace nada; si un intento anterior falló, reintenta
  * con la misma publicación. Nunca interrumpe el flujo que la llamó.
+ * Con `automatico`, respeta la configuración: si la publicación automática
+ * está apagada, no publica (queda el botón de cada contenido).
  */
-export async function difundirEnInstagram(tipo: TipoRed, origenId: string, usuarioId: string | null): Promise<Difusion> {
+export async function difundirEnInstagram(tipo: TipoRed, origenId: string, usuarioId: string | null, { automatico = false } = {}): Promise<Difusion> {
   try {
+    if (automatico && !(await publicacionAutomatica())) return { estado: "manual", mensaje: "La publicación automática en Instagram está apagada." };
     const integracion = estadoIntegracion();
     if (!integracion.configurada) return { estado: "sin-integracion", mensaje: "Instagram no está configurado: se publicó solo en la web." };
     const municipio = municipioActivo();
@@ -211,6 +229,7 @@ export function notaInstagram(d: Difusion): string {
     "sin-integracion": " Instagram no está configurado: se publicó solo en la web.",
     demo: " Son datos de demostración: no se publicaron en Instagram.",
     "no-publico": " No se publicó en Instagram porque no tiene foto.",
+    manual: " No se publicó en Instagram: la publicación automática está apagada. Puedes publicarlo desde Configuración.",
   }[d.estado];
 }
 

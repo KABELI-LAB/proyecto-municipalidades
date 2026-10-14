@@ -214,7 +214,8 @@
   font-weight: var(--weight-bold);
 }
 .exito {
-  border-left: var(--space-1) solid var(--color-secondary);
+  border: 1.5px solid var(--green-200);
+  background: var(--color-success-bg);
 }
 .error {
   background: var(--color-error-bg);

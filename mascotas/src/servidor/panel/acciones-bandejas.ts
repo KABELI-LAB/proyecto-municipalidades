@@ -95,7 +95,7 @@ export async function aprobarPublicacion(id: string) {
     if (p.moderacion === "PENDIENTE") {
       await notificar(db, p.persona, "Publicamos tu aviso", `Revisamos y publicamos tu aviso${p.codigo ? ` ${p.codigo}` : ""} en el portal y en las redes sociales del municipio. Te avisaremos si aparece una publicación que podría corresponder.`, p.loteDemoId);
     }
-    const instagram = await difundirEnInstagram(p.tipo === "PERDIDA" ? "PERDIDA" : "AVISTADA", id, u.id);
+    const instagram = await difundirEnInstagram(p.tipo === "PERDIDA" ? "PERDIDA" : "AVISTADA", id, u.id, { automatico: true });
     return { ok: true, mensaje: `Publicamos el aviso en el portal.${notaInstagram(instagram)}` };
   });
 }
@@ -225,7 +225,7 @@ export async function aprobarPropuesta(id: string) {
     ]);
     if (!r) return YA_CAMBIO;
     // Ficha aprobada: también a Instagram. Sin autorización de quien la propuso, no se publica allí.
-    const instagram = await difundirEnInstagram("ADOPCION", id, u.id);
+    const instagram = await difundirEnInstagram("ADOPCION", id, u.id, { automatico: true });
     return { ok: true, mensaje: `Publicamos la ficha en el catálogo de adopción y avisamos a quien la propuso.${notaInstagram(instagram)}` };
   });
 }

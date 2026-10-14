@@ -464,19 +464,29 @@ Un CRUD simple:
 - **Editar** un aviso desde su ficha: texto, fechas, retirar del portal o
   eliminar.
 
-### Instagram (sin ventana propia)
+### Instagram
 
 Aceptar o publicar un contenido en el panel lo publica en la web y en
 Instagram a la vez; no hay una bandeja de redes aparte.
+
+- **Configuración** (`/panel/configuracion`, solo administración):
+  - «Publicar automáticamente», encendido por omisión. Apagado: lo que se
+    aprueba o publica sale solo en el portal, y el mensaje de la acción lo
+    dice.
+  - Lista «Sin publicar en Instagram»: contenido público que aún no sale o
+    cuyo intento falló, con «Publicar en Instagram» o «Reintentar».
+  - «Incluir datos de demostración», solo para pruebas.
 
 - **Qué sale a Instagram:** los avisos de mascotas perdidas y avistadas al
   aceptarlos, los operativos al publicarlos y las fichas de adopción al
   aprobarlas (si quien propuso autorizó publicarlas). Solo con foto (salvo los
   operativos). SOS Mascotas, reportes y contenido privado nunca salen.
-- **Pieza gráfica** (1080 × 1350, JPEG): escudo negativo sobre azul
-  institucional, firma del municipio desde la configuración, distintivo del
-  tipo, la foto del animal solo recortada para encuadrar, título, datos y cómo
-  participar o informar.
+- **Pieza gráfica** (1080 × 1350, JPEG), según la plantilla de redes del
+  sistema de diseño (`applications/social-system.html`): píldora de categoría
+  con ícono, logotipo ciudadano, foto con el corte inclinado (solo recortada
+  para encuadrar), título grande, datos con íconos, Cauce y barra con la
+  dirección del portal. Perdidas, avistadas y adopciones van sobre blanco con
+  píldora roja, azul o verde; los operativos, sobre amarillo («Actividad»).
 - **Texto:** tono municipal, solo datos existentes, enlace al portal (si
   `APP_URL` es pública) y tres etiquetas como máximo. Sin RUT, teléfonos,
   correos, domicilios ni cuidadores; sin afirmar vacunas, salud ni

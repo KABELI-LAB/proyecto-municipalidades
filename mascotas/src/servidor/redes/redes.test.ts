@@ -155,6 +155,28 @@ describe("aviso de un vecino: aceptar y publicar", () => {
     expect(llamadas.filter((l) => l.metodo === "POST" && l.ruta.endsWith("/media_publish"))).toHaveLength(2);
   });
 
+  it("con la publicación automática apagada, aceptar publica solo en la web; luego se publica a mano", async () => {
+    configurarInstagram();
+    const llamadas = apiSimulada();
+    sesion = await sesionDe("COMUNICACIONES");
+    // Solo administración cambia la configuración.
+    expect((await redes.guardarPublicacionAutomatica(false)).ok).toBe(false);
+    sesion = await sesionDe("ADMINISTRADOR");
+    expect((await redes.guardarPublicacionAutomatica(false)).ok).toBe(true);
+    sesion = await sesionDe("COMUNICACIONES");
+    const aviso = await avisoDeVecino("PERDIDA");
+    const r = await bandejas.aprobarPublicacion(aviso.id);
+    expect(r.mensaje).toBe("Publicamos el aviso en el portal. No se publicó en Instagram: la publicación automática está apagada. Puedes publicarlo desde Configuración.");
+    expect(await db.publicacionRed.count({ where: { origenId: aviso.id } })).toBe(0);
+    expect(llamadas).toHaveLength(0);
+    // A mano, desde la configuración (el mismo botón de cada contenido).
+    const manual = await redes.publicarEnInstagram("PERDIDA", aviso.id);
+    expect(manual.ok).toBe(true);
+    expect((await db.publicacionRed.findFirstOrThrow({ where: { origenId: aviso.id } })).estado).toBe("PUBLICADO");
+    sesion = await sesionDe("ADMINISTRADOR");
+    await redes.guardarPublicacionAutomatica(true);
+  });
+
   it("ocultar y volver a mostrar no publica dos veces en Instagram", async () => {
     configurarInstagram();
     apiSimulada();

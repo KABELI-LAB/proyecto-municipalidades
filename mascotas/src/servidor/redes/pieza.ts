@@ -1,62 +1,63 @@
-// Pieza gráfica para Instagram (1080 × 1350, formato 4:5, JPEG): identidad
-// municipal (escudo y nombre oficial sobre blanco, desde la ruta que define
-// la configuración del municipio), tipografía, colores y Cauce del sistema
-// de diseño, y la foto del animal sin alterarla (solo se recorta para
-// encuadrar). Se genera en el servidor con sharp; no usa servicios externos.
+// Pieza gráfica para Instagram (1080 × 1350, formato 4:5, JPEG), según la
+// plantilla «Social media system» del sistema de diseño
+// (design-system/applications/social-system.html): fondo de la categoría,
+// píldora de categoría con ícono, logotipo ciudadano arriba a la derecha,
+// foto con el corte inclinado, título grande, datos con íconos, Cauce de tres
+// colores y barra inferior con la dirección del portal. La foto del animal
+// no se altera (solo se recorta para encuadrar). Se genera en el servidor con
+// sharp; no usa servicios externos.
 import "server-only";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { ArrowRight, CalendarDays, Clock, Eye, Heart, MapPin, PawPrint, Search, Stethoscope, type LucideIcon } from "lucide-react";
 import sharp, { type OverlayOptions } from "sharp";
 import type { TipoRed } from "@/dominio/redes";
 import { municipioActivo } from "@/lib/municipio";
 
 export const ANCHO = 1080;
 export const ALTO = 1350;
-const MARGEN = 56;
+const MARGEN = 80;
 const UTIL = ANCHO - 2 * MARGEN;
-const CABECERA = 190;
-const PIE = 130;
+const ARRIBA = 72;
+const ALTO_CAUCE = 150;
+const ALTO_BARRA = 80;
 
 // Colores de design-system/tokens/colors.css.
-const COLOR = {
-  azul: "#253786", // blue-700, primario
-  azulInfo: "#1A58A0", // blue-600
-  azulOscuro: "#162253", // blue-900, pie
-  azulSuave: "#D9E4F5", // blue-100
+const C = {
+  azul: "#253786", // blue-700
+  azulNoche: "#0D1533", // blue-950
   verde: "#316B2C", // green-700
-  verdeSuave: "#D7EFD5", // green-100
-  amarilloSuave: "#FEF4BF", // yellow-100
-  rojo: "#C42B2B", // error
+  verdeHoja: "#3AAA35", // green-500
+  amarillo: "#FAC22F", // yellow-400
+  rojo: "#C42B2B", // red-600
   texto: "#0E121B", // neutral-950
-  fondo: "#F6F7F9", // neutral-50
-  borde: "#DCDFE6", // neutral-200
   blanco: "#FFFFFF",
 } as const;
 
-// Pango no lee woff2: Atkinson Hyperlegible Next como TTF (vea fuentes/LEAME.md).
-const FUENTES = path.join(process.cwd(), "src", "servidor", "redes", "fuentes");
-const FUENTE = {
-  texto: { familia: "Atkinson Hyperlegible Next", archivo: path.join(FUENTES, "AtkinsonHyperlegibleNext-Regular.ttf") },
-  negrita: { familia: "Atkinson Hyperlegible Next Bold", archivo: path.join(FUENTES, "AtkinsonHyperlegibleNext-Bold.ttf") },
+/**
+ * Categorías de la plantilla aplicadas a cada tipo de publicación:
+ * mascotas y adopción como «Comunidad» (fondo blanco con foto), operativos
+ * como «Actividad» (amarillo).
+ */
+type Estilo = { etiqueta: string; icono: LucideIcon; fondo: string; tinta: string; pildora: string; tintaPildora: string; cauce: [string, string, string]; logo: "color" | "placa" };
+const ESTILO: Record<TipoRed, Estilo> = {
+  PERDIDA: { etiqueta: "Se busca", icono: Search, fondo: C.blanco, tinta: C.texto, pildora: C.rojo, tintaPildora: C.blanco, cauce: [C.azul, C.verdeHoja, C.amarillo], logo: "color" },
+  AVISTADA: { etiqueta: "Mascota avistada", icono: Eye, fondo: C.blanco, tinta: C.texto, pildora: C.azul, tintaPildora: C.blanco, cauce: [C.azul, C.verdeHoja, C.amarillo], logo: "color" },
+  ADOPCION: { etiqueta: "En adopción", icono: Heart, fondo: C.blanco, tinta: C.texto, pildora: C.verde, tintaPildora: C.blanco, cauce: [C.azul, C.verdeHoja, C.amarillo], logo: "color" },
+  OPERATIVO: { etiqueta: "Operativo", icono: CalendarDays, fondo: C.amarillo, tinta: C.azulNoche, pildora: C.azul, tintaPildora: C.blanco, cauce: [C.azul, C.blanco, C.verdeHoja], logo: "placa" },
 };
 
-/** Distintivo de cada tipo: texto y color (texto blanco, grande y en negrita). */
-const DISTINTIVO: Record<TipoRed, { texto: string; color: string }> = {
-  OPERATIVO: { texto: "Operativo de tenencia responsable", color: COLOR.azul },
-  ADOPCION: { texto: "En adopción", color: COLOR.verde },
-  PERDIDA: { texto: "Se busca", color: COLOR.rojo },
-  AVISTADA: { texto: "Mascota avistada", color: COLOR.azulInfo },
-};
+/** Íconos de los datos (set Lucide del sistema). */
+const ICONOS = { fecha: CalendarDays, hora: Clock, lugar: MapPin, servicio: Stethoscope, animal: PawPrint, llamado: ArrowRight } satisfies Record<string, LucideIcon>;
+export type IconoPieza = keyof typeof ICONOS;
 
 export type DatosPieza = {
   tipo: TipoRed;
+  /** Línea corta sobre el título (opcional). */
+  antetitulo?: string;
   titulo: string;
-  /** Líneas de detalle; la primera va destacada cuando no hay foto. */
-  lineas: string[];
-  /** Lista con viñetas (servicios del operativo). */
-  lista?: string[];
-  /** Cómo participar o entregar información. */
-  llamado: string;
+  /** Datos con ícono, en orden; el último suele ser el llamado a participar. */
+  detalles: { icono: IconoPieza; texto: string }[];
   foto: Buffer | null;
   /** Dirección pública del portal (sin protocolo), si existe. */
   portal: string | null;
@@ -65,138 +66,192 @@ export type DatosPieza = {
 
 const escapar = (t: string) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-type Texto = { texto: string; tamano: number; color: string; negrita?: boolean; ancho?: number };
+// Pango no lee woff2: Atkinson Hyperlegible Next como TTF (vea fuentes/LEAME.md).
+const FUENTES = path.join(process.cwd(), "src", "servidor", "redes", "fuentes");
+const FUENTE = {
+  texto: { familia: "Atkinson Hyperlegible Next", archivo: path.join(FUENTES, "AtkinsonHyperlegibleNext-Regular.ttf") },
+  negrita: { familia: "Atkinson Hyperlegible Next Bold", archivo: path.join(FUENTES, "AtkinsonHyperlegibleNext-Bold.ttf") },
+};
 
-/** Bloque de texto con salto de línea por palabras, en la fuente local del sistema de diseño. */
-async function bloque({ texto, tamano, color, negrita = false, ancho = UTIL }: Texto) {
+type Texto = { texto: string; tamano: number; color: string; negrita?: boolean; ancho?: number; interlineado?: number; espaciado?: number; mayusculas?: boolean };
+
+/** Una línea de texto sin cortes, en la tipografía del sistema. */
+async function linea(t: string, { tamano, color, negrita = true, espaciado = 0 }: Omit<Texto, "texto">) {
   const fuente = negrita ? FUENTE.negrita : FUENTE.texto;
+  // Pango mide el espaciado entre letras en milésimas de punto (a 72 ppp, 1 punto = 1 px).
+  const letras = espaciado ? ` letter_spacing="${Math.round(espaciado * tamano * 1024)}"` : "";
   const { data, info } = await sharp({
-    text: {
-      text: `<span foreground="${color}">${escapar(texto)}</span>`,
-      font: `${fuente.familia} ${tamano}`,
-      fontfile: fuente.archivo,
-      width: ancho,
-      wrap: "word",
-      rgba: true,
-      spacing: Math.round(tamano * 0.25),
-    },
+    text: { text: `<span foreground="${color}"${letras}>${escapar(t)}</span>`, font: `${fuente.familia} ${tamano}`, fontfile: fuente.archivo, rgba: true },
   })
     .png()
     .toBuffer({ resolveWithObject: true });
   return { imagen: data, ancho: info.width, alto: info.height };
 }
 
-const rect = (ancho: number, alto: number, color: string, radio = 0, borde?: string) =>
-  Buffer.from(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${ancho}" height="${alto}"><rect x="1" y="1" width="${ancho - 2}" height="${alto - 2}" rx="${radio}" fill="${color}"${borde ? ` stroke="${borde}" stroke-width="2"` : ""}/></svg>`,
-  );
-
-// Cauce: las tres ondas del escudo, forma propia del sistema (src/componentes/Cauce.tsx).
-function cauce(ancho: number, alto: number, colores: string[], grosor: number, separacion: number) {
-  const trazos = colores
-    .map((c, i) => {
-      const y = 120 + i * separacion;
-      return `<path d="M-40 ${y + 150} C 260 ${y + 150}, 470 ${y + 20}, 760 ${y} S 1120 ${y - 14}, 1240 ${y - 14}" fill="none" stroke="${c}" stroke-width="${grosor}"/>`;
-    })
-    .join("");
-  return Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${ancho}" height="${alto}" viewBox="0 0 1200 400" preserveAspectRatio="none">${trazos}</svg>`);
+/**
+ * Párrafo con corte por palabras y alto de línea controlado: Pango no permite
+ * interlineados menores que el de la fuente, así que cada línea se dibuja
+ * por separado y se apilan a `interlineado` × tamaño.
+ */
+async function bloque({ texto, tamano, color, negrita = true, ancho = UTIL, interlineado = 1.2, espaciado = 0, mayusculas = false }: Texto) {
+  const opciones = { tamano, color, negrita, espaciado };
+  const palabras = (mayusculas ? texto.toLocaleUpperCase("es-CL") : texto).split(/\s+/).filter(Boolean);
+  const lineas: Awaited<ReturnType<typeof linea>>[] = [];
+  let actual = "";
+  let dibujo: Awaited<ReturnType<typeof linea>> | null = null;
+  for (const palabra of palabras) {
+    const prueba = actual ? `${actual} ${palabra}` : palabra;
+    const d = await linea(prueba, opciones);
+    if (d.ancho > ancho && actual && dibujo) {
+      lineas.push(dibujo);
+      actual = palabra;
+      dibujo = await linea(palabra, opciones);
+    } else {
+      actual = prueba;
+      dibujo = d;
+    }
+  }
+  if (dibujo) lineas.push(dibujo);
+  if (lineas.length === 1) return lineas[0];
+  const paso = Math.round(tamano * interlineado);
+  const alto = paso * (lineas.length - 1) + lineas[lineas.length - 1].alto;
+  const anchoTotal = Math.max(...lineas.map((l) => l.ancho));
+  const imagen = await sharp({ create: { width: anchoTotal, height: alto, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } })
+    .composite(lineas.map((l, k) => ({ input: l.imagen, left: 0, top: k * paso })))
+    .png()
+    .toBuffer();
+  return { imagen, ancho: anchoTotal, alto };
 }
 
-/** Ruta del escudo según la configuración («/ds/…» apunta a design-system/assets/). */
-function rutaEscudo() {
-  const ruta = municipioActivo().identidad.escudo;
+type NodoIcono = [string, Record<string, string>][];
+
+/**
+ * Trazos de un ícono Lucide. El componente de lucide-react guarda sus trazos
+ * en la propiedad iconNode del elemento que devuelve; así se dibuja el mismo
+ * ícono que en la web sin pasar por react-dom/server (que no corre en el servidor de Next).
+ */
+function trazos(Icono: LucideIcon): NodoIcono {
+  const elemento = (Icono as unknown as { render: (p: object, r: null) => { props: { iconNode: NodoIcono } } }).render({}, null);
+  return elemento.props.iconNode;
+}
+
+/** Ícono Lucide como imagen, con trazo de 2 px a 24 px (se escala con el tamaño). */
+function icono(Icono: LucideIcon, tamano: number, color: string) {
+  const hijos = trazos(Icono)
+    .map(([etiqueta, atributos]) => `<${etiqueta} ${Object.entries(atributos).filter(([k]) => k !== "key").map(([k, v]) => `${k}="${v}"`).join(" ")}/>`)
+    .join("");
+  return Buffer.from(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${tamano}" height="${tamano}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${hijos}</svg>`,
+  );
+}
+
+const rect = (ancho: number, alto: number, color: string, radio = 0, opacidad = 1) =>
+  Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${ancho}" height="${alto}"><rect width="${ancho}" height="${alto}" rx="${radio}" fill="${color}" fill-opacity="${opacidad}"/></svg>`);
+
+/** Cauce: las tres ondas del escudo (src/componentes/Cauce.tsx), dibujadas a la medida. */
+function cauce(ancho: number, alto: number, colores: readonly string[], grosor = 22, separacion = 70) {
+  const x = (v: number) => ((v * ancho) / 1200).toFixed(1);
+  const y = (v: number) => ((v * alto) / 400).toFixed(1);
+  const trazos = colores
+    .map((c, i) => {
+      const b = 120 + i * separacion;
+      return `<path d="M${x(-40)} ${y(b + 150)} C ${x(260)} ${y(b + 150)}, ${x(470)} ${y(b + 20)}, ${x(760)} ${y(b)} S ${x(1120)} ${y(b - 14)}, ${x(1240)} ${y(b - 14)}" fill="none" stroke="${c}" stroke-width="${grosor}"/>`;
+    })
+    .join("");
+  return Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${ancho}" height="${alto}">${trazos}</svg>`);
+}
+
+/** Ruta de un archivo de identidad según la configuración («/ds/…» apunta a design-system/assets/). */
+function rutaIdentidad(ruta: string) {
   return ruta.startsWith("/ds/") ? path.join(process.cwd(), "design-system", "assets", ruta.slice(4)) : path.join(process.cwd(), "public", ruta);
 }
 
+/** Logotipo ciudadano a color; sobre amarillo va en una placa blanca, como en la plantilla. */
+async function logotipo(estilo: Estilo) {
+  const alto = estilo.logo === "placa" ? 72 : 88;
+  const logo = await sharp(await readFile(rutaIdentidad(municipioActivo().identidad.logoCiudadano)))
+    .resize({ height: alto })
+    .png()
+    .toBuffer({ resolveWithObject: true });
+  if (estilo.logo === "color") return { imagen: logo.data, ancho: logo.info.width, alto: logo.info.height };
+  const [px, py] = [18, 14];
+  const placa = await sharp(rect(logo.info.width + 2 * px, logo.info.height + 2 * py, C.blanco, 20))
+    .composite([{ input: logo.data, left: px, top: py }])
+    .png()
+    .toBuffer();
+  return { imagen: placa, ancho: logo.info.width + 2 * px, alto: logo.info.height + 2 * py };
+}
+
 export async function generarPieza(d: DatosPieza): Promise<Buffer> {
-  const municipio = municipioActivo();
+  const e = ESTILO[d.tipo];
   const capas: OverlayOptions[] = [];
   const poner = (input: Buffer, left: number, top: number) => capas.push({ input, left: Math.round(left), top: Math.round(top) });
 
-  // Cabecera: escudo a color sobre blanco y el nombre oficial (nivel institucional).
-  poner(rect(ANCHO, CABECERA, COLOR.blanco), 0, 0);
-  const escudo = await sharp(await readFile(rutaEscudo())).resize({ height: 130, fit: "inside" }).png().toBuffer({ resolveWithObject: true });
-  poner(escudo.data, MARGEN, (CABECERA - escudo.info.height) / 2);
-  const firma = await bloque({ texto: municipio.firma.join("\n"), tamano: 38, color: COLOR.azul, negrita: true, ancho: UTIL - escudo.info.width - 32 });
-  poner(firma.imagen, MARGEN + escudo.info.width + 32, (CABECERA - firma.alto) / 2);
+  // 1. Píldora de categoría (ícono + mayúsculas con tracking) y logotipo.
+  const etiqueta = await bloque({ texto: e.etiqueta, tamano: 30, color: e.tintaPildora, espaciado: 0.08, mayusculas: true, ancho: 600 });
+  const altoPildora = 68;
+  const anchoPildora = 28 + 36 + 16 + etiqueta.ancho + 28;
+  poner(rect(anchoPildora, altoPildora, e.pildora, altoPildora / 2), MARGEN, ARRIBA);
+  poner(icono(e.icono, 36, e.tintaPildora), MARGEN + 28, ARRIBA + (altoPildora - 36) / 2);
+  poner(etiqueta.imagen, MARGEN + 28 + 36 + 16, ARRIBA + (altoPildora - etiqueta.alto) / 2);
+  const logo = await logotipo(e);
+  poner(logo.imagen, ANCHO - MARGEN - logo.ancho, ARRIBA + (altoPildora - logo.alto) / 2);
+  const finCabecera = ARRIBA + Math.max(altoPildora, logo.alto);
 
-  // Distintivo del tipo y, si corresponde, la marca de demostración.
-  let y = CABECERA + 36;
-  const distintivo = await bloque({ texto: DISTINTIVO[d.tipo].texto, tamano: 32, color: COLOR.blanco, negrita: true });
-  poner(rect(distintivo.ancho + 40, distintivo.alto + 24, DISTINTIVO[d.tipo].color, 12), MARGEN, y);
-  poner(distintivo.imagen, MARGEN + 20, y + 12);
-  if (d.demo) {
-    const demo = await bloque({ texto: "Datos de demostración", tamano: 26, color: COLOR.texto, negrita: true, ancho: 360 });
-    poner(demo.imagen, ANCHO - MARGEN - demo.ancho, y + (distintivo.alto + 24 - demo.alto) / 2);
+  // 2. Texto: antetítulo, título grande y datos con ícono. Se arma primero
+  //    para saber cuánto alto le queda a la foto.
+  const conFoto = Boolean(d.foto);
+  const tamanoTitulo = conFoto ? (d.titulo.length > 28 ? 76 : 88) : d.titulo.length > 28 ? 96 : 112;
+  const antetitulo = d.antetitulo ? await bloque({ texto: d.antetitulo, tamano: 36, color: e.tinta, interlineado: 1.2 }) : null;
+  const titulo = await bloque({ texto: d.titulo, tamano: tamanoTitulo, color: e.tinta, interlineado: 1.02, espaciado: -0.03 });
+  const detalles = [];
+  for (const x of d.detalles) {
+    const b = await bloque({ texto: x.texto, tamano: 36, color: e.tinta, ancho: UTIL - 64, interlineado: 1.2 });
+    detalles.push({ ...b, icono: ICONOS[x.icono] });
   }
-  y += distintivo.alto + 24 + 32;
+  const separacion = 24;
+  const altoTexto =
+    (antetitulo ? antetitulo.alto + separacion : 0) + titulo.alto + (detalles.length ? 28 + detalles.reduce((t, b) => t + b.alto, 0) + 16 * (detalles.length - 1) : 0);
 
+  const pie = ALTO - ALTO_CAUCE - ALTO_BARRA;
+  let y: number;
   if (d.foto) {
-    // Foto: solo se recorta para encuadrar; no cambia colores ni rasgos.
-    const alto = Math.max(460, 600 - 70 * Math.max(0, d.lineas.length - 2));
-    // Esquinas de 20 px, como las fotos de las tarjetas del sistema.
-    const mascara = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${UTIL}" height="${alto}"><rect width="${UTIL}" height="${alto}" rx="20"/></svg>`);
-    const foto = await sharp(d.foto).rotate().resize({ width: UTIL, height: alto, fit: "cover", position: "attention" }).composite([{ input: mascara, blend: "dest-in" }]).png().toBuffer();
-    poner(foto, MARGEN, y);
-    y += alto + 32;
-    const titulo = await bloque({ texto: d.titulo, tamano: 54, color: COLOR.azul, negrita: true });
-    poner(titulo.imagen, MARGEN, y);
-    y += titulo.alto + 20;
-    for (const linea of d.lineas) {
-      const b = await bloque({ texto: linea, tamano: 34, color: COLOR.texto });
-      poner(b.imagen, MARGEN, y);
-      y += b.alto + 8;
-    }
+    // 3. Foto con el corte inclinado del logotipo y esquinas de 40 px.
+    const arribaFoto = finCabecera + 48;
+    const altoFoto = Math.max(320, Math.min(500, pie - 32 - altoTexto - 40 - arribaFoto));
+    const mascara = Buffer.from(
+      `<svg xmlns="http://www.w3.org/2000/svg" width="${UTIL}" height="${altoFoto}"><clipPath id="c"><polygon points="0,${altoFoto * 0.07} ${UTIL},0 ${UTIL},${altoFoto} 0,${altoFoto}"/></clipPath><rect width="${UTIL}" height="${altoFoto}" rx="40" clip-path="url(#c)"/></svg>`,
+    );
+    const foto = await sharp(d.foto).rotate().resize({ width: UTIL, height: altoFoto, fit: "cover", position: "attention" }).composite([{ input: mascara, blend: "dest-in" }]).png().toBuffer();
+    poner(foto, MARGEN, arribaFoto);
+    y = arribaFoto + altoFoto + 40;
   } else {
-    const titulo = await bloque({ texto: d.titulo, tamano: 72, color: COLOR.azul, negrita: true });
-    poner(titulo.imagen, MARGEN, y);
-    y += titulo.alto + 36;
-    // Tarjeta blanca con fecha, horario, lugar y servicios.
-    const dentro: { imagen: Buffer; alto: number; separacion: number }[] = [];
-    for (const [i, linea] of d.lineas.entries()) {
-      const b = await bloque({ texto: linea, tamano: i === 0 ? 56 : 42, color: i === 0 ? COLOR.azul : COLOR.texto, negrita: i === 0, ancho: UTIL - 80 });
-      dentro.push({ imagen: b.imagen, alto: b.alto, separacion: i === 0 ? 20 : 14 });
-    }
-    if (d.lista?.length) {
-      const encabezado = await bloque({ texto: "Servicios", tamano: 40, color: COLOR.azul, negrita: true, ancho: UTIL - 80 });
-      dentro.push({ imagen: encabezado.imagen, alto: encabezado.alto, separacion: 12 });
-      for (const item of d.lista) {
-        const b = await bloque({ texto: `•  ${item}`, tamano: 42, color: COLOR.texto, ancho: UTIL - 80 });
-        dentro.push({ imagen: b.imagen, alto: b.alto, separacion: 10 });
-      }
-    }
-    const extra = d.lista?.length ? 28 : 0;
-    const altoTarjeta = dentro.reduce((t, b) => t + b.alto + b.separacion, 0) + 72 + extra;
-    poner(rect(UTIL, altoTarjeta, COLOR.blanco, 20, COLOR.borde), MARGEN, y);
-    let yy = y + 40;
-    for (const [i, b] of dentro.entries()) {
-      if (d.lista?.length && i === d.lineas.length) yy += 28; // aire antes de «Servicios»
-      poner(b.imagen, MARGEN + 40, yy);
-      yy += b.alto + b.separacion;
-    }
-    y += altoTarjeta + 36;
+    // Sin foto, el texto se centra en el espacio libre.
+    y = finCabecera + Math.max(40, (pie - finCabecera - altoTexto) / 2);
   }
 
-  const llamado = await bloque({ texto: d.llamado, tamano: d.foto ? 34 : 40, color: COLOR.azul, negrita: true });
-  const yLlamado = Math.min(y + 8, ALTO - PIE - llamado.alto - 28);
-  poner(llamado.imagen, MARGEN, yLlamado);
-  // Sin foto queda espacio libre: se llena con el Cauce en tonos suaves, detrás de nada.
-  const libre = ALTO - PIE - (yLlamado + llamado.alto + 24);
-  if (!d.foto && libre > 120) poner(cauce(ANCHO, libre, [COLOR.azulSuave, COLOR.verdeSuave, COLOR.amarilloSuave], 26, 60), 0, yLlamado + llamado.alto + 24);
+  if (antetitulo) {
+    poner(antetitulo.imagen, MARGEN, y);
+    y += antetitulo.alto + separacion;
+  }
+  poner(titulo.imagen, MARGEN, y);
+  y += titulo.alto + 28;
+  for (const b of detalles) {
+    poner(icono(b.icono, 44, e.tinta), MARGEN, y + Math.max(0, (Math.min(b.alto, 52) - 44) / 2));
+    poner(b.imagen, MARGEN + 64, y);
+    y += b.alto + 16;
+  }
 
-  // Pie azul con el Cauce: dónde informarse.
-  poner(rect(ANCHO, PIE, COLOR.azulOscuro), 0, ALTO - PIE);
-  poner(cauce(360, PIE, [COLOR.azulInfo, COLOR.azul, COLOR.verde], 22, 70), ANCHO - 360, ALTO - PIE);
-  // Texto a la izquierda del Cauce; la dirección del portal va en una línea más chica.
-  const anchoPie = ANCHO - 360 - MARGEN;
-  const pie = await bloque({ texto: "Más información en el portal municipal", tamano: 30, color: COLOR.blanco, negrita: true, ancho: anchoPie });
-  const direccion = d.portal ? await bloque({ texto: d.portal, tamano: d.portal.length > 40 ? 22 : 26, color: COLOR.blanco, ancho: anchoPie }) : null;
-  const altoPie = pie.alto + (direccion ? direccion.alto + 4 : 0);
-  const yPie = ALTO - PIE + (PIE - altoPie) / 2;
-  poner(pie.imagen, MARGEN, yPie);
-  if (direccion) poner(direccion.imagen, MARGEN, yPie + pie.alto + 4);
+  // 4. Cauce de tres colores y barra inferior con la dirección del portal.
+  poner(cauce(ANCHO, ALTO_CAUCE, e.cauce), 0, ALTO - ALTO_BARRA - ALTO_CAUCE);
+  // Barra en azul: el texto blanco nunca va sobre amarillo.
+  poner(rect(ANCHO, ALTO_BARRA, C.azul), 0, ALTO - ALTO_BARRA);
+  const izquierda = await bloque({ texto: d.portal ?? municipioActivo().sitioWeb, tamano: 28, color: C.blanco, ancho: 560 });
+  poner(izquierda.imagen, MARGEN, ALTO - ALTO_BARRA + (ALTO_BARRA - izquierda.alto) / 2);
+  const derecha = await bloque({ texto: d.demo ? "Datos de demostración" : municipioActivo().nombreOficial, tamano: 28, color: C.blanco, ancho: 520 });
+  poner(derecha.imagen, ANCHO - MARGEN - derecha.ancho, ALTO - ALTO_BARRA + (ALTO_BARRA - derecha.alto) / 2);
 
-  return sharp({ create: { width: ANCHO, height: ALTO, channels: 3, background: COLOR.fondo } })
+  return sharp({ create: { width: ANCHO, height: ALTO, channels: 3, background: e.fondo } })
     .composite(capas)
     .jpeg({ quality: 88, mozjpeg: true })
     .toBuffer();

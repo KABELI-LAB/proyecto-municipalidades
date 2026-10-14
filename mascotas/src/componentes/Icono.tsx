@@ -16,6 +16,7 @@ import {
   MessageCircle,
   PawPrint,
   Search,
+  Settings,
   Stethoscope,
   TriangleAlert,
   X,
@@ -41,6 +42,7 @@ const ICONOS = {
   documento: FileText,
   mensaje: MessageCircle,
   ubicacion: MapPin,
+  ajustes: Settings,
 } satisfies Record<string, LucideIcon>;
 
 export type NombreIcono = keyof typeof ICONOS;

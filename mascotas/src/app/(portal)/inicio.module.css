@@ -366,7 +366,7 @@ a.principal:hover .ir svg {
 }
 @media (min-width: 640px) {
   .otros {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: var(--space-4);
   }
 }
