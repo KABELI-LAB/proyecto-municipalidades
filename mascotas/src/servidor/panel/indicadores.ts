@@ -19,8 +19,6 @@ import { diaISO, hoyISO, inicioDeHoy, ventana } from "@/servidor/formato";
 const municipioId = () => municipioActivo().id;
 
 export type Periodo = 30 | 90 | 365;
-/** Los reportes recientes son siempre de 30 días (sección 10). */
-export const DIAS_REPORTES_RECIENTES = 30;
 /** Factor R de la prioridad: reportes de los últimos 90 días (incluye el día 90). */
 const DIAS_REPORTES_PRIORIDAD = 91;
 

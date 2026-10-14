@@ -42,7 +42,7 @@ export const CONFIG: Record<Contexto, { inicio: string; textoInicio: string; sec
   },
 };
 
-export function destinoVolver(contexto: Contexto, ruta: string, parametros: URLSearchParams): { href: string; texto: string } | null {
+export function destinoVolver(contexto: Contexto, ruta: string): { href: string; texto: string } | null {
   const c = CONFIG[contexto];
   // Cada bandeja (y «Por aprobar») cuelga de la pantalla principal: basta «Inicio».
   if (contexto === "panel" && [...BANDEJAS, "aprobar"].some((b) => ruta === `/panel/${b}`)) return null;

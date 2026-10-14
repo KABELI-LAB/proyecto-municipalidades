@@ -56,7 +56,7 @@ export function puede(rol: Rol, permiso: Permiso): boolean {
   return (PERMISOS[permiso] as readonly Rol[]).includes(rol);
 }
 
-/** Página de inicio del panel según el rol. */
-export function inicioDe(rol: Rol): string {
+/** Página de inicio del panel: la misma para todos los roles (cada uno ve sus bloques). */
+export function inicioDe(_rol?: Rol): string {
   return "/panel";
 }
