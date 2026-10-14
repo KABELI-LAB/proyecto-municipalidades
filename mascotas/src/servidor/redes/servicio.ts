@@ -11,7 +11,7 @@ import { PREFIJO_FOTO_AVISO } from "@/componentes/portal/fotoAviso";
 import { ESPECIE, nombreMascota, TAMANO } from "@/dominio/etiquetas";
 import { generoAviso, puedeRed, rasgosAviso, textoAdopcion, textoAvistada, textoOperativo, textoPerdida, type DatosAviso, type TipoRed } from "@/dominio/redes";
 import { municipioActivo } from "@/lib/municipio";
-import { guardarGenerada, leerFoto } from "@/servidor/archivos";
+import { borrarFoto, guardarGenerada, leerFoto } from "@/servidor/archivos";
 import { FICHA_PUBLICA, PUBLICACION_CON_FOTO } from "@/servidor/conFoto";
 import { db } from "@/servidor/db";
 import { fechaCorta, fechaLarga } from "@/servidor/formato";
@@ -199,8 +199,16 @@ export async function difundirEnInstagram(tipo: TipoRed, origenId: string, usuar
     const ahora = new Date();
     let id: string;
     if (anterior) {
-      // Un intento anterior que no salió: se reintenta con la misma publicación (y su contenedor).
-      await db.publicacionRed.update({ where: { id: anterior.id }, data: { estado: anterior.estado === "ERROR" ? "ERROR" : "APROBADO", revisadoPorId: usuarioId, aprobadaEn: ahora } });
+      // Un intento anterior que no salió: se reintenta con la misma publicación,
+      // pero con la pieza y el texto rehechos con el diseño y los datos de hoy
+      // (el contenedor anterior apuntaba a la imagen vieja, así que se descarta).
+      const imagen = await generarImagen(origen);
+      await db.publicacionRed.update({
+        where: { id: anterior.id },
+        data: { estado: anterior.estado === "ERROR" ? "ERROR" : "APROBADO", revisadoPorId: usuarioId, aprobadaEn: ahora, imagen, texto: origen.texto, textoGenerado: origen.texto, textoAlternativo: origen.alternativo, contenedorId: null },
+      });
+      if (anterior.imagen && anterior.imagen !== imagen) await borrarFoto("redes", anterior.imagen);
+      await anotar(anterior.id, "Pieza rehecha para el reintento", null, usuarioId);
       id = anterior.id;
     } else {
       const imagen = await generarImagen(origen);

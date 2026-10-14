@@ -191,7 +191,7 @@ describe("aviso de un vecino: aceptar y publicar", () => {
     expect(llamadas).toHaveLength(0);
   });
 
-  it("si Instagram falla, el aviso igual queda en la web y el reintento reutiliza el contenedor", async () => {
+  it("si Instagram falla, el aviso igual queda en la web y el reintento rehace la pieza", async () => {
     configurarInstagram();
     apiSimulada({ publicar: "error" });
     sesion = await sesionDe("COMUNICACIONES");
@@ -206,9 +206,11 @@ describe("aviso de un vecino: aceptar y publicar", () => {
     vi.unstubAllGlobals();
     const llamadas = apiSimulada();
     expect(await redes.publicarEnInstagram("PERDIDA", aviso.id)).toEqual({ ok: true, mensaje: "Publicado en Instagram." });
-    expect(llamadas.filter((l) => l.metodo === "POST" && l.ruta.endsWith("/media"))).toHaveLength(0);
+    // Pieza nueva (diseño vigente) y, por lo tanto, un contenedor nuevo; la misma publicación.
+    expect(llamadas.filter((l) => l.metodo === "POST" && l.ruta.endsWith("/media"))).toHaveLength(1);
     const final = await db.publicacionRed.findUniqueOrThrow({ where: { id: conError.id } });
     expect([final.estado, final.intentos]).toEqual(["PUBLICADO", 2]);
+    expect(final.imagen).not.toBe(conError.imagen);
     // La imagen pública solo responde con su firma.
     const { GET } = await import("@/app/redes/[id]/imagen/route");
     const pedir = (f: string) => GET(new Request(`http://localhost/redes/${final.id}/imagen?f=${f}`), { params: Promise.resolve({ id: final.id }) });
