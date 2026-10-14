@@ -12,6 +12,8 @@ import { crearBaseTemporal } from "@/pruebas/baseTemporal";
 
 const CORTE = "2026-10-06";
 vi.mock("next/cache", () => ({ revalidatePath: () => {} }));
+// Cada publicación dibuja su pieza con sharp: con toda la suite en paralelo puede tardar más de 5 s.
+vi.setConfig({ testTimeout: 30_000 });
 type Sesion = { id: string; nombre: string; rol: "COORDINADOR" | "COMUNICACIONES" | "DIRECTIVO" | "ADMINISTRADOR"; municipioId: string; loteDemoId: null };
 let sesion: Sesion | null = null;
 vi.mock("@/servidor/auth", async () => {
@@ -166,10 +168,10 @@ describe("aviso de un vecino: aceptar y publicar", () => {
     sesion = await sesionDe("COMUNICACIONES");
     const aviso = await avisoDeVecino("PERDIDA");
     const r = await bandejas.aprobarPublicacion(aviso.id);
-    expect(r.mensaje).toBe("Publicamos el aviso en el portal. No se publicó en Instagram: la publicación automática está apagada. Puedes publicarlo desde Configuración.");
+    expect(r.mensaje).toBe("Publicamos el aviso en el portal. No se publicó en Instagram: la publicación automática está apagada. Puedes publicarlo desde Instagram en el panel.");
     expect(await db.publicacionRed.count({ where: { origenId: aviso.id } })).toBe(0);
     expect(llamadas).toHaveLength(0);
-    // A mano, desde la configuración (el mismo botón de cada contenido).
+    // A mano, desde Instagram en el panel (el mismo botón de cada contenido).
     const manual = await redes.publicarEnInstagram("PERDIDA", aviso.id);
     expect(manual.ok).toBe(true);
     expect((await db.publicacionRed.findFirstOrThrow({ where: { origenId: aviso.id } })).estado).toBe("PUBLICADO");

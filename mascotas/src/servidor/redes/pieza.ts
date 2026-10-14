@@ -95,7 +95,11 @@ async function linea(t: string, { tamano, color, negrita = true, espaciado = 0 }
  */
 async function bloque({ texto, tamano, color, negrita = true, ancho = UTIL, interlineado = 1.2, espaciado = 0, mayusculas = false }: Texto) {
   const opciones = { tamano, color, negrita, espaciado };
-  const palabras = (mayusculas ? texto.toLocaleUpperCase("es-CL") : texto).split(/\s+/).filter(Boolean);
+  const completo = mayusculas ? texto.toLocaleUpperCase("es-CL") : texto;
+  // Lo habitual: cabe en una línea y basta un solo dibujo.
+  const entero = await linea(completo, opciones);
+  if (entero.ancho <= ancho) return entero;
+  const palabras = completo.split(/\s+/).filter(Boolean);
   const lineas: Awaited<ReturnType<typeof linea>>[] = [];
   let actual = "";
   let dibujo: Awaited<ReturnType<typeof linea>> | null = null;

@@ -48,7 +48,7 @@ Una sola pantalla, como el portal de vecinos, sin menú de módulos. Los funcion
 | Mapa | ¿Dónde se concentra la demanda? |
 | Avisos a vecinos | Crear, editar y eliminar lo que se comunica en el portal |
 
-Fuera del panel (decisión del equipo): Sectores, Inteligencia, minuta y correo semanal. Configuración queda solo para Instagram (publicación automática), para administración. La asistencia de los operativos se registra en la ficha de cada operativo, no en una vista de terreno aparte.
+Fuera del panel (decisión del equipo): Sectores, Inteligencia, minuta y correo semanal. Queda una página «Instagram»: lo que falta publicar, para quien aprueba o publica, y la publicación automática, que cambia administración. La asistencia de los operativos se registra en la ficha de cada operativo, no en una vista de terreno aparte.
 
 ### Núcleo de datos (entidades)
 

@@ -469,7 +469,8 @@ Un CRUD simple:
 Aceptar o publicar un contenido en el panel lo publica en la web y en
 Instagram a la vez; no hay una bandeja de redes aparte.
 
-- **Configuración** (`/panel/configuracion`, solo administración):
+- **Instagram en el panel** (`/panel/instagram`): quien aprueba o publica ve
+  lo suyo; administración además cambia los interruptores.
   - «Publicar automáticamente», encendido por omisión. Apagado: lo que se
     aprueba o publica sale solo en el portal, y el mensaje de la acción lo
     dice.

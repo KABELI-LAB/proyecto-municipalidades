@@ -229,7 +229,7 @@ export function notaInstagram(d: Difusion): string {
     "sin-integracion": " Instagram no está configurado: se publicó solo en la web.",
     demo: " Son datos de demostración: no se publicaron en Instagram.",
     "no-publico": " No se publicó en Instagram porque no tiene foto.",
-    manual: " No se publicó en Instagram: la publicación automática está apagada. Puedes publicarlo desde Configuración.",
+    manual: " No se publicó en Instagram: la publicación automática está apagada. Puedes publicarlo desde Instagram en el panel.",
   }[d.estado];
 }
 

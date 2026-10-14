@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Icono, type NombreIcono } from "@/componentes/Icono";
 import { numero } from "@/dominio/formato";
 import { puede, type Permiso } from "@/dominio/permisos";
+import { PERMISO_RED } from "@/dominio/redes";
 import { requerir } from "@/servidor/auth";
 import { fechaLarga } from "@/servidor/formato";
 import { pendientesDeRevision, proximosOperativos } from "@/servidor/panel/indicadores";
@@ -12,11 +13,19 @@ import estilos from "@/estilos/paginas.module.css";
 export const metadata: Metadata = { title: "Panel municipal" };
 
 // Lo que se usa menos, debajo de los tres bloques (como en el portal de vecinos).
-const OTROS: { href: string; titulo: string; detalle: string; icono: NombreIcono; tono: "azul" | "verde" | "amarillo"; permiso: Permiso }[] = [
-  { href: "/panel/vecinos", titulo: "Lo que piden los vecinos", detalle: "Solicitudes y temas frecuentes", icono: "huella", tono: "verde", permiso: "verIndicadores" },
-  { href: "/panel/mapa", titulo: "Mapa", detalle: "Avisos y reportes por sector", icono: "ubicacion", tono: "azul", permiso: "verInteligencia" },
-  { href: "/panel/avisos", titulo: "Avisos a vecinos", detalle: "Publicar y quitar avisos", icono: "megafono", tono: "amarillo", permiso: "gestionarAvisos" },
-  { href: "/panel/configuracion", titulo: "Configuración", detalle: "Publicación en Instagram", icono: "ajustes", tono: "azul", permiso: "configurarRedes" },
+// Cada acceso se muestra si la persona tiene alguno de sus permisos.
+const OTROS: { href: string; titulo: string; detalle: string; icono: NombreIcono; tono: "azul" | "verde" | "amarillo"; permisos: Permiso[] }[] = [
+  { href: "/panel/vecinos", titulo: "Lo que piden los vecinos", detalle: "Solicitudes y temas frecuentes", icono: "huella", tono: "verde", permisos: ["verIndicadores"] },
+  { href: "/panel/mapa", titulo: "Mapa", detalle: "Avisos y reportes por sector", icono: "ubicacion", tono: "azul", permisos: ["verInteligencia"] },
+  { href: "/panel/avisos", titulo: "Avisos a vecinos", detalle: "Publicar y quitar avisos", icono: "megafono", tono: "amarillo", permisos: ["gestionarAvisos"] },
+  {
+    href: "/panel/instagram",
+    titulo: "Instagram",
+    detalle: "Publicación y pendientes",
+    icono: "ajustes",
+    tono: "azul",
+    permisos: ["configurarRedes", ...new Set(Object.values(PERMISO_RED))],
+  },
 ];
 
 const capitalizar = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
@@ -33,7 +42,7 @@ export default async function InicioPanel() {
   const [n, proximos] = await Promise.all([pendientesDeRevision(), operativos ? proximosOperativos() : Promise.resolve([])]);
   const porAprobar = (puede(usuario.rol, "moderarPublicaciones") ? n.publicaciones : 0) + (puede(usuario.rol, "gestionarAdopciones") ? n.propuestas : 0);
   const proximo = proximos.find((o) => o.estado !== "BORRADOR");
-  const otros = OTROS.filter((o) => puede(usuario.rol, o.permiso));
+  const otros = OTROS.filter((o) => o.permisos.some((x) => puede(usuario.rol, x)));
 
   return (
     <div className={`contenedor ${estilos.pagina}`}>

@@ -3,7 +3,17 @@
 // existente y autorizada: nunca RUT, teléfonos, correos, domicilios,
 // cuidadores ni datos de salud sin confirmar.
 
+import type { Permiso } from "./permisos";
+
 export type TipoRed = "OPERATIVO" | "ADOPCION" | "PERDIDA" | "AVISTADA";
+
+/** Quién puede publicar cada tipo en Instagram: el mismo rol que publica o acepta el contenido. */
+export const PERMISO_RED: Record<TipoRed, Permiso> = {
+  OPERATIVO: "gestionarOperativos",
+  ADOPCION: "gestionarAdopciones",
+  PERDIDA: "moderarPublicaciones",
+  AVISTADA: "moderarPublicaciones",
+};
 export type EstadoRed = "BORRADOR" | "PENDIENTE_REVISION" | "APROBADO" | "PUBLICANDO" | "PUBLICADO" | "ERROR" | "CANCELADO";
 
 /** Desde qué estados se puede publicar: aprobado, o reintentar tras un error. */

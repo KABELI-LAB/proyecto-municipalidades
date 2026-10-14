@@ -1,5 +1,5 @@
-// Configuración del panel: Instagram (publicación automática y contenido
-// público que aún no sale en Instagram, para publicarlo a mano).
+// Instagram en el panel: publicación automática (la cambia administración) y
+// contenido público que aún no sale en Instagram, para publicarlo a mano.
 import "server-only";
 import type { TipoRed } from "@/dominio/redes";
 import { municipioActivo } from "@/lib/municipio";
@@ -25,19 +25,21 @@ export async function configuracionInstagram() {
  * avisos aprobados y vigentes, fichas de adopción publicadas y operativos
  * publicados que aún no ocurren. El de demostración solo si está habilitado.
  */
-export async function pendientesInstagram(incluirDemo: boolean): Promise<PendienteInstagram[]> {
+export async function pendientesInstagram(incluirDemo: boolean, tipos: TipoRed[]): Promise<PendienteInstagram[]> {
+  if (!tipos.length) return [];
   const municipio = municipioActivo();
   const demo = incluirDemo ? {} : { loteDemoId: null };
   const hoy = new Date(new Date().toDateString());
+  const quiere = (t: TipoRed) => tipos.includes(t);
   const [avisos, fichas, operativos] = await Promise.all([
-    db.publicacionMascota.findMany({
+    !quiere("PERDIDA") ? [] : db.publicacionMascota.findMany({
       where: { estado: "ABIERTA", moderacion: "APROBADA", sector: { municipioId: municipio.id }, ...PUBLICACION_CON_FOTO, ...demo },
       include: { sector: true },
       orderBy: { creadaEn: "desc" },
       take: LIMITE,
     }),
-    db.fichaAdopcion.findMany({ where: { ...FICHA_PUBLICA, ...demo }, include: { animal: true }, orderBy: { creadaEn: "desc" }, take: LIMITE }),
-    db.operativo.findMany({ where: { estado: "PUBLICADO", fecha: { gte: hoy }, sector: { municipioId: municipio.id }, ...demo }, include: { sector: true }, orderBy: { fecha: "asc" }, take: LIMITE }),
+    !quiere("ADOPCION") ? [] : db.fichaAdopcion.findMany({ where: { ...FICHA_PUBLICA, ...demo }, include: { animal: true }, orderBy: { creadaEn: "desc" }, take: LIMITE }),
+    !quiere("OPERATIVO") ? [] : db.operativo.findMany({ where: { estado: "PUBLICADO", fecha: { gte: hoy }, sector: { municipioId: municipio.id }, ...demo }, include: { sector: true }, orderBy: { fecha: "asc" }, take: LIMITE }),
   ]);
   const candidatos: PendienteInstagram[] = [
     ...operativos.map((o) => ({ tipo: "OPERATIVO" as const, id: o.id, titulo: `Operativo en ${o.sector.nombre}`, detalle: fechaCorta(o.fecha) })),
@@ -49,8 +51,8 @@ export async function pendientesInstagram(incluirDemo: boolean): Promise<Pendien
     })),
     ...fichas.map((f) => ({ tipo: "ADOPCION" as const, id: f.id, titulo: `En adopción: ${f.animal.nombre ?? "sin nombre"}`, detalle: fechaCorta(f.creadaEn) })),
   ];
-  const tipos = [...new Set(candidatos.map((c) => c.tipo))];
-  const estados = Object.assign({}, ...(await Promise.all(tipos.map((t) => estadosInstagram(t, candidatos.filter((c) => c.tipo === t).map((c) => c.id))))));
+  const presentes = [...new Set(candidatos.map((c) => c.tipo))];
+  const estados = Object.assign({}, ...(await Promise.all(presentes.map((t) => estadosInstagram(t, candidatos.filter((c) => c.tipo === t).map((c) => c.id))))));
   return candidatos
     .map((c) => ({ ...c, estado: estados[c.id] as EstadoInstagram | undefined }))
     .filter((c) => c.estado?.estado !== "PUBLICADO" && c.estado?.estado !== "PUBLICANDO")

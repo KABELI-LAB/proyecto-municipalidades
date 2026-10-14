@@ -31,7 +31,7 @@ export const CONFIG: Record<Contexto, { inicio: string; textoInicio: string; sec
       avisos: "Avisos",
       mapa: "Mapa",
       inteligencia: "Inteligencia",
-      configuracion: "Configuración",
+      instagram: "Instagram",
       reportes: "Reportes",
       publicaciones: "Publicaciones",
       coincidencias: "Coincidencias",
