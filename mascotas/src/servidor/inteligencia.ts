@@ -1,11 +1,10 @@
-// Cifras de inteligencia que usan el portal (retrato de la comuna) y el panel
-// (pérdidas por mes, alerta preventiva). Todo se calcula desde los registros.
+// Cifras que usa el portal (retrato de la comuna e impacto del programa).
+// Todo se calcula desde los registros.
 import "server-only";
-import { alertaPreventiva, porMes, type PerdidaSector } from "@/dominio/inteligencia";
 import { municipioActivo } from "@/lib/municipio";
 import { COMUNITARIO_PUBLICO } from "@/servidor/conFoto";
 import { db } from "@/servidor/db";
-import { diaISO, hoyISO, ventana } from "@/servidor/formato";
+import { hoyISO, ventana } from "@/servidor/formato";
 
 const municipioId = () => municipioActivo().id;
 
@@ -51,21 +50,3 @@ export async function impactoDelPrograma(hoy = hoyISO()) {
   return { operativos, atenciones: atenciones.reduce((t, x) => t + x.cantidad, 0), atencionesPorServicio: atenciones, adopciones, reencuentros };
 }
 
-/** Publicaciones «Perdí» con su mes y sector, para series y alerta preventiva. */
-async function perdidasConSector(): Promise<PerdidaSector[]> {
-  const perdidas = await db.publicacionMascota.findMany({
-    where: { tipo: "PERDIDA", sector: { municipioId: municipioId() } },
-    select: { fechaEvento: true, sector: { select: { id: true, nombre: true } } },
-  });
-  return perdidas.map((p) => ({ mes: diaISO(p.fechaEvento).slice(0, 7), sectorId: p.sector.id, sector: p.sector.nombre }));
-}
-
-/** Mascotas perdidas por mes en los últimos 12 meses (Inteligencia). */
-export async function perdidasPorMes(hoy = hoyISO()) {
-  return porMes(hoy, (await perdidasConSector()).map((p) => p.mes));
-}
-
-/** Próximo mes de riesgo (enero o septiembre) y la propuesta de aviso para los sectores con más pérdidas. */
-export async function alertaPreventivaActual(hoy = hoyISO()) {
-  return alertaPreventiva(hoy, await perdidasConSector());
-}

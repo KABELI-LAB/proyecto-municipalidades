@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { GaleriaOperativo } from "@/componentes/GaleriaOperativo";
 import { notFound } from "next/navigation";
 import { EnlaceBoton } from "@/componentes/Boton";

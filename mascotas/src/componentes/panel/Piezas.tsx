@@ -1,13 +1,11 @@
 // Piezas de presentación del panel municipal (componentes de servidor).
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { EnlaceBoton } from "@/componentes/Boton";
 import { Cifra } from "@/componentes/Cifra";
 import { Icono, type NombreIcono } from "@/componentes/Icono";
-import type { Nivel, Prioridad } from "@/dominio/prioridad";
+import type { Nivel } from "@/dominio/prioridad";
 import { numero, porcentaje } from "@/dominio/formato";
 import estilos from "./piezas.module.css";
-import { MarcarEvaluado } from "./MarcarEvaluado";
 
 // ───────────── Nivel de prioridad: color + texto + ícono ─────────────
 
@@ -95,45 +93,6 @@ export function BarrasOcupacion({ ocupacion }: { ocupacion: Ocupacion[] }) {
 }
 
 // ───────────── Tarjeta de recomendación (sección 12) ─────────────
-
-type TarjetaPrioridadProps = {
-  prioridad: Prioridad & { clave: string };
-  puedeGestionar: boolean;
-  puedeDecidir: boolean;
-  nivelTitulo?: "h2" | "h3";
-  conEnlaceSector?: boolean;
-  /** Desde dónde se crea el operativo: queda registrado como su origen. */
-  origen?: "RECOMENDACION" | "FICHA_SECTOR";
-};
-
-export function TarjetaPrioridad({ prioridad: p, puedeGestionar, puedeDecidir, nivelTitulo: Titulo = "h3", conEnlaceSector = true, origen = "RECOMENDACION" }: TarjetaPrioridadProps) {
-  return (
-    <article className={estilos.prioridad}>
-      <div className={estilos.encabezadoPrioridad}>
-        <Titulo>{p.nombre}</Titulo>
-        <EtiquetaNivel nivel={p.nivel} />
-      </div>
-      <div>
-        <b>Por qué:</b>
-        <ul className={estilos.motivos}>
-          {p.motivos.map((m) => (
-            <li key={m}>{m}</li>
-          ))}
-        </ul>
-      </div>
-      <p>
-        <b>Recomendación:</b> {p.recomendacion}
-      </p>
-      <p className="nota">
-        Índice {numero(p.puntaje, 2)} de 1. Basado en {numero(p.registros)} registros, confianza {p.confianza}.
-      </p>
-      <div className={estilos.acciones}>
-        {puedeGestionar && <EnlaceBoton href={`/panel/operativos/nuevo?sector=${p.clave}&origen=${origen}`}>Crear operativo</EnlaceBoton>}
-        {puedeDecidir && <MarcarEvaluado sectorId={p.sectorId} />}
-      </div>
-    </article>
-  );
-}
 
 // ───────────── Bandeja de pendientes ─────────────
 

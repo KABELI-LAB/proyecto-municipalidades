@@ -2,7 +2,7 @@
 import { EtiquetaEstado } from "@/componentes/EtiquetaEstado";
 import { FotoAnimal } from "@/componentes/portal/FotoAnimal";
 import { fotoDeAviso } from "@/componentes/portal/fotoAviso";
-import { ESPECIE, especieConSexo, MODERACION, SEXO, TAMANO, textoResguardo, TIPO_PUBLICACION, tipoAviso, tituloAviso } from "@/dominio/etiquetas";
+import { ESPECIE, especieConSexo, MODERACION, SEXO, TAMANO, textoResguardo, tipoAviso, tituloAviso } from "@/dominio/etiquetas";
 import { fechaCorta } from "@/servidor/formato";
 import estilos from "@/estilos/paginas.module.css";
 

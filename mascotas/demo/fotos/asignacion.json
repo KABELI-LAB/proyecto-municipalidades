@@ -5,42 +5,42 @@
   "_criterio": "Cada foto se asocia a un animal compatible por especie, color y tamaño, priorizando los más visibles (adopción disponible y publicaciones activas). Colores solo del catálogo (catalogos.json).",
   "animales": [
     {
-      "foto": "perros/imagen_04.png",
+      "foto": "perros/imagen_04.webp",
       "animal_id": "ani-065",
       "uso": "pub-047 perdida activa (escena de coincidencia)",
       "descripcion": "café con pecho blanco, collar rojo",
       "cambios": {}
     },
     {
-      "foto": "perros/imagen_04.png",
+      "foto": "perros/imagen_04.webp",
       "animal_id": "ani-066",
       "uso": "pub-048 encontrada activa (escena de coincidencia)",
       "descripcion": "misma foto que ani-065: es el mismo perro en la escena",
       "cambios": {}
     },
     {
-      "foto": "perros/imagen_07.png",
+      "foto": "perros/imagen_07.webp",
       "animal_id": "ani-018",
       "uso": "adopción adp-10",
       "descripcion": "negro y fuego, pelo largo, collar rojo",
       "cambios": {}
     },
     {
-      "foto": "perros/imagen_08.png",
+      "foto": "perros/imagen_08.webp",
       "animal_id": "ani-053",
       "uso": "pub-035 perdida activa",
       "descripcion": "negro y fuego, mediano",
       "cambios": {}
     },
     {
-      "foto": "perros/imagen_09.png",
+      "foto": "perros/imagen_09.webp",
       "animal_id": "ani-056",
       "uso": "pub-038 perdida activa",
       "descripcion": "negro y fuego, mediano, collar",
       "cambios": {}
     },
     {
-      "foto": "perros/imagen_10.png",
+      "foto": "perros/imagen_10.webp",
       "animal_id": "ani-014",
       "uso": "adopción adp-06",
       "descripcion": "amarillo claro, collar, se ve grande",
@@ -52,35 +52,35 @@
       }
     },
     {
-      "foto": "perros/imagen_11.png",
+      "foto": "perros/imagen_11.webp",
       "animal_id": "ani-043",
       "uso": "pub-017/018 reencontrada",
       "descripcion": "negro y fuego, pelo duro, mediano",
       "cambios": {}
     },
     {
-      "foto": "perros/imagen_12.png",
+      "foto": "perros/imagen_12.webp",
       "animal_id": "ani-057",
       "uso": "pub-039 encontrada activa",
       "descripcion": "negro y fuego, grande",
       "cambios": {}
     },
     {
-      "foto": "perros/nueva_imagen.png",
+      "foto": "perros/nueva_imagen.webp",
       "animal_id": "ani-012",
       "uso": "adopción adp-04",
       "descripcion": "café claro, pelo duro, en cocina",
       "cambios": {}
     },
     {
-      "foto": "perros/nueva_imagen_01.png",
+      "foto": "perros/nueva_imagen_01.webp",
       "animal_id": "ani-062",
       "uso": "pub-044 perdida activa",
       "descripcion": "café con manto oscuro, pelo duro, mediano",
       "cambios": {}
     },
     {
-      "foto": "perros/nueva_imagen_02.png",
+      "foto": "perros/nueva_imagen_02.webp",
       "animal_id": "ani-017",
       "uso": "adopción adp-09",
       "descripcion": "blanco con manchas café, mediano",
@@ -92,14 +92,14 @@
       }
     },
     {
-      "foto": "perros/nueva_imagen_03.png",
+      "foto": "perros/nueva_imagen_03.webp",
       "animal_id": "ani-061",
       "uso": "pub-043 perdida activa",
       "descripcion": "café con negro, pelo duro, primer plano",
       "cambios": {}
     },
     {
-      "foto": "perros/nueva_imagen_04.png",
+      "foto": "perros/nueva_imagen_04.webp",
       "animal_id": "ani-010",
       "uso": "adopción adp-02",
       "descripcion": "café rojizo, pelo duro, collar azul, mediano",
@@ -111,7 +111,7 @@
       }
     },
     {
-      "foto": "perros/nueva_imagen_05.png",
+      "foto": "perros/nueva_imagen_05.webp",
       "animal_id": "ani-064",
       "uso": "pub-046 perdida activa",
       "descripcion": "negro y fuego, hocico canoso (adulto mayor)",
@@ -123,91 +123,91 @@
       }
     },
     {
-      "foto": "perros/nueva_imagen_06.png",
+      "foto": "perros/nueva_imagen_06.webp",
       "animal_id": "ani-011",
       "uso": "adopción adp-03",
       "descripcion": "negro y fuego con pecho blanco, pequeño",
       "cambios": {}
     },
     {
-      "foto": "perros/nueva_imagen_07.png",
+      "foto": "perros/nueva_imagen_07.webp",
       "animal_id": "ani-015",
       "uso": "adopción adp-07",
       "descripcion": "gris atigrado, pelo duro, collar azul",
       "cambios": {}
     },
     {
-      "foto": "gatos/01_gato_atigrado_banco_patio.png",
+      "foto": "gatos/01_gato_atigrado_banco_patio.webp",
       "animal_id": "ani-074",
       "uso": "pub-056 encontrada archivada",
       "descripcion": "atigrado café",
       "cambios": {}
     },
     {
-      "foto": "gatos/02_gata_calico_corredor_mimbre.png",
+      "foto": "gatos/02_gata_calico_corredor_mimbre.webp",
       "animal_id": "ani-060",
       "uso": "pub-042 perdida activa",
       "descripcion": "tricolor (calico), hembra",
       "cambios": {}
     },
     {
-      "foto": "gatos/03_gato_smoking_sillon_estufa.png",
+      "foto": "gatos/03_gato_smoking_sillon_estufa.webp",
       "animal_id": "ani-016",
       "uso": "adopción adp-08",
       "descripcion": "negro con pecho y patas blancas",
       "cambios": {}
     },
     {
-      "foto": "gatos/04_gato_naranjo_cama_colcha.png",
+      "foto": "gatos/04_gato_naranjo_cama_colcha.webp",
       "animal_id": "ani-022",
       "uso": "adopción adp-14",
       "descripcion": "naranjo, adulto",
       "cambios": {}
     },
     {
-      "foto": "gatos/05_gato_gris_blanco_cocina_lena.png",
+      "foto": "gatos/05_gato_gris_blanco_cocina_lena.webp",
       "animal_id": "ani-009",
       "uso": "adopción adp-01",
       "descripcion": "gris con blanco",
       "cambios": {}
     },
     {
-      "foto": "gatos/06_gato_siames_mesa_mate.png",
+      "foto": "gatos/06_gato_siames_mesa_mate.webp",
       "animal_id": "ani-049",
       "uso": "pub-029/030 reencontrada",
       "descripcion": "siamés (crema con puntas oscuras); se mantiene «blanco», el color del catálogo que ya tiene el animal",
       "cambios": {}
     },
     {
-      "foto": "gatos/07_gato_blanco_ventana.png",
+      "foto": "gatos/07_gato_blanco_ventana.webp",
       "animal_id": "ani-052",
       "uso": "pub-034 perdida activa",
       "descripcion": "blanco",
       "cambios": {}
     },
     {
-      "foto": "gatos/08_gato_romano_pirca_cerco.png",
+      "foto": "gatos/08_gato_romano_pirca_cerco.webp",
       "animal_id": "ani-055",
       "uso": "pub-037 perdida activa",
       "descripcion": "gris atigrado (romano)",
       "cambios": {}
     },
     {
-      "foto": "gatos/09_gata_tricolor_cama_pieza.png",
+      "foto": "gatos/09_gata_tricolor_cama_pieza.webp",
       "animal_id": "ani-051",
       "uso": "pub-033 encontrada activa",
       "descripcion": "tricolor diluida, hembra",
       "cambios": {}
     },
     {
-      "foto": "gatos/10_gata_carey_puerta_parron.png",
+      "foto": "gatos/10_gata_carey_puerta_parron.webp",
       "animal_id": "ani-071",
       "uso": "pub-053 encontrada archivada",
       "descripcion": "carey (negro y naranjo): se usa «tricolor», el más cercano del catálogo",
       "cambios": {}
     },
     {
-      "foto": "perros/nueva_imagen_10.png",
+      "foto": "perros/nueva_imagen_10.webp",
       "animal_id": "ani-019",
       "uso": "adopción adp-11 (Bruno)",
       "descripcion": "negro con blanco, pelo largo, collar azul con placa; la ficha dice «cola corta» y en la foto la cola es larga",
@@ -219,7 +219,7 @@
       }
     },
     {
-      "foto": "perros/nueva_imagen_08.png",
+      "foto": "perros/nueva_imagen_08.webp",
       "animal_id": "ani-059",
       "uso": "pub-041 perdida activa",
       "descripcion": "café con pecho blanco; la ficha dice «pañuelo al cuello», que no se ve",
@@ -231,21 +231,21 @@
       }
     },
     {
-      "foto": "perros/nueva_imagen_12.png",
+      "foto": "perros/nueva_imagen_12.webp",
       "animal_id": "ani-054",
       "uso": "pub-036 perdida activa",
       "descripcion": "negro y café, pelo duro, pecho blanco; collar con placa con texto legible",
       "cambios": {}
     },
     {
-      "foto": "perros/nueva_imagen_11.png",
+      "foto": "perros/nueva_imagen_11.webp",
       "animal_id": "ani-058",
       "uso": "pub-040 encontrada activa",
       "descripcion": "atigrado, pelo duro, collar azul, en un corredor; se ven tarros de una marca comercial",
       "cambios": {}
     },
     {
-      "foto": "perros/nueva_imagen_09.png",
+      "foto": "perros/nueva_imagen_09.webp",
       "animal_id": "ani-063",
       "uso": "pub-045 perdida activa",
       "descripcion": "beagle tricolor; el catálogo no tiene «tricolor» para perros y se usa «café con blanco»; la ficha dice «collar rojo» y en la foto es azul",
@@ -259,7 +259,7 @@
   ],
   "comunitarios": [
     {
-      "foto": "comunitarios/imagen_03.png",
+      "foto": "comunitarios/imagen_03.webp",
       "comunitario_id": "com-01",
       "animal_id": "ani-001",
       "descripcion": "negro y fuego, en una plaza con kiosco (calza con «la guardiana de la plaza»)",
@@ -271,21 +271,21 @@
       }
     },
     {
-      "foto": "comunitarios/imagen_02.png",
+      "foto": "comunitarios/imagen_02.webp",
       "comunitario_id": "com-01",
       "animal_id": "ani-001",
       "descripcion": "el mismo perro en una calle: segunda foto de com-01",
       "cambios": {}
     },
     {
-      "foto": "comunitarios/imagen_06.png",
+      "foto": "comunitarios/imagen_06.webp",
       "comunitario_id": "com-04",
       "animal_id": "ani-004",
       "descripcion": "atigrado con pecho blanco, grande",
       "cambios": {}
     },
     {
-      "foto": "comunitarios/imagen_05.png",
+      "foto": "comunitarios/imagen_05.webp",
       "comunitario_id": "com-05",
       "animal_id": "ani-005",
       "descripcion": "amarillo claro con collar y placa, grande",
@@ -297,7 +297,7 @@
       }
     },
     {
-      "foto": "comunitarios/perro_feria_comunitario.png",
+      "foto": "comunitarios/perro_feria_comunitario.webp",
       "comunitario_id": "com-02",
       "animal_id": "ani-002",
       "descripcion": "café, pelo duro, mediano; el entorno (feria con vestimenta y frutas tropicales) no parece de la zona",
@@ -317,18 +317,18 @@
   ],
   "operativos": [
     {
-      "foto": "operativos/02_vacunacion_preventiva_camilla.png",
+      "foto": "operativos/02_vacunacion_preventiva_camilla.webp",
       "operativo_id": "ope-01",
       "descripcion": "vacunación de un gato en una sala; sin logos ni textos"
     },
     {
-      "foto": "operativos/03_implantacion_microchip_registro.png",
+      "foto": "operativos/03_implantacion_microchip_registro.webp",
       "operativo_id": "ope-03",
       "descripcion": "lectura de microchip a un gato bajo toldo municipal",
       "nota": "Aprobada por el equipo el 2026-10-06 pese a mostrar una versión dibujada del escudo y un nombre en la polera."
     },
     {
-      "foto": "operativos/05_entrega_carnet_tenencia_responsable.png",
+      "foto": "operativos/05_entrega_carnet_tenencia_responsable.webp",
       "operativo_id": "ope-04",
       "descripcion": "entrega de cuaderno de salud a una vecina con su gato",
       "nota": "Aprobada por el equipo el 2026-10-06 pese a mostrar una versión del escudo que no es la original."
@@ -336,15 +336,15 @@
   ],
   "no_asignadas": [
     {
-      "foto": "gatos/00_collage_gatos_hualane.png",
+      "foto": "gatos/00_collage_gatos_hualane.webp",
       "motivo": "Collage: no se asigna a ningún animal."
     },
     {
-      "foto": "operativos/imagen_01.png",
+      "foto": "operativos/imagen_01.webp",
       "motivo": "El lienzo dice «Hualpén» y muestra otro logo municipal: no corresponde a esta comuna."
     },
     {
-      "foto": "operativos/01_evaluacion_clinica_toldo_municipal.png",
+      "foto": "operativos/01_evaluacion_clinica_toldo_municipal.webp",
       "motivo": "El lienzo muestra una versión dibujada del escudo con texto deformado; el sistema de diseño exige el escudo original y sin deformar."
     }
   ]

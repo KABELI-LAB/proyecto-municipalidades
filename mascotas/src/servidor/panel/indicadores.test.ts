@@ -96,15 +96,6 @@ describe("inteligencia con la fecha de corte", () => {
     ]);
   });
 
-  it("pérdidas por mes en los últimos 12 meses", async () => {
-    for (const m of await intel.perdidasPorMes(CORTE)) expect(m.cantidad).toBe(resumen.perdidas_por_mes[m.mes] ?? 0);
-  });
-
-  it("alerta preventiva: enero de 2027, dirigida a Hualañé", async () => {
-    const a = await intel.alertaPreventivaActual(CORTE);
-    expect([a.mesObjetivo, a.activaDesde, a.activa]).toEqual(["2027-01", "2026-12-02", false]);
-    expect(a.sectores.map((s) => s.sector)).toEqual(["Hualañé"]);
-  });
 });
 
 describe("mapa del panel con la fecha de corte", () => {

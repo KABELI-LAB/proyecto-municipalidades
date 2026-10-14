@@ -19,15 +19,6 @@ export function avisosPanel(grupo: GrupoAvisos) {
   return db.aviso.findMany({ where: { ...where, ...delMunicipio() }, include: incluir, orderBy: { vigenteDesde: grupo === "terminados" ? "desc" : "asc" } });
 }
 
-export async function contarAvisos() {
-  const ahora = new Date();
-  const [borradores, vigentes] = await Promise.all([
-    db.aviso.count({ where: { estado: "BORRADOR", vigenteHasta: { gte: ahora }, ...delMunicipio() } }),
-    db.aviso.count({ where: { estado: "PUBLICADO", vigenteHasta: { gte: ahora }, ...delMunicipio() } }),
-  ]);
-  return { borradores, vigentes };
-}
-
 export function avisoPanel(id: string) {
   return db.aviso.findFirst({ where: { id, ...delMunicipio() }, include: incluir });
 }

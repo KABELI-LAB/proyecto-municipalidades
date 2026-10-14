@@ -7,7 +7,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import type { Prisma } from "@/generated/prisma/client";
-import { alcanzaLimiteHogar, CUPO_OCUPA, CUPO_VIGENTE } from "@/dominio/cupos";
+import { CUPO_VIGENTE } from "@/dominio/cupos";
 import { calcularResultado, destinoDe, esEditable, puedeTransitar, type EstadoOperativo, type Transicion } from "@/dominio/operativos";
 import { municipioActivo } from "@/lib/municipio";
 import { autorizar } from "@/servidor/auth";

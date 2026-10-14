@@ -131,11 +131,3 @@ export function calcularPrioridad(sectores: FactoresSector[], pesos: Pesos): Pri
     .sort((a, b) => b.puntaje - a.puntaje);
 }
 
-/** Pesos en puntos porcentuales enteros (lo que muestra el simulador) → fracciones. */
-export const pesosDesdePorcentajes = (p: Pesos): Pesos => ({ demanda: p.demanda / 100, reportes: p.reportes / 100, tiempo: p.tiempo / 100, noCubierta: p.noCubierta / 100 });
-
-/** Cada peso entre 0 y 100, enteros, y la suma exactamente 100 (sección 12). */
-export function pesosValidos(porcentajes: Pesos): boolean {
-  const v = Object.values(porcentajes);
-  return v.every((x) => Number.isInteger(x) && x >= 0 && x <= 100) && v.reduce((t, x) => t + x, 0) === 100;
-}

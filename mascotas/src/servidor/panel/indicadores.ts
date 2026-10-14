@@ -19,11 +19,6 @@ import { diaISO, hoyISO, inicioDeHoy, ventana } from "@/servidor/formato";
 const municipioId = () => municipioActivo().id;
 
 export type Periodo = 30 | 90 | 365;
-export const PERIODOS: { valor: Periodo; texto: string }[] = [
-  { valor: 30, texto: "Últimos 30 días" },
-  { valor: 90, texto: "Último trimestre" },
-  { valor: 365, texto: "Último año" },
-];
 /** Período por defecto del resumen: atenciones y adopciones se leen en 12 meses (resumen.json). */
 export const PERIODO_POR_DEFECTO: Periodo = 365;
 /** Los reportes recientes son siempre de 30 días (sección 10). */
@@ -178,15 +173,6 @@ export async function conOcupacion<T extends { id: string; capacidades: { servic
   }));
 }
 
-/** Último operativo cerrado y su resultado. */
-export function ultimoCerrado(filtro: { sectorId?: string } = {}) {
-  return db.operativo.findFirst({
-    where: { estado: "CERRADO", sector: { municipioId: municipioId() }, ...(filtro.sectorId ? { sectorId: filtro.sectorId } : {}) },
-    orderBy: { fecha: "desc" },
-    include: { sector: true, lugar: true, resultado: true },
-  });
-}
-
 /** Solicitudes recibidas y atenciones realizadas por mes, últimos 12 meses. */
 export async function tendencia(especie?: Especie, hoy = hoyISO()) {
   const zona = municipioActivo().zonaHoraria;
@@ -218,43 +204,3 @@ export async function tendencia(especie?: Especie, hoy = hoyISO()) {
 
 // ───────────── Ficha de sector ─────────────
 
-export async function fichaSector(clave: string, hoy = hoyISO()) {
-  const sector = await db.sector.findUnique({ where: { municipioId_clave: { municipioId: municipioId(), clave } } });
-  if (!sector) return null;
-  const v90 = ventana(DIAS_REPORTES_PRIORIDAD, hoy);
-  const v30 = ventana(DIAS_REPORTES_RECIENTES, hoy);
-
-  const [prioridad, servicios, pendientes, reportes, decisiones, publicaciones, localidades] = await Promise.all([
-    prioridades(hoy).then((ps) => ps.find((p) => p.sectorId === sector.id)!),
-    db.servicio.findMany({ where: { municipioId: municipioId() }, orderBy: { nombre: "asc" } }),
-    db.solicitudServicio.groupBy({ by: ["servicioId"], where: { sectorId: sector.id, estado: { in: [...SOLICITUD_PENDIENTE] } }, _count: { _all: true }, _min: { creadaEn: true } }),
-    db.reporteCiudadano.findMany({ where: { sectorId: sector.id, creadoEn: { gte: v90.desde, lt: v90.hasta } }, select: { tipo: { select: { nombre: true } }, estado: true, creadoEn: true } }),
-    db.decisionPrioridad.findMany({ where: { sectorId: sector.id }, orderBy: { creadaEn: "desc" }, take: 5, include: { usuario: { select: { nombre: true } } } }),
-    db.publicacionMascota.count({ where: { sectorId: sector.id, estado: "ABIERTA" } }),
-    // Demanda pendiente por localidad, para ver dónde se concentra dentro del sector.
-    db.solicitudServicio.groupBy({ by: ["localidadId"], where: { sectorId: sector.id, estado: { in: [...SOLICITUD_PENDIENTE] } }, _count: { _all: true } }),
-  ]);
-  const nombresLocalidad = new Map((await db.localidad.findMany({ where: { sectorId: sector.id } })).map((l) => [l.id, l.nombre]));
-
-  return {
-    sector,
-    prioridad,
-    demanda: servicios.map((s) => {
-      const p = pendientes.find((x) => x.servicioId === s.id);
-      return { servicioId: s.id, clave: s.clave, nombre: s.nombre, pendientes: p?._count._all ?? 0, masAntigua: p?._min.creadaEn ?? null };
-    }),
-    demandaPorLocalidad: localidades
-      .map((l) => ({ localidad: l.localidadId ? (nombresLocalidad.get(l.localidadId) ?? "Sin localidad") : "Sin localidad", pendientes: l._count._all }))
-      .sort((a, b) => b.pendientes - a.pendientes),
-    reportes: {
-      en30: reportes.filter((r) => r.creadoEn >= v30.desde).length,
-      en90: reportes.length,
-      abiertos: reportes.filter((r) => r.estado === "ABIERTO" || r.estado === "EN_REVISION").length,
-      porTipo: Object.entries(reportes.reduce<Record<string, number>>((t, r) => ({ ...t, [r.tipo.nombre]: (t[r.tipo.nombre] ?? 0) + 1 }), {})).sort(
-        (a, b) => b[1] - a[1],
-      ),
-    },
-    publicacionesAbiertas: publicaciones,
-    decisiones,
-  };
-}

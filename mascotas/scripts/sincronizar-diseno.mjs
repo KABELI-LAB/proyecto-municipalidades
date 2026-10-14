@@ -1,6 +1,9 @@
 // Genera src/estilos/tokens.css desde design-system/tokens.json y copia
-// fuentes y recursos gráficos a public/ds/. design-system/ es la fuente de
-// verdad: no edite los archivos generados a mano.
+// fuentes y recursos gráficos a public/ds/. También copia las fotos de la
+// demo (demo/fotos/, en WebP) a public/fotos/, para que se entreguen como
+// archivos estáticos desde la red de Netlify y no por una función.
+// design-system/ y demo/fotos/ son la fuente de verdad: no edite los
+// archivos generados a mano.
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -75,4 +78,9 @@ for (const carpeta of ["fonts", "assets"]) {
   });
 }
 
-console.log(`Tokens → ${destinoCss}\nFuentes y recursos → ${destinoPublico}`);
+const fotosOrigen = join(raiz, "demo", "fotos");
+const fotosDestino = join(raiz, "public", "fotos");
+rmSync(fotosDestino, { recursive: true, force: true });
+cpSync(fotosOrigen, fotosDestino, { recursive: true, filter: (ruta) => !/\.(md|txt|json)$/.test(ruta) });
+
+console.log(`Tokens → ${destinoCss}\nFuentes y recursos → ${destinoPublico}\nFotos de la demo → ${fotosDestino}`);

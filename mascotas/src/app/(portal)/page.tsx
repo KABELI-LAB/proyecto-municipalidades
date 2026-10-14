@@ -7,8 +7,8 @@ import { ESPECIE, TIPO_AVISO } from "@/dominio/etiquetas";
 import { numero } from "@/dominio/formato";
 import { municipioActivo } from "@/lib/municipio";
 import { fechaCorta } from "@/servidor/formato";
-import { impactoDelPrograma, retratoComuna } from "@/servidor/inteligencia";
-import { avisosVigentes, mapaPublico, mosaicoInicio, posiblesReencuentros, proximoOperativo } from "@/servidor/portal/consultas";
+import { avisosVigentes, posiblesReencuentros, proximoOperativo } from "@/servidor/portal/consultas";
+import { impactoEnCache, mapaPublicoEnCache, mosaicoEnCache, retratoEnCache } from "@/servidor/portal/enCache";
 import inicio from "./inicio.module.css";
 import { AdornoMascotas, AdornoOperativos, AdornoSos } from "./AdornosTarjeta";
 import { MapaMiniatura } from "./MapaMiniatura";
@@ -33,11 +33,11 @@ const plural = (n: number, uno: string, varios: string) => `${numero(n)} ${n ===
 export default async function Inicio() {
   const municipio = municipioActivo();
   const [mosaico, reencuentros, mapa, retrato, impacto, proximo, avisos] = await Promise.all([
-    mosaicoInicio(7),
+    mosaicoEnCache(7),
     posiblesReencuentros(1),
-    mapaPublico(),
-    retratoComuna(),
-    impactoDelPrograma(),
+    mapaPublicoEnCache(),
+    retratoEnCache(),
+    impactoEnCache(),
     proximoOperativo(),
     avisosVigentes({ limite: 3 }),
   ]);

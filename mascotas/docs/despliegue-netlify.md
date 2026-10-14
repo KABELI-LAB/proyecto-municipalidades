@@ -56,6 +56,17 @@ chat: van solo en las variables de entorno de Netlify y en `.env.produccion`
 Cada cambio que se suba a la carpeta del proyecto en GitHub se publica solo. Si
 el cambio trae una migración nueva, córrala antes con `npm run db:migrar-turso`.
 
+## Velocidad
+
+- **Misma región:** la base Turso está en São Paulo (`sa-east-1`). En Netlify,
+  **Project configuration → Build & deploy → Functions → Region**, elija
+  **São Paulo** (o la más cercana): cada consulta deja de cruzar el continente.
+- **Fotos de la demo:** están en WebP (`demo/fotos/`) y al armar el sitio se
+  copian a `public/fotos/`, así que se entregan como archivos estáticos desde
+  la red de Netlify.
+- **Caché del portal:** las cifras de la portada (retrato, impacto, mapa,
+  collage) y la franja de demostración se guardan 60 segundos.
+
 ## Qué cambia respecto de este computador
 
 - Ya no hace falta el túnel temporal: `APP_URL` es la dirección fija de Netlify y

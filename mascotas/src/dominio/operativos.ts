@@ -31,9 +31,6 @@ export function transicionesPosibles(estado: EstadoOperativo): Transicion[] {
 /** Solo un borrador se edita libremente; después, los cambios se comunican con un aviso. */
 export const esEditable = (estado: EstadoOperativo) => estado === "BORRADOR";
 
-/** Durante la ejecución se registran asistencia y atenciones. */
-export const enEjecucion = (estado: EstadoOperativo) => estado === "EN_CURSO";
-
 /**
  * Cupos sugeridos para un servicio según la demanda pendiente del sector:
  * pendientes × 1,5 (margen para inscripciones nuevas), redondeado hacia arriba

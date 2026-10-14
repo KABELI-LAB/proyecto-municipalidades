@@ -1,13 +1,6 @@
 // «Dar en adopción» (docs/concepto.md, sección 7, paso 0): reglas de las
 // propuestas de vecinos que no dependen de la base de datos.
 
-/** Edad aproximada: cada opción guarda los meses que `textoEdad` vuelve a mostrar igual. */
-export const EDADES_ADOPCION: { valor: string; texto: string; meses: number | null }[] = [
-  { valor: "NO_SE", texto: "No se sabe", meses: null },
-  { valor: "2", texto: "Menos de 4 meses", meses: 2 },
-  { valor: "8", texto: "Menos de 1 año", meses: 8 },
-  ...Array.from({ length: 15 }, (_, i) => ({ valor: String((i + 1) * 12), texto: i === 0 ? "1 año aprox." : `${i + 1} años aprox.`, meses: (i + 1) * 12 })),
-];
 export const mesesDeEdad = (valor: string) => (/^\d+$/.test(valor) ? Number(valor) : null);
 
 /** Edad máxima que se acepta al escribirla (25 años). */

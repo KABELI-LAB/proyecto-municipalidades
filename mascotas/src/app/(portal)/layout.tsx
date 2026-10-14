@@ -6,8 +6,7 @@ import { FirmaInstitucional } from "@/componentes/FirmaInstitucional";
 import { Icono } from "@/componentes/Icono";
 import { FranjaDemo } from "@/componentes/FranjaDemo";
 import { municipioActivo } from "@/lib/municipio";
-import { db } from "@/servidor/db";
-import { hayDatosDemo } from "@/servidor/demo/borrar";
+import { hayDemoEnCache } from "@/servidor/portal/enCache";
 import estilos from "./portal.module.css";
 
 // El portal lee datos vivos: nada se prerenderiza.
@@ -15,7 +14,7 @@ export const dynamic = "force-dynamic";
 
 export default async function LayoutPortal({ children }: { children: ReactNode }) {
   const municipio = municipioActivo();
-  const demo = await hayDatosDemo(db);
+  const demo = await hayDemoEnCache();
 
   return (
     <>

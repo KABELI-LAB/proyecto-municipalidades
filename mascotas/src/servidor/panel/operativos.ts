@@ -71,10 +71,6 @@ export async function demandaPorSector() {
   return demanda;
 }
 
-export function usuariosTerreno() {
-  return db.usuarioMunicipal.findMany({ where: { municipioId: municipioId(), rol: "TERRENO", activo: true }, select: { id: true, nombre: true }, orderBy: { nombre: "asc" } });
-}
-
 /** Lugares de referencia por sector, para elegir dónde se hace un operativo. */
 export function lugares() {
   return db.lugar.findMany({ where: { sector: { municipioId: municipioId() } }, orderBy: { nombre: "asc" }, select: { id: true, nombre: true, sectorId: true } });
@@ -85,19 +81,6 @@ export async function puedeOperar(usuario: UsuarioSesion, operativoId: string): 
   if (usuario.rol === "COORDINADOR" || usuario.rol === "ADMINISTRADOR") return true;
   if (usuario.rol !== "TERRENO") return false;
   return !!(await db.asignacionTerreno.findUnique({ where: { usuarioId_operativoId: { usuarioId: usuario.id, operativoId } } }));
-}
-
-/** Operativos que un usuario puede atender en terreno. */
-export function operativosDeTerreno(usuario: UsuarioSesion) {
-  return db.operativo.findMany({
-    where: {
-      sector: { municipioId: municipioId() },
-      estado: { in: ["PUBLICADO", "INSCRIPCIONES_CERRADAS", "EN_CURSO"] },
-      ...(usuario.rol === "TERRENO" ? { asignaciones: { some: { usuarioId: usuario.id } } } : {}),
-    },
-    include: { sector: true, lugar: true },
-    orderBy: { fecha: "asc" },
-  });
 }
 
 /** Lista de trabajo de terreno: inscritos presentes o por llegar, por servicio. */

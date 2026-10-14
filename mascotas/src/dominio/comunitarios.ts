@@ -18,9 +18,6 @@ export function estadoActualizacion(ultimoControl: Date | null, hoy = new Date()
     : { texto: "Revisada en los últimos 6 meses", tono: "confirmado", desactualizada: false };
 }
 
-/** Fecha límite: revisadas antes de esta fecha (o nunca) están desactualizadas. */
-export const limiteDesactualizada = (hoy = new Date()) => new Date(hoy.getTime() - DIAS_PARA_DESACTUALIZAR * DIA);
-
 /** Tipos de novedad. `ATENCION` queda solo para novedades antiguas de cuidadores. */
 export const TIPO_NOVEDAD: Record<string, string> = {
   SALUD: "Está herido o enfermo",
@@ -39,9 +36,3 @@ export const ESTADO_NOVEDAD: Record<string, Estado> = {
   DESCARTADA: { texto: "No aplicada", tono: "cerrado" },
 };
 
-/** Servicios que se registran como atención de un perro comunitario, y el dato del animal que confirman. */
-export const DATO_POR_SERVICIO: Record<string, "esterilizado" | "vacunasAlDia" | "microchip"> = {
-  esterilizacion: "esterilizado",
-  vacunacion: "vacunasAlDia",
-  microchip: "microchip",
-};

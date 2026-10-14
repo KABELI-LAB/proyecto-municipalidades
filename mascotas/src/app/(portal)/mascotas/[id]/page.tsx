@@ -5,7 +5,7 @@ import { Icono } from "@/componentes/Icono";
 import { FotoAnimal } from "@/componentes/portal/FotoAnimal";
 import { fotoDeAviso } from "@/componentes/portal/fotoAviso";
 import { TarjetaMascota } from "@/componentes/portal/TarjetaMascota";
-import { ESPECIE, SEXO, SI_NO_SE, TAMANO, textoResguardo, TIPO_PUBLICACION, tipoAviso, tituloAviso } from "@/dominio/etiquetas";
+import { ESPECIE, SEXO, SI_NO_SE, TAMANO, textoResguardo, tipoAviso, tituloAviso } from "@/dominio/etiquetas";
 import { fechaCorta, haceDias } from "@/servidor/formato";
 import { avistamientosVinculados, coincidenciasDe, publicacion as buscarPublicacion } from "@/servidor/portal/consultas";
 import tarjetas from "@/componentes/portal/tarjetas.module.css";

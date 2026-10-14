@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Icono } from "@/componentes/Icono";
-import { ESPECIE, especieConSexo, TAMANO, TIPO_PUBLICACION, tipoAviso, tituloAviso } from "@/dominio/etiquetas";
+import { ESPECIE, especieConSexo, TAMANO, tipoAviso, tituloAviso } from "@/dominio/etiquetas";
 import { fechaCorta } from "@/servidor/formato";
 import { FotoAnimal } from "./FotoAnimal";
 import { fotoDeAviso } from "./fotoAviso";

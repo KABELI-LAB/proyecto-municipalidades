@@ -92,17 +92,3 @@ export function finDeMes(mes: string): string {
   return d.toISOString().slice(0, 10);
 }
 
-/**
- * Borrador del aviso preventivo, en el estilo de los avisos de campaña. Lo
- * revisa y publica Comunicaciones; vigente desde que se activa la alerta (o
- * desde hoy, si ya pasó esa fecha) hasta el fin del mes de riesgo.
- */
-export function avisoPreventivo(a: Pick<AlertaPreventiva, "mesObjetivo" | "activaDesde">, hoy: string) {
-  const mes = NOMBRE_MES[Number(a.mesObjetivo.slice(5, 7)) - 1];
-  return {
-    titulo: `Antes de ${mes}, identifique a su mascota`,
-    texto: `En ${mes} suelen aumentar las mascotas perdidas. Le recomendamos usar collar con placa y mantenerla en un lugar seguro durante las celebraciones con fuegos artificiales.`,
-    desde: a.activaDesde > hoy ? a.activaDesde : hoy,
-    hasta: finDeMes(a.mesObjetivo),
-  };
-}

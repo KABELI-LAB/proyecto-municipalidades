@@ -2,38 +2,9 @@
 // publicación y el texto que acompaña cada tipo. Solo se usa información
 // existente y autorizada: nunca RUT, teléfonos, correos, domicilios,
 // cuidadores ni datos de salud sin confirmar.
-import type { Tono } from "./etiquetas";
 
 export type TipoRed = "OPERATIVO" | "ADOPCION" | "PERDIDA" | "AVISTADA";
 export type EstadoRed = "BORRADOR" | "PENDIENTE_REVISION" | "APROBADO" | "PUBLICANDO" | "PUBLICADO" | "ERROR" | "CANCELADO";
-
-export const TIPO_RED: Record<TipoRed, string> = {
-  OPERATIVO: "Operativo",
-  ADOPCION: "Adopción",
-  PERDIDA: "Mascota perdida",
-  AVISTADA: "Mascota avistada",
-};
-
-export const ESTADO_RED: Record<EstadoRed, string> = {
-  BORRADOR: "Borrador generado",
-  PENDIENTE_REVISION: "Pendiente de revisión",
-  APROBADO: "Aprobado",
-  PUBLICANDO: "Publicando",
-  PUBLICADO: "Publicado",
-  ERROR: "Error de publicación",
-  CANCELADO: "Cancelado",
-};
-
-/** Tono de la etiqueta de estado (siempre color + texto + ícono). */
-export const TONO_RED: Record<EstadoRed, Tono> = {
-  BORRADOR: "recibido",
-  PENDIENTE_REVISION: "espera",
-  APROBADO: "confirmado",
-  PUBLICANDO: "informacion",
-  PUBLICADO: "finalizado",
-  ERROR: "cerrado",
-  CANCELADO: "cerrado",
-};
 
 /** Desde qué estados se puede publicar: aprobado, o reintentar tras un error. */
 export const TRANSICION_RED = {

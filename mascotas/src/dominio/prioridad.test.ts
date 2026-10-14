@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { calcularPrioridad, confianzaDe, nivelDe, pesosDesdePorcentajes, pesosValidos, recomendacionDe, type FactoresSector } from "./prioridad";
+import { calcularPrioridad, confianzaDe, nivelDe, recomendacionDe, type FactoresSector } from "./prioridad";
 
 const pesos = { demanda: 0.4, reportes: 0.25, tiempo: 0.2, noCubierta: 0.15 };
 const leer = <T,>(f: string) => (JSON.parse(readFileSync(join(process.cwd(), "demo", "datos", f), "utf8")) as { datos: T }).datos;
@@ -74,17 +74,5 @@ describe("prioridad", () => {
     expect([nivelDe(0.66), nivelDe(0.65), nivelDe(0.33), nivelDe(0.32)]).toEqual(["ALTA", "MEDIA", "MEDIA", "BAJA"]);
     expect(recomendacionDe("BAJA", "Microchip")).toBe("Sin acción recomendada por ahora.");
     expect([confianzaDe(6), confianzaDe(12), confianzaDe(40)]).toEqual(["baja", "media", "alta"]);
-  });
-});
-
-describe("pesos del simulador", () => {
-  it("acepta enteros que suman 100 y los convierte en fracciones", () => {
-    expect(pesosValidos({ demanda: 40, reportes: 25, tiempo: 20, noCubierta: 15 })).toBe(true);
-    expect(pesosDesdePorcentajes({ demanda: 40, reportes: 25, tiempo: 20, noCubierta: 15 })).toEqual({ demanda: 0.4, reportes: 0.25, tiempo: 0.2, noCubierta: 0.15 });
-  });
-  it("rechaza sumas distintas de 100, negativos y decimales", () => {
-    expect(pesosValidos({ demanda: 40, reportes: 25, tiempo: 20, noCubierta: 10 })).toBe(false);
-    expect(pesosValidos({ demanda: 110, reportes: -10, tiempo: 0, noCubierta: 0 })).toBe(false);
-    expect(pesosValidos({ demanda: 40.5, reportes: 24.5, tiempo: 20, noCubierta: 15 })).toBe(false);
   });
 });

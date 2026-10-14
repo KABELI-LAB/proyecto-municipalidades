@@ -8,7 +8,7 @@ import { fotoDeComunitario } from "@/componentes/portal/fotoComunitario";
 import { fotosDeFicha } from "@/componentes/portal/fotoFicha";
 import { radioPara, type CapaCiudadana, type CapaMapaCiudadano, type ItemMapa, type MarcaCiudadana } from "@/componentes/portal/marcasMapa";
 import { REPORTE_COMUNITARIO } from "@/componentes/portal/TarjetaComunitario";
-import { ESPECIE, SEXO, textoEdad, TIPO_PUBLICACION, tipoAviso, tituloAviso } from "@/dominio/etiquetas";
+import { ESPECIE, SEXO, textoEdad, tipoAviso, tituloAviso } from "@/dominio/etiquetas";
 import { punto, type Punto } from "@/dominio/geo";
 import { nivelIntensidad } from "@/dominio/mapa";
 import { municipioActivo } from "@/lib/municipio";

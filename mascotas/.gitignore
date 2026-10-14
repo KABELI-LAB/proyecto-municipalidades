@@ -5,6 +5,7 @@ next-env.d.ts
 # Generados desde design-system/ por scripts/sincronizar-diseno.mjs
 src/estilos/tokens.css
 public/ds/
+public/fotos/
 # Base de datos local y cliente generado
 prisma/*.db
 prisma/*.db-journal

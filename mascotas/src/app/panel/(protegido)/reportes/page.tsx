@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Boton } from "@/componentes/Boton";
 import { EtiquetaEstado } from "@/componentes/EtiquetaEstado";
 import { BotonAccion } from "@/componentes/panel/BotonAccion";
-import { Icono } from "@/componentes/Icono";
 import { CANTIDAD_ANIMALES, ESPECIE, ESTADO_REPORTE, SI_NO_SE } from "@/dominio/etiquetas";
 import { puede } from "@/dominio/permisos";
 import { requerir } from "@/servidor/auth";

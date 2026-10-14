@@ -3,7 +3,6 @@
 // 12 meses y ficha lateral del sector elegido. Sectores coloreados por
 // intensidad en sus coordenadas, nunca puntos sobre casas; el calor de
 // reportes se dibuja como cuadros de ~1 km y solo donde hay 3 o más registros.
-import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { EnlaceBoton } from "@/componentes/Boton";
 import { RELLENO_POR_NIVEL, token, ubicarTooltips, useMapa } from "@/componentes/mapa/useMapa";

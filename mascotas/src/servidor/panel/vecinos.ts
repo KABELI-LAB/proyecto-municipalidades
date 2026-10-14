@@ -27,7 +27,6 @@ export async function loQuePidenLosVecinos() {
     db.perroComunitario.count({ where: { ...COMUNITARIO_PUBLICO, ...enMunicipio } }),
   ]);
   const suma = <T extends { _count: { _all: number } }>(xs: T[]) => xs.reduce((t, x) => t + x._count._all, 0);
-  const nombre = (lista: { id: string; nombre: string }[], id: string) => lista.find((x) => x.id === id)?.nombre ?? "Otro";
 
   // Qué servicios piden, de más a menos.
   const porServicio = servicios

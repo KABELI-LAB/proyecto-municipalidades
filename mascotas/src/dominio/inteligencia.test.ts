@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { alertaPreventiva, avisoPreventivo, finDeMes, nombreMes, porMes, ultimos12Meses, type PerdidaSector } from "./inteligencia";
+import { alertaPreventiva, nombreMes, porMes, ultimos12Meses, type PerdidaSector } from "./inteligencia";
 
 const leer = <T,>(f: string) => (JSON.parse(readFileSync(join(process.cwd(), "demo", "datos", f), "utf8")) as { datos: T }).datos;
 const publicaciones = leer<{ tipo: string; fecha: string; sector_id: string }[]>("publicaciones.json");
@@ -48,16 +48,5 @@ describe("alerta preventiva", () => {
     const a = alertaPreventiva("2025-08-10", perdidas); // septiembre de 2024: sin datos
     expect(a.sectores).toEqual([]);
     expect(a.totalReferencia).toBe(0);
-  });
-});
-
-describe("avisoPreventivo", () => {
-  it("propone un borrador vigente desde la activación hasta el fin del mes de riesgo", () => {
-    const a = avisoPreventivo({ mesObjetivo: "2027-01", activaDesde: "2026-12-02" }, "2026-10-06");
-    expect(a).toMatchObject({ titulo: "Antes de enero, identifique a su mascota", desde: "2026-12-02", hasta: "2027-01-31" });
-  });
-  it("si la alerta ya está activa, parte hoy", () => {
-    expect(avisoPreventivo({ mesObjetivo: "2026-09", activaDesde: "2026-08-02" }, "2026-08-20").desde).toBe("2026-08-20");
-    expect(finDeMes("2028-02")).toBe("2028-02-29");
   });
 });
