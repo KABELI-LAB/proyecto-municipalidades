@@ -24,8 +24,8 @@ const REVISE = "Revise los datos marcados.";
 const ERROR = "No pudimos guardar el cambio. Intente nuevamente en unos minutos.";
 const NO_CUIDADOR = "No encontramos a un cuidador de este perro con ese RUT y código.";
 
-function revalidar(id?: string) {
-  for (const ruta of ["/comunitarios", "/mapa", ...(id ? [`/comunitarios/${id}`] : [])]) revalidatePath(ruta);
+function revalidar() {
+  revalidatePath("/", "layout");
 }
 
 /** Lee «datos» (JSON) y la foto opcional «foto» de un FormData. */
@@ -99,7 +99,7 @@ export async function registrarComunitario(entrada: FormData): Promise<Respuesta
       );
       return { id: perro.id, codigo };
     });
-    revalidar(id);
+    revalidar();
     return { ok: true, mensaje: `Publicamos a ${d.apodo}.`, codigo, id };
   } catch (err) {
     console.error(err);
@@ -140,7 +140,7 @@ export async function hacermeCargo(valores: unknown): Promise<Respuesta> {
       );
       return c.codigo;
     });
-    revalidar(perro.id);
+    revalidar();
     return { ok: true, mensaje: `Quedó a cargo de ${perro.apodo}.`, codigo, id: perro.id };
   } catch (err) {
     console.error(err);
@@ -192,7 +192,7 @@ export async function registrarVistoHoy(valores: unknown): Promise<Respuesta> {
     db.perroComunitario.update({ where: { id: c.perroId }, data: { ultimoControl: new Date(), necesitaAtencion: false } }),
     db.historialComunitario.create({ data: { perroId: c.perroId, accion: "Revisado por su cuidador", publico: true, detalle: c.codigo } }),
   ]);
-  revalidar(c.perroId);
+  revalidar();
   return { ok: true, mensaje: `Anotamos que vio a ${c.perro.apodo} hoy.` };
 }
 
@@ -267,7 +267,7 @@ export async function actualizarFichaComunitario(entrada: FormData): Promise<Res
   // La foto reemplazada ya no se usa.
   const vieja = c.perro.fotos.split(",").find((x) => x.startsWith(PREFIJO_SUBIDA));
   if (nueva && vieja) await borrarFoto("comunitarios", vieja.slice(PREFIJO_SUBIDA.length));
-  revalidar(c.perroId);
+  revalidar();
   return { ok: true, mensaje: "Guardamos los cambios de la ficha." };
 }
 
@@ -279,7 +279,7 @@ export async function darDeBajaComunitario(valores: unknown): Promise<Respuesta>
     db.perroComunitario.update({ where: { id: c.perroId }, data: { oculto: true } }),
     db.historialComunitario.create({ data: { perroId: c.perroId, accion: "Dado de baja por su cuidador", detalle: c.codigo } }),
   ]);
-  revalidar(c.perroId);
+  revalidar();
   return { ok: true, mensaje: `${c.perro.apodo} ya no se muestra en el portal.` };
 }
 
@@ -296,6 +296,6 @@ export async function marcarNovedadVista(valores: unknown): Promise<Respuesta> {
     await tx.historialComunitario.create({ data: { perroId: c.perroId, accion: "Novedad vista por su cuidador", detalle: `${n.codigo} · ${TIPO_NOVEDAD[n.tipo]}` } });
     await notificar(tx, n.persona, "Su novedad llegó", `Quien cuida a ${c.perro.apodo} vio su novedad ${n.codigo}. Gracias por avisar.`, n.loteDemoId);
   });
-  revalidar(c.perroId);
+  revalidar();
   return { ok: true, mensaje: "Marcamos la novedad como vista y avisamos a quien la envió." };
 }

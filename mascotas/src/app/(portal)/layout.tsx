@@ -9,8 +9,9 @@ import { municipioActivo } from "@/lib/municipio";
 import { hayDemoEnCache } from "@/servidor/portal/enCache";
 import estilos from "./portal.module.css";
 
-// El portal lee datos vivos: nada se prerenderiza.
-export const dynamic = "force-dynamic";
+// Las páginas públicas se guardan armadas hasta 60 segundos (o hasta que una
+// acción las renueve): así Netlify las entrega sin consultar la base en cada visita.
+export const revalidate = 60;
 
 export default async function LayoutPortal({ children }: { children: ReactNode }) {
   const municipio = municipioActivo();

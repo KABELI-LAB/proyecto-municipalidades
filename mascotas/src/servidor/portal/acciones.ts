@@ -727,7 +727,7 @@ export async function gestionarPropuesta(valores: unknown): Promise<{ ok: boolea
     });
     if (!cambio.count) return { ok: false, mensaje: "Esta propuesta ya no está abierta." };
     revalidatePath("/adoptar");
-    revalidatePath("/");
+    revalidatePath("/", "layout");
     return { ok: true, mensaje: r.data.accion === "encontro_hogar" ? "¡Qué buena noticia! Retiramos la ficha del catálogo." : "Retiramos su propuesta." };
   } catch (e) {
     console.error(e);
@@ -837,7 +837,7 @@ export async function decidirPostulacion(valores: unknown): Promise<{ ok: boolea
       const persona = await db.persona.findUniqueOrThrow({ where: { id: p.personaId } });
       const compromisos = await concretarAdopcion({ ...p, persona, ficha: f }, municipioActivo().id);
       revalidatePath("/adoptar");
-      revalidatePath("/");
+      revalidatePath("/", "layout");
       return { ok: true, mensaje: `¡Qué buena noticia! Registramos la adopción de ${nombre}.${compromisos.length ? ` Quedó registrado el compromiso de ${compromisos.join(" y ")}.` : ""}` };
     }
     // No se concretó: la persona queda no seleccionada y la ficha vuelve a recibir postulaciones.
@@ -1301,7 +1301,7 @@ export async function gestionarAviso(valores: unknown): Promise<{ ok: boolean; m
         );
       });
       revalidatePath("/mascotas");
-      revalidatePath("/");
+      revalidatePath("/", "layout");
       return { ok: true, mensaje: "¡Qué buena noticia! Retiramos su aviso y el de la otra persona, a quien le avisamos." };
     }
 
@@ -1313,7 +1313,7 @@ export async function gestionarAviso(valores: unknown): Promise<{ ok: boolean; m
           : { estado: "YA_NO_APLICA", resueltaEn: ahora },
     });
     revalidatePath("/mascotas");
-    revalidatePath("/");
+    revalidatePath("/", "layout");
     return { ok: true, mensaje: d.accion === "reencontrada" ? "¡Qué buena noticia! Retiramos su aviso del portal." : "Retiramos su aviso del portal." };
   } catch (e) {
     console.error(e);

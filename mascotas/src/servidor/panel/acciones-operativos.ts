@@ -33,7 +33,7 @@ const refrescar = (id?: string) => {
   revalidatePath("/panel", "layout");
   if (id) revalidatePath(`/operativos/${id}`);
   revalidatePath("/operativos");
-  revalidatePath("/");
+  revalidatePath("/", "layout");
 };
 
 // ───────────── Crear y editar (borrador) ─────────────

@@ -24,6 +24,7 @@ async function autorizarEn(operativoId: string) {
 const refrescar = (operativoId: string) => {
   revalidatePath(`/panel/operativos/${operativoId}/asistencia`);
   revalidatePath(`/panel/operativos/${operativoId}`);
+  revalidatePath("/", "layout");
 };
 
 /** Un servicio realizado actualiza el estado sanitario del animal. */

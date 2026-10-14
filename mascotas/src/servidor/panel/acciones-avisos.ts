@@ -17,7 +17,7 @@ const fin = (dia: string) => new Date(medianocheEn(dia).getTime() + 86_400_000 -
 function refrescar() {
   revalidatePath("/panel/avisos");
   revalidatePath("/avisos");
-  revalidatePath("/");
+  revalidatePath("/", "layout");
 }
 
 const dia = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Indique la fecha.");

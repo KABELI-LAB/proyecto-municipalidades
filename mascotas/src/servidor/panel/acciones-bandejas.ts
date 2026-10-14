@@ -25,7 +25,10 @@ async function con(permiso: Permiso, rutas: string[], accion: (usuario: UsuarioS
   if (!usuario) return SIN_PERMISO;
   try {
     const r = await accion(usuario);
-    if (r.ok) for (const ruta of [...rutas, "/panel"]) revalidatePath(ruta);
+    if (r.ok) {
+      for (const ruta of [...rutas, "/panel"]) revalidatePath(ruta);
+      revalidatePath("/", "layout");
+    }
     return r;
   } catch (e) {
     console.error(e);
