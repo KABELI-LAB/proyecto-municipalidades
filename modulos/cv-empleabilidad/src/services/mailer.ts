@@ -38,7 +38,7 @@ export function createHttpMailer(baseUrl: string): CvMailer {
   }
 }
 
-/** No envía nada: simula la espera para desarrollar la UI sin Resend. */
+/** No envía nada: simula la espera para desarrollar la UI sin un servidor de correo. */
 export const mockMailer: CvMailer = {
   demo: true,
   enviar: () => new Promise((resolve) => setTimeout(resolve, 800)),

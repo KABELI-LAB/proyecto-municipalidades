@@ -81,7 +81,7 @@ Variables: `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_DEPLOY
 }
 ```
 
-Respuesta `200 { "ok": true }` o `{ "error": "<mensaje para mostrar>" }` con `400` (correo o adjuntos inválidos), `405`, `502`, `503` (sin configurar o límite de Resend).
+Respuesta `200 { "ok": true }` o `{ "error": "<mensaje para mostrar>" }` con `400` (correo o adjuntos inválidos), `405`, `502`, `503` (sin configurar, credenciales SMTP inválidas o límite de envío).
 
 Protecciones contra abuso (el endpoint envía correos a direcciones arbitrarias):
 
@@ -90,7 +90,9 @@ Protecciones contra abuso (el endpoint envía correos a direcciones arbitrarias)
 - Honeypot `sitioWeb`: si viene lleno, se responde `200` sin enviar.
 - No se guarda el correo ni el CV; los logs solo registran códigos de estado.
 
-Variables: `RESEND_API_KEY`, `CV_EMAIL_FROM`.
+Envío por SMTP con `nodemailer` (`crearEnviadorSmtp`); el handler recibe el enviador inyectado para poder probarlo sin red. El remitente es siempre `SMTP_USER`; los logs solo registran el código de error SMTP.
+
+Variables: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` y, opcionales, `CV_EMAIL_FROM_NAME` y `CV_EMAIL_REPLY_TO`.
 
 ## Pendiente
 
