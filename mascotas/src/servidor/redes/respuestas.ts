@@ -8,11 +8,11 @@
 // repetido no responde dos veces. No se guarda el nombre de usuario.
 import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { clasificar, enlacesDe, mensajePrivado, respuestaPublica, type Contexto } from "@/dominio/respuestas";
+import { clasificar, enlaceEnTexto, enlacesDe, mensajePrivado, respuestaPublica, type Contexto } from "@/dominio/respuestas";
 import type { TipoRed } from "@/dominio/redes";
 import { municipioActivo } from "@/lib/municipio";
 import { db } from "@/servidor/db";
-import { enviarMensaje, responderComentario, responderEnPrivado, urlPublica } from "./instagram";
+import { enviarMensaje, responderComentario, responderEnPrivado, textoDePublicacion, urlPublica } from "./instagram";
 
 /**
  * Firma de Meta (X-Hub-Signature-256 = sha256=<hmac del cuerpo con la clave
@@ -49,13 +49,35 @@ export async function respuestasActivas() {
 
 const RUTA: Record<TipoRed, string> = { OPERATIVO: "/operativos", ADOPCION: "/adoptar", PERDIDA: "/mascotas", AVISTADA: "/mascotas" };
 
-/** La publicación comentada, si la publicamos nosotros, con su página en el portal. */
+const SIN_CONTEXTO = { contexto: null, tipo: null, origenId: null };
+
+/**
+ * La publicación comentada y su página en el portal. Primero, si la publicó
+ * la plataforma; si no está registrada (por ejemplo, la publicó una persona
+ * del equipo con el enlace del aviso), se lee su texto en Instagram y se usa
+ * el enlace que trae, solo si ese contenido existe aquí.
+ */
 async function contextoDe(mediaId: string | undefined, base: string): Promise<{ contexto: Contexto; tipo: string | null; origenId: string | null }> {
-  if (!mediaId) return { contexto: null, tipo: null, origenId: null };
+  if (!mediaId) return SIN_CONTEXTO;
   const p = await db.publicacionRed.findFirst({ where: { igMediaId: mediaId, municipioId: municipioActivo().id }, select: { tipo: true, origenId: true } });
-  if (!p) return { contexto: null, tipo: null, origenId: null };
-  const tipo = p.tipo as TipoRed;
-  return { contexto: { tipo, url: `${base}${RUTA[tipo]}/${p.origenId}` }, tipo, origenId: p.origenId };
+  if (p) {
+    const tipo = p.tipo as TipoRed;
+    return { contexto: { tipo, url: `${base}${RUTA[tipo]}/${p.origenId}` }, tipo, origenId: p.origenId };
+  }
+  const texto = await textoDePublicacion(mediaId);
+  const enlace = texto ? enlaceEnTexto(texto) : null;
+  if (!enlace) return SIN_CONTEXTO;
+  let tipo: TipoRed | null = null;
+  if (enlace.seccion === "mascotas") {
+    const aviso = await db.publicacionMascota.findUnique({ where: { id: enlace.id }, select: { tipo: true } });
+    tipo = aviso ? (aviso.tipo === "PERDIDA" ? "PERDIDA" : "AVISTADA") : null;
+  } else if (enlace.seccion === "operativos") {
+    tipo = (await db.operativo.findUnique({ where: { id: enlace.id }, select: { id: true } })) ? "OPERATIVO" : null;
+  } else {
+    tipo = (await db.fichaAdopcion.findUnique({ where: { id: enlace.id }, select: { id: true } })) ? "ADOPCION" : null;
+  }
+  if (!tipo) return SIN_CONTEXTO;
+  return { contexto: { tipo, url: `${base}${RUTA[tipo]}/${enlace.id}` }, tipo, origenId: enlace.id };
 }
 
 type Comentario = { id: string; text?: string; from?: { id?: string }; media?: { id?: string }; parent_id?: string };
@@ -106,10 +128,12 @@ async function atenderComentario(c: Comentario) {
   const base = urlPublica();
   const texto = (c.text ?? "").slice(0, 1000);
   const intencion = clasificar(texto);
-  const { contexto, tipo, origenId } = base ? await contextoDe(c.media?.id, base) : { contexto: null, tipo: null, origenId: null };
-  const id = await registrar({ canal: "COMENTARIO", igId: c.id, autorIgId: c.from!.id!, mediaId: c.media?.id, origenTipo: tipo, origenId, texto, intencion });
+  const id = await registrar({ canal: "COMENTARIO", igId: c.id, autorIgId: c.from!.id!, mediaId: c.media?.id, origenTipo: null, origenId: null, texto, intencion });
   if (!id) return;
   if (!base || !(await respuestasActivas())) return void (await db.interaccionRed.update({ where: { id }, data: { estado: "SIN_RESPUESTA" } }));
+  // Solo si vamos a responder se averigua de qué publicación se trata (puede consultar Instagram).
+  const { contexto, tipo, origenId } = await contextoDe(c.media?.id, base);
+  if (tipo) await db.interaccionRed.update({ where: { id }, data: { origenTipo: tipo, origenId } });
 
   const privado = mensajePrivado(intencion, contexto, enlacesDe(base));
   const publico = respuestaPublica(intencion, Boolean(privado));

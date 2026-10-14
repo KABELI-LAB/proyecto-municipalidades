@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { clasificar, enlacesDe, mensajePrivado, normalizar, respuestaPublica } from "./respuestas";
+import { clasificar, enlaceEnTexto, enlacesDe, mensajePrivado, normalizar, respuestaPublica } from "./respuestas";
 
 const e = enlacesDe("https://portal.ejemplo.cl");
 
@@ -7,6 +7,8 @@ describe("clasificar comentarios y mensajes", () => {
   it.each([
     ["¿Cuándo es el operativo? ¿Quedan cupos?", "OPERATIVO"],
     ["Lo vi ayer cerca de la plaza!!", "VISTO"],
+    ["Vi este perro", "VISTO"],
+    ["La vimos en la feria", "VISTO"],
     ["Creo que es mío, es mi perrita", "ES_MIO"],
     ["Se me perdió mi gato anoche", "PERDI"],
     ["Quiero adoptarlo ❤️", "ADOPTAR"],
@@ -25,6 +27,14 @@ describe("clasificar comentarios y mensajes", () => {
 
   it("normaliza tildes y signos", () => {
     expect(normalizar("¿LO VÍ? ¡Sí!")).toBe("lo vi si");
+  });
+});
+
+describe("enlace en el texto de un post", () => {
+  it("encuentra la sección y el id, con cualquier dominio", () => {
+    expect(enlaceEnTexto("avísanos en el portal: https://otro.ejemplo.cl/mascotas/cmv7ariym00009kuby8ekpim1. Gracias")).toEqual({ seccion: "mascotas", id: "cmv7ariym00009kuby8ekpim1" });
+    expect(enlaceEnTexto("Inscríbete: https://x.cl/operativos/cmv719ez90005m0ub40yyyclk")).toEqual({ seccion: "operativos", id: "cmv719ez90005m0ub40yyyclk" });
+    expect(enlaceEnTexto("Sin enlaces")).toBeNull();
   });
 });
 

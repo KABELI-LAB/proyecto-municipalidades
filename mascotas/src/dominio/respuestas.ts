@@ -36,7 +36,7 @@ export function normalizar(texto: string): string {
 const REGLAS: [Intencion, RegExp][] = [
   ["SOS", /\b(herid|atropell|maltrat|envenen|sangr|agoniz|abandon|emergencia|urgente|se esta muriendo|golpead)/],
   ["ES_MIO", /\b(es mio|es mia|es mi (perr|gat|mascota)|es el mio|es la mia|es de mi (casa|familia)|es nuestr)/],
-  ["VISTO", /\b(lo vi|la vi|los vi|las vi|lo he visto|la he visto|vi a|vi un|vi una|visto|vista|anda por|andaba|esta en|estaba en|lo tengo|la tengo|lo encontre|la encontre|aparecio|lo veo|la veo|pasa por|pasea por)/],
+  ["VISTO", /\b(vi|vimos|lo vi|la vi|los vi|las vi|lo he visto|la he visto|lo hemos visto|visto|vista|anda por|andaba|esta en|estaba en|lo tengo|la tengo|lo encontre|la encontre|aparecio|lo veo|la veo|pasa por|pasea por)\b/],
   ["PERDI", /\b(perdi|se me perdio|se perdio|se escapo|extravi|busco a mi|no encuentro a mi|se arranco)/],
   ["ADOPTAR", /\b(adopt|adopcion|darle (un )?hogar|lo quiero|la quiero|me lo llevo|me la llevo)/],
   ["SERVICIO", /\b(vacun|esteriliz|castra|chip|antirrabic|desparasit)/],
@@ -50,6 +50,15 @@ export function clasificar(texto: string): Intencion {
   if (!t) return "GRACIAS";
   for (const [intencion, patron] of REGLAS) if (patron.test(t)) return intencion;
   return "OTRO";
+}
+
+/**
+ * Enlace a un contenido del portal escrito en el texto de una publicación
+ * («…/mascotas/<id>», «…/operativos/<id>», «…/adoptar/<id>»), con o sin dominio.
+ */
+export function enlaceEnTexto(texto: string): { seccion: "mascotas" | "operativos" | "adoptar"; id: string } | null {
+  const m = texto.match(/\/(mascotas|operativos|adoptar)\/([a-z0-9][a-z0-9_-]{2,})/i);
+  return m ? { seccion: m[1].toLowerCase() as "mascotas" | "operativos" | "adoptar", id: m[2] } : null;
 }
 
 /** La publicación de Instagram que comentaron (si es nuestra), con su enlace en el portal. */

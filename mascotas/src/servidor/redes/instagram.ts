@@ -127,6 +127,15 @@ async function intentar(fn: () => Promise<unknown>): Promise<ResultadoRespuesta>
   }
 }
 
+/** Texto (caption) de una publicación de la cuenta, para saber de qué contenido trata. */
+export async function textoDePublicacion(mediaId: string): Promise<string | null> {
+  try {
+    return ((await llamar("GET", mediaId, { fields: "caption" })) as { caption?: string }).caption ?? null;
+  } catch {
+    return null;
+  }
+}
+
 /** Respuesta pública a un comentario. */
 export const responderComentario = (comentarioId: string, texto: string) => intentar(() => llamar("POST", `${comentarioId}/replies`, { message: texto }));
 

@@ -111,6 +111,22 @@ describe("respuestas automáticas", () => {
     expect([fila.estado, fila.intencion, fila.origenTipo]).toEqual(["RESPONDIDA", "OPERATIVO", "OPERATIVO"]);
   });
 
+  it("en un post que no publicó la plataforma, usa el enlace del aviso que trae su texto", async () => {
+    configurar();
+    const aviso = await db.publicacionMascota.findFirstOrThrow({ where: { tipo: "PERDIDA" } });
+    const llamadas: { ruta: string; datos: URLSearchParams }[] = [];
+    vi.stubGlobal("fetch", async (url: string, init?: RequestInit) => {
+      const ruta = new URL(url).pathname.replace(/^\/v[\d.]+\//, "");
+      if (!init?.method || init.method === "GET") return new Response(JSON.stringify({ caption: `Se busca. Avísanos en el portal: https://otro.ejemplo.cl/mascotas/${aviso.id}. Gracias.` }));
+      llamadas.push({ ruta, datos: new URLSearchParams(String(init.body ?? "")) });
+      return new Response(JSON.stringify({ id: "r" }));
+    });
+    await respuestas.procesarAviso(comentario("c-5", "Vi este perro", "media-manual"));
+    expect(JSON.parse(llamadas[0].datos.get("message")!).text).toContain(`https://tenencia.ejemplo.cl/mascotas/${aviso.id}`);
+    const fila = await db.interaccionRed.findUniqueOrThrow({ where: { igId: "c-5" } });
+    expect([fila.intencion, fila.origenTipo, fila.origenId]).toEqual(["VISTO", "PERDIDA", aviso.id]);
+  });
+
   it("no responde a sus propios comentarios ni a sus mensajes (eco)", async () => {
     configurar();
     const llamadas = apiSimulada();
