@@ -119,3 +119,32 @@ export async function verificarCuenta(): Promise<{ ok: true; usuario: string } |
     throw e;
   }
 }
+
+// ── Respuestas a comentarios y mensajes (permisos instagram_business_manage_comments
+//    e instagram_business_manage_messages). Documentado por Meta:
+//    POST /<COMENTARIO>/replies            message            → respuesta pública al comentario
+//    POST /<IG_ID>/messages  recipient={comment_id}, message  → respuesta privada (una por comentario, hasta 7 días)
+//    POST /<IG_ID>/messages  recipient={id: IGSID}, message   → mensaje directo (hasta 24 h después del último mensaje de la persona)
+
+export type ResultadoRespuesta = { ok: true } | { ok: false; error: string };
+
+async function intentar(fn: () => Promise<unknown>): Promise<ResultadoRespuesta> {
+  try {
+    await fn();
+    return { ok: true };
+  } catch (e) {
+    if (e instanceof ErrorInstagram) return { ok: false, error: e.message };
+    throw e;
+  }
+}
+
+/** Respuesta pública a un comentario. */
+export const responderComentario = (comentarioId: string, texto: string) => intentar(() => llamar("POST", `${comentarioId}/replies`, { message: texto }));
+
+/** Mensaje privado a quien comentó (respuesta privada). */
+export const responderEnPrivado = (comentarioId: string, texto: string) =>
+  intentar(() => llamar("POST", `${process.env.INSTAGRAM_USER_ID?.trim() ?? ""}/messages`, { recipient: JSON.stringify({ comment_id: comentarioId }), message: JSON.stringify({ text: texto }) }));
+
+/** Mensaje directo a quien nos escribió. */
+export const enviarMensaje = (destinatarioId: string, texto: string) =>
+  intentar(() => llamar("POST", `${process.env.INSTAGRAM_USER_ID?.trim() ?? ""}/messages`, { recipient: JSON.stringify({ id: destinatarioId }), message: JSON.stringify({ text: texto }) }));

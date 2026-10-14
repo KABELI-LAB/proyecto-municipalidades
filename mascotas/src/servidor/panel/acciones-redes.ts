@@ -47,3 +47,16 @@ export async function guardarDemoInstagram(incluir: boolean): Promise<Respuesta>
   revalidatePath("/panel/instagram");
   return { ok: true, mensaje: incluir ? "El contenido de demostración también se publicará en Instagram, con su marca." : "El contenido de demostración ya no se publicará en Instagram." };
 }
+
+/** Enciende o apaga las respuestas automáticas a comentarios y mensajes de Instagram. */
+export async function guardarRespuestasAutomaticas(encendidas: boolean): Promise<Respuesta> {
+  if (!(await autorizar("configurarRedes"))) return SIN_PERMISO;
+  await db.municipio.update({ where: { id: municipioActivo().id }, data: { redesResponderAuto: encendidas } });
+  revalidatePath("/panel/instagram");
+  return {
+    ok: true,
+    mensaje: encendidas
+      ? "Listo: responderemos automáticamente los comentarios y mensajes que Instagram nos avise."
+      : "Listo: ya no se responden automáticamente los comentarios ni los mensajes.",
+  };
+}

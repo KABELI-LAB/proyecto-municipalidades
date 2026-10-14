@@ -6,7 +6,10 @@ import { Interruptor } from "@/componentes/panel/Interruptor";
 import { inicioDe, puede } from "@/dominio/permisos";
 import { PERMISO_RED, type TipoRed } from "@/dominio/redes";
 import { requerir } from "@/servidor/auth";
-import { guardarDemoInstagram, guardarPublicacionAutomatica } from "@/servidor/panel/acciones-redes";
+import { INTENCION, type Intencion } from "@/dominio/respuestas";
+import { fechaCorta } from "@/servidor/formato";
+import { guardarDemoInstagram, guardarPublicacionAutomatica, guardarRespuestasAutomaticas } from "@/servidor/panel/acciones-redes";
+import { ultimasInteracciones } from "@/servidor/redes/respuestas";
 import { configuracionInstagram, pendientesInstagram } from "@/servidor/panel/instagram";
 import estilos from "@/estilos/paginas.module.css";
 import propios from "./instagram.module.css";
@@ -21,8 +24,8 @@ export default async function Instagram() {
   const administra = puede(usuario.rol, "configurarRedes");
   const tipos = (Object.keys(PERMISO_RED) as TipoRed[]).filter((t) => puede(usuario.rol, PERMISO_RED[t]));
   if (!administra && !tipos.length) redirect(inicioDe(usuario.rol));
-  const { automatica, incluirDemo, integracion } = await configuracionInstagram();
-  const pendientes = await pendientesInstagram(incluirDemo, tipos);
+  const { automatica, incluirDemo, responder, integracion, faltanParaResponder } = await configuracionInstagram();
+  const [pendientes, conversaciones] = await Promise.all([pendientesInstagram(incluirDemo, tipos), ultimasInteracciones(15)]);
 
   return (
     <div className={`contenedor ${estilos.pagina}`}>
@@ -60,6 +63,16 @@ export default async function Instagram() {
               guardar={guardarPublicacionAutomatica}
             />
             <Interruptor
+              id="responder-auto"
+              etiqueta="Responder comentarios y mensajes"
+              descripcion="Responde con el enlace del portal que corresponde: el operativo, el aviso o la adopción comentada. En los comentarios, el detalle va por mensaje privado."
+              inicial={responder}
+              guardar={guardarRespuestasAutomaticas}
+            />
+            {faltanParaResponder.length > 0 && (
+              <p className={propios.nota}>Para que Instagram nos avise de comentarios y mensajes falta configurar: {faltanParaResponder.join(", ")}.</p>
+            )}
+            <Interruptor
               id="incluir-demo"
               etiqueta="Incluir datos de demostración"
               descripcion="Solo para pruebas: el contenido de demostración también se publica, con su marca."
@@ -69,7 +82,9 @@ export default async function Instagram() {
           </>
         ) : (
           <p>
-            <b>Publicación automática: {automatica ? "encendida" : "apagada"}.</b>{" "}
+            <b>
+              Publicación automática: {automatica ? "encendida" : "apagada"}. Respuestas automáticas: {responder ? "encendidas" : "apagadas"}.
+            </b>{" "}
             <span className={propios.nota}>
               {automatica ? "Lo que apruebas o publicas también sale en Instagram." : "Lo que apruebas o publicas sale solo en el portal; publícalo en Instagram desde la lista de abajo."} La
               cambia administración.
@@ -99,6 +114,32 @@ export default async function Instagram() {
               ))}
             </ul>
           )}
+        </section>
+      )}
+
+      {conversaciones.length > 0 && (
+        <section className={propios.tarjeta} aria-labelledby="conversaciones">
+          <div className={propios.titulo}>
+            <h2 id="conversaciones">Comentarios y mensajes</h2>
+          </div>
+          <p className={propios.nota}>Lo último que escribieron en Instagram y qué respondimos. Lo que no tuvo respuesta conviene revisarlo en la app de Instagram.</p>
+          <ul className={propios.lista}>
+            {conversaciones.map((c) => (
+              <li key={c.id}>
+                <span>
+                  <b>«{c.texto.length > 140 ? `${c.texto.slice(0, 137)}…` : c.texto}»</b>
+                  <span className={propios.nota}>
+                    {c.canal === "COMENTARIO" ? "Comentario" : "Mensaje"} · {INTENCION[c.intencion as Intencion] ?? c.intencion} · {fechaCorta(c.creadaEn)}
+                  </span>
+                  {c.error && <span className={propios.nota}>No se pudo responder: {c.error}</span>}
+                </span>
+                <span className={`${propios.insignia} ${c.estado === "RESPONDIDA" ? propios.ok : propios.falta}`}>
+                  <Icono nombre={c.estado === "RESPONDIDA" ? "check" : "alerta"} tamano={14} />
+                  {c.estado === "RESPONDIDA" ? "Respondido" : c.estado === "ERROR" ? "Con error" : "Sin respuesta"}
+                </span>
+              </li>
+            ))}
+          </ul>
         </section>
       )}
     </div>

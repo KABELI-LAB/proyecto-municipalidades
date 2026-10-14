@@ -27,21 +27,23 @@ datasource db {
 // ───────────────────────── Configuración ─────────────────────────
 
 model Municipio {
-  id               String  @id // clave de config/municipios/<id>.json
-  nombre           String
-  nombreOficial    String
-  sitioWeb         String?
+  id                 String  @id // clave de config/municipios/<id>.json
+  nombre             String
+  nombreOficial      String
+  sitioWeb           String?
   // Pesos del índice de prioridad (sección 12); deben sumar 1.
-  pesoDemanda      Float   @default(0.4)
-  pesoReportes     Float   @default(0.25)
-  pesoTiempo       Float   @default(0.2)
-  pesoNoCubierta   Float   @default(0.15)
-  limitePorHogar   Int     @default(2)
+  pesoDemanda        Float   @default(0.4)
+  pesoReportes       Float   @default(0.25)
+  pesoTiempo         Float   @default(0.2)
+  pesoNoCubierta     Float   @default(0.15)
+  limitePorHogar     Int     @default(2)
   /// Solo para pruebas: permite publicar en Instagram contenido de demostración (la pieza lleva la marca).
-  redesIncluirDemo Boolean @default(false)
+  redesIncluirDemo   Boolean @default(false)
   /// Al aprobar un aviso o una adopción, o al publicar un operativo, también se publica en Instagram.
   /// Apagado: solo en el portal; se publica en Instagram con el botón de cada contenido.
-  redesPublicarAuto Boolean @default(true)
+  redesPublicarAuto  Boolean @default(true)
+  /// Responder automáticamente comentarios y mensajes de Instagram (apagado hasta configurar Meta).
+  redesResponderAuto Boolean @default(false)
 
   sectores     Sector[]
   servicios    Servicio[]
@@ -1184,4 +1186,31 @@ enum EstadoNotificacion {
   PENDIENTE
   ENVIADA
   FALLIDA
+}
+
+/// Comentario o mensaje recibido en Instagram y la respuesta automática que se le dio.
+/// No guarda el nombre de usuario: solo el id que Instagram asigna para responder.
+model InteraccionRed {
+  id               String   @id @default(cuid())
+  municipioId      String
+  /// COMENTARIO o MENSAJE.
+  canal            String
+  /// Id del comentario o del mensaje en Instagram: evita responder dos veces.
+  igId             String   @unique
+  /// Id de quien escribió (asignado por Instagram para esta cuenta).
+  autorIgId        String
+  /// Publicación comentada, si es una de las nuestras.
+  mediaId          String?
+  origenTipo       String?
+  origenId         String?
+  texto            String
+  intencion        String
+  respuestaPublica String?
+  respuestaPrivada String?
+  /// RESPONDIDA, SIN_RESPUESTA (apagado o sin nada que decir) o ERROR.
+  estado           String
+  error            String?
+  creadaEn         DateTime @default(now())
+
+  @@index([municipioId, creadaEn])
 }

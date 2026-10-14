@@ -47,9 +47,38 @@ chat: van solo en las variables de entorno de Netlify y en `.env.produccion`
    | `SESION_SECRETO` | una frase larga al azar (firma las sesiones del panel) |
    | `APP_URL` | la dirección del sitio en Netlify, por ejemplo `https://….netlify.app` |
    | `INSTAGRAM_USER_ID`, `INSTAGRAM_ACCESS_TOKEN` | los de la cuenta de Instagram (opcional) |
+   | `INSTAGRAM_APP_SECRET`, `INSTAGRAM_WEBHOOK_TOKEN` | para responder comentarios y mensajes (opcional; vea abajo) |
    | `BREVO_API_KEY` o `SMTP_…`, y `CORREO_REMITENTE` | para enviar correos (opcional) |
 
 4. Publique (**Deploy**). Las fotos de los vecinos se guardan solas en Netlify Blobs.
+
+## Respuestas automáticas en Instagram (opcional)
+
+La plataforma puede responder comentarios y mensajes de Instagram con el enlace
+que corresponde (el operativo, el aviso o la adopción). Para eso, Instagram
+tiene que avisarle cada comentario y mensaje a una dirección del sitio (el
+«webhook»). Se configura en Meta for Developers, en la app de Instagram:
+
+1. **Permisos:** agrega `instagram_business_manage_comments` e
+   `instagram_business_manage_messages` y genera un token nuevo con ellos
+   (reemplaza `INSTAGRAM_ACCESS_TOKEN` en Netlify).
+2. **Variables en Netlify:**
+   - `INSTAGRAM_APP_SECRET`: el «App Secret» (Configuración de la app → Básica).
+   - `INSTAGRAM_WEBHOOK_TOKEN`: un texto que inventes, por ejemplo una frase
+     larga al azar.
+3. **Webhook** (Instagram → Configuración de la API → Webhooks):
+   - URL de devolución: `https://<tu-sitio>.netlify.app/api/instagram/webhook`
+   - Token de verificación: el mismo `INSTAGRAM_WEBHOOK_TOKEN`.
+   - Suscribe los campos `comments` y `messages`, y activa la suscripción de
+     la cuenta de Instagram de la municipalidad.
+4. **Modo de la app:** Meta solo envía avisos con la app en modo **Live**; los
+   comentarios exigen además **acceso avanzado** (revisión de la app) y la
+   verificación del negocio. Mientras tanto, solo funcionan con las cuentas
+   agregadas como probadoras. La cuenta de Instagram debe ser pública.
+5. En el panel, **Instagram → Responder comentarios y mensajes** (administración).
+
+Límites de Meta: una respuesta privada por comentario, hasta 7 días después; y
+los mensajes directos se responden dentro de las 24 horas.
 
 ## 3. Actualizaciones
 

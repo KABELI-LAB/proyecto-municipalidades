@@ -477,6 +477,20 @@ Instagram a la vez; no hay una bandeja de redes aparte.
   - Lista «Sin publicar en Instagram»: contenido público que aún no sale o
     cuyo intento falló, con «Publicar en Instagram» o «Reintentar».
   - «Incluir datos de demostración», solo para pruebas.
+  - «Responder comentarios y mensajes» (apagado por omisión) y la lista de lo
+    último que escribieron y qué se respondió.
+- **Respuestas automáticas** (reglas por palabras clave, sin inteligencia
+  artificial; `src/dominio/respuestas.ts`): Instagram avisa cada comentario y
+  mensaje al webhook `/api/instagram/webhook` (firma de Meta validada).
+  - Comentario en una publicación nuestra: respuesta pública breve («Te
+    enviamos la información por mensaje privado») y, por privado, el enlace
+    exacto. Ejemplos: el operativo comentado; en un «Se busca», el aviso para
+    «Informar que la vi», sin publicar dónde está el animal.
+  - Mensaje directo: el enlace de la sección según la consulta (operativos,
+    perdí o vi una mascota, adopción, servicios).
+  - Un animal herido o en peligro siempre lleva a SOS Mascotas.
+  - Cada comentario o mensaje se responde una vez; nunca a la propia cuenta.
+    No se guarda el nombre de usuario.
 
 - **Qué sale a Instagram:** los avisos de mascotas perdidas y avistadas al
   aceptarlos, los operativos al publicarlos y las fichas de adopción al

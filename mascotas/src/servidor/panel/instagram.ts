@@ -7,6 +7,7 @@ import { FICHA_PUBLICA, PUBLICACION_CON_FOTO } from "@/servidor/conFoto";
 import { db } from "@/servidor/db";
 import { fechaCorta } from "@/servidor/formato";
 import { estadoIntegracion } from "@/servidor/redes/instagram";
+import { faltantesRespuestas } from "@/servidor/redes/respuestas";
 import { estadosInstagram, type EstadoInstagram } from "@/servidor/redes/servicio";
 
 export type PendienteInstagram = { tipo: TipoRed; id: string; titulo: string; detalle: string; estado?: EstadoInstagram };
@@ -16,8 +17,14 @@ const LIMITE = 12;
 
 export async function configuracionInstagram() {
   const municipio = municipioActivo();
-  const m = await db.municipio.findUnique({ where: { id: municipio.id }, select: { redesPublicarAuto: true, redesIncluirDemo: true } });
-  return { automatica: m?.redesPublicarAuto ?? true, incluirDemo: m?.redesIncluirDemo ?? false, integracion: estadoIntegracion() };
+  const m = await db.municipio.findUnique({ where: { id: municipio.id }, select: { redesPublicarAuto: true, redesIncluirDemo: true, redesResponderAuto: true } });
+  return {
+    automatica: m?.redesPublicarAuto ?? true,
+    incluirDemo: m?.redesIncluirDemo ?? false,
+    responder: m?.redesResponderAuto ?? false,
+    integracion: estadoIntegracion(),
+    faltanParaResponder: faltantesRespuestas(),
+  };
 }
 
 /**
