@@ -14,13 +14,21 @@ import { municipioActivo } from "@/lib/municipio";
 import { db } from "@/servidor/db";
 import { enviarMensaje, responderComentario, responderEnPrivado, urlPublica } from "./instagram";
 
-/** Firma de Meta (X-Hub-Signature-256 = sha256=<hmac del cuerpo con el App Secret>). */
+/**
+ * Firma de Meta (X-Hub-Signature-256 = sha256=<hmac del cuerpo con la clave
+ * secreta>). Meta tiene dos claves: la de la app de Instagram
+ * (INSTAGRAM_APP_SECRET) y la de la app de Meta que la contiene
+ * (META_APP_SECRET, opcional). La documentación no precisa cuál firma con el
+ * inicio de sesión de Instagram, así que se acepta cualquiera de las dos.
+ */
 export function firmaValida(cuerpo: string, firma: string | null): boolean {
-  const secreto = process.env.INSTAGRAM_APP_SECRET?.trim();
-  if (!secreto || !firma?.startsWith("sha256=")) return false;
-  const esperada = Buffer.from(`sha256=${createHmac("sha256", secreto).update(cuerpo, "utf8").digest("hex")}`);
+  const secretos = [process.env.INSTAGRAM_APP_SECRET, process.env.META_APP_SECRET].map((s) => s?.trim()).filter((s): s is string => Boolean(s));
+  if (!secretos.length || !firma?.startsWith("sha256=")) return false;
   const recibida = Buffer.from(firma);
-  return esperada.length === recibida.length && timingSafeEqual(esperada, recibida);
+  return secretos.some((secreto) => {
+    const esperada = Buffer.from(`sha256=${createHmac("sha256", secreto).update(cuerpo, "utf8").digest("hex")}`);
+    return esperada.length === recibida.length && timingSafeEqual(esperada, recibida);
+  });
 }
 
 /** Qué falta para responder (además de las credenciales de publicación). */

@@ -17,7 +17,11 @@ export function GET(request: Request) {
 
 export async function POST(request: Request) {
   const cuerpo = await request.text();
-  if (!firmaValida(cuerpo, request.headers.get("x-hub-signature-256"))) return new Response("Firma no válida", { status: 401 });
+  if (!firmaValida(cuerpo, request.headers.get("x-hub-signature-256"))) {
+    // Queda en el registro de Netlify para diagnosticar (sin claves ni contenido).
+    console.warn("Webhook de Instagram: aviso rechazado por firma no válida. Revisa INSTAGRAM_APP_SECRET y META_APP_SECRET.");
+    return new Response("Firma no válida", { status: 401 });
+  }
   let aviso: unknown;
   try {
     aviso = JSON.parse(cuerpo);

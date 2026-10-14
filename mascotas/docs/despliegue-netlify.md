@@ -47,7 +47,7 @@ chat: van solo en las variables de entorno de Netlify y en `.env.produccion`
    | `SESION_SECRETO` | una frase larga al azar (firma las sesiones del panel) |
    | `APP_URL` | la dirección del sitio en Netlify, por ejemplo `https://….netlify.app` |
    | `INSTAGRAM_USER_ID`, `INSTAGRAM_ACCESS_TOKEN` | los de la cuenta de Instagram (opcional) |
-   | `INSTAGRAM_APP_SECRET`, `INSTAGRAM_WEBHOOK_TOKEN` | para responder comentarios y mensajes (opcional; vea abajo) |
+   | `INSTAGRAM_APP_SECRET`, `META_APP_SECRET`, `INSTAGRAM_WEBHOOK_TOKEN` | para responder comentarios y mensajes (opcional; vea abajo) |
    | `BREVO_API_KEY` o `SMTP_…`, y `CORREO_REMITENTE` | para enviar correos (opcional) |
 
 4. Publique (**Deploy**). Las fotos de los vecinos se guardan solas en Netlify Blobs.
@@ -63,7 +63,11 @@ tiene que avisarle cada comentario y mensaje a una dirección del sitio (el
    `instagram_business_manage_messages` y genera un token nuevo con ellos
    (reemplaza `INSTAGRAM_ACCESS_TOKEN` en Netlify).
 2. **Variables en Netlify:**
-   - `INSTAGRAM_APP_SECRET`: el «App Secret» (Configuración de la app → Básica).
+   - `INSTAGRAM_APP_SECRET`: la «Clave secreta de la aplicación de Instagram»
+     (Casos de uso → API de Instagram → Configuración de la API).
+   - `META_APP_SECRET` (opcional): la «Clave secreta de la aplicación» de Meta
+     (Configuración de la app → Información básica). Se acepta cualquiera de las
+     dos, porque Meta no precisa cuál firma los avisos.
    - `INSTAGRAM_WEBHOOK_TOKEN`: un texto que inventes, por ejemplo una frase
      larga al azar.
 3. **Webhook** (Instagram → Configuración de la API → Webhooks):

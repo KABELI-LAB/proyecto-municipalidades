@@ -11,7 +11,7 @@ import { crearBaseTemporal } from "@/pruebas/baseTemporal";
 
 vi.mock("next/cache", () => ({ revalidatePath: () => {} }));
 
-const ENTORNO = ["INSTAGRAM_USER_ID", "INSTAGRAM_ACCESS_TOKEN", "APP_URL", "INSTAGRAM_APP_SECRET", "INSTAGRAM_WEBHOOK_TOKEN"] as const;
+const ENTORNO = ["INSTAGRAM_USER_ID", "INSTAGRAM_ACCESS_TOKEN", "APP_URL", "INSTAGRAM_APP_SECRET", "META_APP_SECRET", "INSTAGRAM_WEBHOOK_TOKEN"] as const;
 const guardado = Object.fromEntries(ENTORNO.map((k) => [k, process.env[k]]));
 const CUENTA = "17841400000000000";
 
@@ -73,8 +73,13 @@ describe("webhook", () => {
     expect((await pedir("otro")).status).toBe(403);
     const cuerpo = JSON.stringify(comentario("c-0", "hola", "m-0"));
     expect((await POST(new Request("https://x/api", { method: "POST", body: cuerpo, headers: { "x-hub-signature-256": "sha256=falsa" } }))).status).toBe(401);
-    const firma = `sha256=${createHmac("sha256", "secreto-de-la-app").update(cuerpo).digest("hex")}`;
-    expect(respuestas.firmaValida(cuerpo, firma)).toBe(true);
+    const firma = (s: string) => `sha256=${createHmac("sha256", s).update(cuerpo).digest("hex")}`;
+    expect(respuestas.firmaValida(cuerpo, firma("secreto-de-la-app"))).toBe(true);
+    // También con la clave de la app de Meta, si está configurada.
+    process.env.META_APP_SECRET = "secreto-de-meta";
+    expect(respuestas.firmaValida(cuerpo, firma("secreto-de-meta"))).toBe(true);
+    expect(respuestas.firmaValida(cuerpo, firma("otra"))).toBe(false);
+    delete process.env.META_APP_SECRET;
   });
 });
 
