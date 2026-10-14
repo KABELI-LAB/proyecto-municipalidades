@@ -11,7 +11,7 @@ export default async function PaginaReportar({ searchParams }: { searchParams: P
     <div className={`contenedor ${estilos.pagina}`}>
       <div className={estilos.cabecera}>
         <h1>SOS Mascotas</h1>
-        <p>Cuéntenos qué le pasa al animal.</p>
+        <p>Cuéntanos qué le pasa al animal.</p>
       </div>
       <FormularioReporte sectores={lista} tipos={tipos} tipoInicial={tipos.some((t) => t.clave === tipo) ? tipo : undefined} />
     </div>

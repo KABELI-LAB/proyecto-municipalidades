@@ -20,8 +20,8 @@ import { notificar } from "@/servidor/notificaciones";
 import { obtenerPersona } from "@/servidor/personas";
 
 type Respuesta = { ok: true; mensaje: string; codigo?: string; id?: string } | { ok: false; mensaje: string; errores?: Errores };
-const REVISE = "Revise los datos marcados.";
-const ERROR = "No pudimos guardar el cambio. Intente nuevamente en unos minutos.";
+const REVISE = "Revisa los datos marcados.";
+const ERROR = "No pudimos guardar el cambio. Intenta nuevamente en unos minutos.";
 const NO_CUIDADOR = "No encontramos a un cuidador de este perro con ese RUT y código.";
 
 function revalidar() {
@@ -63,10 +63,10 @@ export async function registrarComunitario(entrada: FormData): Promise<Respuesta
   if (!e) return { ok: false, mensaje: REVISE };
   const r = esquemaRegistroComunitario.safeParse(e.valores);
   if (!r.success) return { ok: false, mensaje: REVISE, errores: validarCampos(esquemaRegistroComunitario, e.valores) };
-  if (!e.foto) return { ok: false, mensaje: REVISE, errores: { foto: "Agregue una foto: en el portal solo se muestran perros con foto." } };
+  if (!e.foto) return { ok: false, mensaje: REVISE, errores: { foto: "Agrega una foto: en el portal solo se muestran perros con foto." } };
   const d = r.data;
   const lugar = await lugarDelMunicipio(d.lugarId);
-  if (!lugar) return { ok: false, mensaje: REVISE, errores: { lugarId: "Elija un lugar de la lista." } };
+  if (!lugar) return { ok: false, mensaje: REVISE, errores: { lugarId: "Elige un lugar de la lista." } };
   const g = await guardarFoto(e.foto, "comunitarios");
   if (!g.ok) return { ok: false, mensaje: REVISE, errores: { foto: g.mensaje } };
   try {
@@ -95,7 +95,7 @@ export async function registrarComunitario(entrada: FormData): Promise<Respuesta
         tx,
         persona,
         `Publicamos a ${d.apodo}`,
-        `Gracias por registrar a ${d.apodo}. Ya está en el portal. Para actualizar su ficha o ver las novedades que le envíen, entre a Mis solicitudes con su RUT y el código ${codigo}.`,
+        `Gracias por registrar a ${d.apodo}. Ya está en el portal. Para actualizar su ficha o ver las novedades que te envíen, entra a Mis solicitudes con tu RUT y el código ${codigo}.`,
       );
       return { id: perro.id, codigo };
     });
@@ -135,7 +135,7 @@ export async function hacermeCargo(valores: unknown): Promise<Respuesta> {
         tx,
         persona,
         `Quedó a cargo de ${perro.apodo}`,
-        `Gracias por hacerse cargo de ${perro.apodo}. Para actualizar su ficha o ver las novedades que le envíen, entre a Mis solicitudes con su RUT y el código ${c.codigo}.`,
+        `Gracias por hacerte cargo de ${perro.apodo}. Para actualizar su ficha o ver las novedades que te envíen, entra a Mis solicitudes con tu RUT y el código ${c.codigo}.`,
         perro.loteDemoId,
       );
       return c.codigo;
@@ -193,7 +193,7 @@ export async function registrarVistoHoy(valores: unknown): Promise<Respuesta> {
     db.historialComunitario.create({ data: { perroId: c.perroId, accion: "Revisado por su cuidador", publico: true, detalle: c.codigo } }),
   ]);
   revalidar();
-  return { ok: true, mensaje: `Anotamos que vio a ${c.perro.apodo} hoy.` };
+  return { ok: true, mensaje: `Anotamos que viste a ${c.perro.apodo} hoy.` };
 }
 
 export type FichaParaEditar = { valores: Record<string, string>; lugares: { valor: string; texto: string; grupo: string }[] };
@@ -234,7 +234,7 @@ export async function actualizarFichaComunitario(entrada: FormData): Promise<Res
   const r = esquemaDatosComunitario.safeParse(e.valores);
   if (!r.success) return { ok: false, mensaje: REVISE, errores: validarCampos(esquemaDatosComunitario, e.valores) };
   const lugar = await lugarDelMunicipio(r.data.lugarId);
-  if (!lugar) return { ok: false, mensaje: REVISE, errores: { lugarId: "Elija un lugar de la lista." } };
+  if (!lugar) return { ok: false, mensaje: REVISE, errores: { lugarId: "Elige un lugar de la lista." } };
   let nueva: string | null = null;
   if (e.foto) {
     const g = await guardarFoto(e.foto, "comunitarios");
@@ -294,7 +294,7 @@ export async function marcarNovedadVista(valores: unknown): Promise<Respuesta> {
   await db.$transaction(async (tx) => {
     await tx.novedadComunitario.update({ where: { id: n.id }, data: { estado: "ACEPTADA", revisadaEn: new Date() } });
     await tx.historialComunitario.create({ data: { perroId: c.perroId, accion: "Novedad vista por su cuidador", detalle: `${n.codigo} · ${TIPO_NOVEDAD[n.tipo]}` } });
-    await notificar(tx, n.persona, "Su novedad llegó", `Quien cuida a ${c.perro.apodo} vio su novedad ${n.codigo}. Gracias por avisar.`, n.loteDemoId);
+    await notificar(tx, n.persona, "Tu novedad llegó", `Quien cuida a ${c.perro.apodo} vio tu novedad ${n.codigo}. Gracias por avisar.`, n.loteDemoId);
   });
   revalidar();
   return { ok: true, mensaje: "Marcamos la novedad como vista y avisamos a quien la envió." };

@@ -559,5 +559,5 @@ function leerAsignacion(carpeta: string): DAsignacion | null {
 }
 
 function falta(que: string, donde: string): never {
-  throw new Error(`Falta ${que} en ${donde}. Revise demo/datos/: la carga no inventa datos que no existen.`);
+  throw new Error(`Falta ${que} en ${donde}. Revisa demo/datos/: la carga no inventa datos que no existen.`);
 }

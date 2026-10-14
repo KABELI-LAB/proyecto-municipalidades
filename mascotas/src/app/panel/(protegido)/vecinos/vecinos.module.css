@@ -2,30 +2,34 @@
 .cifras {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
-  gap: var(--espacio-4);
+  gap: var(--space-4);
   margin: 0;
 }
 .cifras > div {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-1);
-  padding: var(--espacio-5);
-  background: var(--blanco);
-  border-radius: var(--radio-base);
+  gap: var(--space-1);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
 }
+/* Métrica del sistema (data/MetricCard): etiqueta secundaria y cifra en mono. */
 .cifras dt {
-  font-weight: var(--tipo-impresion-h2-peso);
-  color: var(--azul-institucional);
+  font-size: 15px;
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-secondary);
 }
 .cifras dd {
   margin: 0;
 }
 .cifra {
-  font-family: var(--font-titulos);
-  font-size: var(--tipo-impresion-h1-tamano);
-  font-weight: var(--tipo-impresion-h1-peso);
-  line-height: 1.1;
-  color: var(--azul-institucional);
+  font-family: var(--font-mono);
+  font-size: var(--type-data-size);
+  font-weight: var(--weight-medium);
+  line-height: var(--type-data-lh);
+  letter-spacing: var(--type-data-track);
+  color: var(--color-text);
 }
 
 /* Servicios pedidos: nombre, barra proporcional y cifra. */
@@ -33,7 +37,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-3);
+  gap: var(--space-3);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -42,7 +46,7 @@
   display: grid;
   grid-template-columns: 8rem minmax(0, 1fr) auto;
   align-items: center;
-  gap: var(--espacio-3);
+  gap: var(--space-3);
 }
 .pista {
   display: block;
@@ -50,8 +54,8 @@
 }
 .barra {
   display: block;
-  height: var(--espacio-3);
-  min-width: var(--espacio-1);
-  background: var(--celeste-rio);
-  border-radius: var(--radio-base);
+  height: 10px;
+  min-width: var(--space-1);
+  background: var(--blue-200);
+  border-radius: var(--radius-full);
 }

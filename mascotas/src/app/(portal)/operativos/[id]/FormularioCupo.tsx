@@ -26,13 +26,13 @@ type Props = {
   operativo: { fecha: string; horario: string; lugar: string };
 };
 
-const TITULOS = ["Servicio y mascota", "Sus datos", "Confirmar"] as const;
+const TITULOS = ["Servicio y mascota", "Tus datos", "Confirmar"] as const;
 const PASOS = [["servicioId", "especie", ...CAMPOS_ANIMAL], [...CAMPOS_PERSONA], []] as const;
 
 /** Ícono y una frase breve por servicio (claves del catálogo). */
 const SERVICIO: Record<string, { icono: NombreIcono; detalle: string }> = {
   esterilizacion: { icono: "corazon", detalle: "Evita camadas no deseadas." },
-  vacunacion: { icono: "servicio", detalle: "Cuida la salud de su mascota." },
+  vacunacion: { icono: "servicio", detalle: "Cuida la salud de tu mascota." },
   microchip: { icono: "documento", detalle: "Identificación permanente." },
 };
 
@@ -45,16 +45,16 @@ export function FormularioCupo({ operativoId, sectores, servicios, requisitos, l
   if (hecho) {
     const confirmado = hecho.estado === "CONFIRMADO";
     return (
-      <ResultadoTramite titulo={confirmado ? "¡Listo! Su cupo está confirmado" : "Quedó en lista de espera"} codigo={hecho.codigo}>
+      <ResultadoTramite titulo={confirmado ? "¡Listo! Tu cupo está confirmado" : "Quedó en lista de espera"} codigo={hecho.codigo}>
         {confirmado ? (
           <p>
-            {hecho.servicio}: {hecho.fecha}, {hecho.horario}, en {hecho.lugar.toLowerCase()}. Le enviaremos un recordatorio 48
-            horas antes; si no puede asistir, avísenos para liberar el cupo.
+            {hecho.servicio}: {hecho.fecha}, {hecho.horario}, en {hecho.lugar.toLowerCase()}. Te enviaremos un recordatorio 48
+            horas antes; si no puedes asistir, avísanos para liberar el cupo.
           </p>
         ) : (
           <p>
-            Los cupos de {hecho.servicio.toLowerCase()} están completos y usted quedó en el lugar {hecho.posicion} de la lista de
-            espera. Si se libera un cupo, le avisaremos.
+            Los cupos de {hecho.servicio.toLowerCase()} están completos y quedaste en el lugar {hecho.posicion} de la lista de
+            espera. Si se libera un cupo, te avisaremos.
           </p>
         )}
       </ResultadoTramite>
@@ -76,7 +76,7 @@ export function FormularioCupo({ operativoId, sectores, servicios, requisitos, l
       {t.paso === 0 && (
         <>
           <fieldset className={`${formulario.grupo} ${formulario.anchoCompleto}`} aria-describedby={`servicioId-ayuda${errores.servicioId ? " servicioId-error" : ""}`} aria-invalid={errores.servicioId ? true : undefined}>
-            <legend className={formulario.etiqueta}>¿Qué servicio necesita?</legend>
+            <legend className={formulario.etiqueta}>¿Qué servicio necesitas?</legend>
             <div className={estilos.opcionesServicio}>
               {servicios.map((s, i) => {
                 const info = SERVICIO[s.clave];
@@ -98,7 +98,7 @@ export function FormularioCupo({ operativoId, sectores, servicios, requisitos, l
               })}
             </div>
             <p id="servicioId-ayuda" className={formulario.ayuda}>
-              Elija un servicio por inscripción. Para otro servicio u otro animal, inscríbase de nuevo.
+              Elige un servicio por inscripción. Para otro servicio u otro animal, inscríbete de nuevo.
             </p>
             {errores.servicioId && (
               <p id="servicioId-error" className={formulario.error}>
@@ -107,13 +107,13 @@ export function FormularioCupo({ operativoId, sectores, servicios, requisitos, l
               </p>
             )}
           </fieldset>
-          <CampoOpciones id="especie" etiqueta="Su mascota es" valor={v.especie} alCambiar={(x) => cambiar("especie", x)} error={errores.especie} opciones={OPCIONES_ESPECIE_ATENDIDA} ayuda={AYUDA_ESPECIE_ATENDIDA} />
+          <CampoOpciones id="especie" etiqueta="Tu mascota es" valor={v.especie} alCambiar={(x) => cambiar("especie", x)} error={errores.especie} opciones={OPCIONES_ESPECIE_ATENDIDA} ayuda={AYUDA_ESPECIE_ATENDIDA} />
           {v.especie && <BloqueAnimal valores={v} errores={errores} cambiar={cambiar} />}
         </>
       )}
       {t.paso === 1 && (
         <>
-          <p className={formulario.ayuda}>Los usamos solo para su inscripción y para avisarle. No se publican.</p>
+          <p className={formulario.ayuda}>Los usamos solo para tu inscripción y para avisarte. No se publican.</p>
           <BloquePersona valores={v} errores={errores} cambiar={cambiar} sectores={sectores} />
         </>
       )}
@@ -144,7 +144,7 @@ export function FormularioCupo({ operativoId, sectores, servicios, requisitos, l
             <div className={estilos.grupoCabecera}>
               <h3 id="resumen-datos">
                 <Icono nombre="documento" tamano={20} />
-                Sus datos
+                Tus datos
               </h3>
               <button type="button" className={estilos.editar} onClick={() => t.irA(1)}>
                 Editar

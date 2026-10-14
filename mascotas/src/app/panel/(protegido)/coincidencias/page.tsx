@@ -76,10 +76,10 @@ export default async function CoincidenciasPanel({ searchParams }: { searchParam
                     accion={registrarReencuentro.bind(null, c.id)}
                     texto="Registrar reencuentro"
                     variante={c.estado === "VALIDADA" ? "primario" : "secundario"}
-                    confirmar="Ambas publicaciones quedarán como reencontradas y dejarán de mostrarse. ¿Confirma que el animal volvió con su familia?"
+                    confirmar="Ambas publicaciones quedarán como reencontradas y dejarán de mostrarse. ¿Confirmas que el animal volvió con su familia?"
                     textoConfirmar="Sí, registrar"
                   />
-                  <BotonAccion accion={descartarCoincidencia.bind(null, c.id)} texto="Descartar" confirmar="Esta coincidencia dejará de sugerirse. ¿Desea descartarla?" textoConfirmar="Sí, descartar" />
+                  <BotonAccion accion={descartarCoincidencia.bind(null, c.id)} texto="Descartar" confirmar="Esta coincidencia dejará de sugerirse. ¿Quieres descartarla?" textoConfirmar="Sí, descartar" />
                 </div>
               )}
             </section>

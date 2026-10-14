@@ -55,7 +55,7 @@ export function EntradaCuidador({ perroId }: { perroId: string }) {
 
   return (
     <form className={`${formulario.formulario} ${formulario.formularioCorto}`} onSubmit={entrar} noValidate aria-label="Entrar como cuidador">
-      <p>Use el RUT y el código de cuidador que recibió al registrarlo o al hacerse cargo. También los encuentra en Mis solicitudes.</p>
+      <p>Usa el RUT y el código de cuidador que recibiste al registrarlo o al hacerte cargo. También los encuentras en Mis solicitudes.</p>
       <div className={formulario.fila}>
         <CampoTexto id="rut" etiqueta="RUT" valor={v.rut} alCambiar={(x) => setV((s) => ({ ...s, rut: x }))} ayuda="Por ejemplo, 12.345.678-5." maxLength={12} />
         <CampoTexto id="codigo" etiqueta="Código de cuidador" valor={v.codigo} alCambiar={(x) => setV((s) => ({ ...s, codigo: x.toUpperCase() }))} ayuda="Por ejemplo, TR-4043." maxLength={7} />

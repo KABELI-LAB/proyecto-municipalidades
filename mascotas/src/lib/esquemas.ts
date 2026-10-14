@@ -1,5 +1,5 @@
 // Validación de los trámites ciudadanos. Se usa en el navegador (paso a paso)
-// y de nuevo en el servidor antes de guardar. Mensajes en trato de usted.
+// y de nuevo en el servidor antes de guardar. Mensajes en trato de tú.
 import { z } from "zod";
 import { EDADES } from "@/dominio/etiquetas";
 import { FORMATO_CODIGO } from "@/dominio/codigo";
@@ -7,9 +7,9 @@ import { MESES_MAXIMOS } from "@/dominio/propuestas";
 import { normalizarRut } from "@/dominio/rut";
 
 const texto = (min: number, max: number, mensaje: string) =>
-  z.string().trim().min(min, mensaje).max(max, `Use como máximo ${max} caracteres.`);
+  z.string().trim().min(min, mensaje).max(max, `Usa como máximo ${max} caracteres.`);
 const eleccion = (mensaje: string) => z.string().min(1, mensaje);
-const opcional = (max: number) => z.string().trim().max(max, `Use como máximo ${max} caracteres.`);
+const opcional = (max: number) => z.string().trim().max(max, `Usa como máximo ${max} caracteres.`);
 
 const ESPECIES = ["PERRO", "GATO", "OTRA"] as const;
 const SEXOS = ["MACHO", "HEMBRA", "DESCONOCIDO"] as const;
@@ -23,12 +23,12 @@ export const TIPOS_VIVIENDA = ["casa con patio", "casa sin patio", "departamento
 
 // ── Datos de la persona ──
 const persona = {
-  nombre: texto(3, 100, "Indique su nombre y apellido."),
-  rut: z.string().trim().refine((v) => normalizarRut(v) !== null, "Revise el RUT: el dígito verificador no coincide."),
+  nombre: texto(3, 100, "Indica tu nombre y apellido."),
+  rut: z.string().trim().refine((v) => normalizarRut(v) !== null, "Revisa el RUT: el dígito verificador no coincide."),
   telefono: opcional(20),
   correo: opcional(120),
   // Lista cerrada: de la localidad se deduce el sector (docs/concepto.md, sección 6).
-  localidadId: eleccion("Elija su localidad de la lista."),
+  localidadId: eleccion("Elige tu localidad de la lista."),
 };
 
 /**
@@ -40,7 +40,7 @@ const rutOpcional = z
   .string()
   .trim()
   .default("")
-  .refine((v) => v === "" || normalizarRut(v) !== null, "Revise el RUT: el dígito verificador no coincide.");
+  .refine((v) => v === "" || normalizarRut(v) !== null, "Revisa el RUT: el dígito verificador no coincide.");
 /** Mismos datos de la persona, con RUT opcional. */
 const personaSinRut = { ...persona, rut: rutOpcional };
 
@@ -51,13 +51,13 @@ const SIEMPRE = { when: () => true };
 /** Teléfono o correo: al menos uno, y bien escrito. */
 function contacto(d: { telefono: string; correo: string }, ctx: z.RefinementCtx) {
   if (!d.telefono && !d.correo) {
-    ctx.addIssue({ code: "custom", path: ["telefono"], message: "Indique un teléfono o un correo para avisarle." });
+    ctx.addIssue({ code: "custom", path: ["telefono"], message: "Indica un teléfono o un correo para avisarte." });
   }
   if (d.telefono && !telefonoValido(d.telefono)) {
-    ctx.addIssue({ code: "custom", path: ["telefono"], message: "Escriba el teléfono con 9 dígitos, por ejemplo 9 1234 5678." });
+    ctx.addIssue({ code: "custom", path: ["telefono"], message: "Escribe el teléfono con 9 dígitos, por ejemplo 9 1234 5678." });
   }
   if (d.correo && !correoValido(d.correo)) {
-    ctx.addIssue({ code: "custom", path: ["correo"], message: "Revise el correo; por ejemplo, nombre@correo.cl." });
+    ctx.addIssue({ code: "custom", path: ["correo"], message: "Revisa el correo; por ejemplo, nombre@correo.cl." });
   }
 }
 
@@ -65,42 +65,42 @@ function contacto(d: { telefono: string; correo: string }, ctx: z.RefinementCtx)
 // Los operativos atienden perros y gatos. El tamaño solo se pregunta para perros:
 // en gatos casi no varía y no cambia la atención.
 const animal = {
-  especie: z.enum(["PERRO", "GATO"], "Indique si es perro o gato."),
+  especie: z.enum(["PERRO", "GATO"], "Indica si es perro o gato."),
   nombreAnimal: opcional(40),
-  sexo: z.enum(SEXOS, "Indique el sexo o elija «No sé»."),
+  sexo: z.enum(SEXOS, "Indica el sexo o elige «No sé»."),
   tamano: z.enum([...TAMANOS, ""]),
-  edad: z.enum(EDADES.map((e) => e.valor) as [string, ...string[]], "Indique la edad aproximada."),
+  edad: z.enum(EDADES.map((e) => e.valor) as [string, ...string[]], "Indica la edad aproximada."),
 };
 
 function tamanoDePerro(d: { especie: string; tamano: string }, ctx: z.RefinementCtx) {
   if (d.especie === "PERRO" && !d.tamano) {
-    ctx.addIssue({ code: "custom", path: ["tamano"], message: "Indique el tamaño del perro." });
+    ctx.addIssue({ code: "custom", path: ["tamano"], message: "Indica el tamaño del perro." });
   }
 }
 
 export const esquemaServicio = z
-  .object({ servicioId: eleccion("Elija el servicio que necesita."), ...animal, ...personaSinRut })
+  .object({ servicioId: eleccion("Elige el servicio que necesitas."), ...animal, ...personaSinRut })
   .superRefine(contacto, SIEMPRE)
   .superRefine(tamanoDePerro, SIEMPRE);
 
 export const esquemaCupo = z
-  .object({ operativoId: z.string().min(1), servicioId: eleccion("Elija un servicio."), ...animal, ...persona })
+  .object({ operativoId: z.string().min(1), servicioId: eleccion("Elige un servicio."), ...animal, ...persona })
   .superRefine(contacto, SIEMPRE)
   .superRefine(tamanoDePerro, SIEMPRE);
 
 export const esquemaReporte = z
   .object({
-    tipo: eleccion("Elija qué situación quiere informar."), // clave del catálogo de tipos de reporte
+    tipo: eleccion("Elige qué situación quieres informar."), // clave del catálogo de tipos de reporte
     especie: z.enum([...ESPECIES, ""]),
-    cantidad: z.enum(["UNO", "DOS_A_CINCO", "MAS_DE_CINCO"], "Indique cuántos animales hay."),
+    cantidad: z.enum(["UNO", "DOS_A_CINCO", "MAS_DE_CINCO"], "Indica cuántos animales hay."),
     sigueEnLugar: z.enum(["SI", "NO", "NO_SE", ""]),
-    descripcion: texto(15, 600, "Describa la situación en al menos 15 caracteres."),
+    descripcion: texto(15, 600, "Describe la situación en al menos 15 caracteres."),
     ...personaSinRut,
   })
   .superRefine(contacto, SIEMPRE)
   .superRefine((d, ctx) => {
     if (PREGUNTA_SI_SIGUE.includes(d.tipo) && !d.sigueEnLugar) {
-      ctx.addIssue({ code: "custom", path: ["sigueEnLugar"], message: "Indique si el animal sigue en el lugar o elija «No sé»." });
+      ctx.addIssue({ code: "custom", path: ["sigueEnLugar"], message: "Indica si el animal sigue en el lugar o elige «No sé»." });
     }
   }, SIEMPRE);
 
@@ -109,24 +109,24 @@ export const PREGUNTA_SI_SIGUE: readonly string[] = ["animal herido", "maltrato 
 
 export const esquemaPublicacion = z
   .object({
-    tipo: z.enum(["PERDIDA", "ENCONTRADA"], "Indique si perdió o encontró una mascota."),
-    especie: z.enum(ESPECIES, "Indique la especie."),
+    tipo: z.enum(["PERDIDA", "ENCONTRADA"], "Indica si perdiste o encontraste una mascota."),
+    especie: z.enum(ESPECIES, "Indica la especie."),
     // Perros y gatos: del catálogo de colores (se revisa en el servidor). Otras especies: texto libre.
-    colorPrincipal: texto(3, 40, "Indique el color principal."),
-    tamano: z.enum(TAMANOS, "Indique el tamaño."),
-    sexo: z.enum(SEXOS, "Indique el sexo o elija «No se sabe»."),
+    colorPrincipal: texto(3, 40, "Indica el color principal."),
+    tamano: z.enum(TAMANOS, "Indica el tamaño."),
+    sexo: z.enum(SEXOS, "Indica el sexo o elige «No se sabe»."),
     nombreAnimal: opcional(40),
-    collar: z.enum(["SI", "NO", "NO_SE"], "Indique si llevaba collar o elija «No sé»."),
+    collar: z.enum(["SI", "NO", "NO_SE"], "Indica si llevaba collar o elige «No sé»."),
     colorCollar: opcional(40),
     microchip: z.enum(["SI", "NO", "NO_SE", ""]),
     senas: opcional(300),
-    fechaEvento: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Indique la fecha."),
+    fechaEvento: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Indica la fecha."),
     /** «si»: con quien informa; «lugar»: retenida en otro lugar; «no»: solo la vio. */
     resguardada: z.enum(["si", "lugar", "no", ""]),
     /** Localidad donde está resguardada (se muestra con su sector). */
     resguardoLocalidadId: z.string().trim().default(""),
     /** Qué lugar es, sin dirección ni teléfono («en una veterinaria del centro»). */
-    resguardoDetalle: opcional(120).default("").refine((t) => !/\d[\d\s.-]{6,}\d/.test(t), "No escriba teléfonos: el contacto es a través de la plataforma."),
+    resguardoDetalle: opcional(120).default("").refine((t) => !/\d[\d\s.-]{6,}\d/.test(t), "No escribas teléfonos: el contacto es a través de la plataforma."),
     /** Avistamiento: aviso de pérdida al que quien la vio lo vincula (posible coincidencia, sin certeza). */
     vinculo: z.string().trim().default(""),
     // Obligatorio solo al reportar una pérdida: con él, el dueño gestiona su aviso en Mis solicitudes.
@@ -135,19 +135,19 @@ export const esquemaPublicacion = z
   .superRefine(contacto, SIEMPRE)
   .superRefine((d, ctx) => {
     if (d.tipo === "PERDIDA" && !d.rut) {
-      ctx.addIssue({ code: "custom", path: ["rut"], message: "Indique su RUT: con él podrá revisar y cerrar su aviso." });
+      ctx.addIssue({ code: "custom", path: ["rut"], message: "Indica tu RUT: con él podrás revisar y cerrar tu aviso." });
     }
     if (d.tipo === "ENCONTRADA" && !d.resguardada) {
-      ctx.addIssue({ code: "custom", path: ["resguardada"], message: "Indique si el animal está resguardado." });
+      ctx.addIssue({ code: "custom", path: ["resguardada"], message: "Indica si el animal está resguardado." });
     }
     if (d.tipo === "ENCONTRADA" && (d.resguardada === "si" || d.resguardada === "lugar") && !d.resguardoLocalidadId) {
-      ctx.addIssue({ code: "custom", path: ["resguardoLocalidadId"], message: "Indique la localidad donde está resguardada." });
+      ctx.addIssue({ code: "custom", path: ["resguardoLocalidadId"], message: "Indica la localidad donde está resguardada." });
     }
     if (d.tipo === "ENCONTRADA" && d.resguardada === "lugar" && !d.resguardoDetalle) {
-      ctx.addIssue({ code: "custom", path: ["resguardoDetalle"], message: "Cuente brevemente qué lugar es, por ejemplo «una veterinaria»." });
+      ctx.addIssue({ code: "custom", path: ["resguardoDetalle"], message: "Cuenta brevemente qué lugar es, por ejemplo «una veterinaria»." });
     }
     if (d.tipo === "PERDIDA" && !d.microchip) {
-      ctx.addIssue({ code: "custom", path: ["microchip"], message: "Indique si tiene microchip o elija «No sé»." });
+      ctx.addIssue({ code: "custom", path: ["microchip"], message: "Indica si tiene microchip o elige «No sé»." });
     }
   }, SIEMPRE);
 
@@ -162,21 +162,21 @@ export const esquemaPropuesta = z
   .object({
     corregir: z.union([z.literal(""), z.string().trim().toUpperCase().regex(FORMATO_CODIGO)]).default(""),
     nombreAnimal: opcional(40),
-    especie: z.enum(ESPECIES, "Indique la especie."),
-    sexo: z.enum(SEXOS, "Indique el sexo o elija «No se sabe»."),
+    especie: z.enum(ESPECIES, "Indica la especie."),
+    sexo: z.enum(SEXOS, "Indica el sexo o elige «No se sabe»."),
     // Meses («NO_SE» si no se conoce): el formulario la pide como un número en años o meses.
     edad: z
       .string()
       .trim()
-      .refine((x) => x === "NO_SE" || (/^\d+$/.test(x) && Number(x) <= MESES_MAXIMOS), "Escriba la edad aproximada o elija «No se sabe»."),
-    tamano: z.enum([...TAMANOS, "NO_SE"], "Indique el tamaño o elija «No sé»."),
-    esterilizado: SI_NO_NO_SE("Indique si está esterilizado o elija «No sé»."),
-    vacunas: SI_NO_NO_SE("Indique si tiene sus vacunas al día o elija «No sé»."),
-    microchip: SI_NO_NO_SE("Indique si tiene microchip o elija «No sé»."),
+      .refine((x) => x === "NO_SE" || (/^\d+$/.test(x) && Number(x) <= MESES_MAXIMOS), "Escribe la edad aproximada o elige «No se sabe»."),
+    tamano: z.enum([...TAMANOS, "NO_SE"], "Indica el tamaño o elige «No sé»."),
+    esterilizado: SI_NO_NO_SE("Indica si está esterilizado o elige «No sé»."),
+    vacunas: SI_NO_NO_SE("Indica si tiene sus vacunas al día o elige «No sé»."),
+    microchip: SI_NO_NO_SE("Indica si tiene microchip o elige «No sé»."),
     // Un solo texto opcional: carácter, salud, convivencia y qué hogar le vendría bien.
     caracter: opcional(800),
-    relacion: z.enum(["PROPIO", "RESCATADO", "HOGAR_TEMPORAL", "COMUNITARIO", "OTRA"], "Indique su relación con el animal."),
-    autoriza: z.literal("SI", "Debe declarar que puede darlo en adopción para enviar la propuesta."),
+    relacion: z.enum(["PROPIO", "RESCATADO", "HOGAR_TEMPORAL", "COMUNITARIO", "OTRA"], "Indica tu relación con el animal."),
+    autoriza: z.literal("SI", "Debes declarar que puedes darlo en adopción para enviar la propuesta."),
     ...persona,
   })
   .superRefine(contacto, SIEMPRE);
@@ -187,15 +187,15 @@ export const esquemaPropuesta = z
  * Mis solicitudes). La ubicación es un lugar público de referencia, nunca un domicilio.
  */
 export const esquemaDatosComunitario = z.object({
-  apodo: texto(2, 60, "Indique cómo lo conocen en el barrio."),
-  lugarId: eleccion("Elija el lugar donde suele estar."),
-  sexo: z.enum(SEXOS, "Indique el sexo o elija «No se sabe»."),
-  tamano: z.enum([...TAMANOS, "NO_SE"], "Indique el tamaño o elija «No se sabe»."),
+  apodo: texto(2, 60, "Indica cómo lo conocen en el barrio."),
+  lugarId: eleccion("Elige el lugar donde suele estar."),
+  sexo: z.enum(SEXOS, "Indica el sexo o elige «No se sabe»."),
+  tamano: z.enum([...TAMANOS, "NO_SE"], "Indica el tamaño o elige «No se sabe»."),
   colorPrincipal: opcional(40),
-  rasgos: opcional(160).refine((t) => !/\d[\d\s.-]{6,}\d/.test(t), "No escriba teléfonos ni direcciones."),
-  esterilizado: SI_NO_NO_SE("Indique si está esterilizado o elija «No sé»."),
-  vacunas: SI_NO_NO_SE("Indique si tiene vacunas al día o elija «No sé»."),
-  microchip: SI_NO_NO_SE("Indique si tiene microchip o elija «No sé»."),
+  rasgos: opcional(160).refine((t) => !/\d[\d\s.-]{6,}\d/.test(t), "No escribas teléfonos ni direcciones."),
+  esterilizado: SI_NO_NO_SE("Indica si está esterilizado o elige «No sé»."),
+  vacunas: SI_NO_NO_SE("Indica si tiene vacunas al día o elige «No sé»."),
+  microchip: SI_NO_NO_SE("Indica si tiene microchip o elige «No sé»."),
 });
 const cuidador = { nombre: persona.nombre, rut: persona.rut, telefono: persona.telefono, correo: persona.correo };
 export const esquemaRegistroComunitario = esquemaDatosComunitario.extend(cuidador).superRefine(contacto, SIEMPRE);
@@ -209,8 +209,8 @@ export const esquemaCuidarComunitario = z.object({ perroId: z.string().min(1), .
 export const esquemaNovedad = z
   .object({
     perroId: z.string().min(1),
-    tipo: z.enum(["SALUD", "NO_ESTA", "ALIMENTACION", "CORRECCION", "OTRA"], "Elija qué quiere informar."),
-    texto: texto(10, 600, "Cuéntenos la novedad en al menos 10 caracteres."),
+    tipo: z.enum(["SALUD", "NO_ESTA", "ALIMENTACION", "CORRECCION", "OTRA"], "Elige qué quieres informar."),
+    texto: texto(10, 600, "Cuéntanos la novedad en al menos 10 caracteres."),
     ...personaSinRut,
   })
   .superRefine(contacto, SIEMPRE);
@@ -219,9 +219,9 @@ export const esquemaPostulacion = z
   .object({
     fichaId: z.string().min(1),
     ...persona,
-    tipoVivienda: z.enum(TIPOS_VIVIENDA, "Elija el tipo de vivienda."),
-    experiencia: z.enum(["SI", "NO"], "Indique si ha tenido animales antes."),
-    tieneOtros: z.enum(["SI", "NO"], "Indique si hay otros animales en su hogar."),
+    tipoVivienda: z.enum(TIPOS_VIVIENDA, "Elige el tipo de vivienda."),
+    experiencia: z.enum(["SI", "NO"], "Indica si has tenido animales antes."),
+    tieneOtros: z.enum(["SI", "NO"], "Indica si hay otros animales en tu hogar."),
     otrosAnimales: opcional(100),
     // Animales propuestos por vecinos: el servidor exige «SI» (ver postularAdopcion).
     compartir: z.enum(["SI", ""]).default(""),
@@ -229,17 +229,17 @@ export const esquemaPostulacion = z
   .superRefine(contacto, SIEMPRE)
   .superRefine((d, ctx) => {
     if (d.tieneOtros === "SI" && (d.otrosAnimales ?? "").trim().length < 3) {
-      ctx.addIssue({ code: "custom", path: ["otrosAnimales"], message: "Cuéntenos qué animales tiene; por ejemplo, «un perro adulto»." });
+      ctx.addIssue({ code: "custom", path: ["otrosAnimales"], message: "Cuéntanos qué animales tienes; por ejemplo, «un perro adulto»." });
     }
   }, SIEMPRE);
 
 export const esquemaMensaje = z
   .object({
     publicacionId: z.string().min(1),
-    nombre: texto(3, 100, "Indique su nombre."),
+    nombre: texto(3, 100, "Indica tu nombre."),
     telefono: opcional(20),
     correo: opcional(120),
-    texto: texto(10, 500, "Escriba un mensaje de al menos 10 caracteres."),
+    texto: texto(10, 500, "Escribe un mensaje de al menos 10 caracteres."),
   })
   .superRefine(contacto, SIEMPRE);
 
@@ -249,7 +249,7 @@ export const esquemaConsulta = z.object({
     .string()
     .trim()
     .toUpperCase()
-    .regex(FORMATO_CODIGO, "Escriba el código tal como lo recibió, por ejemplo TR-4043."),
+    .regex(FORMATO_CODIGO, "Escribe el código tal como lo recibiste, por ejemplo TR-4043."),
 });
 
 export type Errores = Record<string, string>;

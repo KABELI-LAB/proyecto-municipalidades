@@ -1,25 +1,27 @@
+/* Tarjeta del sistema: blanco, borde 1 px Neutral 200, radio grande, sin sombra en reposo. */
 .tarjeta {
-  background: var(--blanco);
-  border-radius: var(--radio-base);
-  padding: var(--espacio-10);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
+  padding: var(--space-6);
 }
-/* Sobre fondo blanco la tarjeta necesita filete para separarse. */
+/* Se mantiene por compatibilidad: toda tarjeta ya lleva su borde. */
 .sobreBlanco {
-  border: var(--borde-filete) solid var(--gris-claro);
+  border-color: var(--color-border);
 }
 @media (max-width: 640px) {
   .tarjeta {
-    padding: var(--espacio-6);
+    padding: var(--space-5);
   }
 }
 
 .bloque {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
 }
 .bloque + .bloque {
-  margin-top: var(--espacio-5);
-  padding-top: var(--espacio-5);
-  border-top: var(--borde-filete) solid var(--gris-claro);
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: var(--border-width) solid var(--color-border);
 }

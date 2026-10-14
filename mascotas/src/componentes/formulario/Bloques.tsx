@@ -20,7 +20,7 @@ export function nombreLocalidad(sectores: SectorOpcion[], localidadId: string) {
 }
 
 /** Localidad de una lista cerrada, agrupada por sector. Nunca una dirección. */
-export function CampoLocalidad({ id = "localidadId", etiqueta, valor, alCambiar, error, sectores, ayuda = "Elija la localidad más cercana. No le pediremos su dirección." }: { id?: string; etiqueta: string; valor: string; alCambiar: (v: string) => void; error?: string; sectores: SectorOpcion[]; ayuda?: string }) {
+export function CampoLocalidad({ id = "localidadId", etiqueta, valor, alCambiar, error, sectores, ayuda = "Elige la localidad más cercana. No te pediremos tu dirección." }: { id?: string; etiqueta: string; valor: string; alCambiar: (v: string) => void; error?: string; sectores: SectorOpcion[]; ayuda?: string }) {
   return <CampoSelect id={id} etiqueta={etiqueta} valor={valor} alCambiar={alCambiar} error={error} ayuda={ayuda} opciones={opcionesLocalidad(sectores)} />;
 }
 
@@ -56,7 +56,7 @@ export function BloqueAnimal({ valores, errores, cambiar }: Props) {
  * `sinLocalidad`: el formulario ya pregunta la localidad en otro lugar (por ejemplo, dónde ocurre un reporte).
  * `rut`: «obligatorio» (cupos, adopción, pérdida), «opcional» (solicitar un servicio) o «no» (SOS, avistamiento, novedad).
  */
-export function BloquePersona({ valores, errores, cambiar, sectores, etiquetaLocalidad = "Localidad donde vive", sinLocalidad = false, rut = "obligatorio" }: Props & { sectores: SectorOpcion[]; etiquetaLocalidad?: string; sinLocalidad?: boolean; rut?: "obligatorio" | "opcional" | "no" }) {
+export function BloquePersona({ valores, errores, cambiar, sectores, etiquetaLocalidad = "Localidad donde vives", sinLocalidad = false, rut = "obligatorio" }: Props & { sectores: SectorOpcion[]; etiquetaLocalidad?: string; sinLocalidad?: boolean; rut?: "obligatorio" | "opcional" | "no" }) {
   return (
     <>
       <CampoTexto id="nombre" etiqueta="Nombre y apellido" valor={v(valores, "nombre")} alCambiar={(x) => cambiar("nombre", x)} error={errores.nombre} autoComplete="name" maxLength={100} />
@@ -67,7 +67,7 @@ export function BloquePersona({ valores, errores, cambiar, sectores, etiquetaLoc
           valor={v(valores, "rut")}
           alCambiar={(x) => cambiar("rut", x)}
           error={errores.rut}
-          ayuda={rut === "opcional" ? "Si lo indica, podrá revisar su trámite en Mis solicitudes." : "Por ejemplo, 12.345.678-5. Lo usará junto al código para revisar su trámite."}
+          ayuda={rut === "opcional" ? "Si lo indicas, podrás revisar tu trámite en Mis solicitudes." : "Por ejemplo, 12.345.678-5. Lo usarás junto al código para revisar tu trámite."}
           maxLength={12}
         />
       )}
@@ -75,7 +75,7 @@ export function BloquePersona({ valores, errores, cambiar, sectores, etiquetaLoc
         <CampoTexto id="telefono" etiqueta="Teléfono" tipo="tel" inputMode="tel" autoComplete="tel" valor={v(valores, "telefono")} alCambiar={(x) => cambiar("telefono", x)} error={errores.telefono} maxLength={20} />
         <CampoTexto id="correo" etiqueta="Correo" tipo="email" inputMode="email" autoComplete="email" valor={v(valores, "correo")} alCambiar={(x) => cambiar("correo", x)} error={errores.correo} maxLength={120} />
       </div>
-      <p className={estilos.ayuda}>Indique al menos un teléfono o un correo. No los mostraremos públicamente.</p>
+      <p className={estilos.ayuda}>Indica al menos un teléfono o un correo. No los mostraremos públicamente.</p>
       {!sinLocalidad && (
         <CampoLocalidad etiqueta={etiquetaLocalidad} valor={v(valores, "localidadId")} alCambiar={(x) => cambiar("localidadId", x)} error={errores.localidadId} sectores={sectores} />
       )}

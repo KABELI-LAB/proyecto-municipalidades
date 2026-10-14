@@ -36,7 +36,7 @@ export default async function ReportesPanel({ searchParams }: { searchParams: Pr
     <div className={`contenedor ${estilos.pagina}`}>
       <div className={estilos.cabecera}>
         <h1>Reportes</h1>
-        <p>Situaciones informadas en SOS Mascotas. Primero las que la persona percibió como urgentes; luego, las que llevan más tiempo esperando.</p>
+        <p>Situaciones informadas en SOS Mascotas, de la que lleva más tiempo esperando a la más reciente.</p>
         <details className={estilos.plegable}>
           <summary>Sector: {sector?.nombre ?? "Todos"}</summary>
           <form className={estilos.filtros} method="get" aria-label="Filtrar por sector">
@@ -130,7 +130,7 @@ export default async function ReportesPanel({ searchParams }: { searchParams: Pr
               {gestiona && (
                 <div className={estilos.accionesCabecera}>
                   {r.estado === "ABIERTO" && <BotonAccion accion={revisarReporte.bind(null, r.id)} texto="Pasar a revisión" variante="primario" />}
-                  {r.estado !== "CERRADO" && <BotonAccion accion={cerrarReporte.bind(null, r.id)} texto="Cerrar reporte" confirmar="Se avisará a quien reportó que su reporte fue revisado. ¿Desea cerrarlo?" textoConfirmar="Sí, cerrar" />}
+                  {r.estado !== "CERRADO" && <BotonAccion accion={cerrarReporte.bind(null, r.id)} texto="Cerrar reporte" confirmar="Se avisará a quien reportó que su reporte fue revisado. ¿Quieres cerrarlo?" textoConfirmar="Sí, cerrar" />}
                   {r.estado === "CERRADO" && <BotonAccion accion={reabrirReporte.bind(null, r.id)} texto="Volver a revisión" />}
                 </div>
               )}

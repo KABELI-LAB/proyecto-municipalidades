@@ -1,16 +1,21 @@
 @import "./tokens.css";
 
 /*
-  Escala de pantalla: usa los estilos del grupo «Impresión» en px.
-  En pantallas angostas h1 baja a 32 px (tamaño de h2). Propuesta pendiente
-  de validación: tokens.json no define todavía una escala web.
+  Base del sistema de diseño (design-system/tokens/base.css), adaptada:
+  Atkinson Hyperlegible Next y Mono las sirve next/font (src/app/layout.tsx)
+  con los nombres --fuente-sans y --fuente-mono. Cuerpo de 18 px.
+  En pantallas angostas los títulos bajan un paso de la escala.
 */
 :root {
-  --web-h1-tamano: var(--tipo-impresion-h1-tamano);
+  --font-sans: var(--fuente-sans), "Atkinson Hyperlegible Next", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--fuente-mono), "Atkinson Hyperlegible Mono", ui-monospace, monospace;
+  --web-h1-tamano: var(--type-h1-size);
+  --web-h2-tamano: var(--type-h2-size);
 }
 @media (max-width: 640px) {
   :root {
-    --web-h1-tamano: var(--tipo-impresion-h2-tamano);
+    --web-h1-tamano: var(--type-h2-size);
+    --web-h2-tamano: var(--type-h3-size);
   }
 }
 
@@ -26,70 +31,114 @@ html {
 
 body {
   margin: 0;
-  background: var(--marfil-institucional);
-  color: var(--gris-texto);
-  font-family: var(--tipo-impresion-cuerpo-familia);
-  font-size: var(--tipo-impresion-cuerpo-tamano);
-  line-height: var(--tipo-impresion-cuerpo-interlineado);
-  font-weight: var(--tipo-impresion-cuerpo-peso);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-lh);
+  font-weight: var(--weight-regular);
+  -webkit-font-smoothing: antialiased;
 }
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
   margin: 0;
-  color: var(--azul-institucional);
+  color: var(--color-text);
+  font-family: var(--font-sans);
 }
 h1 {
-  font-family: var(--tipo-impresion-h1-familia);
   font-size: var(--web-h1-tamano);
-  line-height: var(--tipo-impresion-h1-interlineado);
-  font-weight: var(--tipo-impresion-h1-peso);
+  line-height: var(--type-h1-lh);
+  font-weight: var(--type-h1-weight);
+  letter-spacing: var(--type-h1-track);
 }
 h2 {
-  font-family: var(--tipo-impresion-h2-familia);
-  font-size: var(--tipo-impresion-h2-tamano);
-  line-height: var(--tipo-impresion-h2-interlineado);
-  font-weight: var(--tipo-impresion-h2-peso);
+  font-size: var(--web-h2-tamano);
+  line-height: var(--type-h2-lh);
+  font-weight: var(--type-h2-weight);
+  letter-spacing: var(--type-h2-track);
 }
 h3 {
-  font-family: var(--tipo-impresion-h3-familia);
-  font-size: var(--tipo-impresion-h3-tamano);
-  line-height: var(--tipo-impresion-h3-interlineado);
-  font-weight: var(--tipo-impresion-h3-peso);
+  font-size: var(--type-h4-size);
+  line-height: var(--type-h4-lh);
+  font-weight: var(--type-h4-weight);
 }
 p {
   margin: 0;
 }
 
 .nota {
-  font-family: var(--tipo-impresion-nota-familia);
-  font-size: var(--tipo-impresion-nota-tamano);
-  line-height: var(--tipo-impresion-nota-interlineado);
-  font-weight: var(--tipo-impresion-nota-peso);
+  font-size: var(--type-body-sm-size);
+  line-height: var(--type-body-sm-lh);
+  color: var(--color-text-secondary);
+}
+
+/* Etiqueta de categoría: única mayúscula del sistema, con su marcador amarillo. */
+.sobretitulo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--type-overline-size);
+  line-height: var(--type-overline-lh);
+  font-weight: var(--type-overline-weight);
+  letter-spacing: var(--type-overline-track);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+.sobretitulo::before {
+  content: "";
+  width: 14px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+}
+
+/* Cifras, RUT, folios y horas en la tipografía mono. */
+.dato {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
 
 :focus-visible {
-  outline: var(--borde-filete) solid var(--azul-institucional);
-  outline-offset: var(--borde-filete);
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-small);
+}
+
+@keyframes entrar {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* ── Utilidades del portal ── */
 .contenedor {
   width: 100%;
-  max-width: 1200px;
+  max-width: var(--container-max);
   margin: 0 auto;
-  padding-inline: var(--espacio-6);
+  padding-inline: var(--space-5);
 }
 @media (max-width: 640px) {
   .contenedor {
-    padding-inline: var(--espacio-4);
+    padding-inline: var(--space-4);
   }
 }
 
 a {
-  color: var(--azul-institucional);
-  text-underline-offset: var(--espacio-1);
+  color: var(--color-text-link);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+a:hover {
+  color: var(--color-text-link-hover);
+  text-decoration-thickness: 2px;
 }
 
 .visualmente-oculto {
@@ -103,19 +152,19 @@ a {
 
 .saltar {
   position: absolute;
-  left: var(--espacio-4);
-  top: calc(-1 * var(--espacio-16));
+  left: var(--space-4);
+  top: calc(-1 * var(--space-9));
   z-index: 20;
-  padding: var(--espacio-2) var(--espacio-4);
-  background: var(--blanco);
-  border-radius: var(--radio-base);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-surface);
+  border-radius: var(--radius-medium);
 }
 .saltar:focus {
-  top: var(--espacio-4);
+  top: var(--space-4);
 }
 
 /* La franja de demostración es fija: lo enfocado no debe quedar bajo ella. */
 :focus,
 :target {
-  scroll-margin-top: var(--espacio-32);
+  scroll-margin-top: var(--space-12);
 }

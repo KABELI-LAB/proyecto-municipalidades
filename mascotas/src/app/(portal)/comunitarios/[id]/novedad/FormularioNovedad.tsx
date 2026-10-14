@@ -11,7 +11,7 @@ import { TIPO_NOVEDAD, TIPOS_VECINO } from "@/dominio/comunitarios";
 import { esquemaNovedad } from "@/lib/esquemas";
 import { informarNovedad } from "@/servidor/portal/acciones";
 
-const TITULOS = ["Qué novedad tiene", "Sus datos", "Revise y confirme"] as const;
+const TITULOS = ["Qué novedad tienes", "Tus datos", "Revisa y confirma"] as const;
 const PASOS = [["tipo", "texto"], ["nombre", "telefono", "correo", "localidadId"], []] as const;
 
 export function FormularioNovedad({ perroId, nombre, sectores }: { perroId: string; nombre: string; sectores: SectorOpcion[] }) {
@@ -21,8 +21,8 @@ export function FormularioNovedad({ perroId, nombre, sectores }: { perroId: stri
 
   if (resultado) {
     return (
-      <ResultadoTramite titulo="Recibimos su novedad" codigo={resultado} conRut={false}>
-        <p>Se la enviamos a quien cuida a {nombre}; no verá su teléfono ni su correo. Si el perro está herido y es urgente, use también SOS Mascotas.</p>
+      <ResultadoTramite titulo="Recibimos tu novedad" codigo={resultado} conRut={false}>
+        <p>Se la enviamos a quien cuida a {nombre}; no verá tu teléfono ni tu correo. Si el perro está herido y es urgente, usa también SOS Mascotas.</p>
       </ResultadoTramite>
     );
   }
@@ -48,7 +48,7 @@ export function FormularioNovedad({ perroId, nombre, sectores }: { perroId: stri
         <>
           <CampoOpciones
             id="tipo"
-            etiqueta={`¿Qué quiere informar sobre ${nombre}?`}
+            etiqueta={`¿Qué quieres informar sobre ${nombre}?`}
             valor={v.tipo}
             alCambiar={(x) => cambiar("tipo", x)}
             error={errores.tipo}
@@ -56,12 +56,12 @@ export function FormularioNovedad({ perroId, nombre, sectores }: { perroId: stri
           />
           <CampoArea
             id="texto"
-            etiqueta="Cuéntenos qué vio"
+            etiqueta="Cuéntanos qué viste"
             valor={v.texto}
             alCambiar={(x) => cambiar("texto", x)}
             error={errores.texto}
             maxLength={600}
-            ayuda={v.tipo === "CORRECCION" ? "Indique qué dato está mal y cuál es el correcto." : "Por ejemplo, desde cuándo, cómo se ve o qué necesita. No indique direcciones exactas."}
+            ayuda={v.tipo === "CORRECCION" ? "Indica qué dato está mal y cuál es el correcto." : "Por ejemplo, desde cuándo, cómo se ve o qué necesita. No indiques direcciones exactas."}
           />
         </>
       )}

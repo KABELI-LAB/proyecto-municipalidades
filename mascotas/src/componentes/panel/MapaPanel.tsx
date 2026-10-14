@@ -97,7 +97,7 @@ export function MapaPanel({ datos, capaInicial, puedeGestionar }: { datos: Datos
   useEffect(() => {
     if (!listo) return;
     const { L, mapa } = listo;
-    const azul = token("azul-institucional");
+    const azul = token("color-primary");
     const grupo = L.layerGroup().addTo(mapa);
     let ubicar: (() => void) | null = null;
     if (capa === "calor") {
@@ -111,9 +111,9 @@ export function MapaPanel({ datos, capaInicial, puedeGestionar }: { datos: Datos
       const dibujadas = marcas.map((m) => {
         const marca = L.circleMarker([m.centro.lat, m.centro.lng], {
           radius: m.r,
-          color: m.s.clave === elegido ? token("gris-texto") : azul,
+          color: m.s.clave === elegido ? token("color-text") : azul,
           weight: m.s.clave === elegido ? 4 : 2,
-          fillColor: m.nivel === 0 ? token("blanco") : azul,
+          fillColor: m.nivel === 0 ? token("color-surface") : azul,
           fillOpacity: m.nivel === 0 ? 1 : RELLENO_POR_NIVEL[m.nivel],
         }).addTo(grupo);
         marca.on("click", () => setElegido(m.s.clave));
@@ -174,7 +174,7 @@ export function MapaPanel({ datos, capaInicial, puedeGestionar }: { datos: Datos
       </p>
 
       <div className={estilos.cuerpo}>
-        <div ref={contenedor} className={estilos.mapa} role="region" aria-label={`Mapa por sector: ${CAPAS[capa].nombre.toLowerCase()}. Elija un sector en el mapa o en la ficha lateral.`} />
+        <div ref={contenedor} className={estilos.mapa} role="region" aria-label={`Mapa por sector: ${CAPAS[capa].nombre.toLowerCase()}. Elige un sector en el mapa o en la ficha lateral.`} />
 
         <aside className={estilos.ficha} aria-live="polite">
           {capa === "calor" ? (
@@ -213,7 +213,7 @@ export function MapaPanel({ datos, capaInicial, puedeGestionar }: { datos: Datos
             </>
           ) : (
             <>
-              <p>Elija un sector en el mapa o aquí para ver su ficha.</p>
+              <p>Elige un sector en el mapa o aquí para ver su ficha.</p>
               <div className={estilos.elegirSector}>
                 {datos.sectores.map((x) => (
                   <button key={x.clave} type="button" onClick={() => setElegido(x.clave)}>

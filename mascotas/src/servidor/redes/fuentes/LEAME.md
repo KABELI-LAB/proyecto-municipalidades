@@ -1,14 +1,12 @@
 # Fuentes para las piezas de redes sociales
 
-Son las mismas fuentes de `design-system/fonts/` (Montserrat y Source Sans 3,
-licencia SIL Open Font License 1.1), fijadas en un peso y guardadas como TTF:
-la biblioteca que dibuja el texto de las piezas (Pango, dentro de sharp) no
-lee archivos woff2.
+Atkinson Hyperlegible Next (Braille Institute, licencia SIL Open Font License
+1.1), la tipografía del sistema de diseño, guardada como TTF: la biblioteca
+que dibuja el texto de las piezas (Pango, dentro de sharp) no lee woff2.
 
-- `Montserrat-Bold.ttf`: Montserrat, peso 700 (títulos).
-- `SourceSans3-Regular.ttf`: Source Sans 3, peso 400 (texto).
-- `SourceSans3-Bold.ttf`: Source Sans 3, peso 700 (texto destacado).
+- `AtkinsonHyperlegibleNext-Regular.ttf`: peso 400 (texto).
+- `AtkinsonHyperlegibleNext-Bold.ttf`: peso 700 (títulos y texto destacado).
 
-Se generaron con fontTools (`varLib.instancer`) a partir de los archivos
-variables de `design-system/fonts/`. Si el sistema de diseño cambia sus
-fuentes, vuelva a generarlas desde allí.
+Se obtuvieron del paquete `@fontsource/atkinson-hyperlegible-next` 5.3.0
+(subconjunto latino: incluye tildes y ñ), descomprimiendo sus archivos woff
+a TTF sin modificar los trazos.

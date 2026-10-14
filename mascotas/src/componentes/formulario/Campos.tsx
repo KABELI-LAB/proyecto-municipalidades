@@ -137,7 +137,7 @@ export function CampoSelect({ id, etiqueta, error, ayuda, opcional, valor, alCam
         aria-describedby={describe(id, error, ayuda)}
         className={estilos.control}
       >
-        <option value="">Elija una opción</option>
+        <option value="">Elige una opción</option>
         <OpcionesSelect opciones={opciones} />
       </select>
       <Mensajes id={id} error={error} ayuda={ayuda} />
@@ -277,7 +277,7 @@ export function CampoFoto({ id, etiqueta, error, ayuda, opcional, archivo, alCam
       alCambiar(await reducirFoto(f));
     } catch {
       alCambiar(null);
-      setErrorLectura("No pudimos leer la foto. Pruebe con otra imagen.");
+      setErrorLectura("No pudimos leer la foto. Prueba con otra imagen.");
     } finally {
       setProcesando(false);
     }
@@ -341,10 +341,10 @@ export function CampoFotos({
       try {
         nuevas.push(await reducirFoto(f));
       } catch {
-        setErrorLectura("No pudimos leer una de las fotos. Pruebe con otra imagen.");
+        setErrorLectura("No pudimos leer una de las fotos. Prueba con otra imagen.");
       }
     }
-    if (lista.length > maximo - archivos.length) setErrorLectura(`Puede agregar hasta ${maximo} fotos.`);
+    if (lista.length > maximo - archivos.length) setErrorLectura(`Puedes agregar hasta ${maximo} fotos.`);
     alCambiar([...archivos, ...nuevas]);
     setProcesando(false);
   }

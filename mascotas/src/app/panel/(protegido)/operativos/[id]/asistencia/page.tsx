@@ -30,7 +30,7 @@ export default async function AsistenciaOperativo({ params }: { params: Promise<
       </div>
       {o.estado !== "EN_CURSO" && (
         <p className={estilos.aviso} role="note">
-          {o.estado === "CERRADO" ? "El operativo está cerrado; ya no se registran atenciones." : "El operativo aún no está en curso. Puede revisar la lista; para registrar, inícielo desde su ficha."}
+          {o.estado === "CERRADO" ? "El operativo está cerrado; ya no se registran atenciones." : "El operativo aún no está en curso. Puedes revisar la lista; para registrar, inícialo desde su ficha."}
         </p>
       )}
       <ListaAsistencia

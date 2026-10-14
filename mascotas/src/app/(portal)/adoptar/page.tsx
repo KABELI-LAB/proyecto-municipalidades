@@ -14,7 +14,7 @@ export default async function PaginaAdoptar() {
       <div className={estilos.barraTitulo}>
         <div className={estilos.cabecera}>
           <h1>Quiero adoptar</h1>
-          <p>Fichas revisadas por el municipio. Conversamos con usted antes de la adopción.</p>
+          <p>Fichas revisadas por el municipio. Conversamos contigo antes de la adopción.</p>
         </div>
         <EnlaceBoton href="/adoptar/dar" variante="secundario">
           Dar en adopción
@@ -28,7 +28,7 @@ export default async function PaginaAdoptar() {
         </section>
       ) : (
         <div className={estilos.vacio}>
-          <p>Por ahora no hay animales disponibles para adopción. Revise los avisos para conocer las próximas campañas.</p>
+          <p>Por ahora no hay animales disponibles para adopción. Revisa los avisos para conocer las próximas campañas.</p>
         </div>
       )}
     </div>

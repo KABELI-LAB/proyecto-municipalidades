@@ -96,7 +96,7 @@ export function FormularioRapido({ lugares, servicios, demanda, hoy }: Props) {
             />
           ))}
         </div>
-        <p className={formulario.ayuda}>Sugeridos según lo que piden los vecinos del sector. Ponga 0 si no se ofrece un servicio.</p>
+        <p className={formulario.ayuda}>Sugeridos según lo que piden las vecinas y vecinos del sector. Pon 0 si no se ofrece un servicio.</p>
         {errores.capacidades && (
           <p className={formulario.error}>
             <Icono nombre="alerta" tamano={18} />

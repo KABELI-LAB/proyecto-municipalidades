@@ -133,7 +133,7 @@ describe("aviso de un vecino: aceptar y publicar", () => {
     expect(await consultas.publicacion(aviso.id)).not.toBeNull();
     expect(await fotoPublica(aviso.id)).toBe(200);
     expect(await db.publicacionRed.count({ where: { origenId: aviso.id } })).toBe(0);
-    expect(await db.notificacion.count({ where: { asunto: "Publicamos su aviso" } })).toBeGreaterThan(0);
+    expect(await db.notificacion.count({ where: { asunto: "Publicamos tu aviso" } })).toBeGreaterThan(0);
   });
 
   it("con credenciales: al aceptar sale a la web y a Instagram de inmediato, perdidas y avistadas", async () => {
@@ -230,7 +230,7 @@ describe("operativos, adopciones y demostración", () => {
     expect((await redes.publicarEnInstagram("PERDIDA", oculto.id)).ok).toBe(false);
     expect(await redes.publicarEnInstagram("SOS", oculto.id)).toEqual({ ok: false, mensaje: "Tipo de contenido no válido." });
     sesion = await sesionDe("DIRECTIVO");
-    expect(await redes.publicarEnInstagram("PERDIDA", oculto.id)).toEqual({ ok: false, mensaje: "Su cuenta no tiene permiso para esta acción." });
+    expect(await redes.publicarEnInstagram("PERDIDA", oculto.id)).toEqual({ ok: false, mensaje: "Tu cuenta no tiene permiso para esta acción." });
   });
 
   it("borrar la demo borra sus publicaciones para Instagram", async () => {

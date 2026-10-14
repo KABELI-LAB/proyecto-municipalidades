@@ -12,8 +12,8 @@ import { puedeOperar } from "@/servidor/panel/operativos";
 type Tx = Prisma.TransactionClient;
 export type Respuesta = { ok: true; mensaje: string } | { ok: false; mensaje: string };
 
-const SIN_PERMISO: Respuesta = { ok: false, mensaje: "Su cuenta no puede registrar en este operativo." };
-const NO_EN_CURSO: Respuesta = { ok: false, mensaje: "El operativo no está en curso. Pida a coordinación que lo inicie." };
+const SIN_PERMISO: Respuesta = { ok: false, mensaje: "Tu cuenta no puede registrar en este operativo." };
+const NO_EN_CURSO: Respuesta = { ok: false, mensaje: "El operativo no está en curso. Pide a coordinación que lo inicie." };
 
 async function autorizarEn(operativoId: string) {
   const u = await autorizar("registrarAtenciones");
@@ -46,7 +46,7 @@ export async function marcarAsistencia(cupoId: string, asistio: boolean): Promis
   if (c.operativo.estado !== "EN_CURSO") return NO_EN_CURSO;
   if (!asistio && c.estado === "ASISTIO") {
     const atencion = await db.atencion.findUnique({ where: { cupoId } });
-    if (atencion) return { ok: false, mensaje: "Ya tiene una atención registrada; corríjala primero." };
+    if (atencion) return { ok: false, mensaje: "Ya tiene una atención registrada; corrígela primero." };
   }
   await db.cupo.update({ where: { id: cupoId }, data: { estado: asistio ? "ASISTIO" : "NO_ASISTIO" } });
   refrescar(c.operativoId);
@@ -60,7 +60,7 @@ const esquemaAtencion = z.object({
 
 export async function registrarAtencion(cupoId: string, valores: unknown): Promise<Respuesta> {
   const r = esquemaAtencion.safeParse(valores);
-  if (!r.success) return { ok: false, mensaje: "Indique el resultado de la atención." };
+  if (!r.success) return { ok: false, mensaje: "Indica el resultado de la atención." };
   const c = await cupoEnCurso(cupoId);
   if (!c) return { ok: false, mensaje: "No encontramos la inscripción." };
   const u = await autorizarEn(c.operativoId);
@@ -103,11 +103,11 @@ export async function deshacerAtencion(cupoId: string): Promise<Respuesta> {
 }
 
 const esquemaEspontanea = z.object({
-  servicioId: z.string().min(1, "Elija el servicio."),
-  especie: z.enum(["PERRO", "GATO"], "Indique si es perro o gato."),
-  sexo: z.enum(["MACHO", "HEMBRA", "DESCONOCIDO"], "Indique el sexo."),
+  servicioId: z.string().min(1, "Elige el servicio."),
+  especie: z.enum(["PERRO", "GATO"], "Indica si es perro o gato."),
+  sexo: z.enum(["MACHO", "HEMBRA", "DESCONOCIDO"], "Indica el sexo."),
   nombreAnimal: z.string().trim().max(40),
-  resultado: z.enum(["REALIZADA", "NO_REALIZADA", "DERIVADA"], "Indique el resultado."),
+  resultado: z.enum(["REALIZADA", "NO_REALIZADA", "DERIVADA"], "Indica el resultado."),
   observaciones: z.string().trim().max(300),
 });
 
@@ -116,7 +116,7 @@ export async function registrarEspontanea(operativoId: string, valores: unknown)
   const u = await autorizarEn(operativoId);
   if (!u) return SIN_PERMISO;
   const r = esquemaEspontanea.safeParse(valores);
-  if (!r.success) return { ok: false, mensaje: r.error.issues[0]?.message ?? "Revise los datos." };
+  if (!r.success) return { ok: false, mensaje: r.error.issues[0]?.message ?? "Revisa los datos." };
   const d = r.data;
   const o = await db.operativo.findUnique({ where: { id: operativoId }, include: { capacidades: true } });
   if (!o || o.estado !== "EN_CURSO") return NO_EN_CURSO;

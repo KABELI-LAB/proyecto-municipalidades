@@ -66,7 +66,7 @@ export async function cargarOrigen(tipo: TipoRed, id: string): Promise<Origen | 
         titulo: `Operativo en ${o.sector.nombre}`,
         lineas: [mayuscula(fecha), `De ${o.horaInicio} a ${o.horaFin} horas`, `${o.lugar.nombre}, ${o.lugar.localidad.nombre}`],
         lista: servicios,
-        llamado: "Inscríbase en el portal municipal. Los cupos son limitados por servicio.",
+        llamado: "Inscríbete en el portal municipal. Los cupos son limitados por servicio.",
         foto: null,
       },
       texto,
@@ -94,7 +94,7 @@ export async function cargarOrigen(tipo: TipoRed, id: string): Promise<Origen | 
         tipo,
         titulo: f.animal.nombre ? `${f.animal.nombre} busca hogar` : "Busca hogar",
         lineas: [[mayuscula(datos.especie), datos.tamano ? `tamaño ${datos.tamano}` : null, donde].filter(Boolean).join(" · ")],
-        llamado: "Revise su ficha oficial y postule en el portal municipal.",
+        llamado: "Revisa su ficha oficial y postula en el portal municipal.",
         foto,
       },
       texto,
@@ -136,9 +136,9 @@ export async function cargarOrigen(tipo: TipoRed, id: string): Promise<Origen | 
   return {
     pieza: {
       tipo,
-      titulo: perdida ? (datos.nombre ? `Se busca a ${datos.nombre}` : `Se busca: ${g.sustantivo} ${datos.color}`) : `¿Reconoce a ${g.este} ${g.sustantivo}?`,
+      titulo: perdida ? (datos.nombre ? `Se busca a ${datos.nombre}` : `Se busca: ${g.sustantivo} ${datos.color}`) : `¿Reconoces a ${g.este} ${g.sustantivo}?`,
       lineas: [rasgos.length > 110 ? `${rasgos.slice(0, 107).trimEnd()}…` : rasgos, perdida ? `Se perdió el ${datos.fecha} en ${donde}.` : `${mayuscula(g.visto)} el ${datos.fecha} en ${donde}.`],
-      llamado: perdida ? `¿${mayuscula(g.lo)} vio? Avise a través del aviso oficial. No publique datos personales.` : "Si es suyo, revise el aviso oficial e informe una coincidencia.",
+      llamado: perdida ? `¿${mayuscula(g.lo)} viste? Avisa a través del aviso oficial. No publiques datos personales.` : "Si es tuyo, revisa el aviso oficial e informa una coincidencia.",
       foto,
     },
     texto,
@@ -207,7 +207,7 @@ export function notaInstagram(d: Difusion): string {
   return {
     publicado: " También se publicó en Instagram.",
     "ya-publicado": " Ya estaba publicado en Instagram.",
-    error: ` No se pudo publicar en Instagram: ${d.mensaje} Puede reintentar desde la misma tarjeta.`,
+    error: ` No se pudo publicar en Instagram: ${d.mensaje} Puedes reintentar desde la misma tarjeta.`,
     "sin-integracion": " Instagram no está configurado: se publicó solo en la web.",
     demo: " Son datos de demostración: no se publicaron en Instagram.",
     "no-publico": " No se publicó en Instagram porque no tiene foto.",
@@ -246,7 +246,7 @@ export async function publicarRed(id: string, usuarioId: string | null): Promise
 
   // Bloqueo: si dos personas pulsan a la vez, solo una publica.
   const tomada = await db.publicacionRed.updateMany({ where: { id, estado: { in: ["APROBADO", "ERROR"] } }, data: { estado: "PUBLICANDO", intentos: { increment: 1 } } });
-  if (!tomada.count) return { ok: false, mensaje: "Esta publicación ya cambió de estado. Actualice la página." };
+  if (!tomada.count) return { ok: false, mensaje: "Esta publicación ya cambió de estado. Actualiza la página." };
   await anotar(id, "Publicación solicitada a Instagram", p.contenedorId ? "Se reutiliza el contenedor del intento anterior." : null, usuarioId);
 
   const imagenUrl = `${urlPublica()}/redes/${p.id}/imagen?f=${firmaImagen(p.id, p.imagen)}`;

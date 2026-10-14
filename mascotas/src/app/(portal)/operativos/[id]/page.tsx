@@ -46,7 +46,7 @@ export default async function PaginaOperativo({ params }: { params: Promise<{ id
               <Icono nombre="calendario" tamano={40} />
             </span>
             <h2>{o.estado === "CERRADO" ? "Este operativo ya se realizó" : o.estado === "EN_CURSO" ? "Este operativo está en curso" : "Las inscripciones están cerradas"}</h2>
-            <p>Cuéntenos qué servicio necesita: nos ayuda a decidir dónde hacer los próximos operativos.</p>
+            <p>Cuéntanos qué servicio necesitas: nos ayuda a decidir dónde hacer los próximos operativos.</p>
             <EnlaceBoton href="/servicio">Solicitar un servicio</EnlaceBoton>
             <Link href="/operativos">Ver otros operativos</Link>
           </div>

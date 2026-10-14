@@ -33,7 +33,7 @@ export function GestionAviso({ rut, codigo, tipo, coincidencias, alTerminar }: P
       <div className={estilos.gestion} role="group" aria-label="Registrar reencuentro">
         <CampoOpciones
           id={`coincidencia-${codigo}`}
-          etiqueta={coincidencias.length ? "¿Volvió gracias a alguno de estos avisos?" : "¿Le ayudó una posible coincidencia de la plataforma?"}
+          etiqueta={coincidencias.length ? "¿Volvió gracias a alguno de estos avisos?" : "¿Te ayudó una posible coincidencia de la plataforma?"}
           valor={porCoincidencia}
           alCambiar={setPorCoincidencia}
           error={error ?? undefined}
@@ -66,7 +66,7 @@ export function GestionAviso({ rut, codigo, tipo, coincidencias, alTerminar }: P
   if (paso === "no_aplica") {
     return (
       <div className={estilos.gestion} role="group" aria-label="Retirar el aviso">
-        <p>Su aviso dejará de mostrarse en el portal. ¿Desea retirarlo?</p>
+        <p>Tu aviso dejará de mostrarse en el portal. ¿Quieres retirarlo?</p>
         {error && <p role="alert">{error}</p>}
         <div className={estilos.botones}>
           <Boton onClick={() => enviar("no_aplica")} disabled={enviando}>

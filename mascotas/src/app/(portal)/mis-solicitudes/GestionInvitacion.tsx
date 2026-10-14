@@ -23,7 +23,7 @@ export function GestionInvitacion({ rut, codigo, alTerminar }: Props) {
   if (confirmarRechazo) {
     return (
       <div className={estilos.gestion} role="group" aria-label="No podré asistir">
-        <p>Liberaremos el cupo para otra persona. Su solicitud seguirá registrada para un próximo operativo. ¿Confirma que no podrá asistir?</p>
+        <p>Liberaremos el cupo para otra persona. Tu solicitud seguirá registrada para un próximo operativo. ¿Confirmas que no podrás asistir?</p>
         {error && <p role="alert">{error}</p>}
         <div className={estilos.botones}>
           <Boton onClick={() => responder("rechazo")} disabled={enviando}>

@@ -22,10 +22,10 @@ export function FormularioMensaje({ publicacionId }: { publicacionId: string }) 
       <div className={estilos.resultado} role="status">
         <h3 className={estilos.tituloResultado}>
           <Icono nombre="check" tamano={28} />
-          Su mensaje fue enviado
+          Tu mensaje fue enviado
         </h3>
         <p>
-          Lo hicimos llegar a la persona que publicó, sin mostrarle su teléfono ni su correo. Si decide responder, le
+          Lo hicimos llegar a la persona que publicó, sin mostrarle tu teléfono ni tu correo. Si decide responder, te
           llegará un aviso por la plataforma.
         </p>
         <p className="nota">En este prototipo, el aviso por correo o SMS es simulado.</p>
@@ -50,13 +50,13 @@ export function FormularioMensaje({ publicacionId }: { publicacionId: string }) 
 
   return (
     <form className={estilos.formulario} onSubmit={enviar} noValidate>
-      <CampoTexto id="nombre" etiqueta="Su nombre" valor={v.nombre} alCambiar={cambiar("nombre")} error={errores.nombre} autoComplete="name" maxLength={100} />
+      <CampoTexto id="nombre" etiqueta="Tu nombre" valor={v.nombre} alCambiar={cambiar("nombre")} error={errores.nombre} autoComplete="name" maxLength={100} />
       <div className={estilos.fila}>
         <CampoTexto id="telefono" etiqueta="Teléfono" tipo="tel" valor={v.telefono} alCambiar={cambiar("telefono")} error={errores.telefono} autoComplete="tel" maxLength={20} />
         <CampoTexto id="correo" etiqueta="Correo" tipo="email" valor={v.correo} alCambiar={cambiar("correo")} error={errores.correo} autoComplete="email" maxLength={120} />
       </div>
-      <p className={estilos.ayuda}>Indique al menos uno, para avisarle si le responden. No se muestra a la otra persona.</p>
-      <CampoArea id="texto" etiqueta="Mensaje" valor={v.texto} alCambiar={cambiar("texto")} error={errores.texto} maxLength={500} ayuda="Por ejemplo, dónde y cuándo vio al animal. No incluya direcciones exactas." />
+      <p className={estilos.ayuda}>Indica al menos uno, para avisarte si te responden. No se muestra a la otra persona.</p>
+      <CampoArea id="texto" etiqueta="Mensaje" valor={v.texto} alCambiar={cambiar("texto")} error={errores.texto} maxLength={500} ayuda="Por ejemplo, dónde y cuándo viste al animal. No incluyas direcciones exactas." />
       {mensaje && (
         <p className={estilos.mensaje} role="alert">
           <Icono nombre="alerta" tamano={20} />
@@ -83,7 +83,7 @@ export function BotonReportar({ publicacionId }: { publicacionId: string }) {
   if (estado === "confirmar") {
     return (
       <div className={estilos.navegacion}>
-        <p>¿Quiere reportar esta publicación como inapropiada o falsa?</p>
+        <p>¿Quieres reportar esta publicación como inapropiada o falsa?</p>
         <Boton variante="secundario" disabled={enviando} onClick={() => iniciar(async () => { await reportarPublicacion(publicacionId); setEstado("hecho"); })}>
           Sí, reportar
         </Boton>

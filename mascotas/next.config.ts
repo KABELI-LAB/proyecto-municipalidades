@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
   // fotos de la demo, escudo y fuentes de las piezas de Instagram): en Netlify
   // tienen que viajar dentro de las funciones.
   outputFileTracingIncludes: {
-    "/**": ["./config/municipios/**/*", "./demo/fotos/**/*", "./design-system/assets/**/*", "./design-system/tokens.json", "./src/servidor/redes/fuentes/**/*"],
+    "/**": ["./config/municipios/**/*", "./demo/fotos/**/*", "./design-system/assets/**/*", "./src/servidor/redes/fuentes/**/*"],
   },
 };
 

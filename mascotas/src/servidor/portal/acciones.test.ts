@@ -199,7 +199,7 @@ describe("cancelar mi cupo desde Mis solicitudes", () => {
     // Con un RUT ajeno, no.
     expect((await acciones.cancelarMiCupo({ rut: "12.345.678-5", codigo: codigo(a) })).ok).toBe(false);
     // Con el propio, sí: el primero en espera queda confirmado y el siguiente avanza al lugar 1.
-    expect(await acciones.cancelarMiCupo({ rut: "15.234.567-4", codigo: codigo(a) })).toEqual({ ok: true, mensaje: "Cancelamos su cupo. Gracias por avisar: quedó libre para otra persona." });
+    expect(await acciones.cancelarMiCupo({ rut: "15.234.567-4", codigo: codigo(a) })).toEqual({ ok: true, mensaje: "Cancelamos tu cupo. Gracias por avisar: quedó libre para otra persona." });
     const estado = async (r: typeof a) => db.cupo.findUniqueOrThrow({ where: { codigo: codigo(r) }, select: { estado: true, posicionEspera: true } });
     expect(await estado(a)).toEqual({ estado: "CANCELADO_PERSONA", posicionEspera: null });
     expect(await estado(b)).toEqual({ estado: "CONFIRMADO", posicionEspera: null });
@@ -207,6 +207,6 @@ describe("cancelar mi cupo desde Mis solicitudes", () => {
     // No se cancela dos veces.
     expect((await acciones.cancelarMiCupo({ rut: "15.234.567-4", codigo: codigo(a) })).ok).toBe(false);
     // Salir de la lista de espera.
-    expect((await acciones.cancelarMiCupo({ rut: "11.111.111-1", codigo: codigo(c) })).mensaje).toBe("Salió de la lista de espera.");
+    expect((await acciones.cancelarMiCupo({ rut: "11.111.111-1", codigo: codigo(c) })).mensaje).toBe("Saliste de la lista de espera.");
    }, 60_000);
 });

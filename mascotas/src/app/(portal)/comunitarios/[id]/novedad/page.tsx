@@ -24,7 +24,7 @@ export default async function PaginaNovedad({ params }: { params: Promise<{ id: 
       <div className={estilos.cabecera}>
         <h1>Informar una novedad</h1>
         <p>
-          Sobre {nombre}, en {c.lugar.nombre}. Se la enviamos a quien lo cuida. Si está herido y es urgente, use{" "}
+          Sobre {nombre}, en {c.lugar.nombre}. Se la enviamos a quien lo cuida. Si está herido y es urgente, usa{" "}
           <Link href={REPORTE_COMUNITARIO}>SOS Mascotas</Link>.
         </p>
       </div>

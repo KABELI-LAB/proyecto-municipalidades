@@ -68,7 +68,7 @@ export function useTramite<V extends Valores>(esquema: z.ZodType, inicial: V, pa
         r = await accion(valores);
       } catch {
         enCurso.current = false;
-        setMensaje("No pudimos enviar su solicitud. Revise su conexión e intente nuevamente; sus datos siguen aquí.");
+        setMensaje("No pudimos enviar tu solicitud. Revisa tu conexión e intenta nuevamente; tus datos siguen aquí.");
         return;
       }
       enCurso.current = false;

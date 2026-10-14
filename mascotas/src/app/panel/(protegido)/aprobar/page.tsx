@@ -3,7 +3,7 @@ import { AccionConMotivo } from "@/componentes/panel/AccionConMotivo";
 import { BotonAccion } from "@/componentes/panel/BotonAccion";
 import { ResumenPublicacion } from "@/componentes/panel/ResumenPublicacion";
 import { fotosDeFicha } from "@/componentes/portal/fotoFicha";
-import { SiNo } from "@/componentes/portal/TarjetaAdopcion";
+import { ConIcono, SiNo } from "@/componentes/portal/TarjetaAdopcion";
 import { ESPECIE, RELACION_ANIMAL, SEXO, TAMANO, textoEdad } from "@/dominio/etiquetas";
 import { puede } from "@/dominio/permisos";
 import { requerir } from "@/servidor/auth";
@@ -47,7 +47,7 @@ export default async function PorAprobar() {
                 <ResumenPublicacion p={p} conModeracion={false} Titulo="h3" plegado />
                 <div className={propios.acciones}>
                   <BotonAccion accion={aprobarPublicacion.bind(null, p.id)} texto="Aprobar y publicar" variante="primario" />
-                  <BotonAccion accion={ocultarPublicacion.bind(null, p.id)} texto="No publicar" confirmar="El aviso no se publicará y avisaremos a quien lo envió. ¿Desea continuar?" textoConfirmar="Sí, no publicar" />
+                  <BotonAccion accion={ocultarPublicacion.bind(null, p.id)} texto="No publicar" confirmar="El aviso no se publicará y avisaremos a quien lo envió. ¿Quieres continuar?" textoConfirmar="Sí, no publicar" />
                 </div>
               </article>
             ))}
@@ -126,7 +126,7 @@ export default async function PorAprobar() {
                           <dt>Contacto</dt>
                           <dd>{[f.proponente.telefono, f.proponente.correo].filter(Boolean).join(" · ") || "[sin contacto]"}</dd>
                           <dt>Autorización</dt>
-                          <dd>{f.autorizaPublicar ? "✓ Declaró que puede darlo en adopción" : "✕ Sin declaración"}</dd>
+                          <dd><ConIcono si={f.autorizaPublicar} texto={f.autorizaPublicar ? "Declaró que puede darlo en adopción" : "Sin declaración"} /></dd>
                         </>
                       )}
                       {f.codigo && (
@@ -142,7 +142,7 @@ export default async function PorAprobar() {
                       accion={aprobarPropuesta.bind(null, f.id)}
                       texto="Aprobar y publicar"
                       variante="primario"
-                      confirmar={`La ficha de ${nombre} se publicará en el catálogo de adopción con sus fotos. ¿Revisó que las fotos y los datos sean adecuados?`}
+                      confirmar={`La ficha de ${nombre} se publicará en el catálogo de adopción con sus fotos. ¿Revisaste que las fotos y los datos sean adecuados?`}
                       textoConfirmar="Sí, publicar"
                     />
                     <AccionConMotivo accion={pedirCorrecciones.bind(null, f.id)} texto="Pedir cambios" pregunta="¿Qué debe corregir quien la propuso?" textoConfirmar="Pedir cambios" />

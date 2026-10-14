@@ -234,7 +234,7 @@ function AtencionEspontanea({ operativoId, servicios, alResponder }: { operativo
             {etiqueta}
           </label>
           <select id={`esp-${k}`} value={v[k]} onChange={campo(k)} className={estilos.control} required>
-            {k !== "resultado" && <option value="">Elija una opción</option>}
+            {k !== "resultado" && <option value="">Elige una opción</option>}
             {opciones.map(([valor, texto]) => (
               <option key={valor} value={valor}>
                 {texto}

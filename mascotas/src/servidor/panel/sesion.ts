@@ -8,12 +8,12 @@ import { db } from "@/servidor/db";
 export type EstadoIngreso = { error: string | null; correo: string };
 
 // Un solo mensaje para correo o contraseña incorrectos: no revela qué cuentas existen.
-const INCORRECTO = "El correo o la contraseña no coinciden. Revíselos e intente de nuevo.";
+const INCORRECTO = "El correo o la contraseña no coinciden. Revísalos e intenta de nuevo.";
 
 export async function ingresar(_: EstadoIngreso, datos: FormData): Promise<EstadoIngreso> {
   const correo = String(datos.get("correo") ?? "").trim().toLowerCase();
   const clave = String(datos.get("contrasena") ?? "");
-  if (!correo || !clave) return { error: "Escriba su correo y su contraseña.", correo };
+  if (!correo || !clave) return { error: "Escribe tu correo y tu contraseña.", correo };
 
   const usuario = await db.usuarioMunicipal.findFirst({ where: { correo, activo: true, municipioId: municipioActivo().id } });
   if (!usuario || !(await verificarContrasena(clave, usuario.hashContrasena))) return { error: INCORRECTO, correo };

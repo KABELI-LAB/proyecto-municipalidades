@@ -12,7 +12,7 @@ import { difundirEnInstagram } from "@/servidor/redes/servicio";
 
 type Respuesta = { ok: boolean; mensaje: string };
 
-const SIN_PERMISO: Respuesta = { ok: false, mensaje: "Su cuenta no tiene permiso para esta acción." };
+const SIN_PERMISO: Respuesta = { ok: false, mensaje: "Tu cuenta no tiene permiso para esta acción." };
 
 /** Quién puede publicar cada tipo: el mismo rol que publica o acepta el contenido. */
 const PERMISO: Record<TipoRed, Permiso> = {

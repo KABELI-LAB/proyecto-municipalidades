@@ -25,7 +25,7 @@ export function MapaMiniatura({ sectores, localidades }: { sectores: Sector[]; l
   useEffect(() => {
     if (!listo) return;
     const { L, mapa } = listo;
-    const azul = token("azul-institucional");
+    const azul = token("color-primary");
     const maximo = Math.max(0, ...con.map((s) => s.total));
     const grupo = L.layerGroup().addTo(mapa);
     // Las etiquetas de los sectores al oeste van a la izquierda y las del este a la derecha, para no taparse.
@@ -36,7 +36,7 @@ export function MapaMiniatura({ sectores, localidades }: { sectores: Sector[]; l
         radius: s.total ? 6 + 10 * Math.sqrt(s.total / Math.max(maximo, 1)) : 4,
         color: azul,
         weight: 2,
-        fillColor: nivel === 0 ? token("blanco") : azul,
+        fillColor: nivel === 0 ? token("color-surface") : azul,
         fillOpacity: nivel === 0 ? 1 : RELLENO_POR_NIVEL[nivel],
         interactive: false,
       })

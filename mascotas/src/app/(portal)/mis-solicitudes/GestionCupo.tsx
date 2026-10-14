@@ -23,7 +23,7 @@ export function GestionCupo({ rut, codigo, enEspera, alTerminar }: Props) {
   if (confirmar) {
     return (
       <div className={estilos.gestion} role="group" aria-label={enEspera ? "Salir de la lista de espera" : "Cancelar mi cupo"}>
-        <p>{enEspera ? "Saldrá de la lista de espera de este operativo. ¿Desea continuar?" : "Liberaremos su cupo para otra persona. ¿Desea cancelarlo?"}</p>
+        <p>{enEspera ? "Saldrás de la lista de espera de este operativo. ¿Quieres continuar?" : "Liberaremos tu cupo para otra persona. ¿Quieres cancelarlo?"}</p>
         {error && <p role="alert">{error}</p>}
         <div className={estilos.botones}>
           <Boton onClick={cancelar} disabled={enviando}>

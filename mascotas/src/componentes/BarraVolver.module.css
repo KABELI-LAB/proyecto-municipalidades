@@ -3,19 +3,19 @@
 .barra {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 var(--espacio-5);
-  margin-bottom: var(--espacio-2);
+  gap: 0 var(--space-5);
+  margin-bottom: var(--space-2);
 }
 .boton {
   display: inline-flex;
   align-items: center;
-  gap: var(--espacio-2);
-  min-height: var(--espacio-12);
+  gap: var(--space-2);
+  min-height: var(--space-8);
   padding: 0;
-  color: var(--azul-institucional);
-  font-weight: var(--tipo-impresion-h2-peso);
+  color: var(--color-primary);
+  font-weight: var(--weight-bold);
   text-decoration: none;
 }
 .boton:hover {
-  color: var(--azul-filete);
+  color: var(--color-text-link);
 }

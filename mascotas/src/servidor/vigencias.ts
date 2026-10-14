@@ -22,8 +22,8 @@ export async function revisarVigencias(db: PrismaClient, zona: string, ahora = n
         await notificar(
           tx,
           p.persona,
-          "¿Su aviso sigue vigente?",
-          `Su aviso${p.codigo ? ` ${p.codigo}` : ""} cumplió 30 días. Si sigue buscando, confírmelo en Mis solicitudes antes del ${limite}; si no, lo archivaremos.`,
+          "¿Tu aviso sigue vigente?",
+          `Tu aviso${p.codigo ? ` ${p.codigo}` : ""} cumplió 30 días. Si sigues buscando, confírmalo en Mis solicitudes antes del ${limite}; si no, lo archivaremos.`,
           p.loteDemoId,
         );
       });

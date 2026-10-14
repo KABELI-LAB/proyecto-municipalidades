@@ -9,7 +9,7 @@ export default function PaginaMisSolicitudes() {
     <div className={`contenedor ${estilos.pagina}`}>
       <div className={estilos.cabecera}>
         <h1>Mis solicitudes</h1>
-        <p>Vea y gestione sus trámites sin registrarse.</p>
+        <p>Mira y gestiona tus trámites sin registrarte.</p>
       </div>
       <ConsultaSolicitudes />
     </div>

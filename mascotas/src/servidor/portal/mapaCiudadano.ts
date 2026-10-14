@@ -83,7 +83,7 @@ async function capaMascotas(sectores: Sector[]): Promise<CapaCiudadana> {
       lineas: [`${p.localidad?.nombre ?? p.sector.nombre} · ${fechaCorta(p.fechaEvento)}`],
       href: `/mascotas/${p.id}`,
       // Nunca se afirma que es el mismo animal: es una sugerencia para revisar.
-      etiqueta: coincidencias.has(p.id) ? "Posible coincidencia: revise el aviso" : undefined,
+      etiqueta: coincidencias.has(p.id) ? "Posible coincidencia: revisa el aviso" : undefined,
       foto: fotoDeAviso(p) ?? undefined,
     }),
     (s, xs) => ({
@@ -154,7 +154,7 @@ async function capaOperativos(sectores: Sector[]): Promise<CapaCiudadana> {
   );
   return {
     marcas: aMarcas(grupos, (g) => g.items.length, (n) => plural(n, "operativo", "operativos")),
-    vacio: { texto: "Por ahora no hay operativos publicados. Registre su interés y le avisaremos cuando haya uno cerca.", enlace: { href: "/servicio", texto: "Solicitar un servicio" } },
+    vacio: { texto: "Por ahora no hay operativos publicados. Registra tu interés y te avisaremos cuando haya uno cerca.", enlace: { href: "/servicio", texto: "Solicitar un servicio" } },
     nota: "Cada operativo, en su lugar de referencia (sede, escuela, posta). Cupos disponibles al momento de abrir el mapa.",
   };
 }
@@ -179,7 +179,7 @@ async function capaComunitarios(): Promise<CapaCiudadana> {
         clave: c.id,
         titulo: c.animal.nombre ?? c.apodo,
         // Fecha de la última revisión registrada: no se afirma cómo está hoy el perro.
-        lineas: [c.lugar.nombre, revision ? `Última revisión registrada: ${fechaCorta(revision)}` : "Sin revisión registrada", "Para informar una novedad o hacerse cargo, abra su ficha"],
+        lineas: [c.lugar.nombre, revision ? `Última revisión registrada: ${fechaCorta(revision)}` : "Sin revisión registrada", "Para informar una novedad o hacerte cargo, abre su ficha"],
         href: `/comunitarios/${c.id}`,
         foto: foto ?? undefined,
       };

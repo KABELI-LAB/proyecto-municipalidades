@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { FirmaInstitucional } from "@/componentes/FirmaInstitucional";
+import { Logo } from "@/componentes/Logo";
 import { FranjaDemo } from "@/componentes/FranjaDemo";
 import { inicioDe } from "@/dominio/permisos";
 import { municipioActivo } from "@/lib/municipio";
@@ -25,7 +25,7 @@ export default async function PaginaIngresar() {
       <main className={estilos.ingreso}>
         <div className={estilos.marcoIngreso}>
           <div className={estilos.cabeceraIngreso}>
-            <FirmaInstitucional municipio={municipio} sobreAzul />
+            <Logo municipio={municipio} variante="institucional" />
           </div>
           <div className={estilos.cuerpoIngreso}>
             <h1>Panel municipal</h1>

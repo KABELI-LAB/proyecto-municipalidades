@@ -4,61 +4,61 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--espacio-2) var(--espacio-4);
-  padding: var(--espacio-3) var(--espacio-4);
-  background: var(--azul-institucional);
-  color: var(--marfil-institucional);
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-primary);
+  color: var(--color-surface-sunken);
 }
 .titulo {
-  color: var(--marfil-institucional);
-  font-family: var(--font-titulos);
-  font-weight: var(--tipo-impresion-h2-peso);
+  color: var(--color-surface-sunken);
+  font-family: var(--font-sans);
+  font-weight: var(--weight-bold);
   text-decoration: none;
 }
 .cuenta {
   display: flex;
   align-items: center;
-  gap: var(--espacio-4);
+  gap: var(--space-4);
 }
 .cuenta a,
 .titulo:focus-visible,
 .cuenta a:focus-visible {
-  color: var(--marfil-institucional);
-  outline-color: var(--marfil-institucional);
+  color: var(--color-surface-sunken);
+  outline-color: var(--color-surface-sunken);
 }
 .rol {
-  font-size: var(--tipo-impresion-nota-tamano);
+  font-size: var(--type-caption-size);
 }
 .salir {
-  min-height: var(--espacio-10);
-  padding: var(--espacio-1) var(--espacio-3);
-  border: var(--borde-filete) solid var(--marfil-institucional);
-  border-radius: var(--radio-base);
+  min-height: var(--space-7);
+  padding: var(--space-1) var(--space-3);
+  border: var(--border-width-strong) solid var(--color-surface-sunken);
+  border-radius: var(--radius-medium);
   background: transparent;
-  color: var(--marfil-institucional);
+  color: var(--color-surface-sunken);
   font: inherit;
-  font-weight: var(--tipo-impresion-h2-peso);
+  font-weight: var(--weight-bold);
 }
 
 .principal {
   max-width: 640px;
   margin: 0 auto;
-  padding: var(--espacio-6) var(--espacio-4) var(--espacio-16);
+  padding: var(--space-5) var(--space-4) var(--space-9);
 }
 
 .pila {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-3);
+  gap: var(--space-3);
 }
 .principal > .pila {
-  gap: var(--espacio-5);
+  gap: var(--space-5);
 }
 
 .lista {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-3);
+  gap: var(--space-3);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -67,98 +67,100 @@
 .tarjetaEnlace {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-2);
-  padding: var(--espacio-4);
-  background: var(--blanco);
-  border-radius: var(--radio-base);
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
 }
 .tarjetaEnlace {
-  color: var(--gris-texto);
+  color: var(--color-text);
   text-decoration: none;
-  border: var(--borde-filete) solid var(--blanco);
+  border: var(--border-width) solid var(--color-border);
 }
 .tarjetaEnlace:hover {
-  border-color: var(--azul-institucional);
+  border-color: var(--color-primary);
 }
 .tarjetaEnlace b,
 .cabeceraTarjeta b {
-  font-family: var(--font-titulos);
-  font-size: var(--tipo-impresion-h3-tamano);
-  font-weight: var(--tipo-impresion-h2-peso);
-  color: var(--azul-institucional);
+  font-family: var(--font-sans);
+  font-size: var(--type-h3-size);
+  font-weight: var(--weight-bold);
+  color: var(--color-primary);
 }
 .cabeceraTarjeta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
 }
 
 .contadores {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--espacio-2) var(--espacio-4);
-  padding: var(--espacio-3) var(--espacio-4);
-  background: var(--blanco);
-  border-radius: var(--radio-base);
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
 }
 .contadores b {
-  font-family: var(--font-titulos);
-  font-weight: var(--tipo-impresion-h1-peso);
-  color: var(--azul-institucional);
+  font-family: var(--font-sans);
+  font-weight: var(--weight-bold);
+  color: var(--color-primary);
 }
 
 .filtros {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
 }
 .etiqueta {
-  font-weight: var(--tipo-impresion-h2-peso);
+  font-weight: var(--weight-bold);
 }
 .opcional {
-  font-weight: var(--tipo-impresion-cuerpo-peso);
+  font-weight: var(--weight-regular);
 }
 .control {
   width: 100%;
-  min-height: var(--espacio-12);
-  padding: var(--espacio-2) var(--espacio-3);
-  border: var(--borde-filete) solid var(--gris-texto);
-  border-radius: var(--radio-base);
-  background: var(--blanco);
-  color: var(--gris-texto);
+  min-height: var(--space-8);
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width-strong) solid var(--color-text);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  color: var(--color-text);
   font: inherit;
 }
 .pestanas {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
 }
 .pestana {
-  min-height: var(--espacio-10);
-  padding: var(--espacio-1) var(--espacio-3);
-  border: var(--borde-filete) solid var(--azul-institucional);
-  border-radius: var(--radio-base);
-  background: var(--blanco);
-  color: var(--azul-institucional);
+  min-height: var(--space-7);
+  padding: var(--space-1) var(--space-3);
+  border: var(--border-width-strong) solid var(--color-primary);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  color: var(--color-primary);
   font: inherit;
-  font-weight: var(--tipo-impresion-h2-peso);
+  font-weight: var(--weight-bold);
 }
 .pestana[aria-pressed="true"] {
-  background: var(--azul-institucional);
-  color: var(--blanco);
+  background: var(--color-primary);
+  color: var(--color-surface);
 }
 
 .botones {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
 }
 .grupo {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
   margin: 0;
   padding: 0;
   border: 0;
@@ -166,63 +168,62 @@
 .opcion {
   display: flex;
   align-items: center;
-  gap: var(--espacio-3);
-  min-height: var(--espacio-12);
-  padding: var(--espacio-2) var(--espacio-3);
-  border: var(--borde-filete) solid var(--gris-claro);
-  border-radius: var(--radio-base);
+  gap: var(--space-3);
+  min-height: var(--space-8);
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width-strong) solid var(--color-border);
+  border-radius: var(--radius-medium);
 }
 .opcion:has(input:checked) {
-  border-color: var(--azul-institucional);
+  border-color: var(--color-primary);
 }
 .opcion input {
-  width: var(--espacio-5);
-  height: var(--espacio-5);
-  accent-color: var(--azul-institucional);
+  width: var(--space-5);
+  height: var(--space-5);
+  accent-color: var(--color-primary);
 }
 .registro {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-2);
-  padding: var(--espacio-3);
-  border-radius: var(--radio-base);
-  background: var(--marfil-institucional);
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface-sunken);
 }
 .registro svg {
   vertical-align: text-bottom;
-  color: var(--verde-territorio);
+  color: var(--color-secondary);
 }
 
 .aviso {
-  padding: var(--espacio-4);
-  border-left: var(--espacio-1) solid var(--amarillo-senal);
-  border-radius: var(--radio-base);
-  background: var(--blanco);
+  padding: var(--space-4);
+  background: var(--color-warning-bg);
+  border-radius: var(--radius-medium);
 }
 .exito,
 .error {
   position: sticky;
-  top: var(--espacio-12);
+  top: var(--space-8);
   z-index: 5;
   display: flex;
   align-items: flex-start;
-  gap: var(--espacio-2);
-  padding: var(--espacio-3) var(--espacio-4);
-  border-radius: var(--radio-base);
-  background: var(--blanco);
-  font-weight: var(--tipo-impresion-h2-peso);
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  font-weight: var(--weight-bold);
 }
 .exito {
-  border-left: var(--espacio-1) solid var(--verde-territorio);
+  border-left: var(--space-1) solid var(--color-secondary);
 }
 .error {
-  border-left: var(--espacio-1) solid var(--terracota);
+  background: var(--color-error-bg);
 }
 .exito svg {
   flex: none;
-  color: var(--verde-territorio);
+  color: var(--color-secondary);
 }
 .error svg {
   flex: none;
-  color: var(--terracota);
+  color: var(--color-error);
 }

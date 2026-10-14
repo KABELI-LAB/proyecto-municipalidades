@@ -68,7 +68,7 @@ export function useMapa(ref: RefObject<HTMLDivElement | null>, { encuadre, inter
   return listo;
 }
 
-/** Color de un token del sistema de diseño (por ejemplo, «azul-institucional»). */
+/** Color de un token del sistema de diseño (por ejemplo, «color-primary»). */
 export function token(nombre: string): string {
   return getComputedStyle(document.documentElement).getPropertyValue(`--${nombre}`).trim();
 }

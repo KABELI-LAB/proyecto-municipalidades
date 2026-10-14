@@ -12,7 +12,7 @@ export default async function PaginaServicio() {
       <div className={estilos.cabecera}>
         <h1>Solicitar un servicio</h1>
         <p>
-          Cuéntenos qué servicio necesita su animal. Con estas solicitudes decidimos dónde hacer los próximos
+          Cuéntanos qué servicio necesita tu animal. Con estas solicitudes decidimos dónde hacer los próximos
           operativos.
         </p>
       </div>

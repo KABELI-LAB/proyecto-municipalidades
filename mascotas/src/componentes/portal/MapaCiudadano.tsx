@@ -31,15 +31,15 @@ export function MapaCiudadano({ capa, nombreCapa, localidades, marcas, vacio }: 
   useEffect(() => {
     if (!listo) return;
     const { L, mapa } = listo;
-    const azul = token("azul-institucional");
+    const azul = token("color-primary");
     const grupo = L.layerGroup().addTo(mapa);
     const dibujadas = marcas.map((m) => {
       const activa = m.clave === elegida?.clave;
       const marca = L.circleMarker([m.centro.lat, m.centro.lng], {
         radius: m.radio,
-        color: activa ? token("gris-texto") : azul,
+        color: activa ? token("color-text") : azul,
         weight: activa ? 4 : 2,
-        fillColor: m.nivel === 0 ? token("blanco") : azul,
+        fillColor: m.nivel === 0 ? token("color-surface") : azul,
         fillOpacity: m.nivel === 0 ? 1 : RELLENO_POR_NIVEL[m.nivel],
       }).addTo(grupo);
       marca.on("click", () => elegir(m, true));
@@ -74,8 +74,8 @@ export function MapaCiudadano({ capa, nombreCapa, localidades, marcas, vacio }: 
           <Detalle marca={elegida} alVolver={() => elegir(null)} />
         ) : (
           <>
-            <h2>Elija un lugar</h2>
-            <p className="nota">Toque una marca en el mapa o un lugar de esta lista.</p>
+            <h2>Elige un lugar</h2>
+            <p className="nota">Toca una marca en el mapa o un lugar de esta lista.</p>
             <ul className={estilos.lugares}>
               {marcas.map((m) => (
                 <li key={m.clave}>

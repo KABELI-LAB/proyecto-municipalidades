@@ -10,8 +10,10 @@
   "region": "Región del Maule",
   "zonaHoraria": "America/Santiago",
   "identidad": {
-    "escudoColor": "/ds/assets/Escudo/escudo-color.png",
-    "escudoNegativo": "/ds/assets/Escudo/escudo-negativo.png"
+    "escudo": "/ds/logo/escudo.png",
+    "logoCiudadano": "/ds/logo/wordmark-somos-todos.png",
+    "logoBlanco": "/ds/logo/logo-vertical-white.png",
+    "marcaDigital": "/ds/logo/digital-mark.svg"
   },
   "parametros": {
     "limitePorHogar": 2,

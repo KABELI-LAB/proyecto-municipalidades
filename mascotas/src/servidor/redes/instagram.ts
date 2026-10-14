@@ -49,7 +49,7 @@ async function llamar(metodo: "GET" | "POST", ruta: string, parametros: Record<s
   try {
     respuesta = metodo === "GET" ? await fetch(`${base()}/${ruta}?${datos}`, { cache: "no-store" }) : await fetch(`${base()}/${ruta}`, { method: "POST", body: datos, cache: "no-store" });
   } catch {
-    throw new ErrorInstagram("No pudimos comunicarnos con Instagram. Revise la conexión a internet del servidor.");
+    throw new ErrorInstagram("No pudimos comunicarnos con Instagram. Revisa la conexión a internet del servidor.");
   }
   const cuerpo = (await respuesta.json().catch(() => ({}))) as Record<string, unknown> & { error?: { message?: string; code?: number } };
   if (!respuesta.ok || cuerpo.error) {
@@ -77,7 +77,7 @@ export async function publicarImagen(p: { imagenUrl: string; texto: string; text
   try {
     if (contenedor) {
       const { status_code } = (await llamar("GET", contenedor, { fields: "status_code" })) as { status_code?: string };
-      if (status_code === "PUBLISHED") return { ok: false, error: "Ese contenedor ya figura publicado en Instagram. Revise la cuenta antes de volver a intentar.", contenedorId: contenedor };
+      if (status_code === "PUBLISHED") return { ok: false, error: "Ese contenedor ya figura publicado en Instagram. Revisa la cuenta antes de volver a intentar.", contenedorId: contenedor };
       if (status_code !== "FINISHED" && status_code !== "IN_PROGRESS") contenedor = null; // vencido o con error: se crea otro
     }
     if (!contenedor) {
@@ -93,7 +93,7 @@ export async function publicarImagen(p: { imagenUrl: string; texto: string; text
       await pausa(espera);
     }
     if (estado === "ERROR" || estado === "EXPIRED") return { ok: false, error: `Instagram no pudo procesar la imagen (estado ${estado}).`, contenedorId: null };
-    if (estado !== "FINISHED") return { ok: false, error: "Instagram aún procesa la imagen. Reintente en unos minutos; se usará el mismo contenedor.", contenedorId: contenedor };
+    if (estado !== "FINISHED") return { ok: false, error: "Instagram aún procesa la imagen. Reintenta en unos minutos; se usará el mismo contenedor.", contenedorId: contenedor };
     const publicado = (await llamar("POST", `${ig}/media_publish`, { creation_id: contenedor })) as { id?: string };
     if (!publicado.id) throw new ErrorInstagram("Instagram no confirmó la publicación.");
     let permalink: string | null = null;

@@ -69,7 +69,7 @@ export function ConsultaSolicitudes() {
     e.preventDefault();
     setErrores({});
     setMensaje(null);
-    if (!v.rut.trim()) return setErrores({ rut: "Escriba su RUT." });
+    if (!v.rut.trim()) return setErrores({ rut: "Escribe tu RUT." });
     iniciar(async () => {
       const r = await pedirCodigoAcceso({ rut: v.rut });
       if (r.ok) setEnviado({ mensaje: r.mensaje, pista: r.pista, codigoPrueba: r.codigoPrueba });
@@ -84,7 +84,7 @@ export function ConsultaSolicitudes() {
     e.preventDefault();
     setErrores({});
     setMensaje(null);
-    if (!/^\d{6}$/.test(codigoCorreo)) return setErrores({ codigoCorreo: "Escriba los 6 dígitos del código." });
+    if (!/^\d{6}$/.test(codigoCorreo)) return setErrores({ codigoCorreo: "Escribe los 6 dígitos del código." });
     iniciar(async () => mostrar(await entrarConCodigoAcceso({ rut: v.rut, codigo: codigoCorreo }), v.rut));
   }
 
@@ -98,7 +98,7 @@ export function ConsultaSolicitudes() {
   return (
     <div className={estilos.contenedor}>
       {!tramites && (
-        <div className={estilos.modos} role="tablist" aria-label="Cómo quiere entrar">
+        <div className={estilos.modos} role="tablist" aria-label="Cómo quieres entrar">
           <button type="button" role="tab" aria-selected={modo === "correo"} className={estilos.modo} onClick={() => cambiarModo("correo")}>
             <Icono nombre="mensaje" tamano={20} />
             Recibir un código en mi correo
@@ -114,7 +114,7 @@ export function ConsultaSolicitudes() {
         <form className={formulario.formulario} onSubmit={enviado ? entrar : pedirCodigo} noValidate aria-label="Entrar con un código enviado a mi correo">
           {!enviado ? (
             <>
-              <CampoTexto id="rut" etiqueta="RUT" valor={v.rut} alCambiar={(x) => setV((s) => ({ ...s, rut: x }))} error={errores.rut} ayuda="Le enviaremos un código al correo que dejó en sus trámites. No necesita registrarse." maxLength={12} />
+              <CampoTexto id="rut" etiqueta="RUT" valor={v.rut} alCambiar={(x) => setV((s) => ({ ...s, rut: x }))} error={errores.rut} ayuda="Te enviaremos un código al correo que dejaste en tus trámites. No necesitas registrarte." maxLength={12} />
             </>
           ) : (
             <>
@@ -198,10 +198,10 @@ export function ConsultaSolicitudes() {
           {tramites.some((t) => t.invitacion?.responder) && (
             <p className={estilos.invitacion} role="status">
               <Icono nombre="calendario" tamano={20} />
-              Tiene una invitación prioritaria a un operativo por responder.
+              Tienes una invitación prioritaria a un operativo por responder.
             </p>
           )}
-          <h2 id="mis-tramites">{tramites.length === 1 ? "Su trámite" : `Sus ${tramites.length} trámites`}</h2>
+          <h2 id="mis-tramites">{tramites.length === 1 ? "Tu trámite" : `Tus ${tramites.length} trámites`}</h2>
           <ul>
             {tramites.map((t, i) => (
               <li key={t.codigo ?? i} className={estilos.tramite}>
@@ -226,8 +226,8 @@ export function ConsultaSolicitudes() {
           </ul>
           {avisos.length > 0 && (
             <section aria-labelledby="avisos-persona" className={estilos.avisos}>
-              <h2 id="avisos-persona">Avisos para usted</h2>
-              <p className="nota">Lo que le hemos enviado. Si el envío de correos no está configurado, los avisos se ven solo aquí.</p>
+              <h2 id="avisos-persona">Avisos para ti</h2>
+              <p className="nota">Lo que te hemos enviado. Si el envío de correos no está configurado, los avisos se ven solo aquí.</p>
               <ul>
                 {avisos.map((a, j) => (
                   <li key={j}>

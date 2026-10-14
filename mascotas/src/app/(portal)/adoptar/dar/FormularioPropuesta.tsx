@@ -15,7 +15,7 @@ import { esquemaPropuesta } from "@/lib/esquemas";
 import { proponerAdopcion } from "@/servidor/portal/acciones";
 import estilos from "@/componentes/formulario/formulario.module.css";
 
-const TITULOS = ["El animal", "Salud y cómo es", "Sus datos", "Revise y confirme"] as const;
+const TITULOS = ["El animal", "Salud y cómo es", "Tus datos", "Revisa y confirma"] as const;
 const PASOS = [
   ["fotos", "nombreAnimal", "especie", "sexo", "edad", "tamano"],
   ["esterilizado", "vacunas", "microchip", "caracter", "relacion"],
@@ -79,10 +79,10 @@ export function FormularioPropuesta({ sectores, inicial = PROPUESTA_VACIA, corre
 
   if (resultado) {
     return (
-      <ResultadoTramite titulo={resultado.corregida ? "Recibimos su propuesta corregida" : "Recibimos su propuesta"} codigo={resultado.codigo}>
+      <ResultadoTramite titulo={resultado.corregida ? "Recibimos tu propuesta corregida" : "Recibimos tu propuesta"} codigo={resultado.codigo}>
         <p>
-          El equipo municipal la revisará antes de publicarla en el catálogo de adopción. Puede que le pidamos corregir algún
-          dato. Cuando esté publicada, revise las postulaciones y elija en Mis solicitudes.
+          El equipo municipal la revisará antes de publicarla en el catálogo de adopción. Puede que te pidamos corregir algún
+          dato. Cuando esté publicada, revisa las postulaciones y elige en Mis solicitudes.
         </p>
       </ResultadoTramite>
     );
@@ -91,7 +91,7 @@ export function FormularioPropuesta({ sectores, inicial = PROPUESTA_VACIA, corre
   function avanzar() {
     // Las fotos no están en el esquema de texto: se revisan aquí antes de dejar el primer paso.
     const faltanFotos = t.paso === 0 && fotos.length === 0 && !correccion?.fotos;
-    setErrorFotos(faltanFotos ? "Agregue al menos una foto del animal." : undefined);
+    setErrorFotos(faltanFotos ? "Agrega al menos una foto del animal." : undefined);
     if (faltanFotos) return document.getElementById("fotos")?.focus();
     t.avanzar();
   }
@@ -138,8 +138,8 @@ export function FormularioPropuesta({ sectores, inicial = PROPUESTA_VACIA, corre
             opcional={Boolean(correccion?.fotos)}
             ayuda={
               correccion?.fotos
-                ? `Ya tenemos ${correccion.fotos === 1 ? "1 foto" : `${correccion.fotos} fotos`}. Si agrega fotos nuevas, reemplazarán a las anteriores.`
-                : `De 1 a ${MAXIMO_FOTOS} fotos en que se vea bien el animal. Evite que aparezcan personas, patentes o el interior de una casa.`
+                ? `Ya tenemos ${correccion.fotos === 1 ? "1 foto" : `${correccion.fotos} fotos`}. Si agregas fotos nuevas, reemplazarán a las anteriores.`
+                : `De 1 a ${MAXIMO_FOTOS} fotos en que se vea bien el animal. Evita que aparezcan personas, patentes o el interior de una casa.`
             }
           />
           <CampoTexto id="nombreAnimal" etiqueta="Nombre o apodo" opcional valor={v.nombreAnimal} alCambiar={(x) => cambiar("nombreAnimal", x)} error={errores.nombreAnimal} maxLength={40} />
@@ -167,28 +167,28 @@ export function FormularioPropuesta({ sectores, inicial = PROPUESTA_VACIA, corre
 
       {t.paso === 1 && (
         <>
-          <p>Si no conoce un dato, elija «No sé»: preferimos eso a un dato inexacto.</p>
+          <p>Si no conoces un dato, elige «No sé»: preferimos eso a un dato inexacto.</p>
           <CampoOpciones id="esterilizado" etiqueta="¿Está esterilizado?" valor={v.esterilizado} alCambiar={(x) => cambiar("esterilizado", x)} error={errores.esterilizado} opciones={SI_NO} columnas={3} />
           <CampoOpciones id="vacunas" etiqueta="¿Tiene sus vacunas al día?" valor={v.vacunas} alCambiar={(x) => cambiar("vacunas", x)} error={errores.vacunas} opciones={SI_NO} columnas={3} />
           <CampoOpciones id="microchip" etiqueta="¿Tiene microchip?" valor={v.microchip} alCambiar={(x) => cambiar("microchip", x)} error={errores.microchip} opciones={SI_NO} columnas={3} />
           <CampoArea
             id="caracter"
-            etiqueta="Cuéntenos de su mascota"
+            etiqueta="Cuéntanos de tu mascota"
             opcional
             valor={v.caracter}
             alCambiar={(x) => cambiar("caracter", x)}
             error={errores.caracter}
             maxLength={800}
             filas={6}
-            sugerencia={"Puede contar, por ejemplo:\n· Cómo es: tranquilo, juguetón, si le gusta pasear o se asusta fácil.\n· Si convive bien con niños o con otros animales.\n· Salud: desparasitación, alguna enfermedad o tratamiento.\n· Qué hogar le vendría bien: con patio, compañía durante el día."}
+            sugerencia={"Puedes contar, por ejemplo:\n· Cómo es: tranquilo, juguetón, si le gusta pasear o se asusta fácil.\n· Si convive bien con niños o con otros animales.\n· Salud: desparasitación, alguna enfermedad o tratamiento.\n· Qué hogar le vendría bien: con patio, compañía durante el día."}
           />
-          <CampoSelect id="relacion" etiqueta="¿Cuál es su relación con el animal?" valor={v.relacion} alCambiar={(x) => cambiar("relacion", x)} error={errores.relacion} opciones={opciones(RELACION_ANIMAL)} />
+          <CampoSelect id="relacion" etiqueta="¿Cuál es tu relación con el animal?" valor={v.relacion} alCambiar={(x) => cambiar("relacion", x)} error={errores.relacion} opciones={opciones(RELACION_ANIMAL)} />
         </>
       )}
 
       {t.paso === 2 && (
         <>
-          <p>No se publican. Las postulaciones le llegarán sin contactos; solo cuando usted elija a una persona compartiremos los contactos de ambos.</p>
+          <p>No se publican. Las postulaciones te llegarán sin contactos; solo cuando elijas a una persona compartiremos los contactos de ambos.</p>
           <BloquePersona valores={v} errores={errores} cambiar={cambiar} sectores={sectores} etiquetaLocalidad="Localidad donde está el animal" />
           <CampoCasillas
             id="autoriza"
@@ -205,7 +205,7 @@ export function FormularioPropuesta({ sectores, inicial = PROPUESTA_VACIA, corre
         <>
         <p className={estilos.nota}>
           <Icono nombre="info" tamano={20} />
-          <span>Revisamos su propuesta antes de publicarla en el catálogo de adopción. Las postulaciones le llegan a usted y usted elige.</span>
+          <span>Revisamos tu propuesta antes de publicarla en el catálogo de adopción. Las postulaciones te llegan y tú eliges.</span>
         </p>
         <Resumen
           filas={[
@@ -219,7 +219,7 @@ export function FormularioPropuesta({ sectores, inicial = PROPUESTA_VACIA, corre
             ["Vacunas al día", SI_NO_SE[v.vacunas] ?? ""],
             ["Microchip", SI_NO_SE[v.microchip] ?? ""],
             ...(v.caracter ? [["Sobre el animal", v.caracter] as [string, string]] : []),
-            ["Su relación", RELACION_ANIMAL[v.relacion] ?? ""],
+            ["Tu relación", RELACION_ANIMAL[v.relacion] ?? ""],
             ...filasPersona(v, sectores, "Dónde está el animal"),
           ]}
         />

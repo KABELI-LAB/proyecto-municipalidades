@@ -12,7 +12,7 @@ import estilos from "@/componentes/formulario/formulario.module.css";
 
 type Props = { sectores: SectorOpcion[]; servicios: { id: string; nombre: string; clave: string }[] };
 
-const TITULOS = ["Qué necesita", "Datos del animal y suyos", "Revise y confirme"] as const;
+const TITULOS = ["Qué necesitas", "Datos del animal y tuyos", "Revisa y confirma"] as const;
 const PASOS = [["servicioId", "especie"], [...CAMPOS_ANIMAL, ...CAMPOS_PERSONA], []] as const;
 
 const DESCRIPCION: Record<string, string> = {
@@ -28,16 +28,16 @@ export function FormularioServicio({ sectores, servicios }: Props) {
 
   if (hecho) {
     return (
-      <ResultadoTramite titulo="Su solicitud fue recibida" codigo={hecho.codigo} conRut={Boolean(v.rut)}>
+      <ResultadoTramite titulo="Tu solicitud fue recibida" codigo={hecho.codigo} conRut={Boolean(v.rut)}>
         {hecho.operativo ? (
           <p>
             Hay un operativo publicado en {hecho.operativo.sector} el {hecho.operativo.fecha} que ofrece{" "}
-            {hecho.servicio.toLowerCase()}. <Link href={`/operativos/${hecho.operativo.id}`}>Puede solicitar un cupo aquí</Link>.
+            {hecho.servicio.toLowerCase()}. <Link href={`/operativos/${hecho.operativo.id}`}>Puedes solicitar un cupo aquí</Link>.
           </p>
         ) : (
           <p>
-            Registramos su solicitud. Nos ayuda a decidir dónde hacer los próximos operativos; revise la sección
-            Operativos para inscribirse cuando haya uno cerca.
+            Registramos tu solicitud. Nos ayuda a decidir dónde hacer los próximos operativos; revisa la sección
+            Operativos para inscribirte cuando haya uno cerca.
           </p>
         )}
       </ResultadoTramite>
@@ -72,7 +72,7 @@ export function FormularioServicio({ sectores, servicios }: Props) {
       {t.paso === 1 && (
         <>
           <BloqueAnimal valores={v} errores={errores} cambiar={cambiar} />
-          <h3 className={estilos.subtitulo}>Sus datos</h3>
+          <h3 className={estilos.subtitulo}>Tus datos</h3>
           <BloquePersona valores={v} errores={errores} cambiar={cambiar} sectores={sectores} rut="opcional" />
         </>
       )}

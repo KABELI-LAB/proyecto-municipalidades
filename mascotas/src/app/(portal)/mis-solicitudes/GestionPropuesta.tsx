@@ -12,8 +12,8 @@ type Props = { rut: string; codigo: string; corregir: boolean; cerrar: boolean; 
 type Decision = "elegir" | "descartar" | "adoptado" | "no_concreto";
 
 const PREGUNTA: Record<Decision, (n: string) => string> = {
-  elegir: (n) => `Compartiremos su contacto con ${n} y usted verá el suyo, para que se conozcan. La ficha quedará en proceso de adopción. ¿Desea elegir a ${n}?`,
-  descartar: (n) => `Avisaremos a ${n} que no fue seleccionada, con un mensaje respetuoso. ¿Desea continuar?`,
+  elegir: (n) => `Compartiremos tu contacto con ${n} y verás el suyo, para que se conozcan. La ficha quedará en proceso de adopción. ¿Quieres elegir a ${n}?`,
+  descartar: (n) => `Avisaremos a ${n} que no fue seleccionada, con un mensaje respetuoso. ¿Quieres continuar?`,
   adoptado: (n) => `Registraremos que ${n} adoptó al animal y la ficha saldrá del catálogo. ¿Se concretó la adopción?`,
   no_concreto: () => "La ficha volverá a estar disponible para recibir postulaciones. ¿La adopción no se concretó?",
 };
@@ -54,7 +54,7 @@ export function GestionPropuesta({ rut, codigo, corregir, cerrar, postulaciones,
   if (confirmar) {
     return (
       <div className={estilos.gestion} role="group" aria-label="Cerrar la propuesta">
-        <p>{confirmar === "encontro_hogar" ? "La ficha dejará de mostrarse en el catálogo. ¿El animal ya encontró hogar?" : "La propuesta dejará de mostrarse y no recibirá postulaciones. ¿Desea retirarla?"}</p>
+        <p>{confirmar === "encontro_hogar" ? "La ficha dejará de mostrarse en el catálogo. ¿El animal ya encontró hogar?" : "La propuesta dejará de mostrarse y no recibirá postulaciones. ¿Quieres retirarla?"}</p>
         {error && <p role="alert">{error}</p>}
         <div className={estilos.botones}>
           <Boton onClick={() => cerrarPropuesta(confirmar)} disabled={enviando}>
@@ -93,7 +93,7 @@ export function GestionPropuesta({ rut, codigo, corregir, cerrar, postulaciones,
 
       {lista && (
         <section aria-label="Postulaciones recibidas" className={estilos.postulaciones}>
-          <p className="nota">Le mostramos los datos de cada persona sin su contacto. Al elegir a una, compartiremos los contactos de ambos.</p>
+          <p className="nota">Te mostramos los datos de cada persona sin su contacto. Al elegir a una, compartiremos los contactos de ambos.</p>
           <ul>
             {lista.map((p) => (
               <li key={p.id} className={estilos.postulacion}>

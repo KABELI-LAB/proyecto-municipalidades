@@ -84,7 +84,7 @@ export async function invitarSiguientes(tx: Tx, operativoId: string, ahora = new
         tx,
         s.persona,
         "Invitación prioritaria a un operativo",
-        `Le invitamos al operativo de ${c.servicio.nombre.toLowerCase()} en ${o.lugar.nombre} (${o.sector.nombre}) el ${fechaLarga(o.fecha)}, de ${o.horaInicio} a ${o.horaFin} horas. Responda antes del ${fechaLarga(venceEn)} en Mis solicitudes con su RUT y el código ${codigo}. Confirmar su interés no reserva el cupo: se lo asignamos según disponibilidad.`,
+        `Te invitamos al operativo de ${c.servicio.nombre.toLowerCase()} en ${o.lugar.nombre} (${o.sector.nombre}) el ${fechaLarga(o.fecha)}, de ${o.horaInicio} a ${o.horaFin} horas. Responde antes del ${fechaLarga(venceEn)} en Mis solicitudes con tu RUT y el código ${codigo}. Confirmar tu interés no reserva el cupo: se lo asignamos según disponibilidad.`,
         o.loteDemoId,
       );
       libres--;
@@ -118,8 +118,8 @@ export async function asignarInteresadas(tx: Tx, operativoId: string, ahora = ne
     await notificar(
       tx,
       i.persona,
-      "Le asignamos un cupo",
-      `Su cupo de ${i.servicio.nombre.toLowerCase()} el ${fechaLarga(o.fecha)}, de ${o.horaInicio} a ${o.horaFin} horas, en ${o.lugar.nombre}, quedó asignado. Su código de cupo es ${cupo.codigo}.`,
+      "Te asignamos un cupo",
+      `Tu cupo de ${i.servicio.nombre.toLowerCase()} el ${fechaLarga(o.fecha)}, de ${o.horaInicio} a ${o.horaFin} horas, en ${o.lugar.nombre}, quedó asignado. Tu código de cupo es ${cupo.codigo}.`,
       i.loteDemoId,
     );
     asignadas++;
@@ -134,7 +134,7 @@ export async function promoverEspera(tx: Tx, operativoId: string, servicioId: st
   if (!siguiente) return null;
   await tx.cupo.update({ where: { id: siguiente.id }, data: { estado: "CONFIRMADO", posicionEspera: null } });
   if (siguiente.solicitudId) await tx.solicitudServicio.update({ where: { id: siguiente.solicitudId }, data: { estado: "CUPO_CONFIRMADO" } });
-  await notificar(tx, siguiente.persona, "Se liberó un cupo", `Se liberó un cupo de ${siguiente.servicio.nombre.toLowerCase()} y quedó confirmado para usted. Su código es ${siguiente.codigo}.`, loteDemoId);
+  await notificar(tx, siguiente.persona, "Se liberó un cupo", `Se liberó un cupo de ${siguiente.servicio.nombre.toLowerCase()} y quedó confirmado para ti. Tu código es ${siguiente.codigo}.`, loteDemoId);
   return siguiente.persona.nombre;
 }
 
@@ -144,7 +144,7 @@ async function vencerDeOperativo(tx: Tx, operativoId: string, ahora: Date): Prom
   for (const i of vencidas) {
     await tx.invitacionOperativo.update({ where: { id: i.id }, data: { estado: "VENCIDA", cerradaEn: ahora, motivoCierre: "Venció el plazo sin respuesta" } });
     await tx.solicitudServicio.update({ where: { id: i.solicitudId }, data: { estado: "RECIBIDA" } });
-    await notificar(tx, i.persona, "Su invitación venció", `Su invitación ${i.codigo} de ${i.servicio.nombre.toLowerCase()} venció sin respuesta. Su solicitud sigue registrada y le avisaremos del próximo operativo.`, i.loteDemoId);
+    await notificar(tx, i.persona, "Tu invitación venció", `Tu invitación ${i.codigo} de ${i.servicio.nombre.toLowerCase()} venció sin respuesta. Tu solicitud sigue registrada y te avisaremos del próximo operativo.`, i.loteDemoId);
   }
   return vencidas.length;
 }
@@ -192,7 +192,7 @@ export async function cerrarInvitacionesAbiertas(tx: Tx, operativoId: string, mo
   for (const i of abiertas) {
     await tx.invitacionOperativo.update({ where: { id: i.id }, data: { estado: "CANCELADA", cerradaEn: ahora, motivoCierre: motivo } });
     await tx.solicitudServicio.update({ where: { id: i.solicitudId }, data: { estado: "RECIBIDA" } });
-    if (avisar) await notificar(tx, i.persona, "Sobre su invitación", `${avisar} Su solicitud sigue registrada y le avisaremos del próximo operativo. (Invitación ${i.codigo}.)`, i.loteDemoId);
+    if (avisar) await notificar(tx, i.persona, "Sobre tu invitación", `${avisar} Tu solicitud sigue registrada y te avisaremos del próximo operativo. (Invitación ${i.codigo}.)`, i.loteDemoId);
   }
   return abiertas.length;
 }

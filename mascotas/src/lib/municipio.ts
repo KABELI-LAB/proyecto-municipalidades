@@ -12,8 +12,14 @@ export type Municipio = {
   /** Zona horaria IANA para mostrar fechas y horas. */
   zonaHoraria: string;
   identidad: {
-    escudoColor: string;
-    escudoNegativo: string;
+    /** Escudo a color (nivel institucional, sobre fondos claros). */
+    escudo: string;
+    /** Logotipo con «Somos tod@s» (nivel ciudadano, sobre blanco). */
+    logoCiudadano: string;
+    /** Versión vertical en blanco, para fondos azules. */
+    logoBlanco: string;
+    /** Marca digital cuadrada: favicon y avatar. */
+    marcaDigital: string;
   };
   parametros: {
     limitePorHogar: number;
@@ -33,7 +39,7 @@ let cache: { ruta: string; modificado: number; revisado: number; municipio: Muni
 export function municipioActivo(): Municipio {
   const id = process.env.MUNICIPIO;
   if (!id || !/^[a-z0-9-]+$/.test(id)) {
-    throw new Error("Falta la variable MUNICIPIO o no es válida (vea el archivo .env).");
+    throw new Error("Falta la variable MUNICIPIO o no es válida (revisa el archivo .env).");
   }
   const ruta = join(process.cwd(), "config", "municipios", `${id}.json`);
   const ahora = Date.now();

@@ -1,74 +1,82 @@
-/* Inicio del portal según la maqueta aprobada: bienvenida y collage, tres
-   funciones protagonistas, las demás funciones debajo y tres tarjetas.
-   Pensado primero para celular. Solo colores y
-   medidas de los tokens: un radio, sin sombras ni degradados. */
+/* Inicio del portal según el sistema de diseño (ui_kits/website): portada con
+   collage y el Cauce del escudo, tres funciones protagonistas como tarjetas
+   blancas con recuadro de ícono de color, las demás como mosaicos de
+   servicio y, al final, tres tarjetas con sobretítulo. Primero para celular.
+   El panel municipal reutiliza las tarjetas protagonistas y los mosaicos. */
 
 .pagina {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-6);
-  margin-top: calc(-1 * var(--espacio-2));
+  gap: var(--space-7);
+  margin-top: calc(-1 * var(--space-5));
 }
 
-/* ───── 1. Bienvenida y collage ───── */
+/* ───── 1. Portada ───── */
 
 .portada {
+  position: relative;
+  padding-block: var(--space-6) var(--space-9);
+  overflow: hidden;
+}
+.portadaInterior {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--espacio-6);
+  gap: var(--space-6);
   align-items: center;
 }
 @media (min-width: 900px) {
-  .portada {
-    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
-    gap: var(--espacio-10);
+  .portadaInterior {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-8);
   }
+}
+.cauce {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -10px;
+  width: 100%;
+  height: 120px;
 }
 .mensaje {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-3);
+  gap: var(--space-4);
 }
-.antetitulo {
-  display: flex;
-  align-items: center;
-  gap: var(--espacio-2);
-  font-weight: var(--tipo-impresion-h2-peso);
-}
-.antetitulo svg {
-  color: var(--azul-institucional);
-}
-/* Tamaño de h2 (32 px), el de la portada anterior. */
+/* Título de portada: estilo display del sistema, en Hualañé Blue. */
 .mensaje h1 {
-  font-family: var(--font-titulos);
-  font-size: var(--tipo-impresion-h2-tamano);
-  font-weight: var(--tipo-impresion-h1-peso);
-  line-height: var(--tipo-impresion-h1-interlineado);
-  color: var(--azul-institucional);
+  font-size: var(--type-h1-size);
+  line-height: var(--type-h1-lh);
+  font-weight: var(--weight-black);
+  letter-spacing: var(--type-display-l-track);
+  color: var(--color-primary);
 }
-/* En escritorio, el título en dos líneas como en la maqueta. */
-@media (min-width: 900px) {
-  .salto {
-    display: block;
+@media (max-width: 640px) {
+  .mensaje h1 {
+    font-size: var(--type-h2-size);
   }
 }
-.mensaje > p:last-child {
-  font-size: var(--tipo-impresion-h3-tamano);
-  line-height: var(--tipo-impresion-cuerpo-interlineado);
+.bajada {
+  max-width: 34em;
+  font-size: var(--type-body-lg-size);
+  line-height: var(--type-body-lg-lh);
+  color: var(--color-text-secondary);
 }
-@media (max-width: 639px) {
-  .mensaje > p:last-child {
-    font-size: var(--tipo-impresion-cuerpo-tamano);
+@media (max-width: 640px) {
+  .bajada {
+    font-size: var(--type-body-size);
   }
 }
 
-/* Collage: franja deslizable en celular; en escritorio una foto grande, dos
-   medianas arriba y cuatro chicas abajo. Cada foto conserva su frase. */
+/* Collage: franja deslizable en celular; en escritorio una foto grande con el
+   corte inclinado del logotipo, dos medianas arriba y cuatro chicas abajo. */
 .mosaico {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: 60%;
-  gap: var(--espacio-2);
+  gap: var(--space-3);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -84,7 +92,7 @@
   position: relative;
   display: block;
   height: 100%;
-  border-radius: var(--radio-base);
+  border-radius: var(--radius-large);
   overflow: hidden;
 }
 .mosaico img {
@@ -93,24 +101,22 @@
   height: 100%;
   aspect-ratio: 1;
   object-fit: cover;
-  transition: transform 250ms ease;
+  transition: transform var(--duration-standard) var(--ease-flow);
 }
 .mosaico a:hover img {
   transform: scale(1.03);
 }
-.mosaico a:focus-visible {
-  outline-offset: calc(-1 * var(--espacio-1));
-}
 .etiquetaFoto {
   position: absolute;
-  left: var(--espacio-2);
-  bottom: var(--espacio-2);
-  max-width: calc(100% - var(--espacio-4));
-  padding: var(--espacio-1) var(--espacio-2);
-  background: var(--blanco);
-  border-radius: var(--radio-base);
-  color: var(--azul-institucional);
-  font-weight: var(--tipo-impresion-h2-peso);
+  left: var(--space-2);
+  bottom: var(--space-2);
+  max-width: calc(100% - var(--space-4));
+  padding: 6px 10px;
+  background: var(--color-surface);
+  border-radius: var(--radius-medium);
+  color: var(--color-text);
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--weight-bold);
   line-height: 1.25;
 }
 @media (min-width: 640px) {
@@ -122,7 +128,7 @@
   .mosaico {
     grid-auto-flow: row;
     grid-template-columns: 2fr repeat(4, minmax(0, 1fr));
-    grid-template-rows: repeat(2, 150px);
+    grid-template-rows: repeat(2, 160px);
     overflow: visible;
   }
   .mosaico img {
@@ -132,6 +138,11 @@
     grid-column: 1;
     grid-row: 1 / 3;
   }
+  .mosaico li:nth-child(1) a,
+  .mosaico li:nth-child(1) > div {
+    border-radius: var(--radius-xl);
+    clip-path: polygon(0 8%, 100% 0, 100% 100%, 0 100%);
+  }
   .mosaico li:nth-child(2) {
     grid-column: 2 / 4;
     grid-row: 1;
@@ -140,45 +151,34 @@
     grid-column: 4 / 6;
     grid-row: 1;
   }
-  /* En las fotos chicas, la frase en letra de nota para que quepa. */
+  /* En las fotos chicas, la frase en letra más chica para que quepa. */
   .mosaico li:nth-child(n + 4) .etiquetaFoto {
-    left: var(--espacio-1);
-    bottom: var(--espacio-1);
-    max-width: calc(100% - var(--espacio-2));
-    font-size: var(--tipo-impresion-nota-tamano);
-  }
-}
-@media (min-width: 1400px) {
-  .mosaico {
-    grid-template-rows: repeat(2, 170px);
+    left: var(--space-1);
+    bottom: var(--space-1);
+    max-width: calc(100% - var(--space-2));
+    padding: 4px 8px;
+    font-size: var(--type-caption-size);
   }
 }
 
-/* En celular, primero las tres funciones y las demás; el collage va después. */
-@media (max-width: 899px) {
-  .portada {
-    display: contents;
-  }
-  .mensaje {
-    order: 1;
-  }
-  .principales {
-    order: 2;
-  }
-  .otros {
-    order: 3;
-  }
-  .mosaico {
-    order: 4;
-  }
-  .fila {
-    order: 5;
-  }
-}
+/* En celular, primero el mensaje y las funciones; el collage va al final de la portada. */
 @media (max-width: 639px) {
-  .mensaje > p:last-child {
+  .bajada {
     display: none;
   }
+  .portada {
+    padding-block: var(--space-5) var(--space-8);
+  }
+}
+
+.contenido {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+.tituloSeccion {
+  margin-bottom: var(--space-5);
+  font-size: var(--web-h2-tamano);
 }
 
 /* ───── 2. Tres funciones protagonistas ───── */
@@ -186,7 +186,7 @@
 .principales {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--espacio-4);
+  gap: var(--space-4);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -194,274 +194,255 @@
 @media (min-width: 900px) {
   .principales {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
   }
 }
 .principales li {
   display: flex;
 }
-/* Todo el bloque es el enlace: sin botones adentro. */
+/* Tarjeta del sistema: blanca, borde 1 px, radio grande; al pasar el cursor,
+   borde más fuerte y sombra media (algo que se puede tocar). */
 .principal {
-  flex: 1;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  column-gap: var(--espacio-4);
-  min-height: 180px;
-  border: var(--borde-filete) solid transparent;
-  border-radius: var(--radio-base);
-  overflow: hidden;
-  text-decoration: none;
-  transition: border-color 200ms ease;
-}
-.principalAzul:hover,
-.principalSos:hover {
-  border-color: var(--blanco);
-}
-.principalClaro:hover {
-  border-color: var(--azul-institucional);
-}
-.principalIcono {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--espacio-16);
-  height: var(--espacio-16);
-  margin: var(--espacio-6) 0 0 var(--espacio-6);
-  border-radius: var(--radio-base);
-}
-.principalTexto {
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--espacio-3);
-  padding: var(--espacio-6) var(--espacio-6) var(--espacio-6) 0;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
+  color: var(--color-text);
+  text-decoration: none;
+  transition:
+    border-color var(--duration-standard) var(--ease-flow),
+    box-shadow var(--duration-standard) var(--ease-flow);
 }
-/* Adornos: un grupo pequeño en el rincón inferior derecho de cada tarjeta,
-   en un tono suave del color de la tarjeta (sin contraste fuerte). */
-.principal {
-  position: relative;
+a.principal:hover,
+.principal:has(.enlaceTitulo:hover) {
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-medium);
 }
-.principal > :not(.adornos) {
-  position: relative;
-  z-index: 1;
+a.principal:active {
+  transform: translateY(1px);
 }
-.adornos {
-  position: absolute;
-  right: var(--espacio-4);
-  bottom: var(--espacio-3);
-  width: 140px;
-  height: 100px;
-  pointer-events: none;
+.principalIcono {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
 }
-/* Azul: huellas en azul filete, apenas más claro que el fondo. */
-.principalAzul .adornos {
-  color: var(--azul-filete);
+.tonoAzul .principalIcono {
+  background: var(--blue-50);
+  color: var(--blue-700);
 }
-/* Fondo claro: huellas blancas. */
-.principalClaro .adornos {
-  color: var(--blanco);
+.tonoVerde .principalIcono {
+  background: var(--green-50);
+  color: var(--green-700);
 }
-/* Terracota: blanco muy translúcido. */
-.principalSos .adornos {
-  color: var(--blanco);
-  opacity: 0.2;
+.tonoRojo .principalIcono {
+  background: var(--color-surface);
+  color: var(--red-700);
 }
-@media (max-width: 639px) {
-  .adornos {
-    right: var(--espacio-2);
-    bottom: var(--espacio-2);
-    width: 84px;
-    height: 60px;
-  }
+/* SOS: fondo de error suave para que se reconozca como pedido de ayuda. */
+.tonoRojo {
+  background: var(--color-error-bg);
+  border-color: var(--red-100);
 }
-
 .principalTitulo {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--espacio-2) var(--espacio-3);
+  gap: var(--space-2) var(--space-3);
 }
-.principal h2 {
-  font-family: var(--font-titulos);
-  font-size: var(--tipo-impresion-h3-tamano);
-  font-weight: var(--tipo-impresion-h1-peso);
-  line-height: var(--tipo-impresion-h3-interlineado);
+.principal :is(h2, h3),
+.enlaceTitulo :is(h2, h3) {
+  font-size: var(--type-h3-size);
+  line-height: var(--type-h3-lh);
+  letter-spacing: var(--type-h3-track);
+  color: var(--color-text);
 }
-
-/* Operativos: azul con texto blanco (9 : 1). */
-.principalAzul {
-  background: var(--azul-institucional);
-  color: var(--blanco);
+.tonoRojo :is(h2, h3) {
+  color: var(--red-700);
 }
-.principalAzul h2 {
-  color: var(--blanco);
+.principalDetalle {
+  color: var(--color-text-secondary);
 }
-.principalAzul .principalIcono {
-  background: var(--blanco);
-  color: var(--azul-institucional);
-}
+/* Insignia del sistema: fondo suave, texto del mismo tono, ícono. */
 .distintivo {
   display: inline-flex;
   align-items: center;
-  gap: var(--espacio-1);
-  padding: var(--espacio-1) var(--espacio-2);
-  background: var(--blanco);
-  border-radius: var(--radio-base);
-  color: var(--azul-institucional);
-  font-size: var(--tipo-impresion-nota-tamano);
-  font-weight: var(--tipo-impresion-h2-peso);
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: var(--radius-full);
+  background: var(--green-50);
+  color: var(--green-700);
+  font-size: 14px;
+  font-weight: var(--weight-bold);
+  line-height: 1;
+  white-space: nowrap;
+}
+/* Llamado al pie de la tarjeta: verbo + flecha. */
+.ir {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-2);
+  color: var(--color-primary);
+  font-weight: var(--weight-bold);
+}
+.tonoRojo .ir {
+  color: var(--red-700);
+}
+a.principal:hover .ir svg {
+  transform: translateX(3px);
+}
+.ir svg {
+  transition: transform var(--duration-micro) var(--ease-flow);
 }
 
-/* Mascotas: el título lleva a los avisos; dos accesos directos para informar. */
+/* Mascotas: el título lleva a los avisos; dos accesos directos para publicar. */
 .enlaceTitulo {
   display: inline-flex;
   align-items: center;
-  gap: var(--espacio-2);
-  min-height: var(--espacio-12);
-  color: inherit;
+  gap: var(--space-2);
+  color: var(--color-text);
   text-decoration: none;
 }
 .enlaceTitulo svg {
   flex: none;
-  transition: transform 200ms ease;
+  color: var(--color-primary);
+  transition: transform var(--duration-micro) var(--ease-flow);
 }
 .enlaceTitulo:hover svg {
-  transform: translateX(var(--espacio-1));
+  transform: translateX(3px);
 }
-/* Atajos uno al lado del otro, a lo ancho de la tarjeta (bajo el ícono y el título). */
-.atajosMascota {
-  grid-column: 1 / -1;
+.atajos {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--espacio-2);
-  align-self: start;
-  padding: 0 var(--espacio-6) var(--espacio-6);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  width: 100%;
+  margin-top: auto;
+  padding-top: var(--space-2);
 }
-.atajoMascota {
+/* Botones secundarios del sistema: borde de 2 px y texto en azul. */
+.atajo {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--espacio-2);
-  min-height: var(--espacio-12);
-  padding: var(--espacio-2);
+  gap: var(--space-2);
+  min-height: var(--target-min);
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width-strong) solid var(--color-primary);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-size: var(--type-label-size);
+  font-weight: var(--weight-bold);
+  line-height: 1.2;
   text-align: center;
-  background: var(--blanco);
-  border: var(--borde-filete) solid var(--blanco);
-  border-radius: var(--radio-base);
-  color: var(--azul-institucional);
-  font-weight: var(--tipo-impresion-h1-peso);
   text-decoration: none;
-  transition: border-color 200ms ease;
+  transition: background-color var(--duration-micro) var(--ease-flow);
 }
-.atajoMascota:hover {
-  border-color: var(--azul-institucional);
+.atajo:hover {
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
 }
-
-/* Mascotas: fondo claro con acento azul. */
-.principalClaro {
-  background: var(--gris-claro);
-  color: var(--gris-texto);
-}
-.principalClaro h2 {
-  color: var(--azul-institucional);
-}
-.principalClaro .principalIcono {
-  background: var(--azul-institucional);
-  color: var(--blanco);
+.atajo svg {
+  flex: none;
 }
 
-/* SOS: sobre terracota (4,2 : 1) el texto blanco va siempre grande y en negrita. */
-.principalSos {
-  background: var(--terracota);
-  color: var(--blanco);
-}
-.principalSos h2 {
-  color: var(--blanco);
-}
-.principalSos .principalIcono {
-  background: var(--blanco);
-  color: var(--terracota);
-}
-.sosMensaje {
-  font-size: var(--tipo-impresion-h3-tamano);
-  font-weight: var(--tipo-impresion-h1-peso);
-  line-height: var(--tipo-impresion-h3-interlineado);
-}
+/* ───── 3. Las demás funciones: mosaicos de servicio ───── */
 
-/* En celular, tarjetas compactas para ver las tres al entrar. */
-@media (max-width: 639px) {
-  .principalIcono {
-    width: var(--espacio-12);
-    height: var(--espacio-12);
-    margin: var(--espacio-4) 0 0 var(--espacio-4);
-  }
-  .principalTexto {
-    gap: var(--espacio-2);
-    padding: var(--espacio-4) var(--espacio-4) var(--espacio-4) 0;
-  }
-  .principal {
-    min-height: 0;
-  }
-  .atajosMascota {
-    padding: 0 var(--espacio-4) var(--espacio-4);
-  }
-}
-
-/* ───── 3. Las demás funciones ───── */
-
-.otros ul {
+.otros {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--espacio-2);
-  margin: 0;
+  gap: var(--space-3);
+  margin: var(--space-4) 0 0;
   padding: 0;
   list-style: none;
 }
 @media (min-width: 640px) {
-  .otros ul {
+  .otros {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
   }
 }
 .otros li {
   display: flex;
 }
 .otro {
+  display: flex;
   flex: 1;
-  display: flex;
   align-items: center;
-  gap: var(--espacio-3);
-  min-height: var(--espacio-12);
-  padding: var(--espacio-3) var(--espacio-4);
-  background: var(--blanco);
-  border: var(--borde-filete) solid var(--blanco);
-  border-radius: var(--radio-base);
-  color: var(--azul-institucional);
+  gap: var(--space-3);
+  min-height: var(--target-comfort);
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
+  color: var(--color-text);
   text-decoration: none;
-  transition: border-color 200ms ease;
-}
-.otro svg {
-  flex: none;
-}
-.otro > span {
-  display: flex;
-  flex-direction: column;
-}
-.otro .nota {
-  color: var(--gris-texto);
-}
-.otro b {
-  font-weight: var(--tipo-impresion-h2-peso);
-  line-height: var(--tipo-impresion-h3-interlineado);
+  transition:
+    border-color var(--duration-standard) var(--ease-flow),
+    box-shadow var(--duration-standard) var(--ease-flow);
 }
 .otro:hover {
-  border-color: var(--celeste-rio);
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-medium);
+  color: var(--color-text);
+}
+.otro > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.otro b {
+  font-weight: var(--weight-bold);
+  line-height: 1.25;
+}
+.otroDetalle {
+  display: block;
+  font-size: var(--type-body-sm-size);
+  line-height: var(--type-body-sm-lh);
+  font-weight: var(--weight-regular);
+  color: var(--color-text-secondary);
+}
+/* Recuadro de ícono del sistema: 48 px, radio 14, fondo suave de la categoría. */
+.recuadro {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+}
+.azul {
+  background: var(--blue-50);
+  color: var(--blue-700);
+}
+.verde {
+  background: var(--green-50);
+  color: var(--green-700);
+}
+.amarillo {
+  background: var(--yellow-100);
+  color: var(--yellow-800);
+}
+.rojo {
+  background: var(--red-50);
+  color: var(--red-700);
 }
 
-/* ───── 4. Cuatro tarjetas ───── */
+/* ───── 4. Tres tarjetas ───── */
 
 .fila {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--espacio-4);
+  gap: var(--space-5);
+  align-items: start;
 }
 @media (min-width: 640px) {
   .fila {
@@ -470,52 +451,68 @@
 }
 @media (min-width: 1200px) {
   .fila {
-    grid-template-columns: minmax(0, 4fr) minmax(0, 3fr) minmax(0, 3fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 .tarjeta {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-4);
-  padding: var(--espacio-5);
-  background: var(--blanco);
-  border-radius: var(--radio-base);
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
 }
 .tituloBloque {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: start;
-  gap: var(--espacio-3);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-3);
 }
-.tituloBloque > svg {
-  color: var(--azul-institucional);
+.tituloBloque > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 .tituloBloque h2 {
-  font-family: var(--font-titulos);
-  font-size: var(--tipo-impresion-cuerpo-tamano);
-  font-weight: var(--tipo-impresion-h1-peso);
-  line-height: var(--tipo-impresion-h3-interlineado);
-  color: var(--azul-institucional);
+  font-size: var(--type-h4-size);
+  line-height: var(--type-h4-lh);
+  letter-spacing: 0;
 }
-.tituloBloque > a {
-  font-size: var(--tipo-impresion-nota-tamano);
-  font-weight: var(--tipo-impresion-h2-peso);
-  white-space: nowrap;
+.verTodo {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--target-min);
+  color: var(--color-text-link);
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--weight-bold);
+}
+.verTodo:hover {
+  color: var(--color-text-link-hover);
+}
+.detalleBloque {
+  font-size: var(--type-body-sm-size);
+  line-height: var(--type-body-sm-lh);
+  color: var(--color-text-secondary);
 }
 
 /* Mapa */
 .miniMapa {
   width: 100%;
   height: 220px;
-  border-radius: var(--radio-base);
+  border-radius: var(--radius-medium);
   overflow: hidden;
   cursor: pointer;
 }
 .par {
   display: flex;
   align-items: center;
-  gap: var(--espacio-3);
-  color: var(--gris-texto);
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: var(--border-width) solid var(--color-border);
+  color: var(--color-text);
   text-decoration: none;
 }
 .par > span:last-child {
@@ -523,80 +520,78 @@
   flex-direction: column;
 }
 .par b {
-  color: var(--azul-institucional);
-  font-weight: var(--tipo-impresion-h2-peso);
+  color: var(--color-primary);
+  font-weight: var(--weight-bold);
 }
 .par:hover b {
-  color: var(--azul-filete);
+  text-decoration: underline;
 }
 .miniaturas {
   display: flex;
   flex: none;
-  gap: var(--espacio-1);
+  gap: var(--space-1);
 }
 .miniaturas img {
-  display: block;
-  width: var(--espacio-10);
-  height: var(--espacio-10);
+  width: var(--space-7);
+  height: var(--space-7);
   object-fit: cover;
-  border-radius: var(--radio-base);
+  border-radius: var(--radius-small);
 }
 
-/* Retrato */
+/* Retrato: cifras en la tipografía mono, como las métricas del sistema. */
 .cifras {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--espacio-2);
+  gap: var(--space-3);
   margin: 0;
 }
 .cifras div {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--espacio-1);
-  padding: var(--espacio-3) var(--espacio-2);
-  background: var(--marfil-institucional);
-  border-radius: var(--radio-base);
-  text-align: center;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  background: var(--color-surface-sunken);
+  border-radius: var(--radius-medium);
 }
 .cifras dt {
   order: 2;
-  font-size: var(--tipo-impresion-nota-tamano);
-  line-height: var(--tipo-impresion-nota-interlineado);
+  font-size: var(--type-body-sm-size);
+  line-height: 1.3;
+  color: var(--color-text-secondary);
 }
 .cifras dd {
   margin: 0;
 }
 .cifras .cifra {
   order: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: var(--tipo-presentacion-cifra-familia);
-  font-size: var(--tipo-impresion-h3-tamano);
-  font-weight: var(--tipo-presentacion-cifra-peso);
-  line-height: var(--tipo-impresion-h1-interlineado);
-  color: var(--azul-institucional);
+  font-family: var(--font-mono);
+  font-size: 34px;
+  font-weight: var(--weight-medium);
+  line-height: 1;
+  letter-spacing: var(--type-data-track);
+  color: var(--color-text);
 }
 
 /* Atenciones por servicio, en una línea que se parte si no cabe. */
 .desglose {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--espacio-1) var(--espacio-4);
-  padding-top: var(--espacio-3);
-  border-top: var(--borde-filete) solid var(--gris-claro);
+  gap: var(--space-1) var(--space-4);
+  padding-top: var(--space-3);
+  border-top: var(--border-width) solid var(--color-border);
+  font-size: var(--type-body-sm-size);
+  color: var(--color-text-secondary);
 }
 .desglose b {
-  color: var(--azul-institucional);
-  font-weight: var(--tipo-impresion-h2-peso);
+  color: var(--color-text);
+  font-weight: var(--weight-medium);
 }
 
 /* Avisos */
 .avisos {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-2);
+  gap: var(--space-1);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -604,56 +599,50 @@
 .aviso {
   display: flex;
   align-items: flex-start;
-  gap: var(--espacio-3);
-  min-height: var(--espacio-12);
-  padding: var(--espacio-2);
-  border-left: var(--espacio-1) solid transparent;
-  color: var(--gris-texto);
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-medium);
+  color: var(--color-text);
   text-decoration: none;
+  transition: background-color var(--duration-micro) var(--ease-flow);
 }
-.aviso:hover b {
-  color: var(--azul-filete);
-}
-/* Alerta: barra de amarillo-senal como llamado, siempre con texto e ícono. */
-.avisoAlerta {
-  border-left-color: var(--amarillo-senal);
-}
-.aviso > span:last-child {
-  display: flex;
-  flex-direction: column;
+.aviso:hover {
+  background: var(--color-surface-sunken);
+  color: var(--color-text);
 }
 .aviso b {
-  color: var(--azul-institucional);
-  font-weight: var(--tipo-impresion-h2-peso);
+  display: block;
+  font-weight: var(--weight-bold);
+  line-height: 1.3;
 }
 .avisoIcono {
-  display: inline-flex;
+  display: grid;
   flex: none;
-  align-items: center;
-  justify-content: center;
-  width: var(--espacio-10);
-  height: var(--espacio-10);
-  background: var(--azul-institucional);
-  border-radius: var(--radio-base);
-  color: var(--blanco);
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--blue-50);
+  color: var(--blue-700);
 }
-
-.vacio {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--espacio-3);
+/* Alerta: aviso de atención, con fondo y recuadro amarillos (texto oscuro). */
+.avisoAlerta {
+  background: var(--color-warning-bg);
+}
+.avisoAlerta:hover {
+  background: var(--yellow-200);
+}
+.avisoAlerta .avisoIcono {
+  background: var(--yellow-400);
+  color: var(--blue-950);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .otro,
+  .mosaico img,
   .principal,
-  .atajoMascota,
-  .enlaceTitulo svg,
-  .mosaico img {
+  .otro,
+  .ir svg,
+  .enlaceTitulo svg {
     transition: none;
-  }
-  .mosaico a:hover img {
-    transform: none;
   }
 }

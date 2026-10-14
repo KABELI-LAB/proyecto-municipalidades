@@ -1,7 +1,7 @@
 .galeria {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
-  gap: var(--espacio-4);
+  gap: var(--space-4);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -12,5 +12,5 @@
   height: auto;
   aspect-ratio: 4 / 3;
   object-fit: cover;
-  border-radius: var(--radio-base);
+  border-radius: var(--radius-medium);
 }

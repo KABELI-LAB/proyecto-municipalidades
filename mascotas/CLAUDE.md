@@ -7,29 +7,41 @@ Resultados → Datos). No es un portal de publicaciones.
 ## Antes de cualquier tarea
 1. Lee `docs/concepto.md`: es la fuente de verdad sobre roles, flujos,
    entidades, alcance del MVP y qué es público o privado.
-2. Para cualquier interfaz, lee `design-system/README.md` y usa
-   `design-system/tokens.json`.
+2. Para cualquier interfaz, lee `design-system/README.md` (Hualañé Design
+   System) y usa los tokens de `design-system/tokens/`.
 3. Si una tarea contradice el concepto, detente y pregunta antes de seguir.
 
 ## Sistema de diseño (obligatorio)
-- Colores, tipografía, espacios y radios SOLO desde `design-system/tokens.json`.
-  No inventes colores ni tamaños fuera de los tokens.
-- Fondo de página: `marfil-institucional`. Tarjetas y paneles: `blanco`.
-  `azul-institucional` para encabezados y fondos de portada.
-- Un solo radio (`radio-base`, 4 px). Sin sombras ni degradados.
-- Montserrat para títulos; Source Sans 3 para texto, formularios y tablas.
-  Fuentes locales en `design-system/fonts/`.
-- `amarillo-senal` solo para alertas y llamados, nunca dominante.
-  Nunca texto blanco sobre `celeste-rio` ni `amarillo-senal`.
+- Colores, tipografía, espacios, radios, sombras y movimiento SOLO desde
+  `design-system/tokens/*.css` (copiados a `src/estilos/tokens.css` por
+  `npm run diseno`). No inventes colores ni tamaños fuera de los tokens.
+- Fondo de página: blanco (`--color-surface`); panel municipal sobre
+  `--color-surface-sunken`. Tarjetas: blanco, borde 1 px `--color-border`,
+  `--radius-large`, sin sombra en reposo (sombra media solo al pasar el cursor).
+- Radios: small 6 (insignias), medium 12 (botones, campos), large 20
+  (tarjetas), xl 28 (portadas, modales), full (chips). Color plano: sin
+  degradados (salvo el de protección bajo texto sobre foto).
+- Atkinson Hyperlegible Next para todo; Atkinson Hyperlegible Mono para cifras,
+  RUT, folios y horas. Cuerpo de 18 px. Las sirve next/font (src/app/layout.tsx).
+- Azul `--color-primary` (Blue 700) para institución y acción principal;
+  verde para comunidad y éxito; amarillo solo para atención, plazos y alertas,
+  nunca como texto sobre blanco (encima va Blue 950).
 - Estados y prioridades: siempre color + texto (+ ícono), nunca solo color.
-- Escudo: siempre desde `design-system/assets/Escudo/`; `escudo-negativo.png`
-  sobre azul. No deformar ni recolorear.
-- Referencias visuales de componentes en `design-system/components/*/`
-  (README.md + preview.html) y `components/bundle.css`.
+- Marca: logotipo ciudadano (nivel B) en el portal; escudo + nombre oficial
+  (nivel A) en el panel; versión vertical blanca sobre azul. Archivos desde
+  `design-system/assets/logo/`, nunca redibujados ni recoloreados.
+- Forma propia: el Cauce (ondas del escudo, `src/componentes/Cauce.tsx`) y el
+  corte inclinado. Sin hojitas, huellas decorativas, montañas ni ilustración.
+- Íconos: set Lucide (`lucide-react`), trazo 2 px, siempre con texto.
+- Referencias de componentes en `design-system/components/` y kits en
+  `design-system/ui_kits/` (website y dashboard).
 
 ## Tono y formato
-- Trato de usted; la institución habla en primera persona plural.
-- Sin emoji, sin MAYÚSCULAS sostenidas, sin urgencia artificial.
+- Se tutea («tú», «tu solicitud»); la institución habla en primera persona
+  plural («Te avisamos»). Botones: verbo + objeto, en minúscula inicial.
+- Frases cortas (20 palabras o menos). Sin siglas sin explicar.
+- Sin emoji, sin MAYÚSCULAS sostenidas (solo en sobretítulos), sin urgencia
+  artificial. En texto corriente, «vecinas y vecinos»; «tod@s» solo en la marca.
 - Formato chileno: coma decimal, espacio antes de % (`45 %`), horas `10:00`.
 - Campos sin dato entre corchetes: `[fecha]`, `[lugar]`.
 - Nunca atribuir logros a autoridades ni usar nombres o fotos de autoridades.
@@ -78,13 +90,14 @@ Resultados → Datos). No es un portal de publicaciones.
   y alertas.
 - Mapa: una capa a la vez, controles plegados, leyenda mínima.
 - Espaciado generoso según los tokens; ante la duda, más espacio.
-- Movimiento sutil: transiciones de 150 a 250 ms, cifras que cuentan una
+- Movimiento sutil («flujo»): 120 ms en detalles, 240 ms al abrir o cambiar
+  de estado; cifras que cuentan una
   vez al entrar, cambios de capa con fundido. Respetar
   prefers-reduced-motion.
 - Carga con bloques de esqueleto, nunca pantallas vacías ni íconos girando.
 - Portal pensado primero para celular; panel para escritorio, salvo la
-  vista de terreno, que es para celular. Botones de al menos 44 px de alto.
+  vista de terreno, que es para celular. Áreas táctiles de al menos 48 px.
 - Prueba de 5 segundos: si alguien no entiende qué hacer en una pantalla
   en 5 segundos, sobra información.
-- Referencia visual: la maqueta del portal (inicio) y del panel (resumen)
-  aprobada por el equipo. Respetar su jerarquía, orden de bloques y espaciado.
+- Referencia visual: los kits `design-system/ui_kits/website` (portal) y
+  `dashboard` (panel). Respetar su jerarquía y espaciado.

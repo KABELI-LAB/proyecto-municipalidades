@@ -53,7 +53,7 @@ describe("mapa ciudadano", () => {
     const items = c.marcas.flatMap((m) => m.items);
     expect(items.every((i) => i.href.startsWith("/mascotas/"))).toBe(true);
     // pub-047 y pub-048: coincidencia sugerida de la demo, marcada sin afirmar que es el mismo animal.
-    expect(items.find((i) => i.clave === "pub-047")?.etiqueta).toBe("Posible coincidencia: revise el aviso");
+    expect(items.find((i) => i.clave === "pub-047")?.etiqueta).toBe("Posible coincidencia: revisa el aviso");
   });
 
   it("adopción: solo fichas publicadas, en el sector donde está el animal", async () => {
@@ -81,7 +81,7 @@ describe("mapa ciudadano", () => {
     // Un perro solo: la marca lleva a su ficha (ahí se informa una novedad o se hace cargo); varios: cada ficha lo indica.
     for (const m of c.marcas) {
       if (m.items.length === 1) expect(m.enlaces?.find((e) => e.principal)?.href).toBe(`/comunitarios/${m.items[0].clave}`);
-      expect(m.items.every((i) => i.lineas.includes("Para informar una novedad o hacerse cargo, abra su ficha"))).toBe(true);
+      expect(m.items.every((i) => i.lineas.includes("Para informar una novedad o hacerte cargo, abre su ficha"))).toBe(true);
     }
   });
 

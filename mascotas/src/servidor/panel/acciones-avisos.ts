@@ -10,8 +10,8 @@ import { hoyISO, medianocheEn } from "@/servidor/formato";
 
 export type Respuesta = { ok: boolean; mensaje: string; id?: string; errores?: Record<string, string> };
 
-const SIN_PERMISO = { ok: false, mensaje: "Su cuenta no tiene permiso para esta acción." };
-const ERROR = "No pudimos guardar el cambio. Intente nuevamente.";
+const SIN_PERMISO = { ok: false, mensaje: "Tu cuenta no tiene permiso para esta acción." };
+const ERROR = "No pudimos guardar el cambio. Intenta nuevamente.";
 const fin = (dia: string) => new Date(medianocheEn(dia).getTime() + 86_400_000 - 1);
 
 function refrescar() {
@@ -20,11 +20,11 @@ function refrescar() {
   revalidatePath("/", "layout");
 }
 
-const dia = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Indique la fecha.");
+const dia = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Indica la fecha.");
 const esquemaAviso = z
   .object({
-    titulo: z.string().trim().min(5, "Escriba un título de al menos 5 caracteres.").max(90, "Use como máximo 90 caracteres."),
-    texto: z.string().trim().min(10, "Escriba el texto del aviso.").max(400, "Use como máximo 400 caracteres."),
+    titulo: z.string().trim().min(5, "Escribe un título de al menos 5 caracteres.").max(90, "Usa como máximo 90 caracteres."),
+    texto: z.string().trim().min(10, "Escribe el texto del aviso.").max(400, "Usa como máximo 400 caracteres."),
     desde: dia,
     hasta: dia,
   })
@@ -43,7 +43,7 @@ export async function guardarAviso(id: string, valores: unknown): Promise<Respue
   if (!r.success) {
     const errores: Record<string, string> = {};
     for (const i of r.error.issues) errores[String(i.path[0])] ??= i.message;
-    return { ok: false, mensaje: "Revise los datos marcados.", errores };
+    return { ok: false, mensaje: "Revisa los datos marcados.", errores };
   }
   if (!(await avisoDelMunicipio(id))) return { ok: false, mensaje: "No encontramos el aviso." };
   await db.aviso.update({ where: { id }, data: { titulo: r.data.titulo, texto: r.data.texto, vigenteDesde: medianocheEn(r.data.desde), vigenteHasta: fin(r.data.hasta) } });
@@ -55,7 +55,7 @@ export async function publicarAviso(id: string): Promise<Respuesta> {
   if (!(await autorizar("gestionarAvisos"))) return SIN_PERMISO;
   const a = await avisoDelMunicipio(id);
   if (!a) return { ok: false, mensaje: "No encontramos el aviso." };
-  if (a.vigenteHasta < new Date()) return { ok: false, mensaje: "La vigencia de este aviso ya terminó. Cambie las fechas antes de publicarlo." };
+  if (a.vigenteHasta < new Date()) return { ok: false, mensaje: "La vigencia de este aviso ya terminó. Cambia las fechas antes de publicarlo." };
   await db.aviso.update({ where: { id }, data: { estado: "PUBLICADO" } });
   refrescar();
   return { ok: true, mensaje: a.vigenteDesde > new Date() ? "Publicado: se mostrará en el portal desde su fecha de inicio." : "Publicado: ya se muestra en el portal." };
@@ -71,9 +71,9 @@ export async function retirarAviso(id: string): Promise<Respuesta> {
 }
 
 const esquemaNuevo = z.object({
-  tipo: z.enum(["INFORMACION", "CAMPANA", "ALERTA", "CAMBIO"], "Elija el tipo de aviso."),
-  titulo: z.string().trim().min(5, "Escriba un título de al menos 5 caracteres.").max(90, "Use como máximo 90 caracteres."),
-  texto: z.string().trim().min(10, "Escriba el texto del aviso.").max(400, "Use como máximo 400 caracteres."),
+  tipo: z.enum(["INFORMACION", "CAMPANA", "ALERTA", "CAMBIO"], "Elige el tipo de aviso."),
+  titulo: z.string().trim().min(5, "Escribe un título de al menos 5 caracteres.").max(90, "Usa como máximo 90 caracteres."),
+  texto: z.string().trim().min(10, "Escribe el texto del aviso.").max(400, "Usa como máximo 400 caracteres."),
   hasta: dia,
 });
 
@@ -85,9 +85,9 @@ export async function crearAviso(valores: unknown): Promise<Respuesta> {
   if (!r.success) {
     const errores: Record<string, string> = {};
     for (const i of r.error.issues) errores[String(i.path[0])] ??= i.message;
-    return { ok: false, mensaje: "Revise los datos marcados.", errores };
+    return { ok: false, mensaje: "Revisa los datos marcados.", errores };
   }
-  if (r.data.hasta < hoyISO()) return { ok: false, mensaje: "Revise los datos marcados.", errores: { hasta: "La fecha no puede ser anterior a hoy." } };
+  if (r.data.hasta < hoyISO()) return { ok: false, mensaje: "Revisa los datos marcados.", errores: { hasta: "La fecha no puede ser anterior a hoy." } };
   try {
     const a = await db.aviso.create({
       data: { tipo: r.data.tipo, titulo: r.data.titulo, texto: r.data.texto, vigenteDesde: medianocheEn(hoyISO()), vigenteHasta: fin(r.data.hasta), estado: "PUBLICADO", autorId: u.id, loteDemoId: u.loteDemoId },

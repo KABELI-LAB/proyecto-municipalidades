@@ -1,14 +1,14 @@
 .figura {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-3);
+  gap: var(--space-3);
   margin: 0;
 }
 
 .leyenda {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--espacio-2) var(--espacio-6);
+  gap: var(--space-2) var(--space-5);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -16,15 +16,15 @@
 .leyenda li {
   display: inline-flex;
   align-items: center;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
 }
 /* La clave de una línea es un trazo, no un bloque. */
 .clave,
 .claveLinea {
   display: inline-block;
-  width: var(--espacio-4);
-  height: var(--borde-filete);
-  border-radius: var(--radio-base);
+  width: var(--space-4);
+  height: var(--border-width-strong);
+  border-radius: var(--radius-medium);
 }
 
 .lienzo {
@@ -37,28 +37,28 @@
   overflow: visible;
 }
 .svg:focus-visible {
-  outline: var(--borde-filete) solid var(--azul-institucional);
-  outline-offset: var(--espacio-1);
+  outline: var(--border-width-strong) solid var(--color-primary);
+  outline-offset: var(--space-1);
 }
 
 .grilla {
-  stroke: var(--gris-claro);
+  stroke: var(--color-surface-muted);
   stroke-width: 1;
 }
 .cruz {
-  stroke: var(--gris-texto);
+  stroke: var(--color-text);
   stroke-width: 1;
 }
 .eje {
-  fill: var(--gris-texto);
-  font-family: var(--font-textos);
-  font-size: var(--tipo-impresion-nota-tamano);
+  fill: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--type-caption-size);
 }
 .etiquetaFinal {
-  fill: var(--gris-texto);
-  font-family: var(--font-textos);
-  font-size: var(--tipo-impresion-nota-tamano);
-  font-weight: var(--tipo-impresion-h2-peso);
+  fill: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--type-caption-size);
+  font-weight: var(--weight-bold);
 }
 
 .lectura {
@@ -66,50 +66,50 @@
   top: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-1);
-  padding: var(--espacio-2) var(--espacio-3);
-  border: var(--borde-filete) solid var(--gris-claro);
-  border-radius: var(--radio-base);
-  background: var(--blanco);
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width-strong) solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
   white-space: nowrap;
   pointer-events: none;
 }
 .mesLectura {
-  font-weight: var(--tipo-impresion-h2-peso);
-  color: var(--azul-institucional);
+  font-weight: var(--weight-bold);
+  color: var(--color-primary);
 }
 .filaLectura {
   display: flex;
   align-items: center;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
 }
 .filaLectura b {
-  font-weight: var(--tipo-impresion-h1-peso);
+  font-weight: var(--weight-bold);
 }
 
 .tabla summary {
   cursor: pointer;
-  color: var(--azul-institucional);
-  font-weight: var(--tipo-impresion-h2-peso);
+  color: var(--color-primary);
+  font-weight: var(--weight-bold);
 }
 .tabla table {
   width: 100%;
-  margin-top: var(--espacio-3);
+  margin-top: var(--space-3);
   border-collapse: collapse;
 }
 .tabla th,
 .tabla td {
-  padding: var(--espacio-1) var(--espacio-2);
-  border: var(--borde-filete) solid var(--tabla-borde);
+  padding: var(--space-1) var(--space-2);
+  border: var(--border-width-strong) solid var(--color-border);
   text-align: left;
 }
 .tabla thead th {
-  background: var(--tabla-encabezado);
-  font-weight: var(--tipo-impresion-h2-peso);
+  background: var(--color-surface-sunken);
+  font-weight: var(--weight-bold);
 }
 .tabla tbody tr:nth-child(even) td,
 .tabla tbody tr:nth-child(even) th {
-  background: var(--gris-claro);
+  background: var(--color-surface-muted);
 }
 .numero {
   text-align: right !important;
@@ -117,20 +117,20 @@
 
 /* ── Barras ── */
 .barra {
-  fill: var(--azul-institucional);
+  fill: var(--color-primary);
 }
 .base {
-  stroke: var(--gris-claro);
+  stroke: var(--color-surface-muted);
   stroke-width: 1;
 }
 .valorBarra {
-  fill: var(--gris-texto);
-  font-family: var(--font-textos);
-  font-size: var(--tipo-impresion-cuerpo-tamano);
-  font-weight: var(--tipo-impresion-h2-peso);
+  fill: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
+  font-weight: var(--weight-bold);
 }
 .ejeBarra {
-  fill: var(--gris-texto);
-  font-family: var(--font-textos);
-  font-size: var(--tipo-impresion-cuerpo-tamano);
+  fill: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
 }

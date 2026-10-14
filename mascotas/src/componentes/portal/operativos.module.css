@@ -6,18 +6,18 @@
 
 /* Menos aire entre bloques que en otras páginas: las tarjetas se ven al entrar. */
 .paginaCompacta {
-  gap: var(--espacio-5);
+  gap: var(--space-5);
 }
 .paginaCompacta .titulo {
   display: flex;
   align-items: center;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
   margin-right: auto;
-  font-family: var(--font-titulos);
-  font-size: var(--tipo-impresion-h3-tamano);
-  font-weight: var(--tipo-impresion-h1-peso);
-  line-height: var(--tipo-impresion-h3-interlineado);
-  color: var(--azul-institucional);
+  font-family: var(--font-sans);
+  font-size: var(--type-h3-size);
+  font-weight: var(--weight-bold);
+  line-height: var(--type-h3-lh);
+  color: var(--color-primary);
 }
 .titulo svg {
   flex: none;
@@ -25,23 +25,23 @@
 /* En celular: título más chico y tarjeta más compacta, para que se vea al entrar. */
 @media (max-width: 639px) {
   .paginaCompacta {
-    gap: var(--espacio-4);
+    gap: var(--space-4);
   }
   .paginaCompacta .titulo {
-    font-size: var(--tipo-impresion-cuerpo-tamano);
+    font-size: var(--type-body-size);
   }
   .paginaCompacta .tarjeta {
-    gap: var(--espacio-3) var(--espacio-4);
-    padding: var(--espacio-4);
+    gap: var(--space-3) var(--space-4);
+    padding: var(--space-4);
   }
   .paginaCompacta .tarjeta .contenido {
-    gap: var(--espacio-2);
+    gap: var(--space-2);
   }
   .paginaCompacta .tarjeta .fecha {
     width: 64px;
   }
   .paginaCompacta .tarjeta .servicios {
-    gap: var(--espacio-1);
+    gap: var(--space-1);
   }
 }
 
@@ -50,23 +50,23 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--espacio-2) var(--espacio-6);
+  gap: var(--space-2) var(--space-5);
 }
 .filtro {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
 }
 .filtro label {
-  font-weight: var(--tipo-impresion-h2-peso);
+  font-weight: var(--weight-bold);
 }
 .filtro select {
-  min-height: var(--espacio-12);
-  padding: var(--espacio-2) var(--espacio-3);
-  border: var(--borde-filete) solid var(--gris-claro);
-  border-radius: var(--radio-base);
-  background: var(--blanco);
+  min-height: var(--space-8);
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width-strong) solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
   font: inherit;
 }
 
@@ -75,7 +75,7 @@
 .grilla {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
-  gap: var(--espacio-5);
+  gap: var(--space-5);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -83,30 +83,33 @@
 .tarjeta {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--espacio-4) var(--espacio-5);
+  gap: var(--space-4) var(--space-5);
   height: 100%;
-  padding: var(--espacio-5);
-  background: var(--blanco);
-  border: var(--borde-filete) solid var(--blanco);
-  border-radius: var(--radio-base);
-  transition: border-color 200ms ease;
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
+  transition:
+    border-color var(--duration-standard) var(--ease-flow),
+    box-shadow var(--duration-standard) var(--ease-flow);
 }
 .tarjeta:hover {
-  border-color: var(--celeste-rio);
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-medium);
 }
 .contenido {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--espacio-3);
+  gap: var(--space-3);
   min-width: 0;
 }
 .contenido h2 {
-  font-family: var(--font-titulos);
-  font-size: var(--tipo-impresion-h3-tamano);
-  font-weight: var(--tipo-impresion-h1-peso);
-  line-height: var(--tipo-impresion-h3-interlineado);
-  color: var(--azul-institucional);
+  font-family: var(--font-sans);
+  font-size: var(--type-h3-size);
+  font-weight: var(--weight-bold);
+  line-height: var(--type-h3-lh);
+  color: var(--color-primary);
 }
 .contenido h2 a {
   color: inherit;
@@ -126,30 +129,30 @@
   align-items: center;
   justify-content: center;
   width: 76px;
-  padding: var(--espacio-2) var(--espacio-1);
-  background: var(--azul-institucional);
-  border-radius: var(--radio-base);
-  color: var(--blanco);
+  padding: var(--space-2) var(--space-1);
+  background: var(--color-primary);
+  border-radius: var(--radius-medium);
+  color: var(--color-surface);
   text-align: center;
   line-height: 1.1;
 }
 .fecha .mes {
-  font-weight: var(--tipo-impresion-h2-peso);
+  font-weight: var(--weight-bold);
 }
 .fecha .dia {
-  font-family: var(--font-titulos);
-  font-size: var(--tipo-impresion-h2-tamano);
-  font-weight: var(--tipo-impresion-h1-peso);
+  font-family: var(--font-sans);
+  font-size: var(--type-h2-size);
+  font-weight: var(--weight-bold);
 }
 .fecha .semana {
-  font-size: var(--tipo-impresion-nota-tamano);
+  font-size: var(--type-caption-size);
 }
 
 /* Datos con ícono: horario y lugar. */
 .datos {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-1);
+  gap: var(--space-1);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -157,19 +160,19 @@
 .datos li {
   display: flex;
   align-items: flex-start;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
 }
 .datos svg {
   flex: none;
   margin-top: 2px;
-  color: var(--azul-institucional);
+  color: var(--color-primary);
 }
 
 /* Servicios como etiquetas, con sus cupos. */
 .servicios {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -177,24 +180,24 @@
 .servicio {
   display: inline-flex;
   align-items: center;
-  gap: var(--espacio-2);
-  padding: var(--espacio-1) var(--espacio-3);
-  background: var(--marfil-institucional);
-  border-radius: var(--radio-base);
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  background: var(--color-surface-sunken);
+  border-radius: var(--radius-medium);
 }
 .servicio svg {
   flex: none;
-  color: var(--verde-territorio);
+  color: var(--color-secondary);
 }
 .servicio b {
-  color: var(--azul-institucional);
-  font-weight: var(--tipo-impresion-h2-peso);
+  color: var(--color-primary);
+  font-weight: var(--weight-bold);
 }
 .servicio span {
-  font-size: var(--tipo-impresion-nota-tamano);
+  font-size: var(--type-caption-size);
 }
 .servicioLleno svg {
-  color: var(--gris-texto);
+  color: var(--color-text);
 }
 
 /* Sin operativos: mensaje útil, no un espacio vacío. */
@@ -202,20 +205,21 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--espacio-3);
+  gap: var(--space-3);
   max-width: 640px;
-  padding: var(--espacio-8) var(--espacio-6);
-  background: var(--blanco);
-  border-radius: var(--radio-base);
+  padding: var(--space-6) var(--space-5);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
 }
 .vacio h2 {
-  font-family: var(--font-titulos);
-  font-size: var(--tipo-impresion-h3-tamano);
-  font-weight: var(--tipo-impresion-h1-peso);
-  color: var(--azul-institucional);
+  font-family: var(--font-sans);
+  font-size: var(--type-h3-size);
+  font-weight: var(--weight-bold);
+  color: var(--color-primary);
 }
 .vacioIcono {
-  color: var(--azul-institucional);
+  color: var(--color-primary);
 }
 
 /* ───── Inscripción: solo el formulario ───── */
@@ -236,75 +240,76 @@
 .opcionesServicio {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
-  gap: var(--espacio-3);
+  gap: var(--space-3);
 }
 .opcionServicio {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
   min-height: 132px;
-  padding: var(--espacio-4);
-  border: var(--borde-filete) solid var(--gris-claro);
-  border-radius: var(--radio-base);
+  padding: var(--space-4);
+  border: var(--border-width-strong) solid var(--color-border);
+  border-radius: var(--radius-medium);
   cursor: pointer;
   transition: border-color 200ms ease, background-color 200ms ease;
 }
 .opcionServicio:hover {
-  border-color: var(--celeste-rio);
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-medium);
 }
 .opcionServicio:has(input:checked) {
-  background: var(--marfil-institucional);
-  border-color: var(--azul-institucional);
+  background: var(--color-surface-sunken);
+  border-color: var(--color-primary);
 }
 .opcionServicio:has(input:focus-visible) {
-  outline: var(--borde-filete) solid var(--azul-institucional);
-  outline-offset: var(--borde-filete);
+  outline: var(--border-width-strong) solid var(--color-primary);
+  outline-offset: var(--border-width-strong);
 }
 .opcionServicio input {
   position: absolute;
-  top: var(--espacio-4);
-  right: var(--espacio-4);
-  width: var(--espacio-5);
-  height: var(--espacio-5);
+  top: var(--space-4);
+  right: var(--space-4);
+  width: var(--space-5);
+  height: var(--space-5);
   margin: 0;
-  accent-color: var(--azul-institucional);
+  accent-color: var(--color-primary);
 }
 .opcionServicioIcono {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--espacio-10);
-  height: var(--espacio-10);
-  background: var(--gris-claro);
-  border-radius: var(--radio-base);
-  color: var(--azul-institucional);
+  width: var(--space-7);
+  height: var(--space-7);
+  background: var(--color-surface-muted);
+  border-radius: var(--radius-medium);
+  color: var(--color-primary);
   transition: background-color 200ms ease, color 200ms ease;
 }
 .opcionServicio:has(input:checked) .opcionServicioIcono {
-  background: var(--azul-institucional);
-  color: var(--blanco);
+  background: var(--color-primary);
+  color: var(--color-surface);
 }
 .opcionServicio b {
-  color: var(--azul-institucional);
-  font-weight: var(--tipo-impresion-h1-peso);
+  color: var(--color-primary);
+  font-weight: var(--weight-bold);
 }
 .opcionServicio .detalle {
-  font-size: var(--tipo-impresion-nota-tamano);
+  font-size: var(--type-caption-size);
 }
 .cuposOpcion {
   display: inline-flex;
   align-items: center;
-  gap: var(--espacio-1);
+  gap: var(--space-1);
   margin-top: auto;
-  font-weight: var(--tipo-impresion-h2-peso);
+  font-weight: var(--weight-bold);
 }
 .cuposOpcion svg {
   flex: none;
-  color: var(--verde-territorio);
+  color: var(--color-secondary);
 }
 .esperaOpcion svg {
-  color: var(--gris-texto);
+  color: var(--color-text);
 }
 
 /* Confirmación agrupada, con «Editar» por bloque. */
@@ -313,7 +318,7 @@
 .grupos {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--espacio-4);
+  gap: var(--space-4);
 }
 @media (min-width: 900px) {
   .grupos {
@@ -325,7 +330,7 @@
 }
 .grupo dl {
   display: grid;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
 }
 .grupo dl > div {
   display: flex;
@@ -335,46 +340,46 @@
   border-top: 0;
 }
 .grupo dt {
-  font-size: var(--tipo-impresion-cuerpo-tamano);
+  font-size: var(--type-body-size);
 }
 .grupo {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-2);
-  padding: var(--espacio-4);
-  border: var(--borde-filete) solid var(--gris-claro);
-  border-radius: var(--radio-base);
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: var(--border-width-strong) solid var(--color-border);
+  border-radius: var(--radius-medium);
 }
 .grupoCabecera {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--espacio-3);
+  gap: var(--space-3);
   /* Mismo alto con o sin botón «Editar»: los títulos quedan alineados. */
-  min-height: var(--espacio-10);
+  min-height: var(--space-7);
 }
 .grupoCabecera h3 {
   display: flex;
   align-items: center;
-  gap: var(--espacio-2);
-  font-family: var(--font-titulos);
-  font-size: var(--tipo-impresion-cuerpo-tamano);
-  font-weight: var(--tipo-impresion-h1-peso);
-  color: var(--azul-institucional);
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
+  font-weight: var(--weight-bold);
+  color: var(--color-primary);
 }
 .editar {
-  min-height: var(--espacio-10);
-  padding: var(--espacio-1) var(--espacio-3);
-  border: var(--borde-filete) solid var(--gris-claro);
-  border-radius: var(--radio-base);
-  background: var(--blanco);
-  color: var(--azul-institucional);
+  min-height: var(--space-7);
+  padding: var(--space-1) var(--space-3);
+  border: var(--border-width-strong) solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  color: var(--color-primary);
   font: inherit;
-  font-weight: var(--tipo-impresion-h2-peso);
+  font-weight: var(--weight-bold);
   cursor: pointer;
 }
 .editar:hover {
-  border-color: var(--azul-institucional);
+  border-color: var(--color-primary);
 }
 
 @media (prefers-reduced-motion: reduce) {

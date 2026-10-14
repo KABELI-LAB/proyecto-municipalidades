@@ -83,9 +83,9 @@ export default async function PaginaComunitario({ params }: { params: Promise<{ 
               <EnlaceBoton href={`/comunitarios/${c.id}/cuidar`}>Hacerme cargo</EnlaceBoton>
             )}
           </div>
-          {!seguimiento.conCuidador && <p className="nota">Aún no tiene un vecino a cargo. Si usted lo cuida, puede quedar como su cuidador.</p>}
+          {!seguimiento.conCuidador && <p className="nota">Aún no tiene un vecino a cargo. Si tú lo cuidas, puedes quedar como su cuidador.</p>}
           <p className="nota">
-            ¿Está herido y es urgente? Use <Link href={REPORTE_COMUNITARIO}>SOS Mascotas</Link>.
+            ¿Está herido y es urgente? Usa <Link href={REPORTE_COMUNITARIO}>SOS Mascotas</Link>.
           </p>
         </section>
       </div>

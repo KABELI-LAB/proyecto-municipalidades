@@ -19,8 +19,8 @@ const FORMATOS = new Set(["jpeg", "png", "webp"]);
 const NOMBRE_VALIDO = /^[0-9a-f-]{36}\.jpg$/;
 
 export const MENSAJE_FOTO = {
-  grande: "La foto pesa demasiado. Pruebe con otra o tómela con menor resolución.",
-  invalida: "No pudimos leer la foto. Use una imagen JPG, PNG o WebP.",
+  grande: "La foto pesa demasiado. Prueba con otra o tómala con menor resolución.",
+  invalida: "No pudimos leer la foto. Usa una imagen JPG, PNG o WebP.",
 } as const;
 
 const raiz = () => path.resolve(process.env.ALMACEN_DIR || path.join(process.cwd(), "almacen"));

@@ -19,8 +19,8 @@ export function FormularioCuidar({ perroId, nombre }: { perroId: string; nombre:
 
   if (codigo) {
     return (
-      <ResultadoTramite titulo={`Quedó a cargo de ${nombre}`} codigo={codigo}>
-        <p>Este código es su credencial de cuidador: con su RUT y este código, en Mis solicitudes, puede actualizar la ficha, anotar que lo vio y leer las novedades de los vecinos.</p>
+      <ResultadoTramite titulo={`Quedaste a cargo de ${nombre}`} codigo={codigo}>
+        <p>Este código es tu credencial de cuidador: con tu RUT y este código, en Mis solicitudes, puedes actualizar la ficha, anotar que lo viste y leer las novedades de los vecinos.</p>
       </ResultadoTramite>
     );
   }
@@ -39,7 +39,7 @@ export function FormularioCuidar({ perroId, nombre }: { perroId: string; nombre:
 
   return (
     <form className={`${estilos.formulario} ${estilos.formularioCorto}`} onSubmit={enviar} noValidate aria-label={`Hacerme cargo de ${nombre}`}>
-      <p>No tiene un vecino a cargo. Si usted lo cuida, quedará como su cuidador: actualizará su ficha y le llegarán las novedades. Sus datos no se publican.</p>
+      <p>No tiene un vecino a cargo. Si tú lo cuidas, quedarás como su cuidador: actualizarás su ficha y te llegarán las novedades. Tus datos no se publican.</p>
       <div className={estilos.fila}>
         <CampoTexto id="nombre" etiqueta="Nombre y apellido" valor={v.nombre} alCambiar={(x) => cambiar("nombre", x)} error={errores.nombre} autoComplete="name" maxLength={100} />
         <CampoTexto id="rut" etiqueta="RUT" valor={v.rut} alCambiar={(x) => cambiar("rut", x)} error={errores.rut} ayuda="Por ejemplo, 12.345.678-5." maxLength={12} />
@@ -48,7 +48,7 @@ export function FormularioCuidar({ perroId, nombre }: { perroId: string; nombre:
         <CampoTexto id="telefono" etiqueta="Teléfono" tipo="tel" inputMode="tel" autoComplete="tel" valor={v.telefono} alCambiar={(x) => cambiar("telefono", x)} error={errores.telefono} maxLength={20} />
         <CampoTexto id="correo" etiqueta="Correo" tipo="email" inputMode="email" autoComplete="email" valor={v.correo} alCambiar={(x) => cambiar("correo", x)} error={errores.correo} maxLength={120} />
       </div>
-      <p className={estilos.ayuda}>Indique al menos un teléfono o un correo: por ahí le llegarán las novedades.</p>
+      <p className={estilos.ayuda}>Indica al menos un teléfono o un correo: por ahí te llegarán las novedades.</p>
       {mensaje && (
         <p className={estilos.mensaje} role="alert">
           <Icono nombre="alerta" tamano={20} />

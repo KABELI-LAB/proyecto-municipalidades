@@ -1,42 +1,76 @@
-/*
-  El sistema de diseño no define botón; esta propuesta se arma solo con tokens:
-  radio-base, borde-filete, Source Sans 3 SemiBold y área táctil de 48 px.
-*/
+/* Botón del sistema de diseño (components/actions/Button): 48 px de alto,
+   radio medio, verbo + objeto. Hover: el fondo baja un paso; press: 1 px abajo. */
 .boton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--espacio-2);
-  min-height: var(--espacio-12);
-  padding: var(--espacio-2) var(--espacio-6);
-  border: var(--borde-filete) solid var(--azul-institucional);
-  border-radius: var(--radio-base);
-  font-family: var(--font-textos);
-  font-size: var(--tipo-impresion-cuerpo-tamano);
-  font-weight: var(--tipo-impresion-h2-peso);
-  line-height: var(--tipo-impresion-cuerpo-interlineado);
+  gap: var(--space-2);
+  min-height: var(--target-min);
+  padding: 0 22px;
+  border: var(--border-width-strong) solid transparent;
+  border-radius: var(--radius-medium);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  font-weight: var(--weight-bold);
+  line-height: 1.15;
+  letter-spacing: 0.005em;
+  text-align: center;
   text-decoration: none;
   cursor: pointer;
+  transition:
+    background-color var(--duration-micro) var(--ease-flow),
+    border-color var(--duration-micro) var(--ease-flow),
+    color var(--duration-micro) var(--ease-flow),
+    transform var(--duration-micro) var(--ease-flow);
+  -webkit-tap-highlight-color: transparent;
+}
+.boton:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 .primario {
-  background: var(--azul-institucional);
-  color: var(--blanco);
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+.primario:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+  color: var(--color-text-inverse);
+}
+.primario:active:not(:disabled) {
+  background: var(--color-primary-pressed);
 }
 
 .secundario {
-  background: var(--blanco);
-  color: var(--azul-institucional);
+  background: var(--color-surface);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+.secundario:hover:not(:disabled) {
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
 }
 
-.boton:hover:not(:disabled) {
-  text-decoration: underline;
-  text-underline-offset: var(--espacio-1);
+.terciario {
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+}
+.terciario:hover:not(:disabled) {
+  background: var(--blue-100);
+  color: var(--color-primary);
+}
+
+.peligro {
+  background: var(--color-error);
+  color: var(--color-text-inverse);
+}
+.peligro:hover:not(:disabled) {
+  background: var(--red-700);
+  color: var(--color-text-inverse);
 }
 
 .boton:disabled {
-  background: var(--gris-claro);
-  border-color: var(--gris-claro);
-  color: var(--gris-texto);
+  background: var(--color-surface-muted);
+  border-color: transparent;
+  color: var(--color-text-muted);
   cursor: not-allowed;
 }

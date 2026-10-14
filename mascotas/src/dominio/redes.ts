@@ -45,7 +45,7 @@ export function textoOperativo(d: DatosOperativo, municipio: string, url: string
     `${mayuscula(d.fecha)}, de ${d.horaInicio} a ${d.horaFin} horas, en ${d.lugar}, ${d.localidad}.`,
     servicios,
     d.requisitos.trim() ? `Requisitos: ${d.requisitos.trim()}` : null,
-    `Inscríbase ${enPortal(url, `/operativos/${d.id}`)}. Los cupos son limitados por servicio.`,
+    `Inscríbete ${enPortal(url, `/operativos/${d.id}`)}. Los cupos son limitados por servicio.`,
     etiquetas(municipio),
   );
   const alternativo = `Pieza informativa de la municipalidad: operativo de tenencia responsable en ${d.localidad}, ${d.fecha}, de ${d.horaInicio} a ${d.horaFin} horas.`;
@@ -69,7 +69,7 @@ export function textoAdopcion(d: DatosAdopcion, municipio: string, url: string |
   const texto = juntar(
     quien,
     d.nombre && descripcion ? `${descripcion}.` : null,
-    "Adoptar es un compromiso para toda su vida. Antes de postular, revise su ficha oficial con sus antecedentes y lo que necesita.",
+    "Adoptar es un compromiso para toda su vida. Antes de postular, revisa su ficha oficial con sus antecedentes y lo que necesita.",
     `Ficha y postulación ${enPortal(url, `/adoptar/${d.id}`)}.`,
     etiquetas(municipio, ["AdopciónResponsable"]),
   );
@@ -100,7 +100,7 @@ export function generoAviso(especie: DatosAviso["especie"], sexo: DatosAviso["se
   const hembra = sexo === "HEMBRA";
   const sustantivo = especie === "PERRO" ? (hembra ? "perra" : "perro") : especie === "GATO" ? (hembra ? "gata" : "gato") : "animal";
   const femenino = hembra && especie !== "OTRA";
-  return { sustantivo, lo: femenino ? "la" : "lo", este: femenino ? "esta" : "este", visto: femenino ? "vista" : "visto", suyo: femenino ? "suya" : "suyo" };
+  return { sustantivo, lo: femenino ? "la" : "lo", este: femenino ? "esta" : "este", visto: femenino ? "vista" : "visto", suyo: femenino ? "tuya" : "tuyo" };
 }
 
 const conPunto = (t: string) => (/[.!?…]$/.test(t.trim()) ? t.trim() : `${t.trim()}.`);
@@ -130,7 +130,7 @@ export function textoPerdida(d: DatosAviso, municipio: string, url: string | nul
     d.nombre ? `Se busca a ${d.nombre}.` : `Se busca a ${g.este} ${g.sustantivo}.`,
     rasgosAviso(d).join("\n"),
     `Se perdió el ${d.fecha} en ${donde}.`,
-    `Si ${g.lo} vio o tiene información, avísenos a través del aviso oficial ${enPortal(url, `/mascotas/${d.id}`)}. Por su seguridad, no publique datos personales en los comentarios.`,
+    `Si ${g.lo} viste o tienes información, avísanos a través del aviso oficial ${enPortal(url, `/mascotas/${d.id}`)}. Por tu seguridad, no publiques datos personales en los comentarios.`,
     etiquetas(municipio, ["MascotaPerdida"]),
   );
   const alternativo = `Fotografía de ${d.nombre ? `${d.nombre}, ` : ""}${g.sustantivo === "animal" ? "un animal" : `${g.este === "esta" ? "una" : "un"} ${g.sustantivo}`} de color ${d.color} que se perdió en ${donde}.`;
@@ -142,10 +142,10 @@ export function textoAvistada(d: DatosAviso, municipio: string, url: string | nu
   const g = generoAviso(d.especie, d.sexo);
   const donde = d.localidad ? `${d.localidad} (sector ${d.sector})` : `el sector ${d.sector}`;
   const texto = juntar(
-    `¿Reconoce a ${g.este} ${g.sustantivo}?`,
+    `¿Reconoces a ${g.este} ${g.sustantivo}?`,
     rasgosAviso(d).join("\n"),
     `Fue ${g.visto} el ${d.fecha} en ${donde}.`,
-    `Si es ${g.suyo} o ${g.lo} reconoce, revise el aviso oficial e informe una coincidencia ${enPortal(url, `/mascotas/${d.id}`)}. Para confirmar que es ${g.suyo} le pediremos datos que solo su familia conoce.`,
+    `Si es ${g.suyo} o ${g.lo} reconoces, revisa el aviso oficial e informa una coincidencia ${enPortal(url, `/mascotas/${d.id}`)}. Para confirmar que es ${g.suyo} te pediremos datos que solo tu familia conoce.`,
     etiquetas(municipio, ["MascotaAvistada"]),
   );
   const alternativo = `Fotografía de ${g.sustantivo === "animal" ? "un animal" : `${g.este === "esta" ? "una" : "un"} ${g.sustantivo}`} de color ${d.color} ${g.visto} en ${donde}.`;

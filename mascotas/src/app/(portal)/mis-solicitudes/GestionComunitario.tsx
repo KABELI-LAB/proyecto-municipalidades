@@ -70,7 +70,7 @@ export function GestionComunitario({ rut, codigo, perro, alTerminar }: Props) {
     const cambiar = (k: string, x: string) => setFicha({ ...ficha, valores: { ...v, [k]: x } });
     return (
       <form className={estilos.gestion} onSubmit={guardar} noValidate aria-label={`Actualizar la ficha de ${perro.apodo}`}>
-        <CampoFoto id={`foto-${codigo}`} etiqueta="Foto nueva" opcional archivo={foto} alCambiar={setFoto} error={errores.foto} ayuda="Si agrega una, reemplaza a la actual." />
+        <CampoFoto id={`foto-${codigo}`} etiqueta="Foto nueva" opcional archivo={foto} alCambiar={setFoto} error={errores.foto} ayuda="Si agregas una, reemplaza a la actual." />
         <CampoTexto id={`apodo-${codigo}`} etiqueta="Apodo" valor={v.apodo} alCambiar={(x) => cambiar("apodo", x)} error={errores.apodo} maxLength={60} />
         <CampoSelect id={`lugar-${codigo}`} etiqueta="¿Dónde suele estar?" valor={v.lugarId} alCambiar={(x) => cambiar("lugarId", x)} error={errores.lugarId} opciones={ficha.lugares} />
         <div className={formulario.fila}>
@@ -98,7 +98,7 @@ export function GestionComunitario({ rut, codigo, perro, alTerminar }: Props) {
   if (modo === "baja") {
     return (
       <div className={estilos.gestion} role="group" aria-label="Dar de baja la ficha">
-        <p>{perro.apodo} dejará de mostrarse en el portal y en el mapa. Úselo si ya no está en su lugar. ¿Desea continuar?</p>
+        <p>{perro.apodo} dejará de mostrarse en el portal y en el mapa. Úsalo si ya no está en su lugar. ¿Quieres continuar?</p>
         {error && <p role="alert">{error}</p>}
         <div className={estilos.botones}>
           <Boton onClick={() => ejecutar(() => darDeBajaComunitario({ rut, codigo }))} disabled={enviando}>

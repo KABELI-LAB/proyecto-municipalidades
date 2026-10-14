@@ -24,7 +24,7 @@ export default async function AvisosPanel() {
     <div className={`contenedor ${estilos.pagina}`}>
       <div className={estilos.cabecera}>
         <h1>Avisos a vecinos</h1>
-        <p>Se muestran en el portal hasta la fecha que indique.</p>
+        <p>Se muestran en el portal hasta la fecha que indiques.</p>
       </div>
 
       <NuevoAviso hastaSugerido={manana} />
@@ -48,7 +48,7 @@ export default async function AvisosPanel() {
               <div className={propios.acciones}>
                 <EtiquetaEstado estado={a.estado === "BORRADOR" ? { texto: "Borrador", tono: "recibido" } : { texto: "En el portal", tono: "confirmado" }} />
                 {a.estado === "BORRADOR" && <BotonAccion accion={publicarAviso.bind(null, a.id)} texto="Publicar" variante="primario" />}
-                <BotonAccion accion={eliminarAviso.bind(null, a.id)} texto="Eliminar" confirmar={`«${a.titulo}» dejará de verse y se eliminará. ¿Desea eliminarlo?`} textoConfirmar="Sí, eliminar" />
+                <BotonAccion accion={eliminarAviso.bind(null, a.id)} texto="Eliminar" confirmar={`«${a.titulo}» dejará de verse y se eliminará. ¿Quieres eliminarlo?`} textoConfirmar="Sí, eliminar" />
               </div>
             </li>
           ))}

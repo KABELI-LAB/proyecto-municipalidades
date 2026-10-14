@@ -54,7 +54,7 @@ export default async function PaginaOperativos({ searchParams }: { searchParams:
             <Icono nombre="calendario" tamano={40} />
           </span>
           <h2>{sector ? `Por ahora no hay operativos en ${sector.nombre}` : "Por ahora no hay operativos publicados"}</h2>
-          <p>Cuéntenos qué servicio necesita: nos ayuda a decidir dónde hacer los próximos operativos.</p>
+          <p>Cuéntanos qué servicio necesitas: nos ayuda a decidir dónde hacer los próximos operativos.</p>
           <EnlaceBoton href="/servicio">Solicitar un servicio</EnlaceBoton>
           {sector && <Link href="/operativos">Ver todos los sectores</Link>}
         </div>

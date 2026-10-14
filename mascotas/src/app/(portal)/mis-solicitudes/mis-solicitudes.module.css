@@ -1,19 +1,19 @@
 .contenedor {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-10);
+  gap: var(--space-7);
 }
 
 .lista {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-4);
+  gap: var(--space-4);
   max-width: 760px;
 }
 .lista ul {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-4);
+  gap: var(--space-4);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -22,63 +22,64 @@
 .tramite {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-2);
-  padding: var(--espacio-6);
-  background: var(--blanco);
-  border-radius: var(--radio-base);
+  gap: var(--space-2);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
 }
 .encabezado {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--espacio-2) var(--espacio-4);
+  gap: var(--space-2) var(--space-4);
 }
 .tipo {
-  font-family: var(--font-titulos);
-  font-size: var(--tipo-impresion-h3-tamano);
-  font-weight: var(--tipo-impresion-h2-peso);
-  line-height: var(--tipo-impresion-h3-interlineado);
-  color: var(--azul-institucional);
+  font-family: var(--font-sans);
+  font-size: var(--type-h3-size);
+  font-weight: var(--weight-bold);
+  line-height: var(--type-h3-lh);
+  color: var(--color-primary);
 }
 .detalle {
-  font-weight: var(--tipo-impresion-h2-peso);
+  font-weight: var(--weight-bold);
 }
 
 /* Acciones sobre un aviso propio. */
 .gestion {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-3);
-  padding-top: var(--espacio-3);
-  border-top: var(--borde-filete) solid var(--gris-claro);
+  gap: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: var(--border-width-strong) solid var(--color-border);
 }
 .botones {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--espacio-3);
+  gap: var(--space-3);
 }
 .confirmacion {
   display: flex;
   align-items: center;
-  gap: var(--espacio-2);
-  padding: var(--espacio-4);
-  background: var(--blanco);
-  border-left: var(--espacio-1) solid var(--verde-territorio);
-  border-radius: var(--radio-base);
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border-left: var(--space-1) solid var(--color-secondary);
+  border-radius: var(--radius-medium);
 }
 
 /* Postulaciones que recibe quien da en adopción. */
 .postulaciones {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-3);
-  margin-top: var(--espacio-4);
+  gap: var(--space-3);
+  margin-top: var(--space-4);
 }
 .postulaciones ul {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-3);
+  gap: var(--space-3);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -86,30 +87,29 @@
 .postulacion {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-2);
-  padding: var(--espacio-4);
-  background: var(--marfil-institucional);
-  border-radius: var(--radio-base);
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: var(--color-surface-sunken);
+  border-radius: var(--radius-medium);
 }
 
 /* Invitación por responder: llamado visible, con ícono y texto. */
 .invitacion {
   display: flex;
   align-items: center;
-  gap: var(--espacio-2);
-  padding: var(--espacio-3) var(--espacio-4);
-  border-left: var(--espacio-1) solid var(--amarillo-senal);
-  background: var(--blanco);
-  border-radius: var(--radio-base);
-  font-weight: var(--tipo-impresion-h2-peso);
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-warning-bg);
+  border-radius: var(--radius-medium);
+  font-weight: var(--weight-bold);
 }
 
 /* Avisos internos para la persona. */
 .avisos {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-3);
-  margin-top: var(--espacio-6);
+  gap: var(--space-3);
+  margin-top: var(--space-5);
 }
 .avisos ul {
   display: flex;
@@ -117,12 +117,13 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  background: var(--blanco);
-  border-radius: var(--radio-base);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
 }
 .avisos li {
-  padding: var(--espacio-3) var(--espacio-4);
-  border-top: var(--borde-filete) solid var(--gris-claro);
+  padding: var(--space-3) var(--space-4);
+  border-top: var(--border-width-strong) solid var(--color-border);
 }
 .avisos li:first-child {
   border-top: 0;
@@ -132,24 +133,24 @@
 .modos {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
 }
 .modo {
   display: inline-flex;
   align-items: center;
-  gap: var(--espacio-2);
-  min-height: var(--espacio-12);
-  padding: var(--espacio-2) var(--espacio-4);
-  background: var(--blanco);
-  border: var(--borde-filete) solid var(--gris-claro);
-  border-radius: var(--radio-base);
-  color: var(--azul-institucional);
+  gap: var(--space-2);
+  min-height: var(--space-8);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-surface);
+  border: var(--border-width-strong) solid var(--color-border);
+  border-radius: var(--radius-medium);
+  color: var(--color-primary);
   font: inherit;
-  font-weight: var(--tipo-impresion-h2-peso);
+  font-weight: var(--weight-bold);
   cursor: pointer;
 }
 .modo[aria-selected="true"] {
-  background: var(--azul-institucional);
-  border-color: var(--azul-institucional);
-  color: var(--blanco);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-surface);
 }

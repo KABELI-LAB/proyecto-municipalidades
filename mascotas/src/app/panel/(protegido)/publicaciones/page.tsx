@@ -32,7 +32,7 @@ export default async function PublicacionesPanel({ searchParams }: { searchParam
     <div className={`contenedor ${estilos.pagina}`}>
       <div className={estilos.cabecera}>
         <h1>Publicaciones de mascotas</h1>
-        <p>Los avisos que envían los vecinos esperan aquí. Al aceptarlos se publican en el portal y en Instagram. Si alguien reporta uno, vuelve a esta bandeja.</p>
+        <p>Los avisos que envían las vecinas y vecinos esperan aquí. Al aceptarlos se publican en el portal y en Instagram. Si alguien reporta uno, vuelve a esta bandeja.</p>
       </div>
 
       <nav aria-label="Estado de moderación" className={estilos.pestanas}>
@@ -55,16 +55,16 @@ export default async function PublicacionesPanel({ searchParams }: { searchParam
               <div className={estilos.accionesCabecera}>
                 {p.moderacion !== "APROBADA" && <BotonAccion accion={aprobarPublicacion.bind(null, p.id)} texto={p.moderacion === "OCULTA" ? "Volver a mostrar" : "Aceptar y publicar"} variante="primario" />}
                 {p.moderacion === "PENDIENTE" && (
-                  <BotonAccion accion={ocultarPublicacion.bind(null, p.id)} texto="No publicar" confirmar="El aviso no se publicará y avisaremos a quien lo envió. ¿Desea continuar?" textoConfirmar="Sí, no publicar" />
+                  <BotonAccion accion={ocultarPublicacion.bind(null, p.id)} texto="No publicar" confirmar="El aviso no se publicará y avisaremos a quien lo envió. ¿Quieres continuar?" textoConfirmar="Sí, no publicar" />
                 )}
                 {p.moderacion === "APROBADA" && (
-                  <BotonAccion accion={ocultarPublicacion.bind(null, p.id)} texto="Ocultar" confirmar="El aviso dejará de verse en el portal y avisaremos a quien lo publicó. Si ya salió en Instagram, bórrelo también allí. ¿Desea ocultarlo?" textoConfirmar="Sí, ocultar" />
+                  <BotonAccion accion={ocultarPublicacion.bind(null, p.id)} texto="Ocultar" confirmar="El aviso dejará de verse en el portal y avisaremos a quien lo publicó. Si ya salió en Instagram, bórralo también allí. ¿Quieres ocultarlo?" textoConfirmar="Sí, ocultar" />
                 )}
                 {p.estado === "ABIERTA" && (
                   <BotonAccion
                     accion={marcarReencontrada.bind(null, p.id)}
                     texto="Marcar como reencontrada"
-                    confirmar="Use esta opción si la persona le avisó por otra vía que la mascota volvió. El aviso dejará de verse en el portal y le avisaremos. ¿Desea continuar?"
+                    confirmar="Usa esta opción si la persona te avisó por otra vía que la mascota volvió. El aviso dejará de verse en el portal y le avisaremos. ¿Quieres continuar?"
                     textoConfirmar="Sí, volvió a casa"
                   />
                 )}

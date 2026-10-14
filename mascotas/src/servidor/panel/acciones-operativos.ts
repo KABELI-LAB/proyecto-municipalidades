@@ -22,8 +22,8 @@ import { difundirEnInstagram, notaInstagram } from "@/servidor/redes/servicio";
 type Tx = Prisma.TransactionClient;
 export type Respuesta = { ok: true; mensaje: string; id?: string } | { ok: false; mensaje: string; errores?: Record<string, string> };
 
-const SIN_PERMISO: Respuesta = { ok: false, mensaje: "Su cuenta no tiene permiso para esta acción." };
-const ERROR = "No pudimos completar la acción. Intente nuevamente.";
+const SIN_PERMISO: Respuesta = { ok: false, mensaje: "Tu cuenta no tiene permiso para esta acción." };
+const ERROR = "No pudimos completar la acción. Intenta nuevamente.";
 
 async function gestor() {
   return autorizar("gestionarOperativos");
@@ -40,14 +40,14 @@ const refrescar = (id?: string) => {
 
 const esquemaOperativo = z.object({
   id: z.string().optional(),
-  sectorId: z.string().min(1, "Elija el sector."),
-  lugarId: z.string().min(1, "Elija el lugar de referencia."),
-  fecha: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Indique la fecha."),
-  horaInicio: z.string().regex(/^\d{2}:\d{2}$/, "Indique la hora de inicio."),
-  horaFin: z.string().regex(/^\d{2}:\d{2}$/, "Indique la hora de término."),
+  sectorId: z.string().min(1, "Elige el sector."),
+  lugarId: z.string().min(1, "Elige el lugar de referencia."),
+  fecha: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Indica la fecha."),
+  horaInicio: z.string().regex(/^\d{2}:\d{2}$/, "Indica la hora de inicio."),
+  horaFin: z.string().regex(/^\d{2}:\d{2}$/, "Indica la hora de término."),
   requisitos: z.string().trim().max(600),
   origen: z.enum(["RECOMENDACION", "FICHA_SECTOR", "DESDE_CERO"]),
-  capacidades: z.record(z.string(), z.coerce.number().int().min(0, "Use 0 o más.").max(500)),
+  capacidades: z.record(z.string(), z.coerce.number().int().min(0, "Usa 0 o más.").max(500)),
 });
 
 export async function guardarOperativo(valores: unknown): Promise<Respuesta> {
@@ -57,7 +57,7 @@ export async function guardarOperativo(valores: unknown): Promise<Respuesta> {
   if (!r.success) {
     const errores: Record<string, string> = {};
     for (const i of r.error.issues) errores[String(i.path[0])] ??= i.message;
-    return { ok: false, mensaje: "Revise los datos marcados.", errores };
+    return { ok: false, mensaje: "Revisa los datos marcados.", errores };
   }
   const d = r.data;
   const errores: Record<string, string> = {};
@@ -65,16 +65,16 @@ export async function guardarOperativo(valores: unknown): Promise<Respuesta> {
   if (medianocheEn(d.fecha) < inicioDeHoy()) errores.fecha = "La fecha no puede ser anterior a hoy.";
   if (d.horaFin <= d.horaInicio) errores.horaFin = "La hora de término debe ser posterior a la de inicio.";
   const capacidades = Object.entries(d.capacidades).filter(([, n]) => n > 0);
-  if (capacidades.length === 0) errores.capacidades = "Indique cupos para al menos un servicio.";
+  if (capacidades.length === 0) errores.capacidades = "Indica cupos para al menos un servicio.";
   const municipio = municipioActivo();
-  if (!(await db.sector.findFirst({ where: { id: d.sectorId, municipioId: municipio.id } }))) errores.sectorId = "Elija un sector de la lista.";
-  else if (!(await db.lugar.findFirst({ where: { id: d.lugarId, sectorId: d.sectorId } }))) errores.lugarId = "Elija un lugar del sector.";
+  if (!(await db.sector.findFirst({ where: { id: d.sectorId, municipioId: municipio.id } }))) errores.sectorId = "Elige un sector de la lista.";
+  else if (!(await db.lugar.findFirst({ where: { id: d.lugarId, sectorId: d.sectorId } }))) errores.lugarId = "Elige un lugar del sector.";
   // Servicios activos; al editar, también los que el operativo ya ofrecía aunque luego se desactivaran.
   const servicios = await db.servicio.findMany({
     where: { municipioId: municipio.id, id: { in: capacidades.map(([s]) => s) }, OR: [{ activo: true }, ...(d.id ? [{ capacidades: { some: { operativoId: d.id } } }] : [])] },
   });
   if (servicios.length !== capacidades.length) errores.capacidades = "Hay un servicio que no existe o ya no se ofrece.";
-  if (Object.keys(errores).length > 0) return { ok: false, mensaje: "Revise los datos marcados.", errores };
+  if (Object.keys(errores).length > 0) return { ok: false, mensaje: "Revisa los datos marcados.", errores };
 
   const datos = {
     sectorId: d.sectorId,
@@ -134,7 +134,7 @@ export async function guardarOperativo(valores: unknown): Promise<Respuesta> {
 export async function crearYPublicarOperativo(valores: unknown): Promise<Respuesta> {
   const lugarId = z.object({ lugarId: z.string().min(1) }).safeParse(valores);
   const lugar = lugarId.success ? await db.lugar.findFirst({ where: { id: lugarId.data.lugarId, sector: { municipioId: municipioActivo().id } } }) : null;
-  if (!lugar) return { ok: false, mensaje: "Revise los datos marcados.", errores: { lugarId: "Elija el lugar de la lista." } };
+  if (!lugar) return { ok: false, mensaje: "Revisa los datos marcados.", errores: { lugarId: "Elige el lugar de la lista." } };
   const creado = await guardarOperativo({ ...(valores as object), id: undefined, sectorId: lugar.sectorId, origen: "DESDE_CERO" });
   if (!creado.ok || !creado.id) return creado;
   const publicado = await publicar(creado.id);
@@ -165,7 +165,7 @@ async function transitar(id: string, t: Transicion, efecto?: (tx: Tx, o: Operati
     const mensaje = await db.$transaction(async (tx) => {
       const o = await tx.operativo.findFirst({ where: { id, sector: { municipioId: municipioActivo().id } }, include: { sector: true, lugar: true } });
       if (!o) throw new ErrorDeUso("No encontramos el operativo.");
-      if (!puedeTransitar(o.estado as EstadoOperativo, t)) throw new ErrorDeUso("El operativo ya no está en un estado que permita esta acción. Actualice la página.");
+      if (!puedeTransitar(o.estado as EstadoOperativo, t)) throw new ErrorDeUso("El operativo ya no está en un estado que permita esta acción. Actualiza la página.");
       const extra = efecto ? await efecto(tx, o) : undefined;
       await tx.operativo.update({
         where: { id },
@@ -206,7 +206,7 @@ export async function publicar(id: string) {
         data: {
           tipo: "OPERATIVO",
           titulo: `Operativo en ${o.sector.nombre}`,
-          texto: `El ${fechaLarga(o.fecha)}, de ${o.horaInicio} a ${o.horaFin} horas, realizaremos un operativo en ${o.lugar.nombre}. Inscríbase en la sección Operativos; los cupos son limitados.`,
+          texto: `El ${fechaLarga(o.fecha)}, de ${o.horaInicio} a ${o.horaFin} horas, realizaremos un operativo en ${o.lugar.nombre}. Inscríbete en la sección Operativos; los cupos son limitados.`,
           vigenteDesde: new Date(),
           vigenteHasta: new Date(o.fecha.getTime() + 86_400_000),
           estado: "BORRADOR",
@@ -235,7 +235,7 @@ export async function reabrirInscripciones(id: string) {
 export async function iniciar(id: string) {
   return transitar(id, "iniciar", async (tx) => {
     // Al comenzar ya no se puede responder: las invitaciones abiertas se cierran y su solicitud sigue pendiente.
-    const n = await cerrarInvitacionesAbiertas(tx, id, "El operativo comenzó", "El operativo comenzó antes de que pudiéramos asignarle un cupo.");
+    const n = await cerrarInvitacionesAbiertas(tx, id, "El operativo comenzó", "El operativo comenzó antes de que pudiéramos asignarte un cupo.");
     return `El operativo está en curso. Terreno ya puede registrar asistencia y atenciones.${n ? ` ${n === 1 ? "Una invitación abierta se cerró" : `${n} invitaciones abiertas se cerraron`}; sus solicitudes siguen pendientes.` : ""}`;
   });
 }
@@ -265,7 +265,7 @@ export async function cerrar(id: string) {
             data: { codigo: await nuevoCodigo(tx), personaId: c.personaId, animalId: c.animalId, servicioId: c.servicioId, sectorId: c.persona.sectorId, origen: "MUNICIPIO", loteDemoId: o.loteDemoId },
           });
         }
-        await notificar(tx, c.persona, "Su solicitud sigue registrada", `No alcanzamos a atender su solicitud de ${c.servicio.nombre.toLowerCase()} en este operativo. La mantenemos registrada y le avisaremos del próximo.`, o.loteDemoId);
+        await notificar(tx, c.persona, "Tu solicitud sigue registrada", `No alcanzamos a atender tu solicitud de ${c.servicio.nombre.toLowerCase()} en este operativo. La mantenemos registrada y te avisaremos del próximo.`, o.loteDemoId);
       }
     }
     const atenciones = await tx.atencion.findMany({ where: { operativoId: id }, include: { servicio: true } });
@@ -289,7 +289,7 @@ export async function cancelar(id: string) {
     for (const c of vigentes) {
       await tx.cupo.update({ where: { id: c.id }, data: { estado: "CANCELADO_MUNICIPIO" } });
       if (c.solicitudId) await tx.solicitudServicio.update({ where: { id: c.solicitudId }, data: { estado: "RECIBIDA" } });
-      await notificar(tx, c.persona, "Operativo cancelado", `Informamos que el operativo del ${fechaLarga(o.fecha)} en ${o.sector.nombre} fue cancelado. Su solicitud sigue registrada y le avisaremos del próximo operativo.`, o.loteDemoId);
+      await notificar(tx, c.persona, "Operativo cancelado", `Informamos que el operativo del ${fechaLarga(o.fecha)} en ${o.sector.nombre} fue cancelado. Tu solicitud sigue registrada y te avisaremos del próximo operativo.`, o.loteDemoId);
     }
     // El aviso del operativo deja de mostrarse y se prepara uno de cancelación para comunicaciones.
     await tx.aviso.updateMany({ where: { operativoId: id, tipo: "OPERATIVO" }, data: { vigenteHasta: new Date() } });
@@ -418,7 +418,7 @@ export async function enviarRecordatorios(operativoId: string): Promise<Respuest
   const cupos = await db.cupo.findMany({ where: { operativoId, estado: { in: ["CONFIRMADO", "INVITADO"] } }, include: { persona: true, servicio: true } });
   await db.$transaction(async (tx) => {
     for (const c of cupos) {
-      await notificar(tx, c.persona, "Recordatorio de operativo", `Le recordamos su cupo de ${c.servicio.nombre.toLowerCase()} el ${fechaLarga(o.fecha)}, de ${o.horaInicio} a ${o.horaFin} horas, en ${o.lugar.nombre}. Si no puede asistir, avísenos para liberar el cupo. Código ${c.codigo}.`, o.loteDemoId);
+      await notificar(tx, c.persona, "Recordatorio de operativo", `Te recordamos tu cupo de ${c.servicio.nombre.toLowerCase()} el ${fechaLarga(o.fecha)}, de ${o.horaInicio} a ${o.horaFin} horas, en ${o.lugar.nombre}. Si no puedes asistir, avísanos para liberar el cupo. Código ${c.codigo}.`, o.loteDemoId);
     }
   });
   return { ok: true, mensaje: `Registramos ${cupos.length === 1 ? "1 recordatorio" : `${cupos.length} recordatorios`} (envío simulado en el prototipo).` };

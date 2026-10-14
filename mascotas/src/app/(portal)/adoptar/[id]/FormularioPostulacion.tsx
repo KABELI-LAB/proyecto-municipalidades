@@ -13,7 +13,7 @@ import estilos from "@/componentes/formulario/formulario.module.css";
 /** `deVecino`: animal propuesto por un vecino; la postulación le llega a esa persona, no al municipio. */
 type Props = { fichaId: string; nombre: string; convivencia: string; sectores: SectorOpcion[]; deVecino?: boolean };
 
-const TITULOS = ["Sus datos", "Su hogar", "Revise y confirme"] as const;
+const TITULOS = ["Tus datos", "Tu hogar", "Revisa y confirma"] as const;
 const PASOS = [CAMPOS_PERSONA, ["tipoVivienda", "experiencia", "tieneOtros", "otrosAnimales", "compartir"], []] as const;
 const mayuscula = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 const SI_NO = [
@@ -28,15 +28,15 @@ export function FormularioPostulacion({ fichaId, nombre, convivencia, sectores, 
 
   if (codigo) {
     return (
-      <ResultadoTramite titulo="Recibimos su postulación" codigo={codigo}>
+      <ResultadoTramite titulo="Recibimos tu postulación" codigo={codigo}>
         {deVecino ? (
           <p>
-            Le enviamos su postulación a quien da en adopción a {nombre}. Si le elige, verá su contacto en Mis solicitudes y
-            esa persona verá el suyo.
+            Le enviamos tu postulación a quien da en adopción a {nombre}. Si te elige, verás su contacto en Mis solicitudes y
+            esa persona verá el tuyo.
           </p>
         ) : (
           <p>
-            Revisaremos su postulación para adoptar a {nombre} y le contactaremos para conversar. El estado puede ser En
+            Revisaremos tu postulación para adoptar a {nombre} y te contactaremos para conversar. El estado puede ser En
             evaluación, Aprobada o No seleccionada.
           </p>
         )}
@@ -60,8 +60,8 @@ export function FormularioPostulacion({ fichaId, nombre, convivencia, sectores, 
       {t.paso === 1 && (
         <>
           <CampoOpciones id="tipoVivienda" etiqueta="Tipo de vivienda" valor={v.tipoVivienda} alCambiar={(x) => cambiar("tipoVivienda", x)} error={errores.tipoVivienda} opciones={TIPOS_VIVIENDA.map((x) => ({ valor: x, texto: mayuscula(x) }))} />
-          <CampoOpciones id="experiencia" etiqueta="¿Ha tenido animales antes?" valor={v.experiencia} alCambiar={(x) => cambiar("experiencia", x)} error={errores.experiencia} opciones={SI_NO} />
-          <CampoOpciones id="tieneOtros" etiqueta="¿Hay otros animales en su hogar?" valor={v.tieneOtros} alCambiar={(x) => cambiar("tieneOtros", x)} error={errores.tieneOtros} opciones={SI_NO} />
+          <CampoOpciones id="experiencia" etiqueta="¿Has tenido animales antes?" valor={v.experiencia} alCambiar={(x) => cambiar("experiencia", x)} error={errores.experiencia} opciones={SI_NO} />
+          <CampoOpciones id="tieneOtros" etiqueta="¿Hay otros animales en tu hogar?" valor={v.tieneOtros} alCambiar={(x) => cambiar("tieneOtros", x)} error={errores.tieneOtros} opciones={SI_NO} />
           {v.tieneOtros === "SI" && (
             <>
               <CampoTexto id="otrosAnimales" etiqueta="¿Cuáles?" valor={v.otrosAnimales} alCambiar={(x) => cambiar("otrosAnimales", x)} error={errores.otrosAnimales} ayuda="Por ejemplo, «un perro adulto y dos gatos»." maxLength={100} />
@@ -80,7 +80,7 @@ export function FormularioPostulacion({ fichaId, nombre, convivencia, sectores, 
               valores={v.compartir === "SI" ? ["SI"] : []}
               alCambiar={(x) => cambiar("compartir", x.includes("SI") ? "SI" : "")}
               error={errores.compartir}
-              ayuda="Su postulación le llega a la persona que lo da en adopción, sin su teléfono ni su correo. Solo si le elige, compartimos los contactos de ambos."
+              ayuda="Tu postulación le llega a la persona que lo da en adopción, sin tu teléfono ni tu correo. Solo si te elige, compartimos los contactos de ambos."
               opciones={[{ valor: "SI", texto: "Acepto que, si me elige, compartan mi contacto con esa persona y el suyo conmigo." }]}
             />
           )}
@@ -92,8 +92,8 @@ export function FormularioPostulacion({ fichaId, nombre, convivencia, sectores, 
             ["Animal", nombre],
             ...filasPersona(v, sectores),
             ["Tipo de vivienda", mayuscula(v.tipoVivienda)],
-            ["Ha tenido animales", v.experiencia === "SI" ? "Sí" : "No"],
-            ["Otros animales en su hogar", v.tieneOtros === "SI" ? v.otrosAnimales : "Ninguno"],
+            ["Has tenido animales", v.experiencia === "SI" ? "Sí" : "No"],
+            ["Otros animales en tu hogar", v.tieneOtros === "SI" ? v.otrosAnimales : "Ninguno"],
           ]}
         />
       )}

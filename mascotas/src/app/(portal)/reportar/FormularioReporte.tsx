@@ -10,13 +10,13 @@ import { esquemaReporte, PREGUNTA_SI_SIGUE } from "@/lib/esquemas";
 import { reportarSituacion } from "@/servidor/portal/acciones";
 import estilos from "@/componentes/formulario/formulario.module.css";
 
-const TITULOS = ["Qué está ocurriendo", "Detalle y sus datos", "Revise y confirme"] as const;
+const TITULOS = ["Qué está ocurriendo", "Detalle y tus datos", "Revisa y confirma"] as const;
 const PASOS = [["tipo"], ["localidadId", "especie", "cantidad", "sigueEnLugar", "descripcion", "foto", ...CAMPOS_PERSONA.filter((c) => c !== "localidadId")], []] as const;
 
 // Qué conviene contar según la categoría (claves de demo/datos/catalogos.json).
 const AYUDA_DESCRIPCION: Record<string, string> = {
   "animal herido": "Por ejemplo, qué lesión o síntoma se ve, si puede caminar y desde cuándo está ahí.",
-  "maltrato o abandono": "Por ejemplo, qué ha visto, desde cuándo y si el animal tiene agua y refugio.",
+  "maltrato o abandono": "Por ejemplo, qué has visto, desde cuándo y si el animal tiene agua y refugio.",
   "animal agresivo": "Por ejemplo, cuántos animales son, a qué hora se ven y si han atacado a alguien.",
   "animal comunitario sin atencion": "Por ejemplo, si los vecinos lo alimentan y qué atención necesita.",
   "animal atrapado": "Por ejemplo, dónde está atrapado de forma general (un canal, un techo, un cerco) y desde cuándo.",
@@ -34,10 +34,10 @@ export function FormularioReporte({ sectores, tipos, tipoInicial = "" }: { secto
 
   if (codigo) {
     return (
-      <ResultadoTramite titulo="Recibimos su reporte" codigo={codigo} conRut={false}>
+      <ResultadoTramite titulo="Recibimos tu reporte" codigo={codigo} conRut={false}>
         <p>El equipo municipal lo revisará en horario de atención.</p>
         <p>
-          <b>No garantiza atención inmediata. Si hay peligro para una persona, llame a los servicios de emergencia.</b>
+          <b>No garantiza atención inmediata. Si hay peligro para una persona, llama a los servicios de emergencia.</b>
         </p>
       </ResultadoTramite>
     );
@@ -69,7 +69,7 @@ export function FormularioReporte({ sectores, tipos, tipoInicial = "" }: { secto
         <>
           <CampoOpciones
             id="tipo"
-            etiqueta="¿Qué situación quiere informar?"
+            etiqueta="¿Qué situación quieres informar?"
             valor={v.tipo}
             alCambiar={(x) => cambiar("tipo", x)}
             error={errores.tipo}
@@ -85,7 +85,7 @@ export function FormularioReporte({ sectores, tipos, tipoInicial = "" }: { secto
             alCambiar={(x) => cambiar("localidadId", x)}
             error={errores.localidadId}
             sectores={sectores}
-            ayuda="Elija la localidad más cercana. No indique direcciones."
+            ayuda="Elige la localidad más cercana. No indiques direcciones."
           />
           <CampoSelect
             id="especie"
@@ -123,7 +123,7 @@ export function FormularioReporte({ sectores, tipos, tipoInicial = "" }: { secto
             alCambiar={(x) => cambiar("descripcion", x)}
             error={errores.descripcion}
             maxLength={600}
-            ayuda={`${AYUDA_DESCRIPCION[v.tipo] ?? ""} Puede indicar un punto de referencia general, como «cerca de la sede social», pero no direcciones exactas.`}
+            ayuda={`${AYUDA_DESCRIPCION[v.tipo] ?? ""} Puedes indicar un punto de referencia general, como «cerca de la sede social», pero no direcciones exactas.`}
           />
           <CampoFoto
             id="foto"
@@ -132,10 +132,10 @@ export function FormularioReporte({ sectores, tipos, tipoInicial = "" }: { secto
             archivo={foto}
             alCambiar={setFoto}
             error={errores.foto}
-            ayuda="Solo la ve el equipo municipal. Evite que aparezcan personas, patentes o el interior de una casa."
+            ayuda="Solo la ve el equipo municipal. Evita que aparezcan personas, patentes o el interior de una casa."
           />
-          <h3 className={estilos.subtitulo}>Sus datos</h3>
-          <p>Los usamos solo para darle seguimiento. Su identidad no se comparte con otras personas.</p>
+          <h3 className={estilos.subtitulo}>Tus datos</h3>
+          <p>Los usamos solo para darte seguimiento. Tu identidad no se comparte con otras personas.</p>
           <BloquePersona valores={v} errores={errores} cambiar={cambiar} sectores={sectores} sinLocalidad rut="no" />
         </>
       )}

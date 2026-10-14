@@ -31,7 +31,7 @@ export function CorregirPropuesta({ codigo, sectores }: { codigo: string; sector
       }}
     >
       <p>
-        Para corregir la propuesta <b>{codigo}</b>, escriba el RUT con que la envió.
+        Para corregir la propuesta <b>{codigo}</b>, escribe el RUT con que la enviaste.
       </p>
       <CampoTexto id="rut" etiqueta="RUT" valor={rut} alCambiar={setRut} error={error ?? undefined} autoComplete="off" />
       <div className={formulario.navegacion}>

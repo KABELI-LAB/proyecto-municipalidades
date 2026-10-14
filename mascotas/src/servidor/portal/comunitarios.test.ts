@@ -83,7 +83,7 @@ describe("un vecino registra y cuida a un perro comunitario", () => {
   it("en Mis solicitudes, con su RUT y su código, aparece el perro a su cuidado", async () => {
     const c = await portal.consultarSolicitudes({ rut: CUIDADORA.rut, codigo });
     if (!c.ok) throw new Error("consulta");
-    expect(c.tramites.find((t) => t.codigo === codigo)).toMatchObject({ tipo: "Perro comunitario a su cuidado", comunitario: { id: perro, apodo: "el del puente" } });
+    expect(c.tramites.find((t) => t.codigo === codigo)).toMatchObject({ tipo: "Perro comunitario a tu cuidado", comunitario: { id: perro, apodo: "el del puente" } });
   });
 
   it("la novedad de un vecino le llega al cuidador (sin el contacto del vecino) y la marca como vista", async () => {
@@ -100,7 +100,7 @@ describe("un vecino registra y cuida a un perro comunitario", () => {
     expect((await comunidad.marcarNovedadVista({ rut: OTRO.rut, codigo, novedad: n })).ok).toBe(false); // otro RUT
     expect((await comunidad.marcarNovedadVista({ rut: CUIDADORA.rut, codigo, novedad: n })).ok).toBe(true);
     expect((await db.novedadComunitario.findUniqueOrThrow({ where: { codigo: n } })).estado).toBe("ACEPTADA");
-    expect(await db.notificacion.count({ where: { destinatario: VECINA.telefono, asunto: "Su novedad llegó" } })).toBe(1);
+    expect(await db.notificacion.count({ where: { destinatario: VECINA.telefono, asunto: "Tu novedad llegó" } })).toBe(1);
   });
 
   it("su cuidador anota que lo vio y actualiza la ficha; con otro RUT no puede", async () => {

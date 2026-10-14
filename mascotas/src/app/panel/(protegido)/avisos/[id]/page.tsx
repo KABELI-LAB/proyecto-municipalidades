@@ -40,17 +40,17 @@ export default async function AvisoPanel({ params }: { params: Promise<{ id: str
           {borrador && !terminado && (
             <>
               <p>Al publicarlo, se muestra en el portal durante su vigencia, en los sectores indicados.</p>
-              <BotonAccion accion={publicarAviso.bind(null, a.id)} texto="Publicar aviso" variante="primario" confirmar="El aviso se mostrará en el portal ciudadano. ¿Desea publicarlo?" textoConfirmar="Sí, publicar" />
+              <BotonAccion accion={publicarAviso.bind(null, a.id)} texto="Publicar aviso" variante="primario" confirmar="El aviso se mostrará en el portal ciudadano. ¿Quieres publicarlo?" textoConfirmar="Sí, publicar" />
             </>
           )}
           {!borrador && !terminado && (
             <>
               <p>Se muestra en el portal hasta el fin de su vigencia.</p>
-              <BotonAccion accion={retirarAviso.bind(null, a.id)} texto="Retirar del portal" confirmar="El aviso dejará de mostrarse hoy. ¿Desea retirarlo?" textoConfirmar="Sí, retirar" />
+              <BotonAccion accion={retirarAviso.bind(null, a.id)} texto="Retirar del portal" confirmar="El aviso dejará de mostrarse hoy. ¿Quieres retirarlo?" textoConfirmar="Sí, retirar" />
             </>
           )}
-          {terminado && <p>Su vigencia terminó. Para volver a usarlo, cambie las fechas.</p>}
-          <BotonAccion accion={eliminarAviso.bind(null, a.id)} texto="Eliminar aviso" confirmar="El aviso dejará de verse y se eliminará. ¿Desea eliminarlo?" textoConfirmar="Sí, eliminar" />
+          {terminado && <p>Su vigencia terminó. Para volver a usarlo, cambia las fechas.</p>}
+          <BotonAccion accion={eliminarAviso.bind(null, a.id)} texto="Eliminar aviso" confirmar="El aviso dejará de verse y se eliminará. ¿Quieres eliminarlo?" textoConfirmar="Sí, eliminar" />
         </section>
       </div>
     </div>

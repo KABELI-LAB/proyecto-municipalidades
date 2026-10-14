@@ -41,7 +41,7 @@ export function TarjetaMascota({ publicacion: p, coincidencia = false }: Props) 
       {coincidencia && (
         <p className={estilos.coincidencia}>
           <Icono nombre="buscar" tamano={18} />
-          Posible coincidencia: revise el aviso
+          Posible coincidencia: revisa el aviso
         </p>
       )}
       <h3>

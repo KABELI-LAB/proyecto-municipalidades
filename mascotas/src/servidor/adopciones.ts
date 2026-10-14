@@ -40,7 +40,7 @@ export async function concretarAdopcion(p: Postulacion, municipioId: string): Pr
     const otras = await tx.postulacionAdopcion.findMany({ where: { fichaId: p.ficha.id, id: { not: p.id }, estado: { in: ["RECIBIDA", "EN_EVALUACION", "APROBADA"] } }, include: { persona: true } });
     for (const o of otras) {
       await tx.postulacionAdopcion.update({ where: { id: o.id }, data: { estado: "NO_SELECCIONADA" } });
-      await notificar(tx, o.persona, "Sobre su postulación", `Gracias por postular para adoptar a ${nombre}. Ya encontró hogar. Le invitamos a conocer a otros animales que buscan uno.`, o.loteDemoId);
+      await notificar(tx, o.persona, "Sobre tu postulación", `Gracias por postular para adoptar a ${nombre}. Ya encontró hogar. Te invitamos a conocer a otros animales que buscan uno.`, o.loteDemoId);
     }
 
     const creados: string[] = [];
@@ -51,7 +51,7 @@ export async function concretarAdopcion(p: Postulacion, municipioId: string): Pr
       });
       creados.push(`${s.nombre.toLowerCase()} (${codigo})`);
     }
-    const compromiso = creados.length ? ` Registramos su compromiso de ${creados.join(" y ")}; le avisaremos cuando haya un operativo.` : "";
+    const compromiso = creados.length ? ` Registramos tu compromiso de ${creados.join(" y ")}; te avisaremos cuando haya un operativo.` : "";
     await notificar(tx, p.persona, "Adopción registrada", `Registramos la adopción de ${nombre}. Gracias por darle un hogar.${compromiso}`, p.loteDemoId);
     // Quien propuso la adopción sabe que el animal encontró hogar.
     const proponente = p.ficha.proponenteId ? await tx.persona.findUnique({ where: { id: p.ficha.proponenteId } }) : null;

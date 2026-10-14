@@ -15,9 +15,9 @@ import { difundirEnInstagram, notaInstagram } from "@/servidor/redes/servicio";
 
 type Respuesta = { ok: boolean; mensaje: string };
 
-const SIN_PERMISO: Respuesta = { ok: false, mensaje: "Su cuenta no tiene permiso para esta acción." };
-const YA_CAMBIO: Respuesta = { ok: false, mensaje: "Este registro ya cambió de estado. Actualice la página para ver su estado actual." };
-const ERROR: Respuesta = { ok: false, mensaje: "No pudimos guardar el cambio. Intente nuevamente." };
+const SIN_PERMISO: Respuesta = { ok: false, mensaje: "Tu cuenta no tiene permiso para esta acción." };
+const YA_CAMBIO: Respuesta = { ok: false, mensaje: "Este registro ya cambió de estado. Actualiza la página para ver su estado actual." };
+const ERROR: Respuesta = { ok: false, mensaje: "No pudimos guardar el cambio. Intenta nuevamente." };
 const enMunicipio = () => ({ sector: { municipioId: municipioActivo().id } });
 
 async function con(permiso: Permiso, rutas: string[], accion: (usuario: UsuarioSesion) => Promise<Respuesta>): Promise<Respuesta> {
@@ -61,7 +61,7 @@ export async function cerrarReporte(id: string) {
       await tx.reporteCiudadano.update({ where: { id }, data: { estado: "CERRADO", cerradoEn: new Date() } });
       await anotar(tx, id, "CERRADO", u);
       if (reporte.persona && reporte.codigo) {
-        await notificar(tx, reporte.persona, "Su reporte fue revisado", `El equipo municipal revisó y cerró su reporte ${reporte.codigo}. Gracias por avisarnos.`, reporte.loteDemoId);
+        await notificar(tx, reporte.persona, "Tu reporte fue revisado", `El equipo municipal revisó y cerró tu reporte ${reporte.codigo}. Gracias por avisarnos.`, reporte.loteDemoId);
       }
     });
     return { ok: true, mensaje: "Cerramos el reporte." };
@@ -93,7 +93,7 @@ export async function aprobarPublicacion(id: string) {
     const r = await db.publicacionMascota.updateMany({ where: { id, moderacion: p.moderacion }, data: { moderacion: "APROBADA" } });
     if (!r.count) return YA_CAMBIO;
     if (p.moderacion === "PENDIENTE") {
-      await notificar(db, p.persona, "Publicamos su aviso", `Revisamos y publicamos su aviso${p.codigo ? ` ${p.codigo}` : ""} en el portal y en las redes sociales del municipio. Le avisaremos si aparece una publicación que podría corresponder.`, p.loteDemoId);
+      await notificar(db, p.persona, "Publicamos tu aviso", `Revisamos y publicamos tu aviso${p.codigo ? ` ${p.codigo}` : ""} en el portal y en las redes sociales del municipio. Te avisaremos si aparece una publicación que podría corresponder.`, p.loteDemoId);
     }
     const instagram = await difundirEnInstagram(p.tipo === "PERDIDA" ? "PERDIDA" : "AVISTADA", id, u.id);
     return { ok: true, mensaje: `Publicamos el aviso en el portal.${notaInstagram(instagram)}` };
@@ -106,7 +106,7 @@ export async function ocultarPublicacion(id: string) {
     if (!p) return YA_CAMBIO;
     await db.$transaction(async (tx) => {
       await tx.publicacionMascota.update({ where: { id }, data: { moderacion: "OCULTA" } });
-      await notificar(tx, p.persona, "Su publicación no está visible", `Ocultamos su publicación${p.codigo ? ` ${p.codigo}` : ""} porque no cumple las condiciones de uso del portal. Si cree que es un error, escríbanos.`, p.loteDemoId);
+      await notificar(tx, p.persona, "Tu publicación no está visible", `Ocultamos tu publicación${p.codigo ? ` ${p.codigo}` : ""} porque no cumple las condiciones de uso del portal. Si crees que es un error, escríbenos.`, p.loteDemoId);
     });
     return { ok: true, mensaje: "Ocultamos la publicación y avisamos a quien la publicó." };
   });
@@ -123,7 +123,7 @@ export async function marcarReencontrada(id: string) {
     if (!p) return YA_CAMBIO;
     await db.$transaction(async (tx) => {
       await tx.publicacionMascota.update({ where: { id }, data: { estado: "REENCONTRADA", resueltaEn: new Date(), reencuentroPorCoincidencia: null } });
-      await notificar(tx, p.persona, "Retiramos su aviso", `Registramos que la mascota de su aviso${p.codigo ? ` ${p.codigo}` : ""} ya volvió a casa, así que dejó de mostrarse en el portal. Si no corresponde, escríbanos.`, p.loteDemoId);
+      await notificar(tx, p.persona, "Retiramos tu aviso", `Registramos que la mascota de tu aviso${p.codigo ? ` ${p.codigo}` : ""} ya volvió a casa, así que dejó de mostrarse en el portal. Si no corresponde, escríbenos.`, p.loteDemoId);
     });
     return { ok: true, mensaje: "Registramos el reencuentro. El aviso dejó de mostrarse en el portal." };
   });
@@ -145,7 +145,7 @@ export async function validarCoincidencia(id: string) {
     await db.$transaction(async (tx) => {
       await tx.coincidencia.update({ where: { id }, data: { estado: "VALIDADA" } });
       for (const p of [c.perdida, c.encontrada]) {
-        await notificar(tx, p.persona, "Revise una posible coincidencia", "El equipo municipal revisó una publicación que podría corresponder a la suya. Le recomendamos revisarla y escribir a la otra persona a través del portal.", p.loteDemoId);
+        await notificar(tx, p.persona, "Revisa una posible coincidencia", "El equipo municipal revisó una publicación que podría corresponder a la tuya. Te recomendamos revisarla y escribir a la otra persona a través del portal.", p.loteDemoId);
       }
     });
     return { ok: true, mensaje: "Validamos la coincidencia y avisamos a ambas personas." };
@@ -184,7 +184,7 @@ export async function registrarReencuentro(id: string) {
 
 const nombreDe = (a: { nombre: string | null }) => a.nombre ?? "el animal";
 const RUTAS_PROPUESTAS = ["/panel/propuestas", "/adoptar", "/"];
-const MOTIVO_CORTO: Respuesta = { ok: false, mensaje: "Escriba el motivo en al menos 10 caracteres: se lo mostraremos a quien propuso." };
+const MOTIVO_CORTO: Respuesta = { ok: false, mensaje: "Escribe el motivo en al menos 10 caracteres: se lo mostraremos a quien propuso." };
 
 async function revisarPropuesta(
   id: string,
@@ -220,8 +220,8 @@ async function revisarPropuesta(
 export async function aprobarPropuesta(id: string) {
   return con("gestionarAdopciones", RUTAS_PROPUESTAS, async (u) => {
     const r = await revisarPropuesta(id, TRANSICION_REVISION.aprobar, u, { revision: "APROBADA" }, (n, c) => [
-      "Publicamos su propuesta de adopción",
-      `Revisamos y publicamos la ficha de ${n} (${c}) en el catálogo de adopción. Las postulaciones le llegan a usted: revíselas en Mis solicitudes con su RUT y este código, y elija con quién compartir su contacto.`,
+      "Publicamos tu propuesta de adopción",
+      `Revisamos y publicamos la ficha de ${n} (${c}) en el catálogo de adopción. Tú recibes las postulaciones: revísalas en Mis solicitudes con tu RUT y este código, y elige con quién compartir tu contacto.`,
     ]);
     if (!r) return YA_CAMBIO;
     // Ficha aprobada: también a Instagram. Sin autorización de quien la propuso, no se publica allí.
@@ -234,8 +234,8 @@ export async function pedirCorrecciones(id: string, motivo: string) {
   return con("gestionarAdopciones", RUTAS_PROPUESTAS, async (u) => {
     if (motivo.trim().length < 10) return MOTIVO_CORTO;
     const r = await revisarPropuesta(id, TRANSICION_REVISION.pedirCorrecciones, u, { revision: "CORRECCIONES", motivo: motivo.trim() }, (n, c) => [
-      "Su propuesta de adopción necesita correcciones",
-      `Antes de publicar la ficha de ${n} (${c}) le pedimos corregir algunos datos: ${motivo.trim()} Puede corregirla en Mis solicitudes con su RUT y este código.`,
+      "Tu propuesta de adopción necesita correcciones",
+      `Antes de publicar la ficha de ${n} (${c}) te pedimos corregir algunos datos: ${motivo.trim()} Puedes corregirla en Mis solicitudes con tu RUT y este código.`,
     ]);
     return r ? { ok: true, mensaje: "Pedimos las correcciones a quien propuso." } : YA_CAMBIO;
   });
@@ -245,8 +245,8 @@ export async function rechazarPropuesta(id: string, motivo: string) {
   return con("gestionarAdopciones", RUTAS_PROPUESTAS, async (u) => {
     if (motivo.trim().length < 10) return MOTIVO_CORTO;
     const r = await revisarPropuesta(id, TRANSICION_REVISION.rechazar, u, { revision: "RECHAZADA", motivo: motivo.trim() }, (n, c) => [
-      "Sobre su propuesta de adopción",
-      `Revisamos la propuesta de ${n} (${c}) y no podemos publicarla: ${motivo.trim()} Si tiene dudas, escríbanos.`,
+      "Sobre tu propuesta de adopción",
+      `Revisamos la propuesta de ${n} (${c}) y no podemos publicarla: ${motivo.trim()} Si tienes dudas, escríbenos.`,
     ]);
     return r ? { ok: true, mensaje: "La propuesta quedó como no publicada y avisamos a quien la propuso." } : YA_CAMBIO;
   });
@@ -256,10 +256,10 @@ export async function ocultarFichaAdopcion(id: string, motivo: string) {
   return con("gestionarAdopciones", RUTAS_PROPUESTAS, async (u) => {
     if (motivo.trim().length < 10) return MOTIVO_CORTO;
     // Con una adopción en curso no se oculta: primero se resuelven las postulaciones aprobadas.
-    if (await db.fichaAdopcion.count({ where: { id, estado: "EN_PROCESO" } })) return { ok: false, mensaje: "Hay una adopción en curso. Resuelva primero la postulación aprobada." };
+    if (await db.fichaAdopcion.count({ where: { id, estado: "EN_PROCESO" } })) return { ok: false, mensaje: "Hay una adopción en curso. Resuelve primero la postulación aprobada." };
     const r = await revisarPropuesta(id, TRANSICION_REVISION.ocultar, u, { revision: "OCULTA", motivo: motivo.trim() }, (n, c) => [
       "Retiramos una ficha de adopción",
-      `Retiramos del catálogo la ficha de ${n} (${c}): ${motivo.trim()} Si tiene dudas, escríbanos.`,
+      `Retiramos del catálogo la ficha de ${n} (${c}): ${motivo.trim()} Si tienes dudas, escríbenos.`,
     ]);
     return r ? { ok: true, mensaje: "La ficha dejó de mostrarse en el catálogo." } : YA_CAMBIO;
   });

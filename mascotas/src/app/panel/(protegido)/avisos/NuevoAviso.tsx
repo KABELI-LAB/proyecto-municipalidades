@@ -59,7 +59,7 @@ export function NuevoAviso({ hastaSugerido }: { hastaSugerido: string }) {
         <CampoTexto id="hasta" tipo="date" etiqueta="Visible hasta" valor={v.hasta} alCambiar={cambiar("hasta")} error={errores.hasta} />
       </div>
       <CampoTexto id="titulo" etiqueta="Título" valor={v.titulo} alCambiar={cambiar("titulo")} error={errores.titulo} maxLength={90} />
-      <CampoArea id="texto" etiqueta="Texto" valor={v.texto} alCambiar={cambiar("texto")} error={errores.texto} maxLength={400} filas={3} sugerencia="Trato de usted. Use corchetes para lo que falta confirmar, por ejemplo [fecha]." />
+      <CampoArea id="texto" etiqueta="Texto" valor={v.texto} alCambiar={cambiar("texto")} error={errores.texto} maxLength={400} filas={3} sugerencia="Tutea a vecinas y vecinos. Usa corchetes para lo que falta confirmar, por ejemplo [fecha]." />
       <div className={formulario.navegacion}>
         <Boton type="submit" disabled={enviando}>
           {enviando ? "Publicando…" : "Publicar aviso"}

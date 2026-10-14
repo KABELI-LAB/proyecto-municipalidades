@@ -101,7 +101,7 @@ export default async function PaginaFicha({ params }: { params: Promise<{ id: st
           </dl>
           {f.proponenteId && (
             <p className="nota">
-              Lo da en adopción un vecino; el municipio revisó la ficha antes de publicarla. Su postulación le llega a esa persona, y solo si le elige se comparten
+              Lo da en adopción un vecino; el municipio revisó la ficha antes de publicarla. Tu postulación le llega a esa persona, y solo si te elige se comparten
               los contactos de ambos.
             </p>
           )}

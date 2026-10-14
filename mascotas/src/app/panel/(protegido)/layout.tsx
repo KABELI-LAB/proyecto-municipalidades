@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { BarraVolver } from "@/componentes/BarraVolver";
 import type { ReactNode } from "react";
-import { FirmaInstitucional } from "@/componentes/FirmaInstitucional";
+import { Logo } from "@/componentes/Logo";
 import { FranjaDemo } from "@/componentes/FranjaDemo";
 import { ProveedorMensajes } from "@/componentes/panel/Mensajes";
 import { NOMBRE_ROL } from "@/dominio/permisos";
@@ -30,7 +30,7 @@ export default async function LayoutPanel({ children }: { children: ReactNode })
       <header className={estilos.encabezado}>
         <div className={`contenedor ${estilos.barra}`}>
           <div className={estilos.identidad}>
-            <FirmaInstitucional municipio={municipio} sobreAzul />
+            <Logo municipio={municipio} variante="institucional" />
             <span className={estilos.modulo}>Panel municipal · Tenencia responsable</span>
           </div>
           <div className={estilos.cuenta}>

@@ -72,7 +72,7 @@ export function FormularioOperativo({ sectores, lugares, servicios, demanda, ori
         valor={v.lugarId}
         alCambiar={cambiar("lugarId")}
         error={errores.lugarId}
-        ayuda={v.sectorId ? "Lugares públicos del sector: plazas, escuelas y recintos municipales." : "Elija primero el sector."}
+        ayuda={v.sectorId ? "Lugares públicos del sector: plazas, escuelas y recintos municipales." : "Elige primero el sector."}
         opciones={lugares.filter((l) => l.sectorId === v.sectorId).map((l) => ({ valor: l.id, texto: l.nombre }))}
       />
       <div className={formulario.fila}>
@@ -84,7 +84,7 @@ export function FormularioOperativo({ sectores, lugares, servicios, demanda, ori
       <fieldset className={formulario.grupo} aria-describedby="cupos-ayuda">
         <legend className={formulario.etiqueta}>Cupos por servicio</legend>
         <p id="cupos-ayuda" className={formulario.ayuda}>
-          Usted decide los cupos según el equipo y el lugar; use 0 si no se ofrece un servicio. La referencia es la demanda pendiente del sector × 1,5, en múltiplos de 5, con un mínimo de 10.
+          Tú decides los cupos según el equipo y el lugar; usa 0 si no se ofrece un servicio. La referencia es la demanda pendiente del sector × 1,5, en múltiplos de 5, con un mínimo de 10.
         </p>
         <div className={formulario.fila}>
           {servicios.map((s) => {
@@ -118,7 +118,7 @@ export function FormularioOperativo({ sectores, lugares, servicios, demanda, ori
         )}
       </fieldset>
 
-      <CampoArea id="requisitos" etiqueta="Requisitos visibles para la ciudadanía" valor={v.requisitos} alCambiar={cambiar("requisitos")} error={errores.requisitos} maxLength={600} ayuda="Ayuno, edad mínima, documentos. Use corchetes para lo que aún no se define, por ejemplo [horas]." />
+      <CampoArea id="requisitos" etiqueta="Requisitos visibles para la ciudadanía" valor={v.requisitos} alCambiar={cambiar("requisitos")} error={errores.requisitos} maxLength={600} ayuda="Ayuno, edad mínima, documentos. Usa corchetes para lo que aún no se define, por ejemplo [horas]." />
 
       {mensaje && (
         <p className={formulario.mensaje} role="alert">

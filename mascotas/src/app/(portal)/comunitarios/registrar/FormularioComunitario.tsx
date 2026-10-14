@@ -13,7 +13,7 @@ import { esquemaRegistroComunitario } from "@/lib/esquemas";
 import { registrarComunitario } from "@/servidor/portal/acciones-comunitarios";
 import estilos from "@/componentes/formulario/formulario.module.css";
 
-const TITULOS = ["El perro", "Dónde está y salud", "Sus datos", "Revise y publique"] as const;
+const TITULOS = ["El perro", "Dónde está y salud", "Tus datos", "Revisa y publica"] as const;
 const PASOS = [
   ["foto", "apodo", "sexo", "tamano", "colorPrincipal", "rasgos"],
   ["lugarId", "esterilizado", "vacunas", "microchip"],
@@ -51,8 +51,8 @@ export function FormularioComunitario({ lugares }: { lugares: Opcion[] }) {
     return (
       <ResultadoTramite titulo={`Publicamos a ${v.apodo}`} codigo={hecho.codigo}>
         <p>
-          Ya está en el portal. Este código es su credencial de cuidador: con su RUT y este código, en Mis solicitudes, puede actualizar la
-          ficha, anotar que lo vio y leer las novedades que le envíen los vecinos.
+          Ya está en el portal. Este código es tu credencial de cuidador: con tu RUT y este código, en Mis solicitudes, puedes actualizar la
+          ficha, anotar que lo viste y leer las novedades que te envíen los vecinos.
         </p>
       </ResultadoTramite>
     );
@@ -61,7 +61,7 @@ export function FormularioComunitario({ lugares }: { lugares: Opcion[] }) {
   function avanzar() {
     // La foto no está en el esquema de texto: se revisa aquí antes de dejar el primer paso.
     if (t.paso === 0 && !foto) {
-      setErrorFoto("Agregue una foto: en el portal solo se muestran perros con foto.");
+      setErrorFoto("Agrega una foto: en el portal solo se muestran perros con foto.");
       return document.getElementById("foto")?.focus();
     }
     t.avanzar();
@@ -100,7 +100,7 @@ export function FormularioComunitario({ lugares }: { lugares: Opcion[] }) {
               if (f) setErrorFoto(undefined);
             }}
             error={errorFoto}
-            ayuda="Que se vea bien el perro. Evite que aparezcan personas, patentes o el frente de una casa."
+            ayuda="Que se vea bien el perro. Evita que aparezcan personas, patentes o el frente de una casa."
           />
           <CampoTexto id="apodo" etiqueta="¿Cómo lo conocen en el barrio?" valor={v.apodo} alCambiar={(x) => cambiar("apodo", x)} error={errores.apodo} maxLength={60} />
           <div className={estilos.fila}>
@@ -123,14 +123,14 @@ export function FormularioComunitario({ lugares }: { lugares: Opcion[] }) {
 
       {t.paso === 2 && (
         <>
-          <p>No se publican. Con su RUT quedará como cuidador del perro y podrá actualizar su ficha.</p>
+          <p>No se publican. Con tu RUT quedarás como cuidador del perro y podrás actualizar su ficha.</p>
           <CampoTexto id="nombre" etiqueta="Nombre y apellido" valor={v.nombre} alCambiar={(x) => cambiar("nombre", x)} error={errores.nombre} autoComplete="name" maxLength={100} />
           <CampoTexto id="rut" etiqueta="RUT" valor={v.rut} alCambiar={(x) => cambiar("rut", x)} error={errores.rut} ayuda="Por ejemplo, 12.345.678-5." maxLength={12} />
           <div className={estilos.fila}>
             <CampoTexto id="telefono" etiqueta="Teléfono" tipo="tel" inputMode="tel" autoComplete="tel" valor={v.telefono} alCambiar={(x) => cambiar("telefono", x)} error={errores.telefono} maxLength={20} />
             <CampoTexto id="correo" etiqueta="Correo" tipo="email" inputMode="email" autoComplete="email" valor={v.correo} alCambiar={(x) => cambiar("correo", x)} error={errores.correo} maxLength={120} />
           </div>
-          <p className={estilos.ayuda}>Indique al menos un teléfono o un correo: por ahí le llegarán las novedades de los vecinos.</p>
+          <p className={estilos.ayuda}>Indica al menos un teléfono o un correo: por ahí te llegarán las novedades de los vecinos.</p>
         </>
       )}
 
@@ -138,7 +138,7 @@ export function FormularioComunitario({ lugares }: { lugares: Opcion[] }) {
         <>
           <p className={estilos.nota}>
             <Icono nombre="info" tamano={20} />
-            <span>Se publica de inmediato en el portal y en el mapa. Usted queda como su cuidador; sus datos no se publican.</span>
+            <span>Se publica de inmediato en el portal y en el mapa. Quedas como su cuidador; tus datos no se publican.</span>
           </p>
           <Resumen
             filas={[

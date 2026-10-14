@@ -63,7 +63,7 @@ export default async function PaginaOperativos() {
           </div>
         ) : (
           <div className={estilos.vacio}>
-            <p>No hay operativos programados. Revise el sector prioritario en el Resumen.</p>
+            <p>No hay operativos programados. Revisa el sector prioritario en el Resumen.</p>
           </div>
         )}
       </section>

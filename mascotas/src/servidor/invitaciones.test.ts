@@ -108,7 +108,7 @@ describe("invitaciones prioritarias", () => {
   it("confirmar interés asigna el cupo efectivo; la invitación y el aviso se ven en Mis solicitudes", async () => {
     const [primera] = await abiertas(servicio.esterilizacion);
     const r = await portal.responderInvitacion({ rut: VECINA.rut, codigo: primera.codigo, accion: "interes" });
-    expect(r).toMatchObject({ ok: true, mensaje: expect.stringContaining("Le asignamos el cupo") });
+    expect(r).toMatchObject({ ok: true, mensaje: expect.stringContaining("Te asignamos el cupo") });
     const i = await db.invitacionOperativo.findUniqueOrThrow({ where: { id: primera.id }, include: { cupo: true, solicitud: true } });
     expect([i.estado, i.cupo?.estado, i.solicitud.estado, i.respondidaEn !== null, i.asignadaEn !== null]).toEqual(["ASIGNADA", "CONFIRMADO", "CUPO_CONFIRMADO", true, true]);
     // Ya respondida: no se puede responder de nuevo.
@@ -118,7 +118,7 @@ describe("invitaciones prioritarias", () => {
     if (!c.ok) throw new Error("consulta");
     expect(c.tramites.find((t) => t.codigo === primera.codigo)).toMatchObject({ tipo: "Invitación prioritaria a operativo", estado: { texto: "Cupo asignado" } });
     expect(c.avisos.some((a) => a.asunto === "Invitación prioritaria a un operativo")).toBe(true);
-    expect(c.avisos.some((a) => a.asunto === "Le asignamos un cupo")).toBe(true);
+    expect(c.avisos.some((a) => a.asunto === "Te asignamos un cupo")).toBe(true);
   });
 
   it("confirmar interés no reserva: sin cupo disponible queda esperando, y se asigna cuando se libera", async () => {

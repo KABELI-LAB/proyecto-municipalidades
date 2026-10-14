@@ -26,7 +26,7 @@ type Props = {
   vinculo?: { id: string; especie: string; descripcion: string };
 };
 
-const TITULOS = ["Qué, cuándo y dónde", "Cómo es el animal y sus datos", "Revise y publique"] as const;
+const TITULOS = ["Qué, cuándo y dónde", "Cómo es el animal y tus datos", "Revisa y publica"] as const;
 const PASOS = [
   ["tipo", "especie", "fechaEvento", "localidadId"],
   ["colorPrincipal", "tamano", "sexo", "nombreAnimal", "collar", "colorCollar", "microchip", "senas", "resguardada", "resguardoLocalidadId", "resguardoDetalle", "foto", "nombre", "rut", "telefono", "correo"],
@@ -35,12 +35,12 @@ const PASOS = [
 
 /** Resumen de dónde está el animal avistado, con la localidad elegida y su sector. */
 function resumenResguardo(v: Record<string, string | string[]>, sectores: SectorOpcion[]) {
-  if (v.resguardada === "no") return "No lo retuvo, solo lo vio";
+  if (v.resguardada === "no") return "No lo retuviste, solo lo viste";
   const s = sectores.find((x) => x.localidades.some((l) => l.id === v.resguardoLocalidadId));
   const l = s?.localidades.find((x) => x.id === v.resguardoLocalidadId);
   const donde = l && s ? `, en ${l.nombre} (sector ${s.nombre})` : "";
   const detalle = v.resguardoDetalle ? `: ${v.resguardoDetalle}` : "";
-  return `${v.resguardada === "lugar" ? "Retenido en otro lugar" : "Está con usted"}${donde}${detalle}`;
+  return `${v.resguardada === "lugar" ? "Retenido en otro lugar" : "Está contigo"}${donde}${detalle}`;
 }
 
 const opciones = (m: Record<string, string>) => Object.entries(m).map(([valor, texto]) => ({ valor, texto }));
@@ -83,23 +83,23 @@ export function FormularioPublicacion({ sectores, colores, hoy, minimo, tipoInic
   if (hecho) {
     const n = hecho.coincidencias.length;
     return (
-      <ResultadoTramite titulo="Recibimos su aviso" codigo={hecho.codigo} conRut={!encontrada}>
+      <ResultadoTramite titulo="Recibimos tu aviso" codigo={hecho.codigo} conRut={!encontrada}>
         {hecho.conFoto ? (
           <p>
             El equipo municipal lo revisará y, al aceptarlo, lo publicaremos en el portal y en las redes sociales del
-            municipio. Le avisaremos cuando esté publicado. Las personas que quieran contactarle le escribirán a través de
-            la plataforma, sin ver su teléfono ni su correo.
+            municipio. Te avisaremos cuando esté publicado. Las personas que quieran contactarte te escribirán a través de
+            la plataforma, sin ver tu teléfono ni tu correo.
           </p>
         ) : (
           <p>
-            En el portal solo mostramos avisos con foto, y el suyo no tiene. Igual buscamos posibles coincidencias y le
-            avisaremos si aparece una.{!encontrada && " Puede revisar su aviso en Mis solicitudes."}
+            En el portal solo mostramos avisos con foto, y el tuyo no tiene. Igual buscamos posibles coincidencias y te
+            avisaremos si aparece una.{!encontrada && " Puedes revisar tu aviso en Mis solicitudes."}
           </p>
         )}
         {encontrada && vinculo && <p>Quedó vinculado al aviso de pérdida como posible coincidencia y avisamos a quien la busca. No podemos asegurar que sea el mismo animal.</p>}
         {encontrada && (v.resguardada === "si" || v.resguardada === "lugar") && (
           <p>
-            Si puede, lleve al animal a una veterinaria o al municipio para revisar si tiene microchip: es la forma más
+            Si puedes, lleva al animal a una veterinaria o al municipio para revisar si tiene microchip: es la forma más
             rápida de ubicar a su familia.
           </p>
         )}
@@ -108,7 +108,7 @@ export function FormularioPublicacion({ sectores, colores, hoy, minimo, tipoInic
             <h3>Posible coincidencia — función experimental</h3>
             <p>
               {n === 1 ? "Hay una publicación que podría corresponder" : `Hay ${n} publicaciones que podrían corresponder`}{" "}
-              {encontrada ? "al animal que vio" : "a su mascota"}. {n === 1 ? "Revísela" : "Revíselas"}; no podemos
+              {encontrada ? "al animal que viste" : "a tu mascota"}. {n === 1 ? "Revísala" : "Revísalas"}; no podemos
               asegurar que se trate del mismo animal.
             </p>
             <ul>
@@ -123,7 +123,7 @@ export function FormularioPublicacion({ sectores, colores, hoy, minimo, tipoInic
             </ul>
           </div>
         ) : (
-          <p>Por ahora no encontramos publicaciones parecidas. Si aparece una, le avisaremos.</p>
+          <p>Por ahora no encontramos publicaciones parecidas. Si aparece una, te avisaremos.</p>
         )}
       </ResultadoTramite>
     );
@@ -152,12 +152,12 @@ export function FormularioPublicacion({ sectores, colores, hoy, minimo, tipoInic
         <>
           {vinculo && (
             <p className={estilos.aviso} role="note">
-              Su avistamiento quedará vinculado al aviso «{vinculo.descripcion}» como posible coincidencia. No necesita estar seguro de que sea el mismo animal.
+              Tu avistamiento quedará vinculado al aviso «{vinculo.descripcion}» como posible coincidencia. No necesitas tener certeza de que sea el mismo animal.
             </p>
           )}
           <CampoOpciones
             id="tipo"
-            etiqueta="¿Qué quiere informar?"
+            etiqueta="¿Qué quieres informar?"
             valor={v.tipo}
             alCambiar={(x) => {
               cambiar("tipo", x);
@@ -166,8 +166,8 @@ export function FormularioPublicacion({ sectores, colores, hoy, minimo, tipoInic
             }}
             error={errores.tipo}
             opciones={[
-              { valor: "PERDIDA", texto: "Se me perdió una mascota", descripcion: "Publique cómo es su animal para que puedan reconocerlo." },
-              { valor: "ENCONTRADA", texto: "Vi una mascota que podría estar perdida", descripcion: "Informe dónde y cuándo la vio; si la tiene resguardada, también puede indicarlo." },
+              { valor: "PERDIDA", texto: "Se me perdió una mascota", descripcion: "Publica cómo es tu animal para que puedan reconocerlo." },
+              { valor: "ENCONTRADA", texto: "Vi una mascota que podría estar perdida", descripcion: "Informa dónde y cuándo la viste; si la tienes resguardada, también puedes indicarlo." },
             ]}
           />
           <CampoOpciones id="especie" etiqueta="Especie" valor={v.especie} alCambiar={(x) => { cambiar("especie", x); cambiar("colorPrincipal", ""); }} error={errores.especie} opciones={OPCIONES_ESPECIE} columnas={3} />
@@ -175,7 +175,7 @@ export function FormularioPublicacion({ sectores, colores, hoy, minimo, tipoInic
             <CampoTexto
               id="fechaEvento"
               tipo="date"
-              etiqueta={encontrada ? "Fecha en que la vio" : "Fecha en que se perdió"}
+              etiqueta={encontrada ? "Fecha en que la viste" : "Fecha en que se perdió"}
               valor={v.fechaEvento}
               alCambiar={(x) => cambiar("fechaEvento", x)}
               error={errores.fechaEvento}
@@ -183,7 +183,7 @@ export function FormularioPublicacion({ sectores, colores, hoy, minimo, tipoInic
               max={hoy}
             />
             <CampoLocalidad
-              etiqueta={encontrada ? "Localidad donde la vio" : "Localidad donde se perdió"}
+              etiqueta={encontrada ? "Localidad donde la viste" : "Localidad donde se perdió"}
               valor={v.localidadId}
               alCambiar={(x) => cambiar("localidadId", x)}
               error={errores.localidadId}
@@ -231,7 +231,7 @@ export function FormularioPublicacion({ sectores, colores, hoy, minimo, tipoInic
             alCambiar={(x) => cambiar("senas", x)}
             error={errores.senas}
             maxLength={300}
-            ayuda={encontrada ? "Qué vio: cómo se veía, hacia dónde iba o cualquier detalle que ayude a reconocerlo. Sin direcciones exactas." : "Manchas, cicatrices, forma de las orejas o de la cola, o cualquier detalle que ayude a reconocerlo."}
+            ayuda={encontrada ? "Qué viste: cómo se veía, hacia dónde iba o cualquier detalle que ayude a reconocerlo. Sin direcciones exactas." : "Manchas, cicatrices, forma de las orejas o de la cola, o cualquier detalle que ayude a reconocerlo."}
           />
           {encontrada && (
             <CampoOpciones
@@ -285,11 +285,11 @@ export function FormularioPublicacion({ sectores, colores, hoy, minimo, tipoInic
             archivo={foto}
             alCambiar={setFoto}
             error={errores.foto}
-            ayuda="El portal muestra solo avisos con foto. Evite que aparezcan personas, patentes o el frente de una casa."
+            ayuda="El portal muestra solo avisos con foto. Evita que aparezcan personas, patentes o el frente de una casa."
           />
 
-          <h3 className={estilos.subtitulo}>Sus datos</h3>
-          <p>No se publican. Los usamos para avisarle si alguien le escribe o si hay una posible coincidencia.</p>
+          <h3 className={estilos.subtitulo}>Tus datos</h3>
+          <p>No se publican. Los usamos para avisarte si alguien te escribe o si hay una posible coincidencia.</p>
           <BloquePersona valores={v} errores={errores} cambiar={cambiar} sectores={sectores} sinLocalidad rut={encontrada ? "no" : "obligatorio"} />
         </>
       )}
@@ -300,8 +300,8 @@ export function FormularioPublicacion({ sectores, colores, hoy, minimo, tipoInic
           <Icono nombre="info" tamano={20} />
           <span>
             {foto
-              ? "Cuando el equipo municipal lo acepte, publicaremos su aviso aquí en el portal y en las redes sociales del municipio. Solo mostramos los datos del animal, el sector y la fecha."
-              : "Sin foto, su aviso no se publica en el portal ni en las redes sociales, pero igual buscamos posibles coincidencias."}
+              ? "Cuando el equipo municipal lo acepte, publicaremos tu aviso aquí en el portal y en las redes sociales del municipio. Solo mostramos los datos del animal, el sector y la fecha."
+              : "Sin foto, tu aviso no se publica en el portal ni en las redes sociales, pero igual buscamos posibles coincidencias."}
           </span>
         </p>
         <Resumen
@@ -318,7 +318,7 @@ export function FormularioPublicacion({ sectores, colores, hoy, minimo, tipoInic
             ...(perdida ? [["Microchip", SI_NO_SE[v.microchip] ?? ""] as [string, string]] : []),
             ["Señas particulares", v.senas],
             ...(encontrada ? [["Dónde está ahora", resumenResguardo(v, sectores)] as [string, string]] : []),
-            ...filasPersona(v, sectores, encontrada ? "Dónde la vio" : "Dónde se perdió"),
+            ...filasPersona(v, sectores, encontrada ? "Dónde la viste" : "Dónde se perdió"),
           ]}
         />
         </>

@@ -19,14 +19,14 @@ export function ResultadoTramite({ titulo, codigo, conRut = true, children }: Pr
         {titulo}
       </h2>
       <div className={estilos.codigo}>
-        <span>Su código de seguimiento</span>
+        <span>Tu código de seguimiento</span>
         <strong>{codigo}</strong>
       </div>
       {children}
       <p>
         {conRut
-          ? "Guarde este código. Con él y su RUT puede revisar el estado en Mis solicitudes. También se lo enviamos por correo o SMS."
-          : "Guarde este código. Si necesitamos más información, le escribiremos al contacto que nos dejó."}
+          ? "Guarda este código. Con él y tu RUT puedes revisar el estado en Mis solicitudes. También te lo enviamos por correo o SMS."
+          : "Guarda este código. Si necesitamos más información, te escribiremos al contacto que nos dejaste."}
       </p>
       <p className="nota">En este prototipo, el envío por correo o SMS es simulado.</p>
       <div className={estilos.navegacion}>

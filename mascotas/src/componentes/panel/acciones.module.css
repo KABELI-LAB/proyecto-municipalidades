@@ -1,38 +1,37 @@
 .accion {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
 }
 .confirmacion {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-3);
+  gap: var(--space-3);
   max-width: 520px;
-  padding: var(--espacio-4);
-  border-left: var(--espacio-1) solid var(--amarillo-senal);
-  border-radius: var(--radio-base);
-  background: var(--marfil-institucional);
+  padding: var(--space-4);
+  background: var(--color-warning-bg);
+  border-radius: var(--radius-medium);
 }
 .botones {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
 }
 .exito,
 .error {
   display: flex;
   align-items: flex-start;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
   max-width: 520px;
-  font-weight: var(--tipo-impresion-h2-peso);
+  font-weight: var(--weight-bold);
 }
 .exito svg {
   flex: none;
-  color: var(--verde-territorio);
+  color: var(--color-secondary);
 }
 .error svg {
   flex: none;
-  color: var(--terracota);
+  color: var(--color-error);
 }
 
 /* Mensaje de la última acción, arriba del contenido. */
@@ -41,15 +40,15 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--espacio-2) var(--espacio-4);
-  margin-bottom: var(--espacio-6);
-  padding-block: var(--espacio-3);
-  border-left: var(--espacio-1) solid var(--verde-territorio);
-  background: var(--blanco);
-  border-radius: var(--radio-base);
+  gap: var(--space-2) var(--space-4);
+  margin-bottom: var(--space-5);
+  padding-block: var(--space-3);
+  border-left: var(--space-1) solid var(--color-secondary);
+  background: var(--color-surface);
+  border-radius: var(--radius-medium);
 }
 .mensajeGlobal:has(.error) {
-  border-left-color: var(--terracota);
+  background: var(--color-error-bg);
 }
 .mensajeGlobal .exito,
 .mensajeGlobal .error {
@@ -58,9 +57,9 @@
 .cerrarMensaje {
   border: 0;
   background: none;
-  color: var(--azul-institucional);
+  color: var(--color-primary);
   font: inherit;
-  font-weight: var(--tipo-impresion-h2-peso);
+  font-weight: var(--weight-bold);
   text-decoration: underline;
   cursor: pointer;
 }
@@ -68,11 +67,11 @@
 /* Motivo escrito de una decisión (correcciones, rechazo, ocultar). */
 .motivo {
   width: 100%;
-  padding: var(--espacio-2) var(--espacio-3);
-  border: var(--borde-filete) solid var(--gris-texto);
-  border-radius: var(--radio-base);
-  background: var(--blanco);
-  color: var(--gris-texto);
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width-strong) solid var(--color-text);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  color: var(--color-text);
   font: inherit;
   resize: vertical;
 }

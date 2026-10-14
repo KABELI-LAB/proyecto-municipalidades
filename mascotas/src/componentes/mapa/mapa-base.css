@@ -3,42 +3,42 @@
 .leaflet-container {
   isolation: isolate; /* las capas de Leaflet quedan bajo el encabezado y la franja de demostración */
   z-index: 0;
-  background: var(--gris-claro);
-  font-family: var(--font-textos);
+  background: var(--color-surface-muted);
+  font-family: var(--font-sans);
 }
 .leaflet-bar {
-  border: var(--borde-filete) solid var(--gris-claro) !important;
-  border-radius: var(--radio-base) !important;
+  border: var(--border-width-strong) solid var(--color-border) !important;
+  border-radius: var(--radius-medium) !important;
   box-shadow: none !important;
 }
 .leaflet-bar a {
-  width: var(--espacio-10) !important;
-  height: var(--espacio-10) !important;
-  line-height: var(--espacio-10) !important;
-  color: var(--azul-institucional) !important;
+  width: var(--space-7) !important;
+  height: var(--space-7) !important;
+  line-height: var(--space-7) !important;
+  color: var(--color-primary) !important;
 }
 .leaflet-control-attribution {
-  font-size: var(--tipo-impresion-nota-tamano);
+  font-size: var(--type-caption-size);
 }
 .etiqueta-mapa {
-  padding: var(--espacio-1) var(--espacio-2);
-  background: var(--blanco);
-  border: var(--borde-filete) solid var(--gris-claro);
-  border-radius: var(--radio-base);
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-surface);
+  border: var(--border-width-strong) solid var(--color-border);
+  border-radius: var(--radius-medium);
   box-shadow: none;
-  color: var(--gris-texto);
-  font-family: var(--font-textos);
-  font-size: var(--tipo-impresion-cuerpo-tamano);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
   line-height: 1.25;
 }
 .etiqueta-mapa b {
-  color: var(--azul-institucional);
-  font-weight: var(--tipo-impresion-h2-peso);
+  color: var(--color-primary);
+  font-weight: var(--weight-bold);
 }
 /* Etiqueta de sector en el mapa en miniatura de la portada: letra de nota. */
 .etiqueta-mini {
-  padding: 0 var(--espacio-1);
-  font-size: var(--tipo-impresion-nota-tamano);
+  padding: 0 var(--space-1);
+  font-size: var(--type-caption-size);
 }
 .etiqueta-mapa::before {
   display: none;

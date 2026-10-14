@@ -1,31 +1,31 @@
 .pagina {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-6);
+  gap: var(--space-5);
 }
 .grilla {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
-  gap: var(--espacio-6);
+  gap: var(--space-5);
 }
 .esqueleto {
   display: block;
   width: 100%;
-  background: var(--blanco);
-  border-radius: var(--radio-base);
+  background: var(--color-surface);
+  border-radius: var(--radius-medium);
   animation: latido 1.2s ease-in-out infinite alternate;
 }
 .linea {
-  height: var(--espacio-5);
+  height: var(--space-5);
 }
 .titulo {
-  height: var(--espacio-10);
+  height: var(--space-7);
 }
 .bloque {
-  height: var(--espacio-16);
+  height: var(--space-9);
 }
 .tarjeta {
-  height: var(--espacio-40);
+  height: var(--space-12);
 }
 @keyframes latido {
   to {

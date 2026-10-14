@@ -19,7 +19,7 @@ type Props = {
   nota?: string;
 };
 
-export function AccionConMotivo({ accion, texto, pregunta, textoConfirmar, nota = "Se lo mostraremos a quien propuso, tal como lo escriba." }: Props) {
+export function AccionConMotivo({ accion, texto, pregunta, textoConfirmar, nota = "Se lo mostraremos a quien propuso, tal como lo escribas." }: Props) {
   const id = useId();
   const [abierta, setAbierta] = useState(false);
   const [motivo, setMotivo] = useState("");

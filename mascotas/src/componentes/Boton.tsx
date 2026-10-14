@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { ButtonHTMLAttributes, ComponentProps } from "react";
 import estilos from "./Boton.module.css";
 
-type Variante = "primario" | "secundario";
+type Variante = "primario" | "secundario" | "terciario" | "peligro";
 
 const clases = (variante: Variante, className?: string) =>
   [estilos.boton, estilos[variante], className].filter(Boolean).join(" ");

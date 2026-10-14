@@ -1,109 +1,124 @@
-/* Barra superior: solo la firma institucional y «Mis solicitudes». */
+/* Barra superior blanca: logotipo ciudadano y «Mis solicitudes». */
 .encabezado {
-  background: var(--azul-institucional);
-  color: var(--marfil-institucional);
+  background: var(--color-surface);
+  border-bottom: var(--border-width) solid var(--color-border);
 }
 .barra {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--espacio-4);
-  padding-block: var(--espacio-2);
+  gap: var(--space-4);
+  min-height: 72px;
+  padding-block: var(--space-3);
 }
 .inicio {
   display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
   text-decoration: none;
-  border-radius: var(--radio-base);
+  border-radius: var(--radius-small);
 }
-.inicio:focus-visible {
-  outline-color: var(--marfil-institucional);
-}
-/* Escudo algo más chico en el encabezado: una barra más limpia. */
-.inicio img {
-  height: var(--espacio-12);
+.programa {
+  padding-left: var(--space-4);
+  border-left: var(--border-width) solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--weight-semibold);
+  line-height: 1.2;
 }
 
 .solicitudes {
   display: inline-flex;
   flex: none;
   align-items: center;
-  gap: var(--espacio-2);
-  min-height: var(--espacio-12);
-  padding-inline: var(--espacio-4);
-  border: var(--borde-filete) solid var(--marfil-institucional);
-  border-radius: var(--radio-base);
-  color: var(--marfil-institucional);
-  font-weight: var(--tipo-impresion-h2-peso);
+  gap: var(--space-2);
+  min-height: var(--target-min);
+  padding-inline: var(--space-4);
+  border-radius: var(--radius-medium);
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+  font-size: var(--type-label-size);
+  font-weight: var(--weight-bold);
   text-decoration: none;
+  transition: background var(--duration-micro) var(--ease-flow);
 }
 .solicitudes:hover {
-  text-decoration: underline;
+  background: var(--blue-100);
+  color: var(--color-primary);
 }
-.solicitudes:focus-visible {
-  outline-color: var(--marfil-institucional);
-}
-/* En celular, firma más compacta y botón en dos líneas para que todo quepa en una fila. */
 @media (max-width: 640px) {
-  .inicio span {
-    font-size: var(--tipo-impresion-cuerpo-tamano);
+  .programa {
+    display: none;
   }
   .solicitudes {
-    max-width: 9em;
-    padding-inline: var(--espacio-3);
-    line-height: 1.15;
+    padding-inline: var(--space-3);
   }
 }
 
 .principal {
-  padding-block: var(--espacio-4) var(--espacio-16);
+  padding-block: var(--space-5) var(--space-10);
 }
 /* Títulos de página moderados: el contenido se ve sin desplazarse. */
 .principal :global(h1) {
-  font-size: var(--tipo-impresion-h2-tamano);
-}
-@media (max-width: 640px) {
-  .principal :global(h1) {
-    font-size: var(--tipo-impresion-h3-tamano);
-  }
+  font-size: var(--web-h2-tamano);
+  line-height: var(--type-h2-lh);
 }
 
-/* Sin subrayados en la web de vecinos: los enlaces se distinguen por color y
-   peso (y por el contorno de foco al navegar con teclado). */
 .principal :global(a),
 .pie :global(a) {
   text-decoration: none;
 }
 .principal :global(p a) {
-  font-weight: var(--tipo-impresion-h2-peso);
+  font-weight: var(--weight-bold);
+  text-decoration: underline;
 }
 
-/* Pie mínimo: solo la institución. */
+/* Pie azul de la institución, con el Cauce como transición. */
 .pie {
-  padding-block: var(--espacio-6);
-  border-top: var(--borde-filete) solid var(--gris-claro);
+  position: relative;
+  overflow: hidden;
+  padding-block: 136px var(--space-6);
+  background: var(--blue-900);
+  color: var(--color-text-inverse);
 }
-.pie b {
-  color: var(--azul-institucional);
-  font-weight: var(--tipo-impresion-h2-peso);
+.caucePie {
+  position: absolute;
+  inset: 0 0 auto;
+  width: 100%;
+  height: 120px;
+  opacity: 0.9;
 }
 .filaPie {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--espacio-2) var(--espacio-6);
+  gap: var(--space-4) var(--space-6);
+}
+.filaPie p {
+  flex: 1;
+  font-size: var(--type-body-sm-size);
+  color: var(--blue-100);
+}
+.filaPie b {
+  color: var(--color-text-inverse);
+  font-weight: var(--weight-bold);
 }
 /* Acceso al panel: presente pero discreto (no compite con las funciones de vecinos). */
 .accesoPanel {
   display: inline-flex;
   align-items: center;
-  gap: var(--espacio-1);
-  min-height: var(--espacio-12);
-  color: var(--gris-texto);
-  font-size: var(--tipo-impresion-cuerpo-tamano);
+  gap: var(--space-2);
+  min-height: var(--target-min);
+  color: var(--color-text-inverse);
+  font-size: var(--type-body-sm-size);
+  text-decoration: underline;
+}
+.pie .accesoPanel {
+  text-decoration: underline;
 }
 .accesoPanel:hover {
-  color: var(--azul-institucional);
+  color: var(--yellow-300);
 }
 
 /* El portal usa todo el ancho de la ventana, con márgenes laterales generosos.
@@ -111,12 +126,12 @@
 .encabezado :global(.contenedor),
 .principal :global(.contenedor),
 .pie :global(.contenedor) {
-  max-width: none;
+  max-width: var(--container-max);
 }
 @media (min-width: 900px) {
   .encabezado :global(.contenedor),
   .principal :global(.contenedor),
   .pie :global(.contenedor) {
-    padding-inline: var(--espacio-10);
+    padding-inline: var(--space-8);
   }
 }

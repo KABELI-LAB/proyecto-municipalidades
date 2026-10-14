@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { EtiquetaEstado } from "@/componentes/EtiquetaEstado";
+import { Icono } from "@/componentes/Icono";
 import { ESPECIE, ESTADO_ADOPCION, oracion, SEXO, TAMANO, textoEdad } from "@/dominio/etiquetas";
 import { FotoAnimal } from "./FotoAnimal";
 import { fotosDeFicha } from "./fotoFicha";
@@ -37,8 +38,18 @@ export function TarjetaAdopcion({ ficha: f }: Props) {
   );
 }
 
-/** «✓ Sí» / «✕ No», siempre con su palabra. */
+/** Sí / No con su ícono, siempre con la palabra. */
 export function SiNo({ valor }: { valor: boolean | null }) {
   if (valor === null) return <>No informado</>;
-  return <>{valor ? "✓ Sí" : "✕ No"}</>;
+  return <ConIcono si={valor} texto={valor ? "Sí" : "No"} />;
+}
+
+/** Ícono de visto o de cruz junto a un texto (nunca el ícono solo). */
+export function ConIcono({ si, texto }: { si: boolean; texto: string }) {
+  return (
+    <span className={estilos.conIcono}>
+      <Icono nombre={si ? "check" : "cerrar"} tamano={16} />
+      {texto}
+    </span>
+  );
 }

@@ -6,17 +6,16 @@ import { puede, type Permiso } from "@/dominio/permisos";
 import { requerir } from "@/servidor/auth";
 import { fechaLarga } from "@/servidor/formato";
 import { pendientesDeRevision, proximosOperativos } from "@/servidor/panel/indicadores";
-import { AdornoMascotas, AdornoOperativos, AdornoSos } from "@/app/(portal)/AdornosTarjeta";
 import inicio from "@/app/(portal)/inicio.module.css";
 import estilos from "@/estilos/paginas.module.css";
 
 export const metadata: Metadata = { title: "Panel municipal" };
 
 // Lo que se usa menos, debajo de los tres bloques (como en el portal de vecinos).
-const OTROS: { href: string; titulo: string; icono: NombreIcono; permiso: Permiso }[] = [
-  { href: "/panel/vecinos", titulo: "Lo que piden los vecinos", icono: "huella", permiso: "verIndicadores" },
-  { href: "/panel/mapa", titulo: "Mapa", icono: "ubicacion", permiso: "verInteligencia" },
-  { href: "/panel/avisos", titulo: "Avisos a vecinos", icono: "megafono", permiso: "gestionarAvisos" },
+const OTROS: { href: string; titulo: string; detalle: string; icono: NombreIcono; tono: "azul" | "verde" | "amarillo"; permiso: Permiso }[] = [
+  { href: "/panel/vecinos", titulo: "Lo que piden los vecinos", detalle: "Solicitudes y temas frecuentes", icono: "huella", tono: "verde", permiso: "verIndicadores" },
+  { href: "/panel/mapa", titulo: "Mapa", detalle: "Avisos y reportes por sector", icono: "ubicacion", tono: "azul", permiso: "verInteligencia" },
+  { href: "/panel/avisos", titulo: "Avisos a vecinos", detalle: "Publicar y quitar avisos", icono: "megafono", tono: "amarillo", permiso: "gestionarAvisos" },
 ];
 
 const capitalizar = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
@@ -45,17 +44,18 @@ export default async function InicioPanel() {
       <ul className={inicio.principales} aria-label="Acciones principales">
         {aprueba && (
           <li>
-            <Link href="/panel/aprobar" className={`${inicio.principal} ${inicio.principalAzul}`}>
-              <AdornoMascotas />
+            <Link href="/panel/aprobar" className={`${inicio.principal} ${inicio.tonoAzul}`}>
               <span className={inicio.principalIcono} aria-hidden="true">
-                <Icono nombre="check" tamano={32} />
+                <Icono nombre="check" tamano={28} />
               </span>
-              <span className={inicio.principalTexto}>
-                <span className={inicio.principalTitulo}>
-                  <h2>Por aprobar</h2>
-                  {porAprobar > 0 && <span className={inicio.distintivo}>{plural(porAprobar, "pendiente", "pendientes")}</span>}
-                </span>
-                <span>Perdidos, avistados y adopciones.</span>
+              <span className={inicio.principalTitulo}>
+                <h2>Por aprobar</h2>
+                {porAprobar > 0 && <span className={inicio.distintivo}>{plural(porAprobar, "pendiente", "pendientes")}</span>}
+              </span>
+              <span className={inicio.principalDetalle}>Perdidas, avistadas y adopciones que enviaron las vecinas y vecinos.</span>
+              <span className={inicio.ir}>
+                Revisar
+                <Icono nombre="flecha" tamano={20} />
               </span>
             </Link>
           </li>
@@ -63,25 +63,22 @@ export default async function InicioPanel() {
 
         {operativos && (
           <li>
-            <div className={`${inicio.principal} ${inicio.principalClaro}`}>
-              <AdornoOperativos />
+            <div className={`${inicio.principal} ${inicio.tonoVerde}`}>
               <span className={inicio.principalIcono} aria-hidden="true">
-                <Icono nombre="calendario" tamano={32} />
+                <Icono nombre="calendario" tamano={28} />
               </span>
-              <div className={inicio.principalTexto}>
-                <Link href="/panel/operativos" className={inicio.enlaceTitulo}>
-                  <h2>Operativos</h2>
-                  <Icono nombre="flecha" tamano={24} />
-                </Link>
-                <span>{proximo ? `Próximo: ${fechaLarga(proximo.fecha)}, ${proximo.lugar.nombre}.` : "No hay operativos próximos."}</span>
-              </div>
+              <Link href="/panel/operativos" className={inicio.enlaceTitulo}>
+                <h2>Operativos</h2>
+                <Icono nombre="flecha" tamano={20} />
+              </Link>
+              <span className={inicio.principalDetalle}>{proximo ? `Próximo: ${fechaLarga(proximo.fecha)}, ${proximo.lugar.nombre}.` : "No hay operativos próximos."}</span>
               {crea && (
-                <div className={inicio.atajosMascota}>
-                  <Link href="/panel/operativos/nuevo" className={inicio.atajoMascota}>
+                <div className={inicio.atajos}>
+                  <Link href="/panel/operativos/nuevo" className={inicio.atajo}>
                     <Icono nombre="servicio" tamano={20} />
                     Crear operativo
                   </Link>
-                  <Link href="/panel/operativos" className={inicio.atajoMascota}>
+                  <Link href="/panel/operativos" className={inicio.atajo}>
                     <Icono nombre="documento" tamano={20} />
                     Ver inscritos
                   </Link>
@@ -93,16 +90,17 @@ export default async function InicioPanel() {
 
         {reportes && (
           <li>
-            <Link href="/panel/reportes" className={`${inicio.principal} ${inicio.principalSos}`}>
-              <AdornoSos />
+            <Link href="/panel/reportes" className={`${inicio.principal} ${inicio.tonoRojo}`}>
               <span className={inicio.principalIcono} aria-hidden="true">
-                <Icono nombre="salvavidas" tamano={32} />
+                <Icono nombre="salvavidas" tamano={28} />
               </span>
-              <span className={inicio.principalTexto}>
-                <span className={inicio.principalTitulo}>
-                  <h2>Reportes SOS</h2>
-                </span>
-                <span className={inicio.sosMensaje}>{n.reportes ? plural(n.reportes, "reporte sin revisar", "reportes sin revisar") : "Sin reportes por revisar."}</span>
+              <span className={inicio.principalTitulo}>
+                <h2>Reportes SOS</h2>
+              </span>
+              <span className={inicio.principalDetalle}>{n.reportes ? plural(n.reportes, "reporte sin revisar", "reportes sin revisar") : "Sin reportes por revisar."}</span>
+              <span className={inicio.ir}>
+                Ver reportes
+                <Icono nombre="flecha" tamano={20} />
               </span>
             </Link>
           </li>
@@ -111,18 +109,23 @@ export default async function InicioPanel() {
 
       {!aprueba && !operativos && !reportes && otros.length === 0 && (
         <div className={estilos.vacio}>
-          <p>Su cuenta no tiene secciones en el panel. Si necesita acceso, pídalo a Coordinación.</p>
+          <p>Tu cuenta no tiene secciones en el panel. Si necesitas acceso, pídelo a Coordinación.</p>
         </div>
       )}
 
       {otros.length > 0 && (
-        <nav aria-label="Otras funciones" className={inicio.otros}>
-          <ul>
-            {otros.map((a) => (
-              <li key={a.href}>
-                <Link href={a.href} className={inicio.otro}>
-                  <Icono nombre={a.icono} tamano={24} />
-                  <b>{a.titulo}</b>
+        <nav aria-label="Otras funciones">
+          <ul className={inicio.otros}>
+            {otros.map((o) => (
+              <li key={o.href}>
+                <Link href={o.href} className={inicio.otro}>
+                  <span className={`${inicio.recuadro} ${inicio[o.tono]}`} aria-hidden="true">
+                    <Icono nombre={o.icono} tamano={24} />
+                  </span>
+                  <span>
+                    <b>{o.titulo}</b>
+                    <span className={inicio.otroDetalle}>{o.detalle}</span>
+                  </span>
                 </Link>
               </li>
             ))}

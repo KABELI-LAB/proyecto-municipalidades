@@ -36,19 +36,19 @@ export const metadata: Metadata = { title: "Operativo · Panel municipal" };
 
 // Qué conviene hacer en cada estado.
 const SIGUIENTE_CON_INVITACIONES: Record<string, string> = {
-  BORRADOR: "Revise los datos y publique. Al publicar invitamos primero a las solicitudes pendientes compatibles (mismo servicio, del sector o cercanas).",
-  PUBLICADO: "Inscripciones abiertas. Las personas invitadas responden en el portal; el sistema asigna cupos y vence las invitaciones sin respuesta. Envíe recordatorios 48 horas antes y asigne al equipo de terreno.",
-  INSCRIPCIONES_CERRADAS: "Las invitaciones aún abiertas pueden responderse hasta su plazo. Inicie el operativo el día de la atención.",
-  EN_CURSO: "Registre la asistencia y las atenciones. Al terminar, cierre el operativo para calcular resultados.",
+  BORRADOR: "Revisa los datos y publica. Al publicar invitamos primero a las solicitudes pendientes compatibles (mismo servicio, del sector o cercanas).",
+  PUBLICADO: "Inscripciones abiertas. Las personas invitadas responden en el portal; el sistema asigna cupos y vence las invitaciones sin respuesta. Envía recordatorios 48 horas antes y asigna al equipo de terreno.",
+  INSCRIPCIONES_CERRADAS: "Las invitaciones aún abiertas pueden responderse hasta su plazo. Inicia el operativo el día de la atención.",
+  EN_CURSO: "Registra la asistencia y las atenciones. Al terminar, cierra el operativo para calcular resultados.",
   CERRADO: "Los resultados ya actualizan la ficha y la prioridad del sector.",
   CANCELADO: "Las personas inscritas fueron avisadas y sus solicitudes siguen como demanda pendiente.",
 };
 /** Sin invitaciones prioritarias (apagadas en la configuración del municipio). */
 const SIGUIENTE_SIN_INVITACIONES: Record<string, string> = {
-  BORRADOR: "Revise los datos y publique. Al publicar, las inscripciones quedan abiertas en el portal.",
-  PUBLICADO: "Inscripciones abiertas en el portal. Si se libera un cupo, pasa al primero de la lista de espera. Envíe recordatorios antes del día.",
-  INSCRIPCIONES_CERRADAS: "Inscripciones cerradas. Inicie el operativo el día de la atención.",
-  EN_CURSO: "Registre la asistencia y las atenciones. Al terminar, cierre el operativo para calcular resultados.",
+  BORRADOR: "Revisa los datos y publica. Al publicar, las inscripciones quedan abiertas en el portal.",
+  PUBLICADO: "Inscripciones abiertas en el portal. Si se libera un cupo, pasa al primero de la lista de espera. Envía recordatorios antes del día.",
+  INSCRIPCIONES_CERRADAS: "Inscripciones cerradas. Inicia el operativo el día de la atención.",
+  EN_CURSO: "Registra la asistencia y las atenciones. Al terminar, cierra el operativo para calcular resultados.",
   CERRADO: "Los resultados ya actualizan la ficha y la prioridad del sector.",
   CANCELADO: "Las personas inscritas fueron avisadas y sus solicitudes siguen como demanda pendiente.",
 };

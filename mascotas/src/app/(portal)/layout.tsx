@@ -2,8 +2,9 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { BarraVolver } from "@/componentes/BarraVolver";
 import type { ReactNode } from "react";
-import { FirmaInstitucional } from "@/componentes/FirmaInstitucional";
+import { Cauce } from "@/componentes/Cauce";
 import { Icono } from "@/componentes/Icono";
+import { Logo } from "@/componentes/Logo";
 import { FranjaDemo } from "@/componentes/FranjaDemo";
 import { municipioActivo } from "@/lib/municipio";
 import { hayDemoEnCache } from "@/servidor/portal/enCache";
@@ -26,11 +27,12 @@ export default async function LayoutPortal({ children }: { children: ReactNode }
       <header className={estilos.encabezado}>
         <div className={`contenedor ${estilos.barra}`}>
           <Link href="/" className={estilos.inicio} aria-label={`Inicio · Tenencia responsable · ${municipio.nombreOficial}`}>
-            <FirmaInstitucional municipio={municipio} sobreAzul />
+            <Logo municipio={municipio} variante="ciudadano" />
+            <span className={estilos.programa}>Tenencia responsable</span>
           </Link>
           {/* El seguimiento de trámites es lo que más se busca al volver: siempre a mano. */}
           <Link href="/mis-solicitudes" className={estilos.solicitudes}>
-            <Icono nombre="documento" tamano={24} />
+            <Icono nombre="documento" tamano={20} />
             Mis solicitudes
           </Link>
         </div>
@@ -41,11 +43,15 @@ export default async function LayoutPortal({ children }: { children: ReactNode }
         </Suspense>
         {children}
       </main>
-      {/* Pie mínimo: las secciones ya están en la portada y «Mis solicitudes» en la barra superior. */}
+      {/* Pie: el Cauce del escudo da paso a la franja azul de la institución. */}
       <footer className={estilos.pie}>
+        <Cauce className={estilos.caucePie} colores="sobreAzul" grosor={28} separacion={70} />
         <div className={`contenedor ${estilos.filaPie}`}>
+          <Logo municipio={municipio} variante="blanco" />
           <p>
-            <b>{municipio.nombreOficial}</b> · {municipio.sitioWeb}
+            <b>{municipio.nombreOficial}</b>
+            <br />
+            {municipio.sitioWeb}
           </p>
           {/* Entrada discreta del equipo municipal al panel. */}
           <Link href="/panel/ingresar" className={estilos.accesoPanel}>

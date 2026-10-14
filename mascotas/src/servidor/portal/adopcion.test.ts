@@ -117,7 +117,7 @@ describe("Dar en adopción", () => {
     const repetidaFoto = await portal.proponerAdopcion(formulario(await campos({ nombreAnimal: "Otra", ...OTRA }), [await foto(200, 120, 60)]));
     expect(repetidaFoto).toMatchObject({ ok: false, errores: { fotos: expect.stringContaining("ya está en otra propuesta") } });
     const repetidoNombre = await portal.proponerAdopcion(formulario(await campos({ nombreAnimal: " canela " }), [await foto(5, 5, 5)]));
-    expect(repetidoNombre).toMatchObject({ ok: false, mensaje: expect.stringContaining("Ya propuso a") });
+    expect(repetidoNombre).toMatchObject({ ok: false, mensaje: expect.stringContaining("Ya propusiste a") });
   });
 
   it("solo quien gestiona adopciones puede revisar propuestas", async () => {

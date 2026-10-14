@@ -46,15 +46,15 @@ import { coincidenciasDe, operativoCercano, publicacion, publicacionPropia } fro
 
 export type Fallo = { ok: false; errores?: Errores; mensaje?: string };
 const fallo = (mensaje: string, errores?: Errores): Fallo => ({ ok: false, mensaje, errores });
-const REVISE = "Revise los datos marcados.";
-const ERROR_GENERAL = "No pudimos registrar su trámite. Intente nuevamente en unos minutos.";
+const REVISE = "Revisa los datos marcados.";
+const ERROR_GENERAL = "No pudimos registrar tu trámite. Intenta nuevamente en unos minutos.";
 
 /** Localidad de la lista cerrada y su sector; null si no pertenece al municipio. */
 async function ubicacion(localidadId: string, municipioId: string) {
   const l = await db.localidad.findFirst({ where: { id: localidadId, sector: { municipioId } }, include: { sector: true } });
   return l ? { localidad: l, sector: l.sector, ids: { sectorId: l.sectorId, localidadId: l.id } } : null;
 }
-const LOCALIDAD_INVALIDA = { localidadId: "Elija una localidad de la lista." };
+const LOCALIDAD_INVALIDA = { localidadId: "Elige una localidad de la lista." };
 
 const datosAnimal = (d: { especie: "PERRO" | "GATO"; nombreAnimal: string; sexo: "MACHO" | "HEMBRA" | "DESCONOCIDO"; tamano: "PEQUENO" | "MEDIANO" | "GRANDE" | ""; edad: string }) => ({
   especie: d.especie,
@@ -80,7 +80,7 @@ export async function solicitarServicio(valores: unknown): Promise<ResultadoServ
   try {
     const servicio = await db.servicio.findFirst({ where: { id: d.servicioId, municipioId: municipio.id, activo: true } });
     const u = await ubicacion(d.localidadId, municipio.id);
-    if (!servicio) return fallo(REVISE, { servicioId: "Elija un servicio de la lista." });
+    if (!servicio) return fallo(REVISE, { servicioId: "Elige un servicio de la lista." });
     if (!u) return fallo(REVISE, LOCALIDAD_INVALIDA);
     const { sector } = u;
 
@@ -91,7 +91,7 @@ export async function solicitarServicio(valores: unknown): Promise<ResultadoServ
       await tx.solicitudServicio.create({
         data: { codigo, personaId: persona.id, animalId: animal.id, servicioId: servicio.id, ...u.ids },
       });
-      await notificar(tx, persona, "Su solicitud fue recibida", `Registramos su solicitud de ${servicio.nombre.toLowerCase()} en el sector ${sector.nombre}. Su código de seguimiento es ${codigo}.`);
+      await notificar(tx, persona, "Tu solicitud fue recibida", `Registramos tu solicitud de ${servicio.nombre.toLowerCase()} en el sector ${sector.nombre}. Tu código de seguimiento es ${codigo}.`);
     });
 
     const cercano = await operativoCercano(sector.id, servicio.id, u.localidad.id);
@@ -156,13 +156,13 @@ export async function solicitarCupo(valores: unknown): Promise<ResultadoCupo> {
           loteDemoId: operativo.loteDemoId,
         },
       });
-      const detalle = dec.estado === "CONFIRMADO" ? "Su cupo está confirmado" : `Quedó en lista de espera, en el lugar ${dec.posicion}`;
-      await notificar(tx, persona, "Solicitud de cupo recibida", `${detalle} para ${capacidad.servicio.nombre.toLowerCase()} el ${fechaLarga(operativo.fecha)}. Su código es ${codigo}. Le enviaremos un recordatorio 48 horas antes.`, operativo.loteDemoId);
+      const detalle = dec.estado === "CONFIRMADO" ? "Tu cupo está confirmado" : `Quedaste en lista de espera, en el lugar ${dec.posicion}`;
+      await notificar(tx, persona, "Solicitud de cupo recibida", `${detalle} para ${capacidad.servicio.nombre.toLowerCase()} el ${fechaLarga(operativo.fecha)}. Tu código es ${codigo}. Te enviaremos un recordatorio 48 horas antes.`, operativo.loteDemoId);
       return dec;
     });
 
     if (!decision) {
-      return fallo(`Cada hogar puede inscribir hasta ${municipio.parametros.limitePorHogar} animales por operativo, y ya alcanzó ese límite con su RUT.`);
+      return fallo(`Cada hogar puede inscribir hasta ${municipio.parametros.limitePorHogar} animales por operativo, y ya alcanzaste ese límite con tu RUT.`);
     }
     revalidatePath(`/operativos/${operativo.id}`);
     return {
@@ -213,7 +213,7 @@ export async function reportarSituacion(entrada: unknown): Promise<ResultadoRepo
     if (!u) return fallo(REVISE, LOCALIDAD_INVALIDA);
     // Solo las categorías vigentes de SOS Mascotas; las antiguas clasifican reportes anteriores.
     const tipo = await db.tipoReporte.findFirst({ where: { municipioId: municipio.id, clave: d.tipo, activo: true } });
-    if (!tipo) return fallo(REVISE, { tipo: "Elija una situación de la lista." });
+    if (!tipo) return fallo(REVISE, { tipo: "Elige una situación de la lista." });
     if (foto) {
       const g = await guardarFoto(foto, "reportes");
       if (!g.ok) return fallo(REVISE, { foto: g.mensaje });
@@ -236,7 +236,7 @@ export async function reportarSituacion(entrada: unknown): Promise<ResultadoRepo
           historial: { create: { estado: "ABIERTO" } },
         },
       });
-      await notificar(tx, persona, "Su reporte fue recibido", `Recibimos su reporte de SOS Mascotas. El equipo municipal lo revisará en horario de atención. Su código de seguimiento es ${codigo}.`);
+      await notificar(tx, persona, "Tu reporte fue recibido", `Recibimos tu reporte de SOS Mascotas. El equipo municipal lo revisará en horario de atención. Tu código de seguimiento es ${codigo}.`);
     });
     return { ok: true, codigo };
   } catch (e) {
@@ -266,7 +266,7 @@ export async function informarNovedad(valores: unknown): Promise<ResultadoNoveda
       include: { cuidadoresAutorizados: { where: { activo: true }, include: { persona: true } } },
     });
     if (!perro) return fallo("No encontramos a este perro comunitario.");
-    if (!perro.cuidadoresAutorizados.length) return fallo(`${perro.apodo} aún no tiene un vecino a cargo que reciba la novedad. Si usted lo cuida, puede hacerse cargo desde su ficha.`);
+    if (!perro.cuidadoresAutorizados.length) return fallo(`${perro.apodo} aún no tiene un vecino a cargo que reciba la novedad. Si tú lo cuidas, puedes hacerte cargo desde su ficha.`);
     const u = await ubicacion(d.localidadId, municipio.id);
     if (!u) return fallo(REVISE, LOCALIDAD_INVALIDA);
     const codigo = await nuevoCodigo(db);
@@ -280,11 +280,11 @@ export async function informarNovedad(valores: unknown): Promise<ResultadoNoveda
           tx,
           c.persona,
           `Novedad sobre ${perro.apodo}`,
-          `Un vecino informó sobre ${perro.apodo}: ${TIPO_NOVEDAD[d.tipo]}. «${d.texto}» Véala y márquela como vista en Mis solicitudes con su RUT y el código ${c.codigo}.`,
+          `Un vecino informó sobre ${perro.apodo}: ${TIPO_NOVEDAD[d.tipo]}. «${d.texto}» Revísala y márcala como vista en Mis solicitudes con tu RUT y el código ${c.codigo}.`,
           perro.loteDemoId,
         );
       }
-      await notificar(tx, persona, "Recibimos su novedad", `Le enviamos su novedad sobre ${perro.apodo} a quien lo cuida. Su código es ${codigo}.`, perro.loteDemoId);
+      await notificar(tx, persona, "Recibimos tu novedad", `Le enviamos tu novedad sobre ${perro.apodo} a quien lo cuida. Tu código es ${codigo}.`, perro.loteDemoId);
     });
     return { ok: true, codigo };
   } catch (e) {
@@ -326,7 +326,7 @@ export async function publicarMascota(entrada: unknown): Promise<ResultadoPublic
   const fechaEvento = new Date(medianocheEn(d.fechaEvento).getTime() + 12 * 3_600_000);
   const hoy = inicioDeHoy();
   if (fechaEvento.getTime() > hoy.getTime() + 86_400_000 || fechaEvento.getTime() < hoy.getTime() - 60 * 86_400_000) {
-    return fallo(REVISE, { fechaEvento: "Indique una fecha de los últimos 60 días." });
+    return fallo(REVISE, { fechaEvento: "Indica una fecha de los últimos 60 días." });
   }
 
   let fotoArchivo: string | null = null;
@@ -335,16 +335,16 @@ export async function publicarMascota(entrada: unknown): Promise<ResultadoPublic
     const u = await ubicacion(d.localidadId, municipio.id);
     if (!u) return fallo(REVISE, LOCALIDAD_INVALIDA);
     if (d.especie !== "OTRA" && !(await db.colorCatalogo.findFirst({ where: { municipioId: municipio.id, especie: d.especie, nombre: d.colorPrincipal } }))) {
-      return fallo(REVISE, { colorPrincipal: "Elija un color de la lista." });
+      return fallo(REVISE, { colorPrincipal: "Elige un color de la lista." });
     }
     // Dónde está resguardada: una localidad de la lista, nunca una dirección.
     const resguardo = d.tipo === "ENCONTRADA" && (d.resguardada === "si" || d.resguardada === "lugar") ? await ubicacion(d.resguardoLocalidadId, municipio.id) : null;
     if (d.tipo === "ENCONTRADA" && (d.resguardada === "si" || d.resguardada === "lugar") && !resguardo) {
-      return fallo(REVISE, { resguardoLocalidadId: "Elija una localidad de la lista." });
+      return fallo(REVISE, { resguardoLocalidadId: "Elige una localidad de la lista." });
     }
     // Solo un avistamiento se vincula, y solo a un aviso de pérdida vigente y visible.
     const vinculada = d.tipo === "ENCONTRADA" && d.vinculo ? await publicacion(d.vinculo) : null;
-    if (d.vinculo && (!vinculada || vinculada.tipo !== "PERDIDA")) return fallo("El aviso de mascota perdida que eligió ya no está vigente.");
+    if (d.vinculo && (!vinculada || vinculada.tipo !== "PERDIDA")) return fallo("El aviso de mascota perdida que elegiste ya no está vigente.");
     if (foto) {
       const g = await guardarFoto(foto, "avisos");
       if (!g.ok) return fallo(REVISE, { foto: g.mensaje });
@@ -378,7 +378,7 @@ export async function publicarMascota(entrada: unknown): Promise<ResultadoPublic
           vigenteHasta: new Date(Date.now() + 30 * 86_400_000),
         },
       });
-      await notificar(tx, persona, "Recibimos su aviso", `Recibimos su aviso. Su código es ${codigo}. Lo publicaremos en el portal y en las redes sociales del municipio cuando lo revisemos, y le avisaremos si aparece una publicación que podría corresponder.`);
+      await notificar(tx, persona, "Recibimos tu aviso", `Recibimos tu aviso. Tu código es ${codigo}. Lo publicaremos en el portal y en las redes sociales del municipio cuando lo revisemos, y te avisaremos si aparece una publicación que podría corresponder.`);
       return { pub, persona };
     });
     guardado = true;
@@ -396,10 +396,10 @@ export async function publicarMascota(entrada: unknown): Promise<ResultadoPublic
         update: { puntaje: c.puntaje, motivos: c.motivos.join("; ") },
       });
       const otra = await db.publicacionMascota.findUnique({ where: { id: c.id }, select: { loteDemoId: true, persona: { select: { telefono: true, correo: true } } } });
-      if (otra) await notificar(db, otra.persona, "Posible coincidencia", "Hay una publicación nueva que podría corresponder a su mascota. La verá en el portal cuando el municipio la revise.", otra.loteDemoId);
+      if (otra) await notificar(db, otra.persona, "Posible coincidencia", "Hay una publicación nueva que podría corresponder a tu mascota. La verás en el portal cuando el municipio la revise.", otra.loteDemoId);
     }
     if (coincidencias.length > 0) {
-      await notificar(db, creada.persona, "Posible coincidencia", "Hay una publicación que podría corresponder a su mascota. Revísela en el portal.");
+      await notificar(db, creada.persona, "Posible coincidencia", "Hay una publicación que podría corresponder a tu mascota. Revísala en el portal.");
     }
     // Vínculo indicado por quien la vio: se registra como posible coincidencia y se avisa a quien la perdió.
     if (vinculada) {
@@ -410,7 +410,7 @@ export async function publicarMascota(entrada: unknown): Promise<ResultadoPublic
         update: { motivos },
       });
       const duena = await db.publicacionMascota.findUnique({ where: { id: vinculada.id }, select: { codigo: true, loteDemoId: true, persona: { select: { telefono: true, correo: true } } } });
-      if (duena) await notificar(db, duena.persona, "Alguien informó que vio una mascota", `Una persona informó que vio una mascota que podría ser la de su aviso ${duena.codigo ?? ""}. Verá el avistamiento en su aviso cuando el municipio lo revise; no podemos asegurar que sea el mismo animal.`, duena.loteDemoId);
+      if (duena) await notificar(db, duena.persona, "Alguien informó que vio una mascota", `Una persona informó que vio una mascota que podría ser la de tu aviso ${duena.codigo ?? ""}. Verás el avistamiento en tu aviso cuando el municipio lo revise; no podemos asegurar que sea el mismo animal.`, duena.loteDemoId);
     }
 
     revalidatePath("/mascotas");
@@ -456,7 +456,7 @@ export async function enviarMensaje(valores: unknown): Promise<ResultadoMensaje>
       await tx.mensajeProtegido.create({
         data: { publicacionId: pub.id, remitenteNombre: d.nombre, remitenteContacto: d.correo || d.telefono, texto: d.texto },
       });
-      await notificar(tx, pub.persona, "Recibió un mensaje sobre su publicación", `Una persona le escribió sobre su publicación ${pub.codigo}. Puede leer el mensaje y responder a través de la plataforma.`, pub.loteDemoId);
+      await notificar(tx, pub.persona, "Recibiste un mensaje sobre tu publicación", `Una persona te escribió sobre tu publicación ${pub.codigo}. Puedes leer el mensaje y responder a través de la plataforma.`, pub.loteDemoId);
     });
     return { ok: true };
   } catch (e) {
@@ -492,7 +492,7 @@ export async function postularAdopcion(valores: unknown): Promise<ResultadoPostu
     if (!ficha.proponenteId) return fallo("Este animal no recibe postulaciones por ahora.");
     // Animal propuesto por un vecino: la postulación le llega a esa persona y, si le elige, se comparten los contactos.
     if (ficha.proponenteId && d.compartir !== "SI") {
-      return fallo(REVISE, { compartir: "Para postular, acepte que compartamos su contacto con quien lo da en adopción si le elige." });
+      return fallo(REVISE, { compartir: "Para postular, acepta que compartamos tu contacto con quien lo da en adopción si te elige." });
     }
     const u = await ubicacion(d.localidadId, municipio.id);
     if (!u) return fallo(REVISE, LOCALIDAD_INVALIDA);
@@ -514,17 +514,17 @@ export async function postularAdopcion(valores: unknown): Promise<ResultadoPostu
           loteDemoId: ficha.loteDemoId,
         },
       });
-      const quien = ficha.proponente ? "Quien lo da en adopción revisará su postulación" : "La revisaremos y le contactaremos";
-      await notificar(tx, persona, "Recibimos su postulación", `Recibimos su postulación para adoptar a ${ficha.animal.nombre ?? "este animal"}. ${quien}. Su código es ${codigo}.`, ficha.loteDemoId);
+      const quien = ficha.proponente ? "Quien lo da en adopción revisará tu postulación" : "La revisaremos y te contactaremos";
+      await notificar(tx, persona, "Recibimos tu postulación", `Recibimos tu postulación para adoptar a ${ficha.animal.nombre ?? "este animal"}. ${quien}. Tu código es ${codigo}.`, ficha.loteDemoId);
       // La postulación le llega a quien propuso: la revisa y decide en Mis solicitudes.
       if (ficha.proponente) {
-        await notificar(tx, ficha.proponente, "Alguien postuló para adoptar", `Recibió una postulación para ${ficha.animal.nombre ?? "el animal que dio en adopción"}. Revísela y decida en Mis solicitudes con su RUT y el código ${ficha.codigo}.`, ficha.loteDemoId);
+        await notificar(tx, ficha.proponente, "Alguien postuló para adoptar", `Recibiste una postulación para ${ficha.animal.nombre ?? "el animal que diste en adopción"}. Revísala y decide en Mis solicitudes con tu RUT y el código ${ficha.codigo}.`, ficha.loteDemoId);
       }
     });
     return { ok: true, codigo, nombre: ficha.animal.nombre ?? "este animal" };
   } catch (e) {
     if (e instanceof PostulacionRepetida) {
-      return fallo(e.codigo ? `Ya postuló a este animal con su RUT. Puede revisar el estado con el código ${e.codigo}.` : "Ya postuló a este animal con su RUT.");
+      return fallo(e.codigo ? `Ya postulaste a este animal con tu RUT. Puedes revisar el estado con el código ${e.codigo}.` : "Ya postulaste a este animal con tu RUT.");
     }
     console.error(e);
     return fallo(ERROR_GENERAL);
@@ -566,14 +566,14 @@ export async function proponerAdopcion(entrada: unknown): Promise<ResultadoPropu
   const d = r.data;
   const municipio = municipioActivo();
   const rut = normalizarRut(d.rut)!;
-  if (fotos.length > MAXIMO_FOTOS) return fallo(REVISE, { fotos: `Puede enviar hasta ${MAXIMO_FOTOS} fotos.` });
+  if (fotos.length > MAXIMO_FOTOS) return fallo(REVISE, { fotos: `Puedes enviar hasta ${MAXIMO_FOTOS} fotos.` });
 
   const anterior = d.corregir
     ? await db.fichaAdopcion.findFirst({ where: { codigo: d.corregir, proponente: { municipioId: municipio.id, rut } } })
     : null;
   if (d.corregir && !anterior) return fallo(NO_ENCONTRADO);
-  if (anterior && anterior.revision !== "CORRECCIONES") return fallo("Esta propuesta ya no espera correcciones. Revise su estado en Mis solicitudes.");
-  if (!anterior && fotos.length === 0) return fallo(REVISE, { fotos: "Agregue al menos una foto del animal." });
+  if (anterior && anterior.revision !== "CORRECCIONES") return fallo("Esta propuesta ya no espera correcciones. Revisa su estado en Mis solicitudes.");
+  if (!anterior && fotos.length === 0) return fallo(REVISE, { fotos: "Agrega al menos una foto del animal." });
 
   const guardadas: { nombre: string; huella: string }[] = [];
   const descartar = () => Promise.all(guardadas.map((g) => borrarFoto("adopciones", g.nombre)));
@@ -593,7 +593,7 @@ export async function proponerAdopcion(entrada: unknown): Promise<ResultadoPropu
     const abiertas = { revision: { in: [...REVISION_ABIERTA] }, estado: { not: "ADOPTADO" as const }, ...(anterior ? { id: { not: anterior.id } } : {}) };
     if (guardadas.length && (await db.fichaAdopcion.count({ where: { ...abiertas, OR: guardadas.map((g) => ({ huellasFotos: { contains: g.huella } })) } }))) {
       await descartar();
-      return fallo(REVISE, { fotos: "Una de estas fotos ya está en otra propuesta de adopción. Si es el mismo animal, revise esa propuesta en Mis solicitudes." });
+      return fallo(REVISE, { fotos: "Una de estas fotos ya está en otra propuesta de adopción. Si es el mismo animal, revisa esa propuesta en Mis solicitudes." });
     }
     if (d.nombreAnimal) {
       const propias = await db.fichaAdopcion.findMany({
@@ -603,7 +603,7 @@ export async function proponerAdopcion(entrada: unknown): Promise<ResultadoPropu
       const repetida = propias.find((p) => p.animal.nombre && normalizarNombre(p.animal.nombre) === normalizarNombre(d.nombreAnimal));
       if (repetida) {
         await descartar();
-        return fallo(`Ya propuso a ${d.nombreAnimal} para adopción${repetida.codigo ? ` con el código ${repetida.codigo}` : ""}. Revise su estado en Mis solicitudes.`);
+        return fallo(`Ya propusiste a ${d.nombreAnimal} para adopción${repetida.codigo ? ` con el código ${repetida.codigo}` : ""}. Revisa su estado en Mis solicitudes.`);
       }
     }
 
@@ -645,8 +645,8 @@ export async function proponerAdopcion(entrada: unknown): Promise<ResultadoPropu
       await notificar(
         tx,
         persona,
-        anterior ? "Recibimos su propuesta corregida" : "Recibimos su propuesta de adopción",
-        `El equipo municipal revisará su propuesta antes de publicarla. Su código de seguimiento es ${codigo}.`,
+        anterior ? "Recibimos tu propuesta corregida" : "Recibimos tu propuesta de adopción",
+        `El equipo municipal revisará tu propuesta antes de publicarla. Tu código de seguimiento es ${codigo}.`,
       );
     });
     // Las fotos reemplazadas en una corrección ya no se usan.
@@ -679,7 +679,7 @@ export async function propuestaParaCorregir(valores: unknown): Promise<Propuesta
     include: { animal: true, proponente: true },
   });
   if (!f || !f.proponente) return { ok: false, mensaje: NO_ENCONTRADO };
-  if (f.revision !== "CORRECCIONES") return { ok: false, mensaje: "Esta propuesta no espera correcciones. Revise su estado en Mis solicitudes." };
+  if (f.revision !== "CORRECCIONES") return { ok: false, mensaje: "Esta propuesta no espera correcciones. Revisa su estado en Mis solicitudes." };
   const a = f.animal;
   return {
     ok: true,
@@ -720,7 +720,7 @@ export async function gestionarPropuesta(valores: unknown): Promise<{ ok: boolea
   try {
     const f = await db.fichaAdopcion.findFirst({ where: { codigo: r.data.codigo, proponente: { municipioId: municipioActivo().id, rut } } });
     if (!f) return { ok: false, mensaje: NO_ENCONTRADO };
-    if (f.estado === "EN_PROCESO") return { ok: false, mensaje: "Eligió a una persona para la adopción. Primero indique en las postulaciones si se concretó o no." };
+    if (f.estado === "EN_PROCESO") return { ok: false, mensaje: "Elegiste a una persona para la adopción. Primero indica en las postulaciones si se concretó o no." };
     const cambio = await db.fichaAdopcion.updateMany({
       where: { id: f.id, revision: { in: [...REVISION_ABIERTA] }, estado: "DISPONIBLE" },
       data: { revision: "RETIRADA", cierre: r.data.accion === "encontro_hogar" ? "ENCONTRO_HOGAR" : "YA_NO_APLICA" },
@@ -728,7 +728,7 @@ export async function gestionarPropuesta(valores: unknown): Promise<{ ok: boolea
     if (!cambio.count) return { ok: false, mensaje: "Esta propuesta ya no está abierta." };
     revalidatePath("/adoptar");
     revalidatePath("/", "layout");
-    return { ok: true, mensaje: r.data.accion === "encontro_hogar" ? "¡Qué buena noticia! Retiramos la ficha del catálogo." : "Retiramos su propuesta." };
+    return { ok: true, mensaje: r.data.accion === "encontro_hogar" ? "¡Qué buena noticia! Retiramos la ficha del catálogo." : "Retiramos tu propuesta." };
   } catch (e) {
     console.error(e);
     return { ok: false, mensaje: ERROR_GENERAL };
@@ -810,25 +810,25 @@ export async function decidirPostulacion(valores: unknown): Promise<{ ok: boolea
     if (!p) return { ok: false, mensaje: NO_ENCONTRADO };
     const nombre = f.animal.nombre ?? "el animal";
     const pendiente = p.estado === "RECIBIDA" || p.estado === "EN_EVALUACION";
-    const yaCambio = { ok: false, mensaje: "Esta postulación ya cambió de estado. Consulte nuevamente." };
+    const yaCambio = { ok: false, mensaje: "Esta postulación ya cambió de estado. Consulta nuevamente." };
 
     if (d.accion === "elegir") {
-      if (!pendiente || f.estado !== "DISPONIBLE") return f.estado === "EN_PROCESO" ? { ok: false, mensaje: "Ya eligió a una persona. Indique primero si la adopción se concretó o no." } : yaCambio;
+      if (!pendiente || f.estado !== "DISPONIBLE") return f.estado === "EN_PROCESO" ? { ok: false, mensaje: "Ya elegiste a una persona. Indica primero si la adopción se concretó o no." } : yaCambio;
       if (!p.compartirContacto) return { ok: false, mensaje: "Esta persona no aceptó compartir su contacto." };
       const pr = f.proponente!;
       await db.$transaction(async (tx) => {
         await tx.postulacionAdopcion.update({ where: { id: p.id }, data: { estado: "APROBADA" } });
         await tx.fichaAdopcion.update({ where: { id: f.id }, data: { estado: "EN_PROCESO" } });
         const contacto = [pr.telefono, pr.correo].filter(Boolean).join(" · ");
-        await notificar(tx, p.persona, "Le eligieron para adoptar", `Quien da en adopción a ${nombre} eligió su postulación. Comuníquese con ${pr.nombre}${contacto ? ` (${contacto})` : ""} para conocerse y acordar la adopción.`, p.loteDemoId);
+        await notificar(tx, p.persona, "Te eligieron para adoptar", `Quien da en adopción a ${nombre} eligió tu postulación. Comunícate con ${pr.nombre}${contacto ? ` (${contacto})` : ""} para conocerse y acordar la adopción.`, p.loteDemoId);
       });
-      return { ok: true, mensaje: `Eligió a ${p.persona.nombre}. Le compartimos su contacto y ahora ve el suyo en la postulación.` };
+      return { ok: true, mensaje: `Elegiste a ${p.persona.nombre}. Le compartimos tu contacto y ahora ves el suyo en la postulación.` };
     }
     if (d.accion === "descartar") {
       if (!pendiente) return yaCambio;
       await db.$transaction(async (tx) => {
         await tx.postulacionAdopcion.update({ where: { id: p.id }, data: { estado: "NO_SELECCIONADA" } });
-        await notificar(tx, p.persona, "Sobre su postulación", `Gracias por postular para adoptar a ${nombre}. En esta ocasión no fue seleccionada. Le invitamos a conocer a otros animales que buscan hogar.`, p.loteDemoId);
+        await notificar(tx, p.persona, "Sobre tu postulación", `Gracias por postular para adoptar a ${nombre}. En esta ocasión no fue seleccionada. Te invitamos a conocer a otros animales que buscan hogar.`, p.loteDemoId);
       });
       return { ok: true, mensaje: "Descartamos la postulación y avisamos a la persona." };
     }
@@ -844,7 +844,7 @@ export async function decidirPostulacion(valores: unknown): Promise<{ ok: boolea
     await db.$transaction(async (tx) => {
       await tx.postulacionAdopcion.update({ where: { id: p.id }, data: { estado: "NO_SELECCIONADA" } });
       await tx.fichaAdopcion.update({ where: { id: f.id }, data: { estado: "DISPONIBLE" } });
-      await notificar(tx, p.persona, "Sobre la adopción", `La adopción de ${nombre} no se concretó. Gracias por su interés; le invitamos a conocer a otros animales que buscan hogar.`, p.loteDemoId);
+      await notificar(tx, p.persona, "Sobre la adopción", `La adopción de ${nombre} no se concretó. Gracias por tu interés; te invitamos a conocer a otros animales que buscan hogar.`, p.loteDemoId);
     });
     return { ok: true, mensaje: `${nombre} vuelve a estar disponible para recibir postulaciones.` };
   } catch (e) {
@@ -885,7 +885,7 @@ export type ResultadoConsulta = { ok: true; tramites: Tramite[]; avisos: AvisoPe
 /** Un aviso de la contraparte que todavía se puede cerrar junto con el propio. */
 const CONTRAPARTE_ABIERTA = { estado: "ABIERTA" as const, moderacion: { not: "OCULTA" as const } };
 
-const NO_ENCONTRADO = "No encontramos un trámite con ese RUT y código. Revise que estén escritos tal como los recibió.";
+const NO_ENCONTRADO = "No encontramos un trámite con ese RUT y código. Revisa que estén escritos tal como los recibiste.";
 
 /** Un cupo se puede cancelar mientras esté vigente y el operativo no haya comenzado. */
 function cupoCancelable(c: { estado: string; operativo: { estado: string; fecha: Date } }) {
@@ -907,7 +907,7 @@ export async function cancelarMiCupo(valores: unknown): Promise<{ ok: boolean; m
     const persona = await db.persona.findUnique({ where: { municipioId_rut: { municipioId: municipioActivo().id, rut } } });
     const c = persona ? await db.cupo.findFirst({ where: { codigo: r.data.codigo, personaId: persona.id }, include: { operativo: true, servicio: true } }) : null;
     if (!persona || !c) return { ok: false, mensaje: NO_ENCONTRADO };
-    if (!cupoCancelable(c)) return { ok: false, mensaje: "Este cupo ya no se puede cancelar desde aquí. Si necesita ayuda, comuníquese con el municipio." };
+    if (!cupoCancelable(c)) return { ok: false, mensaje: "Este cupo ya no se puede cancelar desde aquí. Si necesitas ayuda, comunícate con el municipio." };
     const enEspera = c.estado === "EN_LISTA_ESPERA";
     await db.$transaction(
       async (tx) => {
@@ -919,16 +919,16 @@ export async function cancelarMiCupo(valores: unknown): Promise<{ ok: boolean; m
         // Quienes siguen en espera avanzan un lugar: la lista queda numerada desde 1.
         const espera = await tx.cupo.findMany({ where: { operativoId: c.operativoId, servicioId: c.servicioId, estado: "EN_LISTA_ESPERA" }, orderBy: [{ posicionEspera: "asc" }, { creadoEn: "asc" }], select: { id: true } });
         for (const [i, e] of espera.entries()) await tx.cupo.update({ where: { id: e.id }, data: { posicionEspera: i + 1 } });
-        await notificar(tx, persona, enEspera ? "Salió de la lista de espera" : "Cancelamos su cupo", `${enEspera ? "Salió de la lista de espera" : "Cancelamos su cupo"} de ${c.servicio.nombre.toLowerCase()} (${c.codigo}). Gracias por avisar.`, c.loteDemoId);
+        await notificar(tx, persona, enEspera ? "Saliste de la lista de espera" : "Cancelamos tu cupo", `${enEspera ? "Saliste de la lista de espera" : "Cancelamos tu cupo"} de ${c.servicio.nombre.toLowerCase()} (${c.codigo}). Gracias por avisar.`, c.loteDemoId);
       },
       { timeout: 30_000 },
     );
     revalidatePath(`/operativos/${c.operativoId}`);
     revalidatePath("/operativos");
-    return { ok: true, mensaje: enEspera ? "Salió de la lista de espera." : "Cancelamos su cupo. Gracias por avisar: quedó libre para otra persona." };
+    return { ok: true, mensaje: enEspera ? "Saliste de la lista de espera." : "Cancelamos tu cupo. Gracias por avisar: quedó libre para otra persona." };
   } catch (e) {
     console.error(e);
-    return { ok: false, mensaje: "No pudimos cancelar el cupo. Consulte nuevamente para ver su estado." };
+    return { ok: false, mensaje: "No pudimos cancelar el cupo. Consulta nuevamente para ver su estado." };
   }
 }
 
@@ -995,7 +995,7 @@ async function tramitesDe(persona: { id: string; correo: string | null; telefono
       detalle: `${s.servicio.nombre} · ${s.animal.nombre ?? ESPECIE[s.animal.especie]} · ${s.sector.nombre}`,
       fecha: fechaCorta(s.creadaEn),
       estado: ESTADO_SOLICITUD[s.estado],
-      nota: s.estado === "RECIBIDA" ? "Nos ayuda a decidir dónde hacer los próximos operativos. Revise la sección Operativos para inscribirse." : undefined,
+      nota: s.estado === "RECIBIDA" ? "Nos ayuda a decidir dónde hacer los próximos operativos. Revisa la sección Operativos para inscribirte." : undefined,
       orden: s.creadaEn.getTime(),
     })),
     ...cupos.map((c) => ({
@@ -1029,7 +1029,7 @@ async function tramitesDe(persona: { id: string; correo: string | null; telefono
           : p.estado === "ABIERTA" && p.moderacion === "PENDIENTE"
             ? "En revisión: lo publicaremos en el portal y en las redes sociales del municipio cuando lo revisemos."
           : p.estado === "ABIERTA" && p.vigenciaPedidaEn
-            ? `Confirme si su aviso sigue vigente antes del ${fechaLarga(limiteParaResponder(p.vigenciaPedidaEn))}; si no, lo archivaremos.`
+            ? `Confirma si tu aviso sigue vigente antes del ${fechaLarga(limiteParaResponder(p.vigenciaPedidaEn))}; si no, lo archivaremos.`
             : undefined,
       aviso:
         p.estado === "ABIERTA" && p.moderacion !== "OCULTA" && p.codigo
@@ -1083,7 +1083,7 @@ async function tramitesDe(persona: { id: string; correo: string | null; telefono
     })),
     ...cuidados.map((c) => ({
       codigo: c.codigo,
-      tipo: "Perro comunitario a su cuidado",
+      tipo: "Perro comunitario a tu cuidado",
       detalle: `${c.perro.apodo} · ${c.perro.lugar.nombre}`,
       fecha: fechaCorta(c.creadoEn),
       estado: c.perro.oculto ? { texto: "No se muestra en el portal", tono: "cerrado" as const } : estadoActualizacion(c.perro.ultimoControl),
@@ -1124,10 +1124,10 @@ async function tramitesDe(persona: { id: string; correo: string | null; telefono
 function notaPostulacion(p: { estado: string; compartirContacto: boolean; ficha: { proponente: { nombre: string; telefono: string | null; correo: string | null } | null } }): string | undefined {
   const pr = p.ficha.proponente;
   if (!pr) return undefined;
-  if (p.estado === "RECIBIDA" || p.estado === "EN_EVALUACION") return "Quien lo da en adopción revisará su postulación.";
+  if (p.estado === "RECIBIDA" || p.estado === "EN_EVALUACION") return "Quien lo da en adopción revisará tu postulación.";
   if (p.estado === "APROBADA" && p.compartirContacto) {
     const contacto = [pr.telefono, pr.correo].filter(Boolean).join(" · ");
-    return `Le eligieron. Comuníquese con ${pr.nombre}${contacto ? `: ${contacto}` : ""}, para conocerse y acordar la adopción.`;
+    return `Te eligieron. Comunícate con ${pr.nombre}${contacto ? `: ${contacto}` : ""}, para conocerse y acordar la adopción.`;
   }
   return undefined;
 }
@@ -1139,19 +1139,19 @@ function notaPropuesta(f: { revision: string; estado: string; motivoRevision: st
     case "PENDIENTE":
       return "El equipo municipal la revisará antes de publicarla.";
     case "CORRECCIONES":
-      return `Le pedimos corregir algunos datos antes de publicarla.${motivo}`;
+      return `Te pedimos corregir algunos datos antes de publicarla.${motivo}`;
     case "RECHAZADA":
       return `No la publicamos.${motivo}`;
     case "OCULTA":
       return `La retiramos del catálogo.${motivo}`;
     case "RETIRADA":
-      return f.cierre === "ENCONTRO_HOGAR" ? "Usted nos avisó que encontró hogar. ¡Gracias!" : "Usted la retiró.";
+      return f.cierre === "ENCONTRO_HOGAR" ? "Nos avisaste que encontró hogar. ¡Gracias!" : "La retiraste.";
     default:
       return f.estado === "ADOPTADO"
         ? "Fue adoptado a través de la plataforma."
         : f.estado === "EN_PROCESO"
-          ? "Eligió a una persona: cuando se concrete (o si no se concreta), indíquelo en las postulaciones."
-          : "Está publicada en el catálogo. Las postulaciones le llegan a usted: revíselas aquí.";
+          ? "Elegiste a una persona: cuando se concrete (o si no se concreta), indícalo en las postulaciones."
+          : "Está publicada en el catálogo. Tú recibes las postulaciones: revísalas aquí.";
   }
 }
 
@@ -1162,17 +1162,17 @@ function notaInvitacion(i: { estado: string; venceEn: Date; motivoCierre: string
   const condiciones = requisitos ? ` Condiciones: ${requisitos}` : "";
   switch (i.estado) {
     case "ENVIADA":
-      return `Responda antes del ${fechaLarga(i.venceEn)}, ${hora(i.venceEn)} horas. Confirmar su interés no reserva el cupo: se lo asignamos según disponibilidad y prioridad.${condiciones}`;
+      return `Responde antes del ${fechaLarga(i.venceEn)}, ${hora(i.venceEn)} horas. Confirmar tu interés no reserva el cupo: se lo asignamos según disponibilidad y prioridad.${condiciones}`;
     case "INTERESADA":
-      return `Confirmó su interés. Le asignaremos el cupo apenas haya uno disponible; le avisaremos.${condiciones}`;
+      return `Confirmaste tu interés. Te asignaremos el cupo apenas haya uno disponible; te avisaremos.${condiciones}`;
     case "ASIGNADA":
-      return `Su cupo quedó asignado${i.cupo ? ` con el código ${i.cupo.codigo}` : ""}.${condiciones}`;
+      return `Tu cupo quedó asignado${i.cupo ? ` con el código ${i.cupo.codigo}` : ""}.${condiciones}`;
     case "RECHAZADA":
-      return "Nos indicó que no podrá asistir. Su solicitud sigue registrada para un próximo operativo.";
+      return "Nos indicaste que no podrás asistir. Tu solicitud sigue registrada para un próximo operativo.";
     case "VENCIDA":
-      return "Venció sin respuesta. Su solicitud sigue registrada para un próximo operativo.";
+      return "Venció sin respuesta. Tu solicitud sigue registrada para un próximo operativo.";
     default:
-      return `${i.motivoCierre ?? "Se cerró"}. Su solicitud sigue registrada.`;
+      return `${i.motivoCierre ?? "Se cerró"}. Tu solicitud sigue registrada.`;
   }
 }
 
@@ -1211,15 +1211,15 @@ export async function responderInvitacion(valores: unknown): Promise<{ ok: boole
       if (r.data.accion === "rechazo") {
         await tx.solicitudServicio.update({ where: { id: i.solicitudId }, data: { estado: "RECIBIDA" } });
         await procesarOperativo(tx, i.operativoId, ahora);
-        return "Registramos que no podrá asistir. Su solicitud sigue registrada para un próximo operativo.";
+        return "Registramos que no podrás asistir. Tu solicitud sigue registrada para un próximo operativo.";
       }
       await asignarInteresadas(tx, i.operativoId, ahora);
       const despues = await tx.invitacionOperativo.findUniqueOrThrow({ where: { id: i.id }, include: { cupo: true } });
       return despues.estado === "ASIGNADA"
-        ? `¡Listo! Le asignamos el cupo. Su código de cupo es ${despues.cupo?.codigo}.`
-        : "Registramos su interés. Aún no hay un cupo disponible para asignarle: le avisaremos apenas lo haya.";
+        ? `¡Listo! Te asignamos el cupo. Tu código de cupo es ${despues.cupo?.codigo}.`
+        : "Registramos tu interés. Aún no hay un cupo disponible para asignarte: te avisaremos apenas lo haya.";
     }, { timeout: 30_000 });
-    if (!mensaje) return { ok: false, mensaje: "Esta invitación ya no se puede responder. Consulte nuevamente para ver su estado." };
+    if (!mensaje) return { ok: false, mensaje: "Esta invitación ya no se puede responder. Consulta nuevamente para ver su estado." };
     revalidatePath(`/operativos/${i.operativoId}`);
     return { ok: true, mensaje };
   } catch (e) {
@@ -1268,9 +1268,9 @@ export async function gestionarAviso(valores: unknown): Promise<{ ok: boolean; m
     if (d.accion === "confirmar") {
       await db.publicacionMascota.update({ where: { id: p.id }, data: { vigenteHasta: nuevaVigencia(ahora), vigenciaPedidaEn: null } });
       revalidatePath("/mascotas");
-      return { ok: true, mensaje: `Su aviso sigue publicado hasta el ${fechaLarga(nuevaVigencia(ahora))}.` };
+      return { ok: true, mensaje: `Tu aviso sigue publicado hasta el ${fechaLarga(nuevaVigencia(ahora))}.` };
     }
-    if (d.accion === "reencontrada" && !d.porCoincidencia) return { ok: false, mensaje: "Indique si le ayudó una posible coincidencia de la plataforma." };
+    if (d.accion === "reencontrada" && !d.porCoincidencia) return { ok: false, mensaje: "Indica si te ayudó una posible coincidencia de la plataforma." };
 
     if (d.accion === "reencontrada" && d.coincidenciaId) {
       const c = await db.coincidencia.findFirst({
@@ -1284,7 +1284,7 @@ export async function gestionarAviso(valores: unknown): Promise<{ ok: boolean; m
         },
         include: { perdida: { include: { persona: true } }, encontrada: { include: { persona: true } } },
       });
-      if (!c) return { ok: false, mensaje: "El otro aviso ya no está vigente. Consulte nuevamente para ver sus trámites actualizados." };
+      if (!c) return { ok: false, mensaje: "El otro aviso ya no está vigente. Consulta nuevamente para ver tus trámites actualizados." };
       const otra = c.perdidaId === p.id ? c.encontrada : c.perdida;
       await db.$transaction(async (tx) => {
         await tx.coincidencia.update({ where: { id: c.id }, data: { estado: "VALIDADA" } });
@@ -1296,13 +1296,13 @@ export async function gestionarAviso(valores: unknown): Promise<{ ok: boolean; m
           tx,
           otra.persona,
           "La mascota volvió a casa",
-          `La otra persona confirmó el reencuentro, así que retiramos también su aviso${otra.codigo ? ` ${otra.codigo}` : ""}. Gracias por ayudar. Si no corresponde, escríbanos.`,
+          `La otra persona confirmó el reencuentro, así que retiramos también tu aviso${otra.codigo ? ` ${otra.codigo}` : ""}. Gracias por ayudar. Si no corresponde, escríbenos.`,
           otra.loteDemoId,
         );
       });
       revalidatePath("/mascotas");
       revalidatePath("/", "layout");
-      return { ok: true, mensaje: "¡Qué buena noticia! Retiramos su aviso y el de la otra persona, a quien le avisamos." };
+      return { ok: true, mensaje: "¡Qué buena noticia! Retiramos tu aviso y el de la otra persona, a quien le avisamos." };
     }
 
     await db.publicacionMascota.update({
@@ -1314,7 +1314,7 @@ export async function gestionarAviso(valores: unknown): Promise<{ ok: boolean; m
     });
     revalidatePath("/mascotas");
     revalidatePath("/", "layout");
-    return { ok: true, mensaje: d.accion === "reencontrada" ? "¡Qué buena noticia! Retiramos su aviso del portal." : "Retiramos su aviso del portal." };
+    return { ok: true, mensaje: d.accion === "reencontrada" ? "¡Qué buena noticia! Retiramos tu aviso del portal." : "Retiramos tu aviso del portal." };
   } catch (e) {
     console.error(e);
     return { ok: false, mensaje: ERROR_GENERAL };
@@ -1336,7 +1336,7 @@ function pistaCorreo(correo: string) {
   return `${usuario.slice(0, 2)}${"*".repeat(Math.max(2, usuario.length - 2))}@${dominio}`;
 }
 
-const MENSAJE_ENVIADO = "Si su RUT tiene un correo registrado en algún trámite, le enviamos un código de 6 dígitos. Revise su bandeja de entrada y la carpeta de spam; vence en 10 minutos.";
+const MENSAJE_ENVIADO = "Si tu RUT tiene un correo registrado en algún trámite, te enviamos un código de 6 dígitos. Revisa tu bandeja de entrada y la carpeta de spam; vence en 10 minutos.";
 
 export type ResultadoPedirCodigo = { ok: true; mensaje: string; pista?: string; codigoPrueba?: string } | { ok: false; mensaje: string; errores?: Errores };
 
@@ -1346,36 +1346,36 @@ export type ResultadoPedirCodigo = { ok: true; mensaje: string; pista?: string; 
  * (modo de prueba); en producción sin envío, la opción no está disponible.
  */
 export async function pedirCodigoAcceso(valores: unknown): Promise<ResultadoPedirCodigo> {
-  const r = z.object({ rut: z.string().trim().min(1, "Escriba su RUT.") }).safeParse(valores);
+  const r = z.object({ rut: z.string().trim().min(1, "Escribe tu RUT.") }).safeParse(valores);
   const rut = r.success ? normalizarRut(r.data.rut) : null;
-  if (!rut) return { ok: false, mensaje: REVISE, errores: { rut: "Revise el RUT, por ejemplo 12.345.678-5." } };
+  if (!rut) return { ok: false, mensaje: REVISE, errores: { rut: "Revisa el RUT, por ejemplo 12.345.678-5." } };
   const { estadoCorreo, enviarCorreo } = await import("@/servidor/correo");
   const correoListo = estadoCorreo().configurado;
   const prueba = !correoListo && process.env.NODE_ENV !== "production";
-  if (!correoListo && !prueba) return { ok: false, mensaje: "Por ahora no podemos enviar códigos por correo. Use el código de uno de sus trámites." };
+  if (!correoListo && !prueba) return { ok: false, mensaje: "Por ahora no podemos enviar códigos por correo. Usa el código de uno de tus trámites." };
   try {
     const municipio = municipioActivo();
     const persona = await db.persona.findUnique({ where: { municipioId_rut: { municipioId: municipio.id, rut } } });
     // Misma respuesta exista o no el RUT, para no revelar quién tiene trámites.
     if (!persona?.correo) return { ok: true, mensaje: MENSAJE_ENVIADO };
     const recientes = await db.codigoAcceso.count({ where: { personaId: persona.id, creadoEn: { gte: new Date(Date.now() - 15 * 60_000) } } });
-    if (recientes >= MAXIMO_PEDIDOS) return { ok: true, mensaje: `${MENSAJE_ENVIADO} Si no le llega, espere unos minutos antes de pedir otro.` };
+    if (recientes >= MAXIMO_PEDIDOS) return { ok: true, mensaje: `${MENSAJE_ENVIADO} Si no te llega, espera unos minutos antes de pedir otro.` };
     const codigo = String(randomInt(0, 1_000_000)).padStart(6, "0");
     await db.codigoAcceso.create({ data: { personaId: persona.id, huella: huellaCodigo(persona.id, codigo), venceEn: new Date(Date.now() + MINUTOS_CODIGO * 60_000) } });
     if (prueba) {
-      return { ok: true, mensaje: "Modo de prueba: el envío de correos no está configurado, así que le mostramos el código aquí.", pista: pistaCorreo(persona.correo), codigoPrueba: codigo };
+      return { ok: true, mensaje: "Modo de prueba: el envío de correos no está configurado, así que te mostramos el código aquí.", pista: pistaCorreo(persona.correo), codigoPrueba: codigo };
     }
     const envio = await enviarCorreo(
       {
         para: persona.correo,
-        asunto: `Su código para Mis solicitudes: ${codigo}`,
-        texto: `Su código para entrar a Mis solicitudes es ${codigo}.\n\nVence en ${MINUTOS_CODIGO} minutos y sirve una sola vez. Si usted no lo pidió, ignore este correo.`,
+        asunto: `Tu código para Mis solicitudes: ${codigo}`,
+        texto: `Tu código para entrar a Mis solicitudes es ${codigo}.\n\nVence en ${MINUTOS_CODIGO} minutos y sirve una sola vez. Si no lo pediste, ignora este correo.`,
       },
       municipio.nombreOficial,
     );
     if (!envio.ok) {
       console.error("No se pudo enviar el código de acceso", envio.error);
-      return { ok: false, mensaje: "No pudimos enviar el correo. Intente en unos minutos o use el código de uno de sus trámites." };
+      return { ok: false, mensaje: "No pudimos enviar el correo. Intenta en unos minutos o usa el código de uno de tus trámites." };
     }
     return { ok: true, mensaje: MENSAJE_ENVIADO, pista: pistaCorreo(persona.correo) };
   } catch (e) {
@@ -1386,10 +1386,10 @@ export async function pedirCodigoAcceso(valores: unknown): Promise<ResultadoPedi
 
 /** Paso 2: con el RUT y el código recibido, muestra todos sus trámites. El código sirve una vez. */
 export async function entrarConCodigoAcceso(valores: unknown): Promise<ResultadoConsulta> {
-  const r = z.object({ rut: z.string().trim().min(1), codigo: z.string().trim().regex(/^\d{6}$/, "Escriba los 6 dígitos del código.") }).safeParse(valores);
+  const r = z.object({ rut: z.string().trim().min(1), codigo: z.string().trim().regex(/^\d{6}$/, "Escribe los 6 dígitos del código.") }).safeParse(valores);
   const rut = r.success ? normalizarRut(r.data.rut) : null;
-  if (!r.success || !rut) return fallo(REVISE, { codigoCorreo: "Escriba los 6 dígitos del código." });
-  const invalido = "El código no es válido o ya venció. Pida uno nuevo.";
+  if (!r.success || !rut) return fallo(REVISE, { codigoCorreo: "Escribe los 6 dígitos del código." });
+  const invalido = "El código no es válido o ya venció. Pide uno nuevo.";
   try {
     const persona = await db.persona.findUnique({ where: { municipioId_rut: { municipioId: municipioActivo().id, rut } } });
     if (!persona) return fallo(invalido);
@@ -1399,7 +1399,7 @@ export async function entrarConCodigoAcceso(valores: unknown): Promise<Resultado
     const recibido = Buffer.from(huellaCodigo(persona.id, r.data.codigo), "hex");
     if (!timingSafeEqual(esperado, recibido)) {
       await db.codigoAcceso.update({ where: { id: vigente.id }, data: { intentos: { increment: 1 } } });
-      return fallo(vigente.intentos + 1 >= INTENTOS_CODIGO ? invalido : "El código no coincide. Revíselo e intente de nuevo.");
+      return fallo(vigente.intentos + 1 >= INTENTOS_CODIGO ? invalido : "El código no coincide. Revísalo e intenta de nuevo.");
     }
     // Un solo uso: si dos pestañas lo intentan a la vez, solo una entra.
     const usado = await db.codigoAcceso.updateMany({ where: { id: vigente.id, usadoEn: null }, data: { usadoEn: new Date() } });

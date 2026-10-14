@@ -1,7 +1,7 @@
 .contenedor {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-4);
+  gap: var(--space-4);
 }
 
 /* Controles plegados en una sola franja: capa y período. */
@@ -9,25 +9,26 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  gap: var(--espacio-4) var(--espacio-8);
-  padding: var(--espacio-4) var(--espacio-6);
-  background: var(--blanco);
-  border-radius: var(--radio-base);
+  gap: var(--space-4) var(--space-6);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
 }
 .control {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-1);
-  font-weight: var(--tipo-impresion-h2-peso);
+  gap: var(--space-1);
+  font-weight: var(--weight-bold);
 }
 .control select {
-  min-height: var(--espacio-12);
+  min-height: var(--space-8);
   min-width: 240px;
-  padding: var(--espacio-2) var(--espacio-3);
-  border: var(--borde-filete) solid var(--gris-claro);
-  border-radius: var(--radio-base);
-  background: var(--blanco);
-  color: var(--gris-texto);
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width-strong) solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  color: var(--color-text);
   font: inherit;
 }
 .tiempo {
@@ -35,20 +36,20 @@
   flex: 1;
   min-width: 260px;
   flex-direction: column;
-  gap: var(--espacio-1);
+  gap: var(--space-1);
 }
 .tiempo[aria-disabled="true"] {
   opacity: 0.5;
 }
 .tiempo input {
   width: 100%;
-  min-height: var(--espacio-10);
-  accent-color: var(--azul-institucional);
+  min-height: var(--space-7);
+  accent-color: var(--color-primary);
 }
 .marcasTiempo {
   display: flex;
   justify-content: space-between;
-  font-size: var(--tipo-impresion-nota-tamano);
+  font-size: var(--type-caption-size);
 }
 .explica {
   max-width: 760px;
@@ -57,7 +58,7 @@
 .cuerpo {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
-  gap: var(--espacio-6);
+  gap: var(--space-5);
   align-items: start;
 }
 @media (max-width: 900px) {
@@ -69,28 +70,29 @@
 .mapa {
   width: 100%;
   height: 560px;
-  border-radius: var(--radio-base);
+  border-radius: var(--radius-medium);
   overflow: hidden;
 }
 
 .ficha {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-4);
-  padding: var(--espacio-6);
-  background: var(--blanco);
-  border-radius: var(--radio-base);
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
 }
 .datosFicha {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-1);
+  gap: var(--space-1);
   margin: 0;
 }
 .datosFicha dt {
-  margin-top: var(--espacio-2);
-  font-weight: var(--tipo-impresion-h2-peso);
-  color: var(--azul-institucional);
+  margin-top: var(--space-2);
+  font-weight: var(--weight-bold);
+  color: var(--color-primary);
 }
 .datosFicha dd {
   margin: 0;
@@ -99,29 +101,29 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--espacio-3) var(--espacio-6);
+  gap: var(--space-3) var(--space-5);
 }
 .zonas {
   display: flex;
   flex-direction: column;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
   margin: 0;
-  padding-left: var(--espacio-6);
+  padding-left: var(--space-5);
 }
 
 .elegirSector {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--espacio-2);
+  gap: var(--space-2);
 }
 .elegirSector button {
-  min-height: var(--espacio-12);
-  padding: 0 var(--espacio-4);
-  background: var(--blanco);
-  border: var(--borde-filete) solid var(--azul-institucional);
-  border-radius: var(--radio-base);
-  color: var(--azul-institucional);
+  min-height: var(--space-8);
+  padding: 0 var(--space-4);
+  background: var(--color-surface);
+  border: var(--border-width-strong) solid var(--color-primary);
+  border-radius: var(--radius-medium);
+  color: var(--color-primary);
   font: inherit;
-  font-weight: var(--tipo-impresion-h2-peso);
+  font-weight: var(--weight-bold);
   cursor: pointer;
 }

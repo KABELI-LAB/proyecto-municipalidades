@@ -80,15 +80,15 @@ export default async function PaginaMascota({ params }: { params: Promise<{ id: 
         </section>
 
         <section className={estilos.seccion} aria-labelledby="contacto">
-          <h2 id="contacto">{perdida ? "¿La ha visto?" : "¿Es su mascota?"}</h2>
+          <h2 id="contacto">{perdida ? "¿La has visto?" : "¿Es tu mascota?"}</h2>
           {perdida && (
             <div>
               <EnlaceBoton href={`/mascotas/publicar?tipo=ENCONTRADA&aviso=${p.id}`}>Informar que la vi</EnlaceBoton>
-              <p className="nota">Indique dónde y cuándo la vio. Quedará vinculado a este aviso como posible coincidencia, sin asegurar que sea el mismo animal.</p>
+              <p className="nota">Indica dónde y cuándo la viste. Quedará vinculado a este aviso como posible coincidencia, sin asegurar que sea el mismo animal.</p>
             </div>
           )}
           <p>
-            Escriba a la persona que publicó. Su mensaje pasa por la plataforma: ninguna de las dos partes ve el
+            Escribe a la persona que publicó. Tu mensaje pasa por la plataforma: ninguna de las dos partes ve el
             teléfono ni el correo de la otra.
           </p>
           <FormularioMensaje publicacionId={p.id} />
@@ -99,7 +99,7 @@ export default async function PaginaMascota({ params }: { params: Promise<{ id: 
         <section className={estilos.seccion} aria-labelledby="avistamientos">
           <div className={estilos.cabecera}>
             <h2 id="avistamientos">Avistamientos informados para este aviso</h2>
-            <p>Personas que vieron una mascota parecida y la vincularon a este aviso. Puede ser el mismo animal o no: revíselos.</p>
+            <p>Personas que vieron una mascota parecida y la vincularon a este aviso. Puede ser el mismo animal o no: revísalos.</p>
           </div>
           <div className={estilos.grilla}>
             {avistamientos.map((a) => (

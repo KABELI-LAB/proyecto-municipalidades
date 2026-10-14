@@ -5,7 +5,7 @@ import { AccionConMotivo } from "@/componentes/panel/AccionConMotivo";
 import { BotonAccion } from "@/componentes/panel/BotonAccion";
 import { EstadoInstagram } from "@/componentes/panel/EstadoInstagram";
 import { fotosDeFicha } from "@/componentes/portal/fotoFicha";
-import { SiNo } from "@/componentes/portal/TarjetaAdopcion";
+import { ConIcono, SiNo } from "@/componentes/portal/TarjetaAdopcion";
 import { ESPECIE, ESTADO_ADOPCION, RELACION_ANIMAL, REVISION_ADOPCION, SEXO, TAMANO, textoEdad } from "@/dominio/etiquetas";
 import { requerir } from "@/servidor/auth";
 import { fechaCorta, haceDias } from "@/servidor/formato";
@@ -39,7 +39,7 @@ export default async function PropuestasPanel({ searchParams }: { searchParams: 
     <div className={`contenedor ${estilos.pagina}`}>
       <div className={estilos.cabecera}>
         <h1>Propuestas de adopción</h1>
-        <p>Animales que los vecinos proponen dar en adopción. Nada se publica sin su revisión.</p>
+        <p>Animales que las vecinas y vecinos proponen dar en adopción. Nada se publica sin tu revisión.</p>
       </div>
 
       <nav aria-label="Estado de las propuestas" className={estilos.pestanas}>
@@ -134,7 +134,7 @@ export default async function PropuestasPanel({ searchParams }: { searchParams: 
                       <dt>Contacto</dt>
                       <dd>{[f.proponente.telefono, f.proponente.correo].filter(Boolean).join(" · ") || "[sin contacto]"}</dd>
                       <dt>Autorización</dt>
-                      <dd>{f.autorizaPublicar ? "✓ Declaró que puede darlo en adopción" : "✕ Sin declaración"}</dd>
+                      <dd><ConIcono si={f.autorizaPublicar} texto={f.autorizaPublicar ? "Declaró que puede darlo en adopción" : "Sin declaración"} /></dd>
                     </>
                   )}
                 </dl>
@@ -153,7 +153,7 @@ export default async function PropuestasPanel({ searchParams }: { searchParams: 
                         accion={aprobarPropuesta.bind(null, f.id)}
                         texto="Aprobar y publicar"
                         variante="primario"
-                        confirmar={`La ficha de ${nombre} se publicará en el catálogo de adopción con sus fotos. ¿Revisó que las fotos y los datos sean adecuados?`}
+                        confirmar={`La ficha de ${nombre} se publicará en el catálogo de adopción con sus fotos. ¿Revisaste que las fotos y los datos sean adecuados?`}
                         textoConfirmar="Sí, publicar"
                       />
                       <AccionConMotivo accion={pedirCorrecciones.bind(null, f.id)} texto="Pedir correcciones" pregunta="¿Qué debe corregir quien propuso?" textoConfirmar="Pedir correcciones" />
