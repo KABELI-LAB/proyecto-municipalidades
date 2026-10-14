@@ -64,16 +64,28 @@ type Aviso = { object?: string; entry?: { changes?: { field?: string; value?: Co
 
 /** Procesa un aviso del webhook. No lanza errores: cada interacción queda registrada con su estado. */
 export async function procesarAviso(aviso: Aviso): Promise<void> {
+  // Solo la forma del aviso (sin contenido ni identificadores), para diagnosticar en el registro de Netlify.
+  console.info(
+    `Webhook de Instagram: ${aviso.object ?? "sin objeto"} · ${(aviso.entry ?? [])
+      .map((e) => [...(e.changes ?? []).map((c) => `changes:${c.field}`), ...(e.messaging ?? []).map(() => "messaging")].join(","))
+      .join(" | ")}`,
+  );
   if (aviso.object !== "instagram") return;
   const cuenta = process.env.INSTAGRAM_USER_ID?.trim();
   for (const entrada of aviso.entry ?? []) {
+    const mensajes = [...(entrada.messaging ?? [])];
     for (const cambio of entrada.changes ?? []) {
+      // El botón «Probar» de Meta envía los mensajes dentro de «changes».
+      if (cambio.field === "messages" && cambio.value) {
+        mensajes.push(cambio.value as unknown as Mensaje);
+        continue;
+      }
       const c = cambio.value;
       // Solo comentarios de otras personas; nunca respondemos a nuestras propias respuestas.
       if (cambio.field !== "comments" || !c?.id || !c.from?.id || c.from.id === cuenta) continue;
       await atenderComentario(c);
     }
-    for (const m of entrada.messaging ?? []) {
+    for (const m of mensajes) {
       if (!m.message?.mid || m.message.is_echo || !m.sender?.id || m.sender.id === cuenta || !m.message.text) continue;
       await atenderMensaje(m.sender.id, m.message.mid, m.message.text);
     }

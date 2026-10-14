@@ -53,6 +53,9 @@ export default async function LayoutPortal({ children }: { children: ReactNode }
             <br />
             {municipio.sitioWeb}
           </p>
+          <Link href="/privacidad" className={estilos.accesoPanel}>
+            Privacidad
+          </Link>
           {/* Entrada discreta del equipo municipal al panel. */}
           <Link href="/panel/ingresar" className={estilos.accesoPanel}>
             <Icono nombre="documento" tamano={16} />
