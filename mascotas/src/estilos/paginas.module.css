@@ -78,21 +78,6 @@
   color: var(--color-primary);
 }
 
-.enlacesSecundarios {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-5);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.enlacesSecundarios a {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-weight: var(--weight-bold);
-}
-
 .vacio,
 .panel {
   display: flex;
@@ -312,22 +297,6 @@
   margin: 0;
   padding: 0;
   list-style: none;
-}
-
-/* Llamado secundario dentro de una página (por ejemplo, «Dar en adopción» en el catálogo). */
-.llamado {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4) var(--space-6);
-  padding: var(--space-5) var(--space-5);
-  background: var(--color-success-bg);
-  border: 1.5px solid var(--green-200);
-  border-radius: var(--radius-medium);
-}
-.llamado h2 {
-  font-size: var(--type-h3-size);
 }
 
 /* Lista breve con separadores (por ejemplo, un historial). */

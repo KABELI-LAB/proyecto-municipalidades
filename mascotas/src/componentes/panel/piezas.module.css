@@ -1,33 +1,4 @@
-/* ── Nivel de prioridad ── */
-.nivel {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-medium);
-  font-weight: var(--weight-bold);
-  white-space: nowrap;
-}
-/* Alta es un llamado: amarillo-senal con gris-texto (7,1:1), en una etiqueta pequeña. */
-.alta {
-  background: var(--color-warning-bg);
-  color: var(--color-text);
-}
-.media {
-  background: var(--color-info-bg);
-  color: var(--color-text);
-}
-.baja {
-  background: var(--color-surface-muted);
-  color: var(--color-text);
-}
 
-/* ── Indicadores ── */
-.indicadores {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
-  gap: var(--space-4);
-}
 .indicador {
   display: flex;
   flex-direction: column;
@@ -81,28 +52,9 @@
   background: var(--color-primary);
 }
 
-/* ── Tarjeta de prioridad ── */
-.prioridad {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  padding: var(--space-5);
-  background: var(--color-surface);
-  border-radius: var(--radius-medium);
-}
-.encabezadoPrioridad {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-2) var(--space-4);
-}
 .motivos {
   margin: var(--space-1) 0 0;
   padding-left: var(--space-5);
-}
-.prioridad b {
-  font-weight: var(--weight-bold);
 }
 .acciones {
   display: flex;

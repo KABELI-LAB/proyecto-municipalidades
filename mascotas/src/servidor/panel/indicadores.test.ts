@@ -39,16 +39,6 @@ afterAll(async () => {
 });
 
 describe("resumen del panel con la fecha de corte", () => {
-  it("situación actual: pendientes, reportes de 30 días, atenciones y adopciones de 12 meses", async () => {
-    const s = await ind.situacionActual(ind.PERIODO_POR_DEFECTO, undefined, CORTE);
-    const r = resumen.situacion_actual;
-    expect([s.pendientes, s.reportes.actual, s.atenciones.actual, s.adopciones.actual]).toEqual([
-      r.solicitudes_pendientes,
-      r.reportes_recientes_30_dias,
-      r.atenciones_realizadas_12_meses,
-      r.adopciones_12_meses,
-    ]);
-  });
 
   it("prioridad: índices, niveles, recomendación y sector prioritario de prioridad.json", async () => {
     const p = await ind.prioridades(CORTE);

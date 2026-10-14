@@ -1,15 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { calcularResultado, capacidadSugerida, puedeTransitar, transicionesPosibles } from "./operativos";
+import { calcularResultado, capacidadSugerida } from "./operativos";
 import { puede } from "./permisos";
 
 describe("ciclo de operativos", () => {
-  it("sigue el orden del concepto y solo cancela antes de iniciar", () => {
-    expect(transicionesPosibles("BORRADOR")).toEqual(["publicar", "cancelar"]);
-    expect(puedeTransitar("PUBLICADO", "iniciar")).toBe(true);
-    expect(puedeTransitar("EN_CURSO", "cancelar")).toBe(false);
-    expect(puedeTransitar("CERRADO", "cerrar")).toBe(false);
-    expect(transicionesPosibles("CERRADO")).toEqual([]);
-  });
 
   it("sugiere capacidad según la demanda pendiente", () => {
     expect(capacidadSugerida(0)).toBe(10);

@@ -19,8 +19,3 @@ export function normalizarRut(texto: string): string | null {
   return digitoVerificador(cuerpo) === m[2] ? `${cuerpo}-${m[2]}` : null;
 }
 
-/** «12345678-5» → «12.345.678-5». */
-export function formatearRut(rut: string): string {
-  const [cuerpo, dv] = rut.split("-");
-  return `${Number(cuerpo).toLocaleString("es-CL")}-${dv}`;
-}

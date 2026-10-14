@@ -8,12 +8,6 @@ export const TRANSICION_REPORTE = {
   reabrir: ["CERRADO"],
 } as const;
 
-export const TRANSICION_POSTULACION = {
-  evaluar: ["RECIBIDA"],
-  aprobar: ["RECIBIDA", "EN_EVALUACION"],
-  noSeleccionar: ["RECIBIDA", "EN_EVALUACION", "APROBADA"],
-} as const;
-
 export const TRANSICION_COINCIDENCIA = {
   validar: ["SUGERIDA"],
   descartar: ["SUGERIDA", "VALIDADA"],

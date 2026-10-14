@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { digitoVerificador, formatearRut, normalizarRut } from "./rut";
+import { digitoVerificador, normalizarRut } from "./rut";
 
 describe("rut", () => {
   it("calcula el dígito verificador", () => {
@@ -14,7 +14,4 @@ describe("rut", () => {
     expect(normalizarRut("abc")).toBeNull();
   });
 
-  it("formatea con puntos", () => {
-    expect(formatearRut("12345678-5")).toBe("12.345.678-5");
-  });
 });

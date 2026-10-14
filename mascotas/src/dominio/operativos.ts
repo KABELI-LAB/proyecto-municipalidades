@@ -24,10 +24,6 @@ export function destinoDe(t: Transicion): EstadoOperativo {
   return DESTINO[t].hacia;
 }
 
-export function transicionesPosibles(estado: EstadoOperativo): Transicion[] {
-  return (Object.keys(DESTINO) as Transicion[]).filter((t) => puedeTransitar(estado, t));
-}
-
 /** Solo un borrador se edita libremente; después, los cambios se comunican con un aviso. */
 export const esEditable = (estado: EstadoOperativo) => estado === "BORRADOR";
 

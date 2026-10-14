@@ -63,8 +63,7 @@
   padding: 0;
   list-style: none;
 }
-.tarjeta,
-.tarjetaEnlace {
+.tarjeta {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -73,15 +72,6 @@
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-large);
 }
-.tarjetaEnlace {
-  color: var(--color-text);
-  text-decoration: none;
-  border: var(--border-width) solid var(--color-border);
-}
-.tarjetaEnlace:hover {
-  border-color: var(--color-primary);
-}
-.tarjetaEnlace b,
 .cabeceraTarjeta b {
   font-family: var(--font-sans);
   font-size: var(--type-h3-size);

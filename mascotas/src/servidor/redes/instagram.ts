@@ -109,17 +109,6 @@ export async function publicarImagen(p: { imagenUrl: string; texto: string; text
   }
 }
 
-/** Consulta la cuenta con las credenciales configuradas (no publica nada). */
-export async function verificarCuenta(): Promise<{ ok: true; usuario: string } | { ok: false; error: string }> {
-  try {
-    const r = (await llamar("GET", "me", { fields: "user_id,username" })) as { username?: string; user_id?: string };
-    return { ok: true, usuario: r.username ? `@${r.username}` : (r.user_id ?? "cuenta sin nombre") };
-  } catch (e) {
-    if (e instanceof ErrorInstagram) return { ok: false, error: e.message };
-    throw e;
-  }
-}
-
 // ── Respuestas a comentarios y mensajes (permisos instagram_business_manage_comments
 //    e instagram_business_manage_messages). Documentado por Meta:
 //    POST /<COMENTARIO>/replies            message            → respuesta pública al comentario

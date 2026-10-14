@@ -19,8 +19,6 @@ import { diaISO, hoyISO, inicioDeHoy, ventana } from "@/servidor/formato";
 const municipioId = () => municipioActivo().id;
 
 export type Periodo = 30 | 90 | 365;
-/** Período por defecto del resumen: atenciones y adopciones se leen en 12 meses (resumen.json). */
-export const PERIODO_POR_DEFECTO: Periodo = 365;
 /** Los reportes recientes son siempre de 30 días (sección 10). */
 export const DIAS_REPORTES_RECIENTES = 30;
 /** Factor R de la prioridad: reportes de los últimos 90 días (incluye el día 90). */
@@ -79,38 +77,6 @@ export async function prioridades(hoy = hoyISO()): Promise<(Prioridad & { clave:
 }
 
 // ───────────── Resumen ─────────────
-
-/** Cifra de la ventana y la de la ventana anterior de igual largo, para mostrar la variación. */
-type Comparada = { actual: number; anterior: number };
-
-async function comparar(dias: number, hoy: string, contar: (desde: Date, hasta: Date) => Promise<number>): Promise<Comparada> {
-  const v = ventana(dias, hoy);
-  const [actual, anterior] = await Promise.all([contar(v.desde, v.hasta), contar(v.anterior.desde, v.anterior.hasta)]);
-  return { actual, anterior };
-}
-
-/**
- * Situación actual (sección 10): pendientes de hoy; reportes de los últimos
- * 30 días; solicitudes nuevas, atenciones y adopciones en el período elegido.
- */
-export async function situacionActual(dias: Periodo, especie?: Especie, hoy = hoyISO()) {
-  const animal = especie ? { animal: { especie } } : {};
-  const enMunicipio = { sector: { municipioId: municipioId() } };
-
-  const [pendientes, nuevas, reportes, atenciones, adopciones] = await Promise.all([
-    db.solicitudServicio.count({ where: { estado: { in: [...SOLICITUD_PENDIENTE] }, ...enMunicipio, ...animal } }),
-    comparar(dias, hoy, (desde, hasta) => db.solicitudServicio.count({ where: { creadaEn: { gte: desde, lt: hasta }, ...enMunicipio, ...animal } })),
-    comparar(DIAS_REPORTES_RECIENTES, hoy, (desde, hasta) =>
-      db.reporteCiudadano.count({ where: { creadoEn: { gte: desde, lt: hasta }, ...enMunicipio, ...(especie ? { especie } : {}) } }),
-    ),
-    comparar(dias, hoy, (desde, hasta) =>
-      // Las atenciones son registros agregados: llevan su propio sector y especie (pueden no tener operativo).
-      db.atencion.count({ where: { resultado: "REALIZADA", realizadaEn: { gte: desde, lt: hasta }, ...enMunicipio, ...(especie ? { especie } : {}) } }),
-    ),
-    comparar(dias, hoy, (desde, hasta) => db.fichaAdopcion.count({ where: { estado: "ADOPTADO", adoptadaEn: { gte: desde, lt: hasta }, ...animal } })),
-  ]);
-  return { pendientes, nuevas, reportes, atenciones, adopciones };
-}
 
 /** Bandeja de pendientes de revisión. */
 export async function pendientesDeRevision() {

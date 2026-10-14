@@ -3,27 +3,8 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Cifra } from "@/componentes/Cifra";
 import { Icono, type NombreIcono } from "@/componentes/Icono";
-import type { Nivel } from "@/dominio/prioridad";
 import { numero, porcentaje } from "@/dominio/formato";
 import estilos from "./piezas.module.css";
-
-// ───────────── Nivel de prioridad: color + texto + ícono ─────────────
-
-const NIVEL: Record<Nivel, { texto: string; icono: NombreIcono; clase: string }> = {
-  ALTA: { texto: "Prioridad alta", icono: "alerta", clase: estilos.alta },
-  MEDIA: { texto: "Prioridad media", icono: "info", clase: estilos.media },
-  BAJA: { texto: "Prioridad baja", icono: "check", clase: estilos.baja },
-};
-
-export function EtiquetaNivel({ nivel }: { nivel: Nivel }) {
-  const n = NIVEL[nivel];
-  return (
-    <span className={`${estilos.nivel} ${n.clase}`}>
-      <Icono nombre={n.icono} tamano={16} />
-      {n.texto}
-    </span>
-  );
-}
 
 // ───────────── Indicador con variación ─────────────
 
