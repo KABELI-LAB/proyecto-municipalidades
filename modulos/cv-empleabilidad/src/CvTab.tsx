@@ -37,7 +37,7 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
   const activeMailer = useMemo(() => mailer ?? createDefaultMailer(), [mailer])
   const [estado, setEstado] = useState<Estado>({ tipo: 'inicio' })
   const abortRef = useRef<AbortController | null>(null)
-  const resultRef = useRef<HTMLHeadingElement>(null)
+  const resultRef = useRef<HTMLParagraphElement>(null)
   // El módulo aporta el <h1> de su página: el sitio anfitrión no agrega otro.
 
   useEffect(() => () => abortRef.current?.abort(), [])
@@ -95,19 +95,8 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
     <div className={s.root}>
       <header className={s.intro}>
         <p className="hds-overline">Empleabilidad</p>
-        <h1>Revisa y mejora tu currículum</h1>
-        <p className={s.lead}>Sube tu CV y recibe sugerencias concretas para mejorarlo, junto con tres diseños listos para descargar.</p>
-        <ol className={s.steps}>
-          <li>
-            <span aria-hidden="true">1</span>Sube tu CV en PDF o Word
-          </li>
-          <li>
-            <span aria-hidden="true">2</span>Revisa las sugerencias
-          </li>
-          <li>
-            <span aria-hidden="true">3</span>Elige un diseño y recíbelo por correo
-          </li>
-        </ol>
+        <h1>Mejora tu CV</h1>
+        <p className={s.lead}>Súbelo y te decimos qué mejorar. Es gratis.</p>
       </header>
 
       {estado.tipo !== 'listo' && (
@@ -120,10 +109,10 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
       {/* Loader y Alert ya anuncian su contenido (role=status / role=alert). */}
       <div className={s.status}>
         {estado.tipo === 'leyendo' && <Loader label={`Leyendo ${estado.archivo}…`} />}
-        {estado.tipo === 'analizando' && <Loader label="Revisando tu CV. Puede tardar hasta un minuto…" />}
+        {estado.tipo === 'analizando' && <Loader label="Revisando tu CV. Espera un momento…" />}
         {estado.tipo === 'noCv' && (
-          <Alert tone="warning" title={`“${estado.archivo}” no parece ser un currículum`}>
-            {estado.motivo} Si es tu CV, revisa que tenga tus datos de contacto, tu experiencia y tu formación. También puedes subir otro archivo.
+          <Alert tone="warning" title="Este archivo no parece un CV">
+            {estado.motivo} Prueba con otro archivo.
           </Alert>
         )}
         {estado.tipo === 'error' && (
@@ -135,14 +124,10 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
 
       {estado.tipo === 'listo' && (
         <>
-          <div className={s.resultBar}>
-            <h2 ref={resultRef} tabIndex={-1}>
-              Resultados para <span className={s.fileName}>{estado.archivo}</span>
-            </h2>
-            <Button variant="secondary" iconLeft="rotate-ccw" onClick={reiniciar}>
-              Revisar otro CV
-            </Button>
-          </div>
+          {/* Destino del foco al terminar: anuncia que hay resultados. */}
+          <p ref={resultRef} tabIndex={-1} className={s.resultBar}>
+            Revisamos <span className={s.fileName}>{estado.archivo}</span>
+          </p>
           {estado.analysis.origen === 'mock' && (
             <Alert tone="info" title="Modo demostración">
               Este análisis usa reglas automáticas, no inteligencia artificial.
@@ -152,6 +137,9 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
             <FeedbackPanel analysis={estado.analysis} />
             <DesignGallery cv={estado.analysis.cvMejorado} mailer={activeMailer} original={estado.original} />
           </div>
+          <Button variant="ghost" iconLeft="rotate-ccw" onClick={reiniciar}>
+            Revisar otro CV
+          </Button>
         </>
       )}
     </div>

@@ -30,77 +30,77 @@ export function analizarTexto({ texto, imagenes = 0 }: CvInput): CvAnalysis {
 
   // Contacto
   if (!cv.contacto.email) {
-    add({ seccion: 'contacto', prioridad: 'alta', titulo: 'Agrega un correo electrónico', detalle: 'Es la forma principal en que una empresa te contactará. Usa un correo con tu nombre, sin apodos.', ejemplo: 'nombre.apellido@gmail.com' })
+    add({ seccion: 'contacto', prioridad: 'alta', titulo: 'Agrega tu correo', detalle: 'Así las empresas pueden contactarte. Usa uno con tu nombre.', ejemplo: 'nombre.apellido@gmail.com' })
   }
   if (!cv.contacto.telefono) {
-    add({ seccion: 'contacto', prioridad: 'media', titulo: 'Agrega un teléfono de contacto', detalle: 'Escribe tu celular con el código de país.', ejemplo: '+56 9 1234 5678' })
+    add({ seccion: 'contacto', prioridad: 'media', titulo: 'Agrega tu teléfono', detalle: 'Escribe tu número de celular.', ejemplo: '+56 9 1234 5678' })
   }
-  if (cv.contacto.email && cv.contacto.telefono) fortalezas.push('Tus datos de contacto están completos y a la vista.')
+  if (cv.contacto.email && cv.contacto.telefono) fortalezas.push('Tus datos de contacto están completos.')
 
   // Perfil
   if (!cv.perfil) {
-    add({ seccion: 'perfil', prioridad: 'alta', titulo: 'Agrega un perfil profesional', detalle: 'Un párrafo breve al inicio ayuda a quien revisa tu CV a entender en segundos qué ofreces.', ejemplo: 'Formación técnica en administración, con 4 años de experiencia en atención de público y gestión documental. Destaco por mi orden y trato cordial. Busco aportar en servicios municipales.' })
+    add({ seccion: 'perfil', prioridad: 'alta', titulo: 'Agrega un párrafo sobre ti', detalle: 'Al inicio, cuenta en 3 líneas qué sabes hacer.', ejemplo: 'Formación técnica en administración, con 4 años de experiencia en atención de público y gestión documental. Destaco por mi orden y trato cordial. Busco aportar en servicios municipales.' })
   } else if (cv.perfil.length < 150) {
-    add({ seccion: 'perfil', prioridad: 'media', titulo: 'Desarrolla más tu perfil', detalle: 'Tu perfil es muy breve. Menciona tus años de experiencia, tu área principal y un logro concreto.' })
+    add({ seccion: 'perfil', prioridad: 'media', titulo: 'Cuenta más sobre ti', detalle: 'Agrega cuántos años de experiencia tienes y en qué.' })
   } else {
-    fortalezas.push('Tienes un perfil profesional que te presenta.')
+    fortalezas.push('Tienes un párrafo que te presenta.')
   }
 
   // Experiencia
   if (cv.experiencia.length === 0) {
-    add({ seccion: 'experiencia', prioridad: 'alta', titulo: 'Agrega tu experiencia laboral', detalle: 'Si tienes poca experiencia formal, suma prácticas, trabajos de temporada, voluntariados o emprendimientos propios.' })
+    add({ seccion: 'experiencia', prioridad: 'alta', titulo: 'Agrega tus trabajos', detalle: 'También cuentan prácticas, temporadas y trabajos por tu cuenta.' })
   } else {
     const logros = cv.experiencia.flatMap((e) => e.logros)
     if (cv.experiencia.some((e) => e.logros.length === 0)) {
-      add({ seccion: 'experiencia', prioridad: 'media', titulo: 'Describe logros en cada cargo', detalle: 'Escribe 2 o 3 viñetas por trabajo que cuenten qué conseguiste, no solo qué funciones tenías.' })
+      add({ seccion: 'experiencia', prioridad: 'media', titulo: 'Cuenta qué lograste', detalle: 'En cada trabajo, escribe 2 o 3 cosas que hiciste bien.' })
     }
     if (logros.length > 0 && !logros.some((l) => /\d/.test(l))) {
-      add({ seccion: 'experiencia', prioridad: 'media', titulo: 'Cuantifica tus resultados', detalle: 'Los números hacen creíbles tus logros: cantidades, porcentajes, plazos o personas atendidas.', ejemplo: 'Atendí a más de 40 personas al día y reduje los tiempos de espera en un 20 %.' })
+      add({ seccion: 'experiencia', prioridad: 'media', titulo: 'Escribe números', detalle: 'Por ejemplo, cuántas personas atendías o cuántos años trabajaste.', ejemplo: 'Atendí a más de 40 personas al día y reduje los tiempos de espera en un 20 %.' })
     }
     const debil = logros.find((l) => FRASES_DEBILES.test(l))
     if (debil) {
-      add({ seccion: 'experiencia', prioridad: 'media', titulo: 'Usa verbos de acción', detalle: `Frases como “${debil.slice(0, 50)}” describen tareas, no resultados. Empieza con verbos como gestioné, lideré, implementé u organicé.`, ejemplo: mejorarLogro(debil) })
+      add({ seccion: 'experiencia', prioridad: 'media', titulo: 'Di lo que hiciste', detalle: 'Cambia “encargado de…” por lo que hiciste: “organicé”, “atendí”.', ejemplo: mejorarLogro(debil) })
     }
     if (cv.experiencia.some((e) => !e.periodo)) {
-      add({ seccion: 'experiencia', prioridad: 'baja', titulo: 'Indica fechas en cada experiencia', detalle: 'Escribe mes y año de inicio y de término (o “actualidad”).' })
+      add({ seccion: 'experiencia', prioridad: 'baja', titulo: 'Agrega las fechas', detalle: 'En cada trabajo, escribe el año en que empezaste y terminaste.' })
     }
-    if (cv.experiencia.length >= 2) fortalezas.push(`Detallas ${cv.experiencia.length} experiencias laborales.`)
+    if (cv.experiencia.length >= 2) fortalezas.push(`Cuentas ${cv.experiencia.length} trabajos.`)
   }
 
   // Educación
   if (cv.educacion.length === 0) {
-    add({ seccion: 'educacion', prioridad: 'media', titulo: 'Agrega tu formación', detalle: 'Incluye tu último nivel de estudios, la institución y el año de egreso, además de cursos relevantes.' })
+    add({ seccion: 'educacion', prioridad: 'media', titulo: 'Agrega tus estudios', detalle: 'Escribe tu último curso o título y dónde estudiaste.' })
   } else {
-    fortalezas.push('Tu formación está clara.')
+    fortalezas.push('Tus estudios están claros.')
   }
 
   // Habilidades e idiomas
   if (cv.habilidades.length < 4) {
-    add({ seccion: 'habilidades', prioridad: 'media', titulo: 'Amplía tus habilidades', detalle: 'Menciona entre 6 y 10 habilidades concretas: programas que usas, licencias, certificaciones y habilidades blandas.', ejemplo: 'Excel intermedio · Licencia clase B · Atención de público · Trabajo en equipo' })
+    add({ seccion: 'habilidades', prioridad: 'media', titulo: 'Agrega lo que sabes hacer', detalle: 'Por ejemplo: manejo de caja, licencia de conducir, Excel.', ejemplo: 'Excel intermedio · Licencia clase B · Atención de público · Trabajo en equipo' })
   } else {
-    fortalezas.push('Tu lista de habilidades es clara.')
+    fortalezas.push('Muestras bien lo que sabes hacer.')
   }
   if (cv.idiomas.length === 0) {
-    add({ seccion: 'idiomas', prioridad: 'baja', titulo: 'Indica tus idiomas y nivel', detalle: 'Aunque sea solo español nativo, indicarlo ordena tu CV. Si hablas otro idioma, señala el nivel.' })
+    add({ seccion: 'idiomas', prioridad: 'baja', titulo: 'Agrega tus idiomas', detalle: 'Aunque sea solo español, escríbelo.' })
   }
 
   // Formato
   if (palabras > 900) {
-    add({ seccion: 'formato', prioridad: 'media', titulo: 'Acorta tu CV', detalle: 'Tu CV es extenso. Lo ideal es 1 página (2 si tienes más de 10 años de experiencia). Deja lo más reciente y relevante.' })
+    add({ seccion: 'formato', prioridad: 'media', titulo: 'Acorta tu CV', detalle: 'Lo ideal es una página. Deja lo más reciente.' })
   } else if (palabras < 150) {
-    add({ seccion: 'formato', prioridad: 'alta', titulo: 'Tu CV es muy breve', detalle: 'Hay poca información para conocer tu perfil. Completa experiencia, formación y habilidades.' })
+    add({ seccion: 'formato', prioridad: 'alta', titulo: 'Cuenta un poco más', detalle: 'Agrega tus trabajos, estudios y lo que sabes hacer.' })
   } else {
     fortalezas.push('La extensión del documento es adecuada.')
   }
   if (DATOS_SENSIBLES.test(texto)) {
-    add({ seccion: 'formato', prioridad: 'baja', titulo: 'Quita datos personales innecesarios', detalle: 'RUT, edad, estado civil o fecha de nacimiento no son necesarios en un CV y pueden generar sesgos. Inclúyelos solo si la postulación lo pide.' })
+    add({ seccion: 'formato', prioridad: 'baja', titulo: 'Quita datos personales', detalle: 'No pongas RUT, edad ni estado civil, salvo que te lo pidan.' })
   }
 
   // Imágenes: no se ven, solo se sabe cuántas hay.
   if (imagenes === 1) {
-    add({ seccion: 'formato', prioridad: 'baja', titulo: 'Revisa la imagen de tu CV', detalle: 'Tu CV tiene una imagen. Si es una foto tuya, que sea tipo carnet, reciente y con fondo neutro; en Chile la foto es opcional. Si es otra imagen (mascotas, paisajes, decoración), quítala.' })
+    add({ seccion: 'formato', prioridad: 'baja', titulo: 'Revisa la foto', detalle: 'Usa una foto tipo carnet, o mejor no pongas foto.' })
   } else if (imagenes > 1) {
-    add({ seccion: 'formato', prioridad: 'media', titulo: 'Reduce las imágenes', detalle: `Tu CV tiene ${imagenes} imágenes. Íconos, logos y adornos distraen y pueden impedir que los sistemas de selección lean tu CV. Deja como máximo una foto tipo carnet.` })
+    add({ seccion: 'formato', prioridad: 'media', titulo: 'Quita las imágenes', detalle: `Tu CV tiene ${imagenes} imágenes. Deja solo una foto tipo carnet, o ninguna.` })
   }
 
   const descuento = sugerencias.reduce((t, s) => t + PESO[s.prioridad], 0)
@@ -108,21 +108,19 @@ export function analizarTexto({ texto, imagenes = 0 }: CvInput): CvAnalysis {
 
   return {
     puntaje,
-    resumen: resumenPara(puntaje, sugerencias),
-    fortalezas: fortalezas.slice(0, 4),
-    sugerencias: sugerencias.sort((a, b) => PESO[b.prioridad] - PESO[a.prioridad]),
+    resumen: resumenPara(puntaje),
+    fortalezas: fortalezas.slice(0, 2),
+    // Solo lo que más ayuda: máximo 5, de más a menos importante.
+    sugerencias: sugerencias.sort((a, b) => PESO[b.prioridad] - PESO[a.prioridad]).slice(0, 5),
     cvMejorado: mejorarCv(cv),
     origen: 'mock',
   }
 }
 
-function resumenPara(puntaje: number, sugerencias: Sugerencia[]): string {
-  const altas = sugerencias.filter((s) => s.prioridad === 'alta').length
-  if (puntaje >= 80) return 'Tu CV va bien encaminado. Con algunos ajustes quedará listo para postular.'
-  if (puntaje >= 60) {
-    return `Tu CV tiene una buena base. Empieza por ${altas ? `las ${altas} sugerencias de prioridad alta` : 'las sugerencias de prioridad media'}.`
-  }
-  return 'Tu CV necesita mejoras importantes antes de postular. Sigue las sugerencias en orden de prioridad.'
+function resumenPara(puntaje: number): string {
+  if (puntaje >= 80) return 'Con unos pocos ajustes queda listo para postular.'
+  if (puntaje >= 60) return 'Empieza por la primera recomendación.'
+  return 'Sigue estos pasos en orden antes de postular.'
 }
 
 function mejorarCv(cv: CvData): CvData {

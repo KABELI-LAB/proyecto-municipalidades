@@ -55,16 +55,13 @@ export function EnvioCorreo({ mailer, diseno, nombreDiseno, nombrePersona, email
 
   return (
     <form className={s.envio} onSubmit={enviar} noValidate aria-labelledby={ids.titulo}>
-      <div>
-        <h3 id={ids.titulo}>Recibe tu CV por correo</h3>
-        <p className={s.textoSecundario}>
-          Te enviamos el diseño <strong>{nombreDiseno}</strong> en PDF y en Word, para que puedas editarlo.
-        </p>
-      </div>
+      <h3 id={ids.titulo}>
+        Te lo enviamos en PDF y Word <span className={s.textoSecundario}>(diseño {nombreDiseno})</span>
+      </h3>
 
       <div className="hds-field">
         <label htmlFor={ids.email} className="hds-label">
-          Correo electrónico
+          Tu correo
         </label>
         <div className={s.campoFila}>
           <input
@@ -86,7 +83,7 @@ export function EnvioCorreo({ mailer, diseno, nombreDiseno, nombrePersona, email
           {/* aria-disabled (no disabled) para que el foco no se pierda durante el envío. */}
           <button type="submit" className="hds-btn hds-btn--primary" aria-disabled={enviando || undefined} aria-busy={enviando || undefined}>
             {enviando ? <span className="hds-spinner" aria-hidden="true" /> : <Icon name="send" size={20} />}
-            <span>{enviando ? 'Enviando…' : 'Enviar a mi correo'}</span>
+            <span>{enviando ? 'Enviando…' : 'Enviar'}</span>
           </button>
         </div>
         {errorCampo ? (
@@ -96,7 +93,7 @@ export function EnvioCorreo({ mailer, diseno, nombreDiseno, nombrePersona, email
           </span>
         ) : null}
         <span id={ids.ayuda} className="hds-hint">
-          Usamos tu correo solo para enviarte este CV. No lo guardamos.
+          Solo lo usamos para enviarte tu CV.
         </span>
       </div>
 
@@ -116,8 +113,8 @@ export function EnvioCorreo({ mailer, diseno, nombreDiseno, nombrePersona, email
               El correo no se envió. Con el servicio configurado, llegaría a {estado.email}.
             </Alert>
           ) : (
-            <Alert tone="success" title="Listo, te enviamos tu CV">
-              Lo enviamos a <strong>{estado.email}</strong>. Si no lo ves en unos minutos, revisa la carpeta de correo no deseado.
+            <Alert tone="success" title="Listo, revisa tu correo">
+              Lo enviamos a <strong>{estado.email}</strong>. Si no llega, mira en «Spam».
             </Alert>
           ))}
       </div>

@@ -34,12 +34,8 @@ export function UploadZone({ onFile, disabled }: Props) {
       <span className="hds-tile-icon hds-tile-icon--blue">
         <Icon name="file-up" size={26} />
       </span>
-      <p className={s.dropTitle}>
-        <strong>Elige tu CV</strong>
-        <span className={s.soloEscritorio}> o arrástralo aquí</span>
-      </p>
       <p id={hintId} className={s.dropHint}>
-        PDF o Word (.docx). Máximo 5 MB.
+        Archivo PDF o Word<span className={s.soloEscritorio}>. También puedes arrastrarlo aquí</span>
       </p>
       <button
         type="button"
