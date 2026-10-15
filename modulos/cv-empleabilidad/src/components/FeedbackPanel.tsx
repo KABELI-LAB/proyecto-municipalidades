@@ -58,8 +58,9 @@ export function FeedbackPanel({ analysis }: { analysis: CvAnalysis }) {
                   {i + 1}
                 </span>
                 <div className={s.sugCuerpo}>
-                  <p className={s.sugTitle}>{x.titulo}</p>
-                  <p>{x.detalle}</p>
+                  <p>
+                    <strong>{x.titulo}.</strong> {x.detalle}
+                  </p>
                   {x.ejemplo && (
                     <details className={s.ejemplo}>
                       <summary>Ver ejemplo</summary>
