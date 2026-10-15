@@ -13,7 +13,7 @@ export const cvTabMeta = {
   id: 'cv',
   label: 'Revisa tu CV',
   path: '/empleabilidad/cv',
-  descripcion: 'Sube tu currículum, recibe sugerencias para mejorarlo y descárgalo en tres diseños.',
+  descripcion: 'Te ayudamos a mejorar tu currículum. Es gratis.',
   icono: 'file-user',
   tono: 'green',
 } as const

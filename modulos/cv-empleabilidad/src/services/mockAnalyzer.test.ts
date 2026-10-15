@@ -13,19 +13,29 @@ describe('analizarTexto (mock)', () => {
     expect(bueno.fortalezas.length).toBeGreaterThan(0)
   })
 
-  it('detecta frases débiles y propone verbos de acción', () => {
+  it('detecta frases débiles y propone decir lo que hizo', () => {
     const r = analizarTexto(input(CV_COMPLETO))
-    const sug = r.sugerencias.find((s) => s.titulo === 'Usa verbos de acción')
+    const sug = r.sugerencias.find((s) => s.titulo === 'Di lo que hiciste')
     expect(sug?.ejemplo).toMatch(/^Gestioné /)
     expect(r.cvMejorado.experiencia[0]!.logros[0]).toMatch(/^Gestioné recepción/)
   })
 
-  it('marca contacto faltante y datos sensibles en un CV pobre', () => {
+  it('en un CV pobre prioriza lo importante y entrega como máximo 5 sugerencias', () => {
     const r = analizarTexto(input(CV_POBRE))
     const titulos = r.sugerencias.map((s) => s.titulo)
-    expect(titulos).toContain('Agrega un correo electrónico')
-    expect(titulos).toContain('Quita datos personales innecesarios')
+    expect(titulos).toContain('Agrega tu correo')
+    expect(r.sugerencias.length).toBeLessThanOrEqual(5)
     expect(r.sugerencias[0]!.prioridad).toBe('alta')
+    expect(r.fortalezas.length).toBeLessThanOrEqual(2)
+  })
+
+  it('usa frases cortas en las sugerencias (lectura fácil)', () => {
+    for (const texto of [CV_COMPLETO, CV_POBRE]) {
+      for (const s of analizarTexto(input(texto)).sugerencias) {
+        expect(s.titulo.split(/\s+/).length).toBeLessThanOrEqual(6)
+        expect(s.detalle.split(/\s+/).length).toBeLessThanOrEqual(15)
+      }
+    }
   })
 
   it('rellena con marcadores lo que falta en el CV mejorado', () => {
@@ -48,8 +58,8 @@ describe('evaluarDocumento (mock)', () => {
 
   it('sugiere revisar la imagen según cuántas tenga el CV', () => {
     const titulos = (imagenes: number) => analizarTexto({ ...input(CV_COMPLETO), imagenes }).sugerencias.map((s) => s.titulo)
-    expect(titulos(0)).not.toContain('Revisa la imagen de tu CV')
-    expect(titulos(1)).toContain('Revisa la imagen de tu CV')
-    expect(titulos(4)).toContain('Reduce las imágenes')
+    expect(titulos(0)).not.toContain('Revisa la foto')
+    expect(titulos(1)).toContain('Revisa la foto')
+    expect(titulos(4)).toContain('Quita las imágenes')
   })
 })

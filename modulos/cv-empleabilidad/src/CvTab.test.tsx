@@ -35,12 +35,13 @@ describe('<CvTab />', () => {
     const file = new File(['%PDF'], 'mi-cv.pdf', { type: 'application/pdf' })
     await user.upload(screen.getByTestId('cv-file-input'), file)
 
-    expect(await screen.findByText('Resultado del análisis')).toBeInTheDocument()
-    expect(screen.getByRole('tab', { name: /Clásico/ })).toHaveAttribute('aria-selected', 'true')
-    expect(screen.getAllByRole('tab')).toHaveLength(3)
+    expect(await screen.findByRole('heading', { name: /^Tu CV/ })).toBeInTheDocument()
+    expect(screen.getByRole('radio', { name: /Clásico/ })).toHaveAttribute('aria-checked', 'true')
+    expect(screen.getAllByRole('radio')).toHaveLength(3)
+    expect(screen.getByRole('button', { name: 'Descargar mi CV' })).toBeInTheDocument()
 
-    await user.click(screen.getByRole('tab', { name: /Moderno/ }))
-    expect(screen.getByRole('tab', { name: /Moderno/ })).toHaveAttribute('aria-selected', 'true')
+    await user.click(screen.getByRole('radio', { name: /Moderno/ }))
+    expect(screen.getByRole('radio', { name: /Moderno/ })).toHaveAttribute('aria-checked', 'true')
     expect(screen.getAllByText('María José Fuentes Rojas').length).toBeGreaterThan(0)
   })
 
@@ -49,21 +50,22 @@ describe('<CvTab />', () => {
     const enviar = vi.fn<CvMailer['enviar']>(async () => {})
     render(<CvTab analyzer={instantAnalyzer} mailer={{ enviar }} />)
     await user.upload(screen.getByTestId('cv-file-input'), new File(['%PDF'], 'mi-cv.pdf', { type: 'application/pdf' }))
-    await screen.findByText('Resultado del análisis')
+    await screen.findByRole('heading', { name: /^Tu CV/ })
 
-    await user.click(screen.getByRole('tab', { name: /Compacto/ }))
-    const campo = screen.getByLabelText('Correo electrónico')
+    await user.click(screen.getByRole('radio', { name: /Compacto/ }))
+    await user.click(screen.getByRole('button', { name: 'Enviar a mi correo' }))
+    const campo = screen.getByLabelText('Tu correo')
     expect(campo).toHaveValue('maria.fuentes@example.com') // sugerido desde el CV
 
     await user.clear(campo)
     await user.type(campo, 'no-es-correo')
-    await user.click(screen.getByRole('button', { name: 'Enviar a mi correo' }))
+    await user.click(screen.getByRole('button', { name: 'Enviar' }))
     expect(await screen.findByRole('alert')).toHaveTextContent('Escribe un correo válido')
     expect(enviar).not.toHaveBeenCalled()
 
     await user.clear(campo)
     await user.type(campo, 'persona@example.com')
-    await user.click(screen.getByRole('button', { name: 'Enviar a mi correo' }))
+    await user.click(screen.getByRole('button', { name: 'Enviar' }))
     expect(await screen.findByText(/Lo enviamos a/)).toHaveTextContent('persona@example.com')
     expect(enviar).toHaveBeenCalledWith(
       expect.objectContaining({ email: 'persona@example.com', diseno: 'compacto', adjuntos: expect.arrayContaining([expect.objectContaining({ tipo: 'pdf' })]) }),
@@ -74,10 +76,10 @@ describe('<CvTab />', () => {
     const user = userEvent.setup()
     render(<CvTab analyzer={instantAnalyzer} />)
     await user.upload(screen.getByTestId('cv-file-input'), new File(['%PDF'], 'mi-cv.pdf', { type: 'application/pdf' }))
-    await screen.findByText('Resultado del análisis')
+    await screen.findByRole('heading', { name: /^Tu CV/ })
 
-    await user.click(screen.getByRole('tab', { name: /Moderno/ }))
-    await user.click(screen.getByRole('button', { name: 'Comparar con mi CV original' }))
+    await user.click(screen.getByRole('radio', { name: /Moderno/ }))
+    await user.click(screen.getByRole('button', { name: 'Ver en grande' }))
 
     const dialogo = screen.getByRole('dialog', { name: 'Compara tu CV' })
     expect(await within(dialogo).findByAltText('Página 1 de 2 de tu CV original')).toBeInTheDocument()
@@ -92,9 +94,9 @@ describe('<CvTab />', () => {
     const user = userEvent.setup()
     render(<CvTab analyzer={instantAnalyzer} />)
     await user.upload(screen.getByTestId('cv-file-input'), new File(['%PDF'], 'receta.pdf', { type: 'application/pdf' }))
-    expect(await screen.findByText(/no parece ser un currículum/)).toBeInTheDocument()
-    expect(screen.queryByText('Resultado del análisis')).not.toBeInTheDocument()
-    expect(screen.queryAllByRole('tab')).toHaveLength(0)
+    expect(await screen.findByText(/no parece un CV/)).toBeInTheDocument()
+    expect(screen.getByText('Este archivo no parece un CV')).toBeInTheDocument()
+    expect(screen.queryAllByRole('radio')).toHaveLength(0)
     // Puede subir otro archivo de inmediato.
     expect(screen.getByTestId('cv-file-input')).toBeInTheDocument()
   })

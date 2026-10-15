@@ -48,6 +48,7 @@ El estado vive en `CvTab.tsx` como unión discriminada (`inicio | leyendo | anal
 
 ## Convenciones del módulo
 
+- **Lectura fácil (prioridad):** la usan personas que leen poco o usan poco la tecnología. Una columna, una acción principal por paso, textos de una frase, sin jerga ("ATS", "verbos de acción", "cuantificar"). Máximo 3 sugerencias a la vista (el resto tras "Ver más"), ejemplos plegados, sin puntaje numérico (veredicto en palabras). Cualquier texto nuevo debe pasar esta prueba; `mockAnalyzer.test.ts` verifica largo de títulos (≤ 6 palabras) y detalles (≤ 15).
 - Textos de UI en español con trato de **tú** y verbo primero en botones (ver GUIA.md del design system). El prompt de la IA (`server/prompt.ts`) también pide tú.
 - Usa los componentes de `@muni/design-system` (`Button`, `Alert`, `Badge`, `Loader`, `Tabs`, `Icon`…). Para elementos propios, las clases `.hds-*`; en `ui.module.css`, solo tokens.
 - Un diseño existe en **tres lugares** que deben verse igual: `src/templates/` (HTML), `src/export/pdf.tsx` y `src/export/docx.ts`. Para agregar un 4º: implementarlo en los tres, registrarlo en `TEMPLATES` y en los mapas `PAGINAS`/`DISENOS`, y sumarlo a `export.test.tsx`.
