@@ -36,12 +36,12 @@ describe('<CvTab />', () => {
     await user.upload(screen.getByTestId('cv-file-input'), file)
 
     expect(await screen.findByRole('heading', { name: /^Tu CV/ })).toBeInTheDocument()
-    expect(screen.getByRole('radio', { name: /Clásico/ })).toHaveAttribute('aria-checked', 'true')
-    expect(screen.getAllByRole('radio')).toHaveLength(3)
-    expect(screen.getByRole('button', { name: 'Descargar mi CV' })).toBeInTheDocument()
+    expect(screen.getByRole('tab', { name: /Clásico/ })).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getAllByRole('tab')).toHaveLength(3)
+    expect(screen.getByRole('button', { name: 'Descargar PDF' })).toBeInTheDocument()
 
-    await user.click(screen.getByRole('radio', { name: /Moderno/ }))
-    expect(screen.getByRole('radio', { name: /Moderno/ })).toHaveAttribute('aria-checked', 'true')
+    await user.click(screen.getByRole('tab', { name: /Moderno/ }))
+    expect(screen.getByRole('tab', { name: /Moderno/ })).toHaveAttribute('aria-selected', 'true')
     expect(screen.getAllByText('María José Fuentes Rojas').length).toBeGreaterThan(0)
   })
 
@@ -52,7 +52,7 @@ describe('<CvTab />', () => {
     await user.upload(screen.getByTestId('cv-file-input'), new File(['%PDF'], 'mi-cv.pdf', { type: 'application/pdf' }))
     await screen.findByRole('heading', { name: /^Tu CV/ })
 
-    await user.click(screen.getByRole('radio', { name: /Compacto/ }))
+    await user.click(screen.getByRole('tab', { name: /Compacto/ }))
     await user.click(screen.getByRole('button', { name: 'Enviar a mi correo' }))
     const campo = screen.getByLabelText('Tu correo')
     expect(campo).toHaveValue('maria.fuentes@example.com') // sugerido desde el CV
@@ -78,7 +78,7 @@ describe('<CvTab />', () => {
     await user.upload(screen.getByTestId('cv-file-input'), new File(['%PDF'], 'mi-cv.pdf', { type: 'application/pdf' }))
     await screen.findByRole('heading', { name: /^Tu CV/ })
 
-    await user.click(screen.getByRole('radio', { name: /Moderno/ }))
+    await user.click(screen.getByRole('tab', { name: /Moderno/ }))
     await user.click(screen.getByRole('button', { name: 'Ver en grande' }))
 
     const dialogo = screen.getByRole('dialog', { name: 'Compara tu CV' })
@@ -96,7 +96,7 @@ describe('<CvTab />', () => {
     await user.upload(screen.getByTestId('cv-file-input'), new File(['%PDF'], 'receta.pdf', { type: 'application/pdf' }))
     expect(await screen.findByText(/no parece un CV/)).toBeInTheDocument()
     expect(screen.getByText('Este archivo no parece un CV')).toBeInTheDocument()
-    expect(screen.queryAllByRole('radio')).toHaveLength(0)
+    expect(screen.queryAllByRole('tab')).toHaveLength(0)
     // Puede subir otro archivo de inmediato.
     expect(screen.getByTestId('cv-file-input')).toBeInTheDocument()
   })

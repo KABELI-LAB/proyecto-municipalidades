@@ -92,12 +92,26 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
   const ocupado = estado.tipo === 'leyendo' || estado.tipo === 'analizando'
 
   return (
-    <div className={s.root}>
-      <header className={s.intro}>
-        <p className="hds-overline">Empleabilidad</p>
-        <h1>Mejora tu CV</h1>
-        <p className={s.lead}>Súbelo y te decimos qué mejorar. Es gratis.</p>
-      </header>
+    <div className={`${s.root} ${estado.tipo === 'listo' ? s.rootCompacto : ''}`}>
+      {estado.tipo === 'listo' ? (
+        // Con resultados, la cabecera se reduce a una línea para que el contenido quede arriba.
+        <header className={s.cabeceraCompacta}>
+          <h1>Mejora tu CV</h1>
+          {/* Destino del foco al terminar: anuncia que hay resultados. */}
+          <p ref={resultRef} tabIndex={-1} className={s.resultArchivo}>
+            {estado.archivo}
+          </p>
+          <Button variant="ghost" size="sm" iconLeft="rotate-ccw" onClick={reiniciar}>
+            Revisar otro CV
+          </Button>
+        </header>
+      ) : (
+        <header className={s.intro}>
+          <p className="hds-overline">Empleabilidad</p>
+          <h1>Mejora tu CV</h1>
+          <p className={s.lead}>Súbelo y te decimos qué mejorar. Es gratis.</p>
+        </header>
+      )}
 
       {estado.tipo !== 'listo' && (
         <>
@@ -124,22 +138,13 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
 
       {estado.tipo === 'listo' && (
         <>
-          {/* Destino del foco al terminar: anuncia que hay resultados. */}
-          <p ref={resultRef} tabIndex={-1} className={s.resultBar}>
-            Revisamos <span className={s.fileName}>{estado.archivo}</span>
-          </p>
           {estado.analysis.origen === 'mock' && (
-            <Alert tone="info" title="Modo demostración">
-              Este análisis usa reglas automáticas, no inteligencia artificial.
-            </Alert>
+            <p className={s.notaDemo}>Modo demostración: análisis con reglas automáticas, sin inteligencia artificial.</p>
           )}
           <div className={s.results}>
             <FeedbackPanel analysis={estado.analysis} />
             <DesignGallery cv={estado.analysis.cvMejorado} mailer={activeMailer} original={estado.original} />
           </div>
-          <Button variant="ghost" iconLeft="rotate-ccw" onClick={reiniciar}>
-            Revisar otro CV
-          </Button>
         </>
       )}
     </div>
