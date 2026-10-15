@@ -4,9 +4,9 @@ import type { CvAnalysis, Prioridad } from '../services/types'
 import s from '../styles/ui.module.css'
 
 /**
- * Resultado pensado para personas que leen poco o usan poco la tecnología:
- * un veredicto en palabras (sin puntaje numérico), lo más importante primero
- * y el resto a un clic. Cada sugerencia es un título corto y una frase.
+ * Resultado pensado para personas que leen poco o usan poco la tecnología.
+ * Se divide en dos piezas: el veredicto (va arriba, en una línea) y las ideas
+ * para mejorar (van después del CV mejorado, que es lo principal).
  */
 
 const VISIBLES = 3
@@ -18,24 +18,34 @@ function veredicto(puntaje: number) {
   return { texto: 'Tu CV necesita mejoras', icono: 'circle-alert', tono: 'yellow' as const }
 }
 
-export function FeedbackPanel({ analysis }: { analysis: CvAnalysis }) {
-  const [verTodas, setVerTodas] = useState(false)
+/** Veredicto en palabras (sin puntaje numérico) y la frase de qué hacer primero. */
+export function Veredicto({ analysis }: { analysis: CvAnalysis }) {
   const v = veredicto(analysis.puntaje)
+  return (
+    <section className={s.veredicto} aria-labelledby="cv-veredicto-title">
+      <span className={`hds-tile-icon hds-tile-icon--${v.tono}`}>
+        <Icon name={v.icono} size={24} />
+      </span>
+      <div>
+        <h2 id="cv-veredicto-title">{v.texto}</h2>
+        <p className={s.textoSecundario}>{analysis.resumen}</p>
+      </div>
+    </section>
+  )
+}
+
+/** Lo que ya hace bien + máximo 3 ideas a la vista; el resto a un toque. */
+export function Sugerencias({ analysis }: { analysis: CvAnalysis }) {
+  const [verTodas, setVerTodas] = useState(false)
   const sugerencias = [...analysis.sugerencias].sort((a, b) => ORDEN[a.prioridad] - ORDEN[b.prioridad])
   const visibles = verTodas ? sugerencias : sugerencias.slice(0, VISIBLES)
   const ocultas = sugerencias.length - VISIBLES
 
+  if (sugerencias.length === 0 && analysis.fortalezas.length === 0) return null
+
   return (
-    <section className={s.panel} aria-labelledby="cv-feedback-title">
-      <div className={s.veredicto}>
-        <span className={`hds-tile-icon hds-tile-icon--${v.tono}`}>
-          <Icon name={v.icono} size={26} />
-        </span>
-        <div>
-          <h2 id="cv-feedback-title">{v.texto}</h2>
-          <p className={s.textoSecundario}>{analysis.resumen}</p>
-        </div>
-      </div>
+    <section className={`${s.panel} ${s.ideas}`} aria-labelledby="cv-ideas-title">
+      <h2 id="cv-ideas-title">Ideas para mejorarlo más</h2>
 
       {analysis.fortalezas.length > 0 && (
         <ul className={`hds-list ${s.fortalezas}`} aria-label="Lo que ya haces bien">
@@ -50,7 +60,6 @@ export function FeedbackPanel({ analysis }: { analysis: CvAnalysis }) {
 
       {sugerencias.length > 0 && (
         <div className={s.mejoras}>
-          <h3>{sugerencias.length === 1 ? 'Te recomendamos' : 'Te recomendamos mejorar'}</h3>
           <ol className={s.sugList}>
             {visibles.map((x, i) => (
               <li key={x.id} className={s.sug}>

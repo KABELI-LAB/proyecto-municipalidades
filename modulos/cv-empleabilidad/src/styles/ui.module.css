@@ -92,16 +92,15 @@
 }
 
 /* ---------- Carga ---------- */
+/* Toda la zona es tocable (abre el selector de archivos). */
 .drop {
-  cursor: default;
+  cursor: pointer;
   padding: var(--space-7) var(--space-4);
   gap: var(--space-3);
 }
 
-/* Solo el botón es clicable: la zona no debe parecerlo al pasar el mouse. */
-.drop:hover {
-  border-color: var(--color-border-strong);
-  background: var(--color-surface-sunken);
+.drop[aria-busy='true'] {
+  cursor: progress;
 }
 
 .dropOver,
@@ -140,11 +139,26 @@
   gap: var(--space-4);
 }
 
+/* Título y "Otro CV" en una fila; el archivo debajo, en una sola línea. */
 .cabeceraCompacta {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'titulo boton'
+    'archivo archivo';
   align-items: center;
-  gap: var(--space-1) var(--space-3);
+  column-gap: var(--space-3);
+}
+
+.cabeceraCompacta h1 {
+  grid-area: titulo;
+}
+
+.cabeceraCompacta .resultArchivo {
+  grid-area: archivo;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .root .cabeceraCompacta h1 {
@@ -153,13 +167,12 @@
 }
 
 .cabeceraCompacta :global(.hds-btn) {
-  margin-left: auto;
+  grid-area: boton;
 }
 
 .resultArchivo {
   font-size: var(--type-body-sm-size);
   color: var(--color-text-secondary);
-  overflow-wrap: anywhere;
 }
 
 .notaDemo {
@@ -178,16 +191,45 @@
   box-shadow: none;
 }
 
+/* Móvil: veredicto → CV → ideas. Escritorio: CV a la izquierda; veredicto e ideas a la derecha. */
 .results {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  gap: var(--space-5);
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'veredicto' 'cv' 'ideas';
+  gap: var(--space-4);
   align-items: start;
 }
 
-@media (max-width: 1023px) {
+@media (min-width: 1024px) {
   .results {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    grid-template-areas:
+      'cv veredicto'
+      'cv ideas';
+    grid-template-rows: auto 1fr;
+    gap: var(--space-4) var(--space-5);
+  }
+}
+
+.areaVeredicto {
+  grid-area: veredicto;
+  min-width: 0;
+}
+
+.areaCv {
+  grid-area: cv;
+  min-width: 0;
+}
+
+.areaIdeas {
+  grid-area: ideas;
+  min-width: 0;
+}
+
+/* Con la barra fija de móvil, se deja espacio para que no tape el contenido. */
+@media (max-width: 1023px) {
+  .rootCompacto {
+    padding-bottom: calc(96px + env(safe-area-inset-bottom));
   }
 }
 
@@ -202,22 +244,34 @@
   min-width: 0;
 }
 
+/* Móvil: secciones a todo el ancho, sin tarjeta (más espacio útil, menos ruido). */
 @media (max-width: 599px) {
   .panel {
-    padding: var(--space-4);
-    border-radius: var(--radius-medium);
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .ideas {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
   }
 }
 
-/* Veredicto */
+/* Veredicto: una franja, no una tarjeta */
 .veredicto {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-large);
+  background: var(--color-surface-sunken);
 }
 
-.veredicto h2 {
-  margin-bottom: var(--space-1) !important;
+.root .veredicto h2 {
+  font-size: var(--type-h4-size);
+  line-height: var(--type-h4-lh);
 }
 
 .fortalezas {
@@ -350,36 +404,188 @@
   color: var(--color-text-secondary);
 }
 
-.actions {
+/* La hoja de la vista previa se puede tocar para verla en grande. */
+.previewTocable {
+  cursor: zoom-in;
+}
+
+.previewAmpliar {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 1;
+  box-shadow: var(--shadow-medium);
+}
+
+/* Escritorio: acciones en una fila. Móvil: barra fija abajo + hoja de opciones. */
+.accionesEscritorio {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
 }
 
-@media (max-width: 599px) {
-  .actions {
+.barraMovil {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .accionesEscritorio {
+    display: none;
+  }
+
+  .barraMovil {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom));
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    box-shadow: 0 -4px 12px rgb(13 21 51 / 0.08);
   }
 
-  .actions :global(.hds-btn) {
+  .barraMovil :global(.hds-btn) {
     width: 100%;
     min-width: 0;
-    padding: var(--space-2) var(--space-3);
-    white-space: normal;
-    line-height: 1.2;
-    text-align: center;
+    padding: 0 var(--space-3);
   }
+}
 
-  /* Descargar PDF (principal) y Ver en grande ocupan la fila completa. */
-  .actions :global(.hds-btn--primary),
-  .actions :global(.hds-btn--ghost) {
-    grid-column: 1 / -1;
-  }
+/* Hoja inferior de opciones (diálogo nativo) */
+.hoja {
+  margin: auto auto 0;
+  width: 100%;
+  max-width: 560px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  box-shadow: var(--shadow-large);
+}
+
+.hoja::backdrop {
+  background: rgb(13 21 51 / 0.55);
+}
+
+.hojaCuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom));
+}
+
+.hojaAsa {
+  align-self: center;
+  width: 40px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--color-border-strong);
+  margin-bottom: var(--space-2);
+}
+
+.hojaOpcion {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--target-comfort);
+  padding: var(--space-2);
+  border: 0;
+  border-radius: var(--radius-medium);
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.hojaOpcion:hover {
+  background: var(--color-surface-muted);
+}
+
+.hojaOpcion:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.hojaTexto {
+  display: flex;
+  flex-direction: column;
+}
+
+.hojaTexto span {
+  font-size: var(--type-body-sm-size);
+  color: var(--color-text-secondary);
+}
+
+/* ---------- Espera ---------- */
+.progreso {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-6) var(--space-5);
+  border-radius: var(--radius-large);
+  background: var(--color-surface-sunken);
+}
+
+.progresoPasos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  font-size: var(--type-body-lg-size);
+}
+
+.progresoPasos li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--color-text-muted);
+}
+
+.progresoPasos li[data-estado='actual'] {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.progresoPasos li[data-estado='listo'] {
+  color: var(--color-text-secondary);
+}
+
+.progresoMarca {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  display: grid;
+  place-items: center;
+  font: 600 15px / 1 var(--font-mono);
+  border: 2px solid var(--color-border-strong);
+  background: var(--color-surface);
+}
+
+li[data-estado='actual'] .progresoMarca {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  box-shadow: 0 0 0 4px var(--color-primary-subtle);
+}
+
+li[data-estado='listo'] .progresoMarca {
+  border-color: var(--color-secondary);
+  background: var(--color-secondary);
+  color: var(--color-text-inverse);
 }
 
 /* Usados por la comparación (vista en grande) */
 .previewFrame {
+  position: relative;
   background: var(--color-surface-muted);
   border-radius: var(--radius-medium);
   padding: var(--space-4);
