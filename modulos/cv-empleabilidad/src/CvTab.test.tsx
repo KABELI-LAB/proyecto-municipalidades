@@ -35,10 +35,12 @@ describe('<CvTab />', () => {
     const file = new File(['%PDF'], 'mi-cv.pdf', { type: 'application/pdf' })
     await user.upload(screen.getByTestId('cv-file-input'), file)
 
-    expect(await screen.findByRole('heading', { name: /^Tu CV/ })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Tu CV mejorado' })).toBeInTheDocument()
     expect(screen.getByRole('tab', { name: /Clásico/ })).toHaveAttribute('aria-selected', 'true')
     expect(screen.getAllByRole('tab')).toHaveLength(3)
-    expect(screen.getByRole('button', { name: 'Descargar PDF' })).toBeInTheDocument()
+    // Escritorio y barra fija de móvil (en jsdom no se aplica el CSS que oculta una de las dos).
+    expect(screen.getAllByRole('button', { name: 'Descargar PDF' }).length).toBeGreaterThan(0)
+    expect(screen.getByRole('heading', { name: /^Tu CV (va|necesita)/ })).toBeInTheDocument()
 
     await user.click(screen.getByRole('tab', { name: /Moderno/ }))
     expect(screen.getByRole('tab', { name: /Moderno/ })).toHaveAttribute('aria-selected', 'true')
@@ -50,7 +52,7 @@ describe('<CvTab />', () => {
     const enviar = vi.fn<CvMailer['enviar']>(async () => {})
     render(<CvTab analyzer={instantAnalyzer} mailer={{ enviar }} />)
     await user.upload(screen.getByTestId('cv-file-input'), new File(['%PDF'], 'mi-cv.pdf', { type: 'application/pdf' }))
-    await screen.findByRole('heading', { name: /^Tu CV/ })
+    await screen.findByRole('heading', { name: 'Tu CV mejorado' })
 
     await user.click(screen.getByRole('tab', { name: /Compacto/ }))
     await user.click(screen.getByRole('button', { name: 'Enviar a mi correo' }))
@@ -72,11 +74,26 @@ describe('<CvTab />', () => {
     )
   })
 
+  it('en móvil, la hoja de opciones abre el envío por correo', async () => {
+    const user = userEvent.setup()
+    render(<CvTab analyzer={instantAnalyzer} />)
+    await user.upload(screen.getByTestId('cv-file-input'), new File(['%PDF'], 'mi-cv.pdf', { type: 'application/pdf' }))
+    await screen.findByRole('heading', { name: 'Tu CV mejorado' })
+
+    await user.click(screen.getByRole('button', { name: 'Más opciones' }))
+    const hoja = screen.getByRole('dialog', { name: 'Más opciones' })
+    expect(within(hoja).getByRole('button', { name: /Descargar en Word/ })).toBeInTheDocument()
+    await user.click(within(hoja).getByRole('button', { name: /Enviar a mi correo/ }))
+
+    expect(screen.queryByRole('dialog', { name: 'Más opciones' })).not.toBeInTheDocument()
+    expect(screen.getByLabelText('Tu correo')).toBeInTheDocument()
+  })
+
   it('compara el CV original con el diseño elegido', async () => {
     const user = userEvent.setup()
     render(<CvTab analyzer={instantAnalyzer} />)
     await user.upload(screen.getByTestId('cv-file-input'), new File(['%PDF'], 'mi-cv.pdf', { type: 'application/pdf' }))
-    await screen.findByRole('heading', { name: /^Tu CV/ })
+    await screen.findByRole('heading', { name: 'Tu CV mejorado' })
 
     await user.click(screen.getByRole('tab', { name: /Moderno/ }))
     await user.click(screen.getByRole('button', { name: 'Ver en grande' }))

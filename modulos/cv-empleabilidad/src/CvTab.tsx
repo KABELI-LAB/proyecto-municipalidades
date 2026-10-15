@@ -1,7 +1,8 @@
-import { Alert, Button, Loader } from '@muni/design-system'
+import { Alert, Button } from '@muni/design-system'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { DesignGallery } from './components/DesignGallery'
-import { FeedbackPanel } from './components/FeedbackPanel'
+import { Sugerencias, Veredicto } from './components/FeedbackPanel'
+import { Progreso } from './components/Progreso'
 import { UploadZone } from './components/UploadZone'
 import { extractText } from './lib/extractText'
 import { validateCvFile, type CvFileKind } from './lib/validateFile'
@@ -102,7 +103,7 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
             {estado.archivo}
           </p>
           <Button variant="ghost" size="sm" iconLeft="rotate-ccw" onClick={reiniciar}>
-            Revisar otro CV
+            Otro CV
           </Button>
         </header>
       ) : (
@@ -113,7 +114,10 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
         </header>
       )}
 
-      {estado.tipo !== 'listo' && (
+      {/* Mientras se revisa, la zona de carga se reemplaza por una pantalla de espera con pasos. */}
+      {(estado.tipo === 'leyendo' || estado.tipo === 'analizando') && <Progreso etapa={estado.tipo} archivo={estado.archivo} />}
+
+      {(estado.tipo === 'inicio' || estado.tipo === 'noCv' || estado.tipo === 'error') && (
         <>
           <UploadZone onFile={procesar} disabled={ocupado} />
           <p className={s.nota}>{activeAnalyzer.avisoPrivacidad ?? 'No guardamos tu CV.'}</p>
@@ -122,8 +126,6 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
 
       {/* Loader y Alert ya anuncian su contenido (role=status / role=alert). */}
       <div className={s.status}>
-        {estado.tipo === 'leyendo' && <Loader label={`Leyendo ${estado.archivo}…`} />}
-        {estado.tipo === 'analizando' && <Loader label="Revisando tu CV. Espera un momento…" />}
         {estado.tipo === 'noCv' && (
           <Alert tone="warning" title="Este archivo no parece un CV">
             {estado.motivo} Prueba con otro archivo.
@@ -141,9 +143,17 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
           {estado.analysis.origen === 'mock' && (
             <p className={s.notaDemo}>Modo demostración: análisis con reglas automáticas, sin inteligencia artificial.</p>
           )}
+          {/* Orden: veredicto → CV mejorado (lo principal) → ideas. En escritorio, el CV va a la izquierda. */}
           <div className={s.results}>
-            <FeedbackPanel analysis={estado.analysis} />
-            <DesignGallery cv={estado.analysis.cvMejorado} mailer={activeMailer} original={estado.original} />
+            <div className={s.areaVeredicto}>
+              <Veredicto analysis={estado.analysis} />
+            </div>
+            <div className={s.areaCv}>
+              <DesignGallery cv={estado.analysis.cvMejorado} mailer={activeMailer} original={estado.original} />
+            </div>
+            <div className={s.areaIdeas}>
+              <Sugerencias analysis={estado.analysis} />
+            </div>
           </div>
         </>
       )}
