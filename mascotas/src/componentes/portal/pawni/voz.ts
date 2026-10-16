@@ -1,6 +1,6 @@
 // La voz de Pawni, con lo que trae el propio navegador (sin servicios nuestros):
-//   - «Escuchar»: lee el texto con una voz en español, más aguda y alegre,
-//     como un cachorro que conversa;
+//   - «Escuchar»: lee el texto con una voz femenina en español, lo más aguda
+//     posible, como la voz de una niña;
 //   - el micrófono: convierte lo que dices en texto. En Chrome y Edge ese
 //     reconocimiento lo hace el servicio del navegador; en Firefox no existe y
 //     el botón no aparece.
@@ -25,9 +25,9 @@ export function decir(texto: string, alTerminar?: () => void) {
   const elegida = elegirVoz(sintesis.getVoices());
   frase.lang = elegida?.lang ?? "es-CL";
   if (elegida) frase.voice = elegida;
-  // Más aguda y un poco más animada: la voz tierna de un cachorro.
-  frase.pitch = 1.6;
-  frase.rate = 1.05;
+  // Lo más aguda que permite el navegador y algo más rápida: voz de niña.
+  frase.pitch = 2;
+  frase.rate = 1.1;
   if (alTerminar) frase.onend = frase.onerror = () => alTerminar();
   sintesis.speak(frase);
 }
