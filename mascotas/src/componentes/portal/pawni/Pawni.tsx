@@ -171,8 +171,13 @@ export function Pawni({ nombre }: { nombre: string }) {
         preguntar(dicho, true);
       },
       error: (motivo) => {
+        // El código queda en la consola del navegador, para saber qué pasó.
+        if (motivo !== "aborted") console.warn(`Micrófono de Pawni: ${motivo}`);
         if (motivo === "not-allowed" || motivo === "service-not-allowed") decirPawni("Para hablarme, permite el micrófono en tu navegador. También puedes escribirme.");
         else if (motivo === "no-speech") decirPawni("No te escuché. Toca el micrófono y prueba de nuevo.");
+        else if (motivo === "audio-capture") decirPawni("No encontré un micrófono. Revisa que esté conectado y que otra aplicación no lo esté usando.");
+        else if (motivo === "network") decirPawni("Tu navegador no pudo conectarse a su servicio de voz. Prueba en Chrome o Edge, o escríbeme.");
+        else if (motivo === "language-not-supported") decirPawni("Tu navegador no reconoce voz en español. Puedes escribirme.");
         else if (motivo !== "aborted") decirPawni("No pude escucharte ahora. Puedes escribirme.");
       },
       fin: () => {
