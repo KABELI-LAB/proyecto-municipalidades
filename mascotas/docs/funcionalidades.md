@@ -342,7 +342,10 @@ a dormir. Sin movimiento si el sistema pide reducirlo.
   operativo, con fecha, lugar y cupos reales. Si la inteligencia artificial
   está encendida, ChatGPT solo elige el tema cuando las reglas no entienden.
   No pide RUT, dirección ni teléfono.
-- **Escuchar:** lee el texto con la voz del propio dispositivo.
+- **Escuchar y micrófono:** lee sus respuestas en voz alta y se le puede
+  hablar (Chrome, Edge, Safari); si le hablas, responde en voz alta. Con Azure
+  Speech configurado, su voz es la misma en todos los equipos (audio generado
+  una vez por texto y guardado); si no, usa la voz del navegador.
 - **Recorrido guiado** por el inicio (6 pasos, con Anterior, Siguiente y
   Saltar). Desde otra página, lleva al inicio y empieza.
 

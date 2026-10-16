@@ -1,12 +1,13 @@
-// La voz de Pawni, con lo que trae el propio navegador (sin servicios nuestros):
-//   - «Escuchar»: lee el texto con una voz femenina en español, lo más aguda
-//     posible, como la voz de una niña;
+// La voz de Pawni:
+//   - «Escuchar»: si el servidor tiene configurada la voz de Pawni (Azure
+//     Speech), reproduce ese audio, igual en todos los equipos; si no, usa la
+//     voz del navegador, femenina y lo más aguda posible, como la de una niña;
 //   - el micrófono: convierte lo que dices en texto. En Chrome y Edge ese
 //     reconocimiento lo hace el servicio del navegador; en Firefox no existe y
 //     el botón no aparece.
 
 // Voces en español conocidas por sonar más suaves, en orden de preferencia.
-const SUAVES = [/paulina/i, /dalia/i, /helena/i, /elvira/i, /sabina/i, /laura/i, /monica|mónica/i, /google español de estados unidos/i, /google español/i];
+const SUAVES = [/catalina/i, /paulina/i, /dalia/i, /helena/i, /elvira/i, /sabina/i, /laura/i, /monica|mónica/i, /google español de estados unidos/i, /google español/i];
 
 function elegirVoz(voces: SpeechSynthesisVoice[]) {
   const espanol = voces.filter((v) => v.lang.toLowerCase().startsWith("es"));
@@ -17,10 +18,32 @@ function elegirVoz(voces: SpeechSynthesisVoice[]) {
   return espanol.find((v) => v.lang === "es-CL") ?? espanol.find((v) => /female|mujer/i.test(v.name)) ?? espanol[0];
 }
 
-export function decir(texto: string, alTerminar?: () => void) {
-  if (!hayVoz()) return;
+let audioActual: HTMLAudioElement | null = null;
+
+/** Dice el texto: con la voz del servidor si viene firmado; si falla, con la del navegador. */
+export function decir(texto: string, firma?: string, alTerminar?: () => void) {
+  callar();
+  if (!firma) return decirConNavegador(texto, alTerminar);
+  const audio = new Audio(`/api/pawni/voz?t=${encodeURIComponent(texto)}&f=${encodeURIComponent(firma)}`);
+  audioActual = audio;
+  let respaldo = false;
+  const usarRespaldo = () => {
+    if (respaldo || audioActual !== audio) return;
+    respaldo = true;
+    audioActual = null;
+    decirConNavegador(texto, alTerminar);
+  };
+  audio.onended = () => {
+    if (audioActual === audio) audioActual = null;
+    alTerminar?.();
+  };
+  audio.onerror = usarRespaldo;
+  audio.play().catch(usarRespaldo);
+}
+
+function decirConNavegador(texto: string, alTerminar?: () => void) {
+  if (!hayVoz()) return alTerminar?.();
   const sintesis = window.speechSynthesis;
-  sintesis.cancel();
   const frase = new SpeechSynthesisUtterance(texto);
   const elegida = elegirVoz(sintesis.getVoices());
   frase.lang = elegida?.lang ?? "es-CL";
@@ -33,6 +56,10 @@ export function decir(texto: string, alTerminar?: () => void) {
 }
 
 export function callar() {
+  if (audioActual) {
+    audioActual.pause();
+    audioActual = null;
+  }
   if (hayVoz()) window.speechSynthesis.cancel();
 }
 

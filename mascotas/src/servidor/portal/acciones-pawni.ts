@@ -8,6 +8,7 @@ import { intencionConIA } from "@/servidor/ia/funciones";
 import { iaActiva } from "@/servidor/ia/openai";
 import { fechaLarga } from "@/servidor/formato";
 import { proximoOperativo } from "./consultas";
+import { firmarVoz, vozConfigurada } from "./voz";
 
 /** Largo máximo de una pregunta: lo que se escribe en el chat, no un documento. */
 const MAXIMO = 300;
@@ -28,5 +29,6 @@ export async function preguntarAPawni(pregunta: string): Promise<RespuestaPawni>
   const texto = String(pregunta ?? "").slice(0, MAXIMO).trim();
   let tema = temaDe(texto);
   if (tema === "OTRO" && texto.length > 2 && (await iaActiva())) tema = (await intencionConIA(texto)) ?? tema;
-  return responderPawni(tema, tema === "OPERATIVO" ? await operativoParaPawni() : null, municipioActivo().plataforma);
+  const r = responderPawni(tema, tema === "OPERATIVO" ? await operativoParaPawni() : null, municipioActivo().plataforma);
+  return vozConfigurada() ? { ...r, voz: firmarVoz(r.texto) } : r;
 }
