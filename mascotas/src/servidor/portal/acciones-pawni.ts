@@ -1,10 +1,12 @@
 "use server";
-// Pawni responde una pregunta del portal. Primero las reglas; si no entienden
-// y la inteligencia artificial está encendida, se le pregunta solo el tema
-// (con el texto, nada más). La respuesta siempre sale de los textos aprobados.
-import { responderPawni, temaDe, type OperativoPawni, type RespuestaPawni } from "@/dominio/asistente";
+// Pawni responde una pregunta del portal. Si la inteligencia artificial está
+// encendida, ella elige el tema de lo que se escribe o dice (solo con el texto);
+// si está apagada o falla, lo eligen las reglas de palabras clave. Las
+// preguntas sugeridas siempre van por reglas. La respuesta sale siempre de los
+// textos aprobados.
+import { SUGERENCIAS, responderPawni, temaDe, type OperativoPawni, type RespuestaPawni, type TemaPawni } from "@/dominio/asistente";
 import { municipioActivo } from "@/lib/municipio";
-import { intencionConIA } from "@/servidor/ia/funciones";
+import { temaPawniConIA } from "@/servidor/ia/funciones";
 import { iaActiva } from "@/servidor/ia/openai";
 import { fechaLarga } from "@/servidor/formato";
 import { proximoOperativo } from "./consultas";
@@ -26,7 +28,8 @@ async function operativoParaPawni(): Promise<OperativoPawni> {
 
 export async function preguntarAPawni(pregunta: string): Promise<RespuestaPawni> {
   const texto = String(pregunta ?? "").slice(0, MAXIMO).trim();
-  let tema = temaDe(texto);
-  if (tema === "OTRO" && texto.length > 2 && (await iaActiva())) tema = (await intencionConIA(texto)) ?? tema;
+  let tema: TemaPawni | null = null;
+  if (!SUGERENCIAS.includes(texto) && texto.length > 2 && (await iaActiva())) tema = await temaPawniConIA(texto);
+  tema ??= temaDe(texto);
   return responderPawni(tema, tema === "OPERATIVO" ? await operativoParaPawni() : null, municipioActivo().plataforma);
 }

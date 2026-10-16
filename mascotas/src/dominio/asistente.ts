@@ -1,10 +1,31 @@
-// Pawni, el quiltro guía del portal: entiende la pregunta con reglas de
-// palabras clave (las mismas de Instagram, más algunas propias del portal) y
-// responde con textos aprobados y el enlace que corresponde. Nunca inventa
-// fechas ni cupos: el próximo operativo llega como dato desde el servidor.
+// Pawni, el quiltro guía del portal: entiende la pregunta (con inteligencia
+// artificial si está encendida; si no, o si falla, con reglas de palabras
+// clave) y responde con textos aprobados y el enlace que corresponde. Nunca
+// inventa fechas ni cupos: el próximo operativo llega como dato del servidor.
 import { clasificar, normalizar, type Intencion } from "./respuestas";
 
-export type TemaPawni = Intencion | "QUE_ES" | "COSTO" | "SEGUIMIENTO" | "COMUNITARIOS" | "MAPA";
+export type TemaPawni = Intencion | "QUE_ES" | "SALUDO" | "COSTO" | "SEGUIMIENTO" | "COMUNITARIOS" | "MAPA" | "AVISOS" | "SALUD";
+
+/** Cada tema explicado, para que la inteligencia artificial elija uno. */
+export const TEMAS_PAWNI: Record<TemaPawni, string> = {
+  QUE_ES: "pregunta por Pawni o por el portal: quién eres, cómo te llamas, qué se puede hacer aquí",
+  SALUDO: "solo saluda",
+  GRACIAS: "agradece, felicita o se despide",
+  OPERATIVO: "fechas, horarios, lugar, cupos o inscripción de operativos",
+  SERVICIO: "vacunas, microchip, esterilización o cómo pedir un servicio",
+  COSTO: "precios o si algo se paga",
+  PERDI: "perdió su mascota o quiere buscarla",
+  VISTO: "vio o encontró un animal que parece perdido",
+  ES_MIO: "dice que un animal de un aviso es suyo",
+  AVISOS: "quiere ver cuántas o cuáles mascotas perdidas o avistadas hay",
+  SOS: "un animal en la calle o ajeno que está herido, maltratado, abandonado, atropellado, atrapado, agresivo, en jauría o en peligro",
+  SALUD: "su propia mascota está enferma, no come o tiene un problema de salud",
+  ADOPTAR: "adoptar o dar en adopción",
+  SEGUIMIENTO: "estado de sus solicitudes o trámites",
+  COMUNITARIOS: "perros comunitarios del barrio",
+  MAPA: "el mapa de la comuna",
+  OTRO: "nada de lo anterior, o consultas ajenas al cuidado de mascotas (horarios de la municipalidad, otros trámites, bromas)",
+};
 
 /** Ánimo del personaje al responder (cada uno es una ilustración). */
 export type AnimoPawni = "reposo" | "saluda" | "feliz" | "atento";
@@ -31,15 +52,23 @@ const PROPIAS: [TemaPawni, RegExp][] = [
   ["COSTO", /\b(cuesta|cuestan|cuanto vale|precio|valor|gratis|gratuit\w*|cobran?|pagar|pago)\b/],
   ["COMUNITARIOS", /\bcomunitari\w*/],
   ["MAPA", /\bmapa\b/],
-  ["QUE_ES", /\b(que es|que puedo hacer|para que sirve|como funciona|quien eres|que haces|muestrame|ensename|pawni)\b/],
+  // Preguntar por las mascotas perdidas no es haber perdido una.
+  ["AVISOS", /\b(cuant[ao]s|hay|ver|veo|lista|donde estan)\b.*\b(perdid|extraviad|avistad)/],
+  ["QUE_ES", /\b(tu nombre|como te llamas|quien eres|que eres|que es pawni|que es este portal|para que sirve|como funciona)\b/],
+  ["SALUDO", /^(hola|holi|buenas|buenos dias|buenas tardes|buenas noches|wena|alo|hey)\b/],
+  ["SALUD", /\b(mi (perr|gat|mascota)\w*).*\b(no come|enferm\w*|vomit\w*|diarrea|fiebre|cojea|decaid\w*)/],
 ];
+
+// Pregunta general: solo si no habla de nada más concreto.
+const GENERAL = /\b(que puedo hacer|que haces|muestrame|ensename|ayuda|ayudame|pawni)\b/;
 
 export function temaDe(texto: string): TemaPawni {
   const reglas = clasificar(texto);
   if (reglas === "SOS") return "SOS";
   const t = normalizar(texto);
   for (const [tema, patron] of PROPIAS) if (patron.test(t)) return tema;
-  return reglas;
+  if (reglas !== "OTRO") return reglas;
+  return GENERAL.test(t) ? "QUE_ES" : "OTRO";
 }
 
 /** Datos del próximo operativo publicado, ya formateados en el servidor. */
@@ -151,11 +180,32 @@ export function responderPawni(tema: TemaPawni, operativo: OperativoPawni, nombr
         acciones: [{ texto: "Ver el mapa", href: "/mapa" }],
         animo: "feliz",
       };
+    case "SALUDO":
+      return {
+        texto: `¡Hola! Soy ${nombre}. ¿En qué te ayudo? Pregúntame por operativos, mascotas perdidas, SOS o adopción.`,
+        acciones: [{ texto: "Recorrer el portal", href: RECORRIDO }],
+        animo: "saluda",
+      };
+    case "SALUD":
+      return {
+        texto: "Si tu mascota está enferma, llévala a un veterinario lo antes posible. Para vacunas y esterilización, revisa los operativos.",
+        acciones: [{ texto: "Ver operativos", href: "/operativos" }],
+        animo: "atento",
+      };
+    case "AVISOS":
+      return {
+        texto: "Las mascotas perdidas y avistadas están en el portal, con foto. En el mapa las ves por sector.",
+        acciones: [
+          { texto: "Ver mascotas perdidas", href: "/mascotas" },
+          { texto: "Ver el mapa", href: "/mapa" },
+        ],
+        animo: "atento",
+      };
     case "GRACIAS":
       return { texto: "¡De nada! Aquí estoy si necesitas algo más.", acciones: [], animo: "feliz" };
     default:
       return {
-        texto: "No estoy seguro de haberte entendido. Prueba con una de las preguntas de abajo o recorre el portal conmigo.",
+        texto: "Eso no lo sé responder. Te ayudo con operativos, mascotas perdidas, SOS y adopción. Para otras consultas, contacta a la municipalidad.",
         acciones: [{ texto: "Recorrer el portal", href: RECORRIDO }],
         animo: "atento",
       };

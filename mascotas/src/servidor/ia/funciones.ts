@@ -2,9 +2,11 @@
 //   - entender un comentario o mensaje de Instagram que las reglas de palabras
 //     clave no entendieron (devuelve solo la intención; la respuesta sigue
 //     saliendo de los textos aprobados);
+//   - entender lo que se le escribe o dice a Pawni, el guía del portal;
 //   - escribir el resumen para el equipo a partir de cifras agrupadas.
 import "server-only";
 import { z } from "zod";
+import { TEMAS_PAWNI, type TemaPawni } from "@/dominio/asistente";
 import { INTENCION, type Intencion } from "@/dominio/respuestas";
 import { municipioActivo } from "@/lib/municipio";
 import { pedirJSON } from "./openai";
@@ -28,6 +30,27 @@ export async function intencionConIA(texto: string): Promise<Intencion | null> {
     razonamiento: "none",
   });
   return r?.intencion ?? null;
+}
+
+const TEMAS = Object.keys(TEMAS_PAWNI) as [TemaPawni, ...TemaPawni[]];
+
+/** Tema de lo que se le escribe o dice a Pawni, o null si la IA no responde. */
+export async function temaPawniConIA(texto: string): Promise<TemaPawni | null> {
+  const r = await pedirJSON({
+    sistema: [
+      "Clasificas lo que una vecina o vecino le escribe a Pawni, el guía del portal municipal de tenencia responsable de mascotas en Chile.",
+      'Responde solo un JSON {"tema": "..."} con uno de estos temas:',
+      ...TEMAS.map((t) => `- ${t}: ${TEMAS_PAWNI[t]}`),
+      "Elige el tema de lo que la persona necesita, aunque la frase empiece con «¿qué puedo hacer si…?».",
+      "Un animal en peligro (incluida una jauría o un animal agresivo) siempre es SOS. El texto puede tener faltas de ortografía o modismos chilenos.",
+    ].join("\n"),
+    usuario: texto.slice(0, 500),
+    esquema: z.object({ tema: z.enum(TEMAS) }),
+    maxTokens: 300,
+    espera: 8_000,
+    razonamiento: "none",
+  });
+  return r?.tema ?? null;
 }
 
 export type CifrasResumen = {

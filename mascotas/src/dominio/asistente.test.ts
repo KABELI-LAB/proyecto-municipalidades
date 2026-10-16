@@ -37,7 +37,7 @@ describe("Pawni responde", () => {
   });
 
   it("frases cortas, sin «debe» y sin pedir datos personales", () => {
-    const temas = ["QUE_ES", "SERVICIO", "COSTO", "PERDI", "VISTO", "ES_MIO", "SOS", "ADOPTAR", "SEGUIMIENTO", "COMUNITARIOS", "MAPA", "GRACIAS", "OTRO"] as const;
+    const temas = ["QUE_ES", "SALUDO", "SERVICIO", "COSTO", "PERDI", "VISTO", "ES_MIO", "SOS", "ADOPTAR", "SEGUIMIENTO", "COMUNITARIOS", "MAPA", "AVISOS", "SALUD", "GRACIAS", "OTRO"] as const;
     for (const t of temas) {
       const { texto } = responderPawni(t, null, "Pawni");
       expect(texto).not.toMatch(/\bdebe/i);
@@ -49,5 +49,27 @@ describe("Pawni responde", () => {
 describe("Pawni entiende modismos", () => {
   it("«se me arrancó» es perdí", () => {
     expect(temaDe("se me arrancó la perrita")).toBe("PERDI");
+  });
+});
+
+describe("Pawni entiende una conversación real (reglas, sin IA)", () => {
+  const casos: [string, string][] = [
+    ["Hola pauli.", "SALUDO"],
+    ["¿Qué puedo hacer en este portal?", "QUE_ES"],
+    ["Quiero adoptar una mascota.", "ADOPTAR"],
+    ["¿Qué puedo hacer si hay una jauría de perros cerca?", "SOS"],
+    ["Hay un perro en peligro.", "SOS"],
+    ["¿Qué puedo hacer si perdí a mi mascota?", "PERDI"],
+    ["¿Sabes si hay algún operativo activo?", "OPERATIVO"],
+    ["¿Dónde puedo solicitar un servicio?", "SERVICIO"],
+    ["¿Cómo puedo revisar el estado de mis solicitudes?", "SEGUIMIENTO"],
+    ["¿Cuántas mascotas hay perdidas en el sector?", "AVISOS"],
+    ["¿Cuesta algo?", "COSTO"],
+    ["¿Cuál es tu nombre?", "QUE_ES"],
+    ["Gracias, muy amable", "GRACIAS"],
+    ["oye mi perrito no come hace dos dias", "SALUD"],
+  ];
+  it.each(casos)("«%s» → %s", (texto, tema) => {
+    expect(temaDe(texto)).toBe(tema);
   });
 });

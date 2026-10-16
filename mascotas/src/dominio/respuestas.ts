@@ -34,12 +34,12 @@ export function normalizar(texto: string): string {
 
 // En orden de prioridad: un animal en peligro va primero.
 const REGLAS: [Intencion, RegExp][] = [
-  ["SOS", /\b(herid|atropell|maltrat|envenen|sangr|agoniz|abandon|emergencia|urgente|se esta muriendo|golpead)/],
+  ["SOS", /\b(herid|atropell|maltrat|envenen|sangr|agoniz|abandon|emergencia|urgente|se esta muriendo|golpead|peligro|jauri|agresiv|mordi|atrapad)/],
   ["ES_MIO", /\b(es mio|es mia|es mi (perr|gat|mascota)|es el mio|es la mia|es de mi (casa|familia)|es nuestr)/],
   ["VISTO", /\b(vi|vimos|lo vi|la vi|los vi|las vi|lo he visto|la he visto|lo hemos visto|visto|vista|anda por|andaba|esta en|estaba en|lo tengo|la tengo|lo encontre|la encontre|aparecio|lo veo|la veo|pasa por|pasea por)\b/],
   ["PERDI", /\b(perdi|se me perdio|se perdio|se escapo|se me escapo|extravi|busco a mi|no encuentro a mi|se arranco|se me arranco|se fue de la casa)/],
   ["ADOPTAR", /\b(adopt|adopcion|darle (un )?hogar|lo quiero|la quiero|me lo llevo|me la llevo)/],
-  ["SERVICIO", /\b(vacun|esteriliz|castra|chip|antirrabic|desparasit)/],
+  ["SERVICIO", /\b(vacun|esteriliz|castra|chip|antirrabic|desparasit|servicio)/],
   ["OPERATIVO", /\b(operativo|cupo|inscrib|inscripcion|horario|a que hora|que hora|cuando es|cuando son|donde es|donde sera|requisito|ayuno)/],
   ["GRACIAS", /^(gracias|muchas gracias|que lindo|que linda|hermos[oa]|bello|bella|bkn|bacan|excelente|buena iniciativa|felicitaciones|hola|buenas|buenos dias|buenas tardes|buenas noches)\b/],
 ];
