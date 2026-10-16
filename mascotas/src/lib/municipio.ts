@@ -5,6 +5,8 @@ export type Municipio = {
   id: string;
   nombre: string;
   nombreOficial: string;
+  /** Nombre de la plataforma que ven las vecinas y vecinos (por ejemplo, «Pawni»). */
+  plataforma: string;
   /** Firma institucional en dos líneas; el corte va después de «Municipalidad». */
   firma: [string, string];
   sitioWeb: string;
@@ -46,7 +48,8 @@ export function municipioActivo(): Municipio {
   if (cache?.ruta === ruta && ahora - cache.revisado < 1000) return cache.municipio;
   const modificado = statSync(ruta).mtimeMs;
   if (cache?.ruta !== ruta || cache.modificado !== modificado) {
-    cache = { ruta, modificado, revisado: ahora, municipio: JSON.parse(readFileSync(ruta, "utf8")) as Municipio };
+    // «Pawni» si la configuración no trae nombre de plataforma.
+    cache = { ruta, modificado, revisado: ahora, municipio: { plataforma: "Pawni", ...(JSON.parse(readFileSync(ruta, "utf8")) as Omit<Municipio, "plataforma">) } };
   }
   cache.revisado = ahora;
   return cache.municipio;

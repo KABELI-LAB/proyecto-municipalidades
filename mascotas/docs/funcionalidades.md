@@ -326,6 +326,26 @@ vea `.env.example`). Quedan en cola y se envían después de guardar la acción;
 cada una queda como enviada o fallida, con el motivo. Sin configuración, o con
 datos de demostración, quedan simuladas y se ven en Mis solicitudes.
 
+### Pawni, el quiltro guía
+
+Un personaje ilustrado (única excepción al sistema de diseño) en todo el
+portal, abajo a la derecha. Cuatro ilustraciones (reposo, saluda, feliz,
+atento) con movimiento propio: respira, se balancea al saludar, salta de
+alegría y ladea la cabeza al escuchar. Tras 25 segundos sin actividad se echa
+a dormir. Sin movimiento si el sistema pide reducirlo.
+
+- **Saludo** la primera vez: «¿Te muestro el portal en un minuto?», con «Sí,
+  muéstrame» y «Ahora no». No vuelve a aparecer.
+- **Conversación:** preguntas sugeridas y texto libre. Entiende con reglas
+  (`src/dominio/asistente.ts`, las mismas de Instagram más temas del portal) y
+  responde con textos aprobados y el enlace que corresponde. El próximo
+  operativo, con fecha, lugar y cupos reales. Si la inteligencia artificial
+  está encendida, ChatGPT solo elige el tema cuando las reglas no entienden.
+  No pide RUT, dirección ni teléfono.
+- **Escuchar:** lee el texto con la voz del propio dispositivo.
+- **Recorrido guiado** por el inicio (6 pasos, con Anterior, Siguiente y
+  Saltar). Desde otra página, lleva al inicio y empieza.
+
 ### Mis solicitudes (`/mis-solicitudes`)
 
 - **Dos formas de entrar, sin registrarse:**
@@ -433,6 +453,10 @@ Un resumen simple de lo que hacen los vecinos en el portal, sin índices:
 - **Qué servicios piden**, de más a menos, con barras.
 - **Qué reportan por SOS** en 30 días, por tipo.
 - **Dónde:** por sector, solicitudes, reportes y avisos de mascotas.
+- **Resumen para el equipo** (si la inteligencia artificial está encendida):
+  «Generar resumen» envía a ChatGPT solo las cifras agrupadas de esta página
+  y guarda un párrafo corto con lo que destaca, dónde y una o dos
+  recomendaciones («Se recomienda evaluar…»). Se muestra con su fecha y hora.
 
 ### Mapa por sectores (`/panel/mapa`)
 
@@ -479,6 +503,8 @@ Instagram a la vez; no hay una bandeja de redes aparte.
   - «Incluir datos de demostración», solo para pruebas.
   - «Responder comentarios y mensajes» (apagado por omisión) y la lista de lo
     último que escribieron y qué se respondió.
+  - «Usar inteligencia artificial (ChatGPT)», apagado por omisión; exige
+    `OPENAI_API_KEY` en el servidor.
 - **Respuestas automáticas** (reglas por palabras clave, sin inteligencia
   artificial; `src/dominio/respuestas.ts`): Instagram avisa cada comentario y
   mensaje al webhook `/api/instagram/webhook` (firma de Meta validada).
@@ -491,6 +517,11 @@ Instagram a la vez; no hay una bandeja de redes aparte.
   - Un animal herido o en peligro siempre lleva a SOS Mascotas.
   - Cada comentario o mensaje se responde una vez; nunca a la propia cuenta.
     No se guarda el nombre de usuario.
+  - **Con inteligencia artificial** (si está encendida): cuando las palabras
+    clave no entienden el texto, se le pregunta a ChatGPT la intención
+    (solo el texto). La respuesta sigue saliendo de los mismos textos
+    aprobados; si la IA falla, se responde como sin ella. El panel marca
+    «entendido con IA».
 
 - **Qué sale a Instagram:** los avisos de mascotas perdidas y avistadas al
   aceptarlos, los operativos al publicarlos y las fichas de adopción al

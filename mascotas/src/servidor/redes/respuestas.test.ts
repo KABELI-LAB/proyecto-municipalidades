@@ -11,7 +11,7 @@ import { crearBaseTemporal } from "@/pruebas/baseTemporal";
 
 vi.mock("next/cache", () => ({ revalidatePath: () => {} }));
 
-const ENTORNO = ["INSTAGRAM_USER_ID", "INSTAGRAM_ACCESS_TOKEN", "APP_URL", "INSTAGRAM_APP_SECRET", "META_APP_SECRET", "INSTAGRAM_WEBHOOK_TOKEN"] as const;
+const ENTORNO = ["INSTAGRAM_USER_ID", "INSTAGRAM_ACCESS_TOKEN", "APP_URL", "INSTAGRAM_APP_SECRET", "META_APP_SECRET", "INSTAGRAM_WEBHOOK_TOKEN", "OPENAI_API_KEY"] as const;
 const guardado = Object.fromEntries(ENTORNO.map((k) => [k, process.env[k]]));
 const CUENTA = "17841400000000000";
 
@@ -151,5 +151,63 @@ describe("respuestas automáticas", () => {
     const fila = await db.interaccionRed.findUniqueOrThrow({ where: { igId: "c-4" } });
     expect([fila.estado, fila.respuestaPublica]).toEqual(["ERROR", null]);
     expect(fila.error).toMatch(/Fuera de plazo/);
+  });
+});
+
+describe("con inteligencia artificial", () => {
+  /** OpenAI e Instagram simulados: la IA contesta la intención indicada (o falla). */
+  function apis(intencion: string | null) {
+    const instagram: { ruta: string; datos: URLSearchParams }[] = [];
+    const ia: string[] = [];
+    vi.stubGlobal("fetch", async (url: string, init?: RequestInit) => {
+      if (url.startsWith("https://api.openai.com/")) {
+        const cuerpo = JSON.parse(String(init?.body));
+        ia.push(cuerpo.messages[1].content);
+        if (!intencion) return new Response(JSON.stringify({ error: { message: "Sin saldo" } }), { status: 429 });
+        return new Response(JSON.stringify({ choices: [{ message: { content: JSON.stringify({ intencion }) } }] }));
+      }
+      instagram.push({ ruta: new URL(url).pathname.replace(/^\/v[\d.]+\//, ""), datos: new URLSearchParams(String(init?.body ?? "")) });
+      return new Response(JSON.stringify({ id: "r", message_id: "m" }));
+    });
+    return { instagram, ia };
+  }
+  const mensaje = (mid: string, texto: string) => ({ object: "instagram", entry: [{ messaging: [{ sender: { id: "igsid-3" }, message: { mid, text: texto } }] }] });
+
+  it("apagada: no consulta a la IA aunque haya clave", async () => {
+    configurar();
+    process.env.OPENAI_API_KEY = "clave-de-prueba";
+    await db.municipio.update({ where: { id: "hualane" }, data: { redesResponderAuto: true, iaActiva: false } });
+    const { ia } = apis("ADOPTAR");
+    await respuestas.procesarAviso(mensaje("mid-ia-0", "ando buscando un regalón pa la casa"));
+    expect(ia).toHaveLength(0);
+    expect((await db.interaccionRed.findUniqueOrThrow({ where: { igId: "mid-ia-0" } })).clasificadoPor).toBe("REGLAS");
+  });
+
+  it("encendida: entiende lo que las reglas no y responde con el texto aprobado", async () => {
+    configurar();
+    process.env.OPENAI_API_KEY = "clave-de-prueba";
+    await db.municipio.update({ where: { id: "hualane" }, data: { redesResponderAuto: true, iaActiva: true } });
+    const { instagram, ia } = apis("ADOPTAR");
+    await respuestas.procesarAviso(mensaje("mid-ia-1", "ando buscando un regalón pa la casa"));
+    expect(ia).toEqual(["ando buscando un regalón pa la casa"]);
+    expect(JSON.parse(instagram[0].datos.get("message")!).text).toContain("https://tenencia.ejemplo.cl/adoptar");
+    const fila = await db.interaccionRed.findUniqueOrThrow({ where: { igId: "mid-ia-1" } });
+    expect([fila.intencion, fila.clasificadoPor, fila.estado]).toEqual(["ADOPTAR", "IA", "RESPONDIDA"]);
+  });
+
+  it("si las reglas entienden, no consulta a la IA", async () => {
+    configurar();
+    const { ia } = apis("SOS");
+    await respuestas.procesarAviso(mensaje("mid-ia-2", "¿Cuándo es el próximo operativo?"));
+    expect(ia).toHaveLength(0);
+  });
+
+  it("si la IA falla, responde como sin ella", async () => {
+    configurar();
+    const { instagram } = apis(null);
+    await respuestas.procesarAviso(mensaje("mid-ia-3", "consulta rara"));
+    expect(instagram).toHaveLength(1);
+    const fila = await db.interaccionRed.findUniqueOrThrow({ where: { igId: "mid-ia-3" } });
+    expect([fila.intencion, fila.clasificadoPor, fila.estado]).toEqual(["OTRO", "REGLAS", "RESPONDIDA"]);
   });
 });

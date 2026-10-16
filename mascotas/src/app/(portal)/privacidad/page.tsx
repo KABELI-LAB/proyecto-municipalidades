@@ -45,6 +45,13 @@ export default function Privacidad() {
           responderte. No guardamos tu nombre de usuario.
         </p>
 
+        <h2>Inteligencia artificial</h2>
+        <p>
+          Si el equipo municipal la activa, usamos un servicio de inteligencia artificial (ChatGPT, de la empresa OpenAI) en dos casos. Para entender un
+          comentario o mensaje de Instagram, le enviamos solo su texto, sin tu cuenta ni tu nombre. Para el resumen del equipo, le enviamos solo cifras
+          agrupadas, nunca datos de personas. Las respuestas siguen siendo textos aprobados por el equipo.
+        </p>
+
         <h2>Cuánto tiempo los guardamos</h2>
         <p>Mientras tu trámite esté vigente y el tiempo que exija la normativa municipal: [plazo de conservación].</p>
 

@@ -4,6 +4,8 @@ import {
   ArrowLeft,
   ArrowRight,
   CalendarDays,
+  ChevronLeft,
+  ChevronRight,
   Check,
   Clock,
   FileText,
@@ -16,9 +18,11 @@ import {
   MessageCircle,
   PawPrint,
   Search,
+  SendHorizontal,
   Settings,
   Stethoscope,
   TriangleAlert,
+  Volume2,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -43,6 +47,10 @@ const ICONOS = {
   mensaje: MessageCircle,
   ubicacion: MapPin,
   ajustes: Settings,
+  enviar: SendHorizontal,
+  escuchar: Volume2,
+  anterior: ChevronLeft,
+  siguiente: ChevronRight,
 } satisfies Record<string, LucideIcon>;
 
 export type NombreIcono = keyof typeof ICONOS;

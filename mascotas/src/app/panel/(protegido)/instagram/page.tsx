@@ -8,8 +8,10 @@ import { PERMISO_RED, type TipoRed } from "@/dominio/redes";
 import { requerir } from "@/servidor/auth";
 import { INTENCION, type Intencion } from "@/dominio/respuestas";
 import { fechaCorta } from "@/servidor/formato";
+import { guardarIaActiva } from "@/servidor/panel/acciones-ia";
 import { guardarDemoInstagram, guardarPublicacionAutomatica, guardarRespuestasAutomaticas } from "@/servidor/panel/acciones-redes";
 import { ultimasInteracciones } from "@/servidor/redes/respuestas";
+import { iaActiva, iaConfigurada } from "@/servidor/ia/openai";
 import { configuracionInstagram, pendientesInstagram } from "@/servidor/panel/instagram";
 import estilos from "@/estilos/paginas.module.css";
 import propios from "./instagram.module.css";
@@ -25,7 +27,7 @@ export default async function Instagram() {
   const tipos = (Object.keys(PERMISO_RED) as TipoRed[]).filter((t) => puede(usuario.rol, PERMISO_RED[t]));
   if (!administra && !tipos.length) redirect(inicioDe(usuario.rol));
   const { automatica, incluirDemo, responder, integracion, faltanParaResponder } = await configuracionInstagram();
-  const [pendientes, conversaciones] = await Promise.all([pendientesInstagram(incluirDemo, tipos), ultimasInteracciones(15)]);
+  const [pendientes, conversaciones, conIA] = await Promise.all([pendientesInstagram(incluirDemo, tipos), ultimasInteracciones(15), iaActiva()]);
 
   return (
     <div className={`contenedor ${estilos.pagina}`}>
@@ -72,6 +74,14 @@ export default async function Instagram() {
             {faltanParaResponder.length > 0 && (
               <p className={propios.nota}>Para que Instagram nos avise de comentarios y mensajes falta configurar: {faltanParaResponder.join(", ")}.</p>
             )}
+            <Interruptor
+              id="usar-ia"
+              etiqueta="Usar inteligencia artificial (ChatGPT)"
+              descripcion="Entiende los comentarios y mensajes que las palabras clave no entienden, y escribe el resumen para el equipo. Se envía el texto del comentario o las cifras agrupadas, nunca datos de cuentas ni de personas."
+              inicial={conIA}
+              guardar={guardarIaActiva}
+            />
+            {!iaConfigurada() && <p className={propios.nota}>Para usarla falta configurar: OPENAI_API_KEY.</p>}
             <Interruptor
               id="incluir-demo"
               etiqueta="Incluir datos de demostración"
@@ -129,7 +139,8 @@ export default async function Instagram() {
                 <span>
                   <b>«{c.texto.length > 140 ? `${c.texto.slice(0, 137)}…` : c.texto}»</b>
                   <span className={propios.nota}>
-                    {c.canal === "COMENTARIO" ? "Comentario" : "Mensaje"} · {INTENCION[c.intencion as Intencion] ?? c.intencion} · {fechaCorta(c.creadaEn)}
+                    {c.canal === "COMENTARIO" ? "Comentario" : "Mensaje"} · {INTENCION[c.intencion as Intencion] ?? c.intencion}
+                    {c.clasificadoPor === "IA" && " (entendido con IA)"} · {fechaCorta(c.creadaEn)}
                   </span>
                   {c.error && <span className={propios.nota}>No se pudo responder: {c.error}</span>}
                 </span>

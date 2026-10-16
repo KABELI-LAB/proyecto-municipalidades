@@ -31,7 +31,7 @@ export default async function LayoutPanel({ children }: { children: ReactNode })
         <div className={`contenedor ${estilos.barra}`}>
           <div className={estilos.identidad}>
             <Logo municipio={municipio} variante="institucional" />
-            <span className={estilos.modulo}>Panel municipal · Tenencia responsable</span>
+            <span className={estilos.modulo}>Panel municipal · {municipio.plataforma}</span>
           </div>
           <div className={estilos.cuenta}>
             <span>

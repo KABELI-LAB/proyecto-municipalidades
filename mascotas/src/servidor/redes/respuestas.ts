@@ -1,6 +1,7 @@
 // Respuestas automáticas a comentarios y mensajes de Instagram. Instagram avisa
 // cada comentario o mensaje al webhook (src/app/api/instagram/webhook); aquí se
-// clasifica con las reglas de src/dominio/respuestas.ts y se responde:
+// clasifica con las reglas de src/dominio/respuestas.ts (y, si no las entiende
+// y la IA está encendida, se le pregunta la intención) y se responde:
 //   - comentario en una publicación: respuesta pública breve y el detalle con
 //     el enlace exacto por mensaje privado;
 //   - mensaje directo: respuesta por mensaje con el enlace de la sección.
@@ -8,10 +9,12 @@
 // repetido no responde dos veces. No se guarda el nombre de usuario.
 import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { clasificar, enlaceEnTexto, enlacesDe, mensajePrivado, respuestaPublica, type Contexto } from "@/dominio/respuestas";
+import { clasificar, enlaceEnTexto, enlacesDe, mensajePrivado, respuestaPublica, type Contexto, type Intencion } from "@/dominio/respuestas";
 import type { TipoRed } from "@/dominio/redes";
 import { municipioActivo } from "@/lib/municipio";
 import { db } from "@/servidor/db";
+import { intencionConIA } from "@/servidor/ia/funciones";
+import { iaActiva } from "@/servidor/ia/openai";
 import { enviarMensaje, responderComentario, responderEnPrivado, textoDePublicacion, urlPublica } from "./instagram";
 
 /**
@@ -114,6 +117,19 @@ export async function procesarAviso(aviso: Aviso): Promise<void> {
   }
 }
 
+/**
+ * Si las reglas no entendieron el texto y la IA está encendida, se le pregunta
+ * la intención (solo el texto, sin datos de la cuenta). La respuesta sigue
+ * saliendo de los textos aprobados; si la IA falla, queda la de las reglas.
+ */
+async function entender(id: string, texto: string, intencion: Intencion): Promise<Intencion> {
+  if (intencion !== "OTRO" || !(await iaActiva())) return intencion;
+  const otra = await intencionConIA(texto);
+  if (!otra || otra === "OTRO") return intencion;
+  await db.interaccionRed.update({ where: { id }, data: { intencion: otra, clasificadoPor: "IA" } });
+  return otra;
+}
+
 /** Registra la interacción una sola vez; devuelve false si ya se había recibido. */
 async function registrar(datos: { canal: string; igId: string; autorIgId: string; mediaId?: string; origenTipo: string | null; origenId: string | null; texto: string; intencion: string }) {
   try {
@@ -127,10 +143,11 @@ async function registrar(datos: { canal: string; igId: string; autorIgId: string
 async function atenderComentario(c: Comentario) {
   const base = urlPublica();
   const texto = (c.text ?? "").slice(0, 1000);
-  const intencion = clasificar(texto);
-  const id = await registrar({ canal: "COMENTARIO", igId: c.id, autorIgId: c.from!.id!, mediaId: c.media?.id, origenTipo: null, origenId: null, texto, intencion });
+  const reglas = clasificar(texto);
+  const id = await registrar({ canal: "COMENTARIO", igId: c.id, autorIgId: c.from!.id!, mediaId: c.media?.id, origenTipo: null, origenId: null, texto, intencion: reglas });
   if (!id) return;
   if (!base || !(await respuestasActivas())) return void (await db.interaccionRed.update({ where: { id }, data: { estado: "SIN_RESPUESTA" } }));
+  const intencion = await entender(id, texto, reglas);
   // Solo si vamos a responder se averigua de qué publicación se trata (puede consultar Instagram).
   const { contexto, tipo, origenId } = await contextoDe(c.media?.id, base);
   if (tipo) await db.interaccionRed.update({ where: { id }, data: { origenTipo: tipo, origenId } });
@@ -159,10 +176,11 @@ async function atenderComentario(c: Comentario) {
 async function atenderMensaje(autor: string, mid: string, textoOriginal: string) {
   const base = urlPublica();
   const texto = textoOriginal.slice(0, 1000);
-  const intencion = clasificar(texto);
-  const id = await registrar({ canal: "MENSAJE", igId: mid, autorIgId: autor, origenTipo: null, origenId: null, texto, intencion });
+  const reglas = clasificar(texto);
+  const id = await registrar({ canal: "MENSAJE", igId: mid, autorIgId: autor, origenTipo: null, origenId: null, texto, intencion: reglas });
   if (!id) return;
   if (!base || !(await respuestasActivas())) return void (await db.interaccionRed.update({ where: { id }, data: { estado: "SIN_RESPUESTA" } }));
+  const intencion = await entender(id, texto, reglas);
   const respuesta = mensajePrivado(intencion, null, enlacesDe(base)) ?? `Gracias por escribirnos. Todo lo del programa está en el portal: ${base}`;
   const r = await enviarMensaje(autor, respuesta);
   await db.interaccionRed.update({ where: { id }, data: r.ok ? { estado: "RESPONDIDA", respuestaPrivada: respuesta } : { estado: "ERROR", error: r.error } });

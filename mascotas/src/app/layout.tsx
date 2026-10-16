@@ -11,8 +11,8 @@ const mono = Atkinson_Hyperlegible_Mono({ subsets: ["latin"], weight: ["400", "5
 export function generateMetadata(): Metadata {
   const municipio = municipioActivo();
   return {
-    title: `Tenencia responsable · ${municipio.nombre}`,
-    description: `Plataforma de tenencia responsable de la ${municipio.nombreOficial}.`,
+    title: `${municipio.plataforma} · ${municipio.nombre}`,
+    description: `${municipio.plataforma}: todo para cuidar a las mascotas de la comuna. ${municipio.nombreOficial}.`,
     icons: { icon: municipio.identidad.marcaDigital },
   };
 }

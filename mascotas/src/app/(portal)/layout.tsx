@@ -6,6 +6,7 @@ import { Cauce } from "@/componentes/Cauce";
 import { Icono } from "@/componentes/Icono";
 import { Logo } from "@/componentes/Logo";
 import { FranjaDemo } from "@/componentes/FranjaDemo";
+import { Pawni } from "@/componentes/portal/pawni/Pawni";
 import { municipioActivo } from "@/lib/municipio";
 import { hayDemoEnCache } from "@/servidor/portal/enCache";
 import estilos from "./portal.module.css";
@@ -26,12 +27,12 @@ export default async function LayoutPortal({ children }: { children: ReactNode }
       {demo && <FranjaDemo />}
       <header className={estilos.encabezado}>
         <div className={`contenedor ${estilos.barra}`}>
-          <Link href="/" className={estilos.inicio} aria-label={`Inicio · Tenencia responsable · ${municipio.nombreOficial}`}>
+          <Link href="/" className={estilos.inicio} aria-label={`Inicio · ${municipio.plataforma} · ${municipio.nombreOficial}`}>
             <Logo municipio={municipio} variante="ciudadano" />
-            <span className={estilos.programa}>Tenencia responsable</span>
+            <span className={estilos.programa}>{municipio.plataforma}</span>
           </Link>
           {/* El seguimiento de trámites es lo que más se busca al volver: siempre a mano. */}
-          <Link href="/mis-solicitudes" className={estilos.solicitudes}>
+          <Link href="/mis-solicitudes" className={estilos.solicitudes} data-recorrido="solicitudes">
             <Icono nombre="documento" tamano={20} />
             Mis solicitudes
           </Link>
@@ -63,6 +64,8 @@ export default async function LayoutPortal({ children }: { children: ReactNode }
           </Link>
         </div>
       </footer>
+      {/* Pawni, el quiltro guía: conversación y recorrido por el portal. */}
+      <Pawni nombre={municipio.plataforma} />
     </>
   );
 }

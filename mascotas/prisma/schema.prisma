@@ -44,6 +44,8 @@ model Municipio {
   redesPublicarAuto  Boolean @default(true)
   /// Responder automáticamente comentarios y mensajes de Instagram (apagado hasta configurar Meta).
   redesResponderAuto Boolean @default(false)
+  /// Usar inteligencia artificial (OpenAI) para el resumen del panel y para entender comentarios y mensajes.
+  iaActiva           Boolean @default(false)
 
   sectores     Sector[]
   servicios    Servicio[]
@@ -1205,6 +1207,8 @@ model InteraccionRed {
   origenId         String?
   texto            String
   intencion        String
+  /// Quién decidió la intención: REGLAS (palabras clave) o IA.
+  clasificadoPor   String   @default("REGLAS")
   respuestaPublica String?
   respuestaPrivada String?
   /// RESPONDIDA, SIN_RESPUESTA (apagado o sin nada que decir) o ERROR.
@@ -1213,4 +1217,17 @@ model InteraccionRed {
   creadaEn         DateTime @default(now())
 
   @@index([municipioId, creadaEn])
+}
+
+/// Resumen para el equipo escrito por la IA a partir de cifras agrupadas (nunca datos de personas).
+model ResumenIA {
+  id          String   @id @default(cuid())
+  municipioId String
+  texto       String
+  /// Las cifras que se le entregaron, en JSON, para mostrarlas junto al texto.
+  cifras      String
+  modelo      String
+  creadoEn    DateTime @default(now())
+
+  @@index([municipioId, creadoEn])
 }

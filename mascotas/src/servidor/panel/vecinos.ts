@@ -65,3 +65,8 @@ export async function loQuePidenLosVecinos() {
     porTipo,
   };
 }
+
+/** El último resumen escrito por la IA, si lo hay. */
+export function ultimoResumen() {
+  return db.resumenIA.findFirst({ where: { municipioId: municipioActivo().id }, orderBy: { creadoEn: "desc" }, select: { texto: true, creadoEn: true } });
+}

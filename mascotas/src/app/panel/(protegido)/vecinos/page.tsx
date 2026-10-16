@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import { Cifra } from "@/componentes/Cifra";
+import { Icono } from "@/componentes/Icono";
+import { BotonAccion } from "@/componentes/panel/BotonAccion";
 import { numero } from "@/dominio/formato";
 import { requerir } from "@/servidor/auth";
-import { loQuePidenLosVecinos } from "@/servidor/panel/vecinos";
+import { fechaCorta, hora } from "@/servidor/formato";
+import { iaActiva } from "@/servidor/ia/openai";
+import { generarResumen } from "@/servidor/panel/acciones-ia";
+import { loQuePidenLosVecinos, ultimoResumen } from "@/servidor/panel/vecinos";
 import estilos from "@/estilos/paginas.module.css";
 import piezas from "@/componentes/panel/piezas.module.css";
 import propios from "./vecinos.module.css";
@@ -14,7 +19,7 @@ const plural = (n: number, uno: string, varios: string) => `${numero(n)} ${n ===
 // Responde: ¿qué están pidiendo y reportando los vecinos, y dónde?
 export default async function LoQuePiden() {
   await requerir("verIndicadores");
-  const d = await loQuePidenLosVecinos();
+  const [d, conIA, resumen] = await Promise.all([loQuePidenLosVecinos(), iaActiva(), ultimoResumen()]);
   const c = d.cifras;
   const maximo = Math.max(1, ...d.porServicio.map((s) => s.cantidad));
 
@@ -55,6 +60,29 @@ export default async function LoQuePiden() {
           <dd>{plural(c.fichas, "animal en adopción", "animales en adopción")}</dd>
         </div>
       </dl>
+
+      {(conIA || resumen) && (
+        <section className={propios.resumen} aria-labelledby="resumen">
+          <div className={propios.resumenTitulo}>
+            <h2 id="resumen">Resumen para el equipo</h2>
+            <span className={propios.insignia}>
+              <Icono nombre="info" tamano={14} />
+              Escrito con inteligencia artificial
+            </span>
+          </div>
+          {resumen ? (
+            <>
+              <p className={propios.resumenTexto}>{resumen.texto}</p>
+              <p className="nota">
+                Con las cifras de esta página al {fechaCorta(resumen.creadoEn)}, <span className="dato">{hora(resumen.creadoEn)}</span>. Revísalo antes de decidir.
+              </p>
+            </>
+          ) : (
+            <p className="nota">Un párrafo con lo que destaca y dónde. Solo se envían las cifras agrupadas, nunca datos de personas.</p>
+          )}
+          {conIA && <BotonAccion accion={generarResumen} texto={resumen ? "Actualizar resumen" : "Generar resumen"} />}
+        </section>
+      )}
 
       <div className={estilos.grillaDos}>
         <section className={estilos.panel} aria-labelledby="servicios">

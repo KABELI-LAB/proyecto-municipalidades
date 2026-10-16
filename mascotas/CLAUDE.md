@@ -32,6 +32,8 @@ Resultados → Datos). No es un portal de publicaciones.
   `design-system/assets/logo/`, nunca redibujados ni recoloreados.
 - Forma propia: el Cauce (ondas del escudo, `src/componentes/Cauce.tsx`) y el
   corte inclinado. Sin hojitas, huellas decorativas, montañas ni ilustración.
+  Única excepción aprobada: Pawni, el quiltro guía del portal
+  (`public/pawni/`, `src/componentes/portal/pawni/`). No se agregan otras.
 - Íconos: set Lucide (`lucide-react`), trazo 2 px, siempre con texto.
 - Referencias de componentes en `design-system/components/` y kits en
   `design-system/ui_kits/` (website y dashboard).

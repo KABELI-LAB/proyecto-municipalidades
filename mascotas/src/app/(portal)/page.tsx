@@ -51,7 +51,7 @@ export default async function Inicio() {
       <section className={inicio.portada} aria-labelledby="titulo-inicio">
         <div className={`contenedor ${inicio.portadaInterior}`}>
           <div className={inicio.mensaje}>
-            <p className="sobretitulo">Tenencia responsable · {municipio.nombre}</p>
+            <p className="sobretitulo">{municipio.plataforma} · {municipio.nombre}</p>
             <h1 id="titulo-inicio">Cuidamos juntos a nuestros animales</h1>
             <p className={inicio.bajada}>Avisa si perdiste o viste una mascota, pide ayuda para un animal e inscríbete en los operativos.</p>
           </div>
@@ -80,7 +80,7 @@ export default async function Inicio() {
           </h2>
           <ul className={inicio.principales}>
             <li>
-              <Link href="/operativos" className={`${inicio.principal} ${inicio.tonoAzul}`}>
+              <Link href="/operativos" className={`${inicio.principal} ${inicio.tonoAzul}`} data-recorrido="operativos">
                 <span className={inicio.principalIcono} aria-hidden="true">
                   <Icono nombre="calendario" tamano={28} />
                 </span>
@@ -102,7 +102,7 @@ export default async function Inicio() {
             </li>
 
             <li>
-              <div className={`${inicio.principal} ${inicio.tonoVerde}`}>
+              <div className={`${inicio.principal} ${inicio.tonoVerde}`} data-recorrido="mascotas">
                 <span className={inicio.principalIcono} aria-hidden="true">
                   <Icono nombre="huella" tamano={28} />
                 </span>
@@ -125,7 +125,7 @@ export default async function Inicio() {
             </li>
 
             <li>
-              <Link href="/reportar" className={`${inicio.principal} ${inicio.tonoRojo}`}>
+              <Link href="/reportar" className={`${inicio.principal} ${inicio.tonoRojo}`} data-recorrido="sos">
                 <span className={inicio.principalIcono} aria-hidden="true">
                   <Icono nombre="salvavidas" tamano={28} />
                 </span>
@@ -142,7 +142,7 @@ export default async function Inicio() {
           </ul>
 
           {/* 3. Las demás funciones, debajo de las protagonistas. */}
-          <nav aria-label="Otras funciones">
+          <nav aria-label="Otras funciones" data-recorrido="otros">
             <ul className={inicio.otros}>
               {OTROS.map((a) => (
                 <li key={a.href}>
@@ -163,7 +163,7 @@ export default async function Inicio() {
 
         {/* 4. Mapa, retrato y avisos. */}
         <div className={inicio.fila}>
-          <section className={inicio.tarjeta} aria-labelledby="comuna-mapa">
+          <section className={inicio.tarjeta} aria-labelledby="comuna-mapa" data-recorrido="mapa">
             <div className={inicio.tituloBloque}>
               <div>
                 <p className="sobretitulo">Mapa</p>

@@ -29,7 +29,7 @@ export default async function PaginaIngresar() {
           </div>
           <div className={estilos.cuerpoIngreso}>
             <h1>Panel municipal</h1>
-            <p>Programa de tenencia responsable. Acceso para funcionarios municipales.</p>
+            <p>{municipio.plataforma}, programa de tenencia responsable. Acceso para funcionarios municipales.</p>
             <FormularioIngreso />
             {demo && (
               <p className="nota">

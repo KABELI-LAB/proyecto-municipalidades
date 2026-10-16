@@ -59,3 +59,41 @@
   background: var(--blue-200);
   border-radius: var(--radius-full);
 }
+
+/* Resumen para el equipo, escrito por la IA: texto, fecha y botón. */
+.resumen {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
+}
+.resumenTitulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+.resumenTitulo h2 {
+  font-size: var(--type-h4-size);
+  line-height: var(--type-h4-lh);
+}
+.resumenTexto {
+  max-width: 70ch;
+  margin: 0;
+}
+.insignia {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: var(--weight-bold);
+  line-height: 1;
+  background: var(--blue-50);
+  color: var(--blue-700);
+}

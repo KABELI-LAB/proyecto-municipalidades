@@ -49,6 +49,7 @@ chat: van solo en las variables de entorno de Netlify y en `.env.produccion`
    | `INSTAGRAM_USER_ID`, `INSTAGRAM_ACCESS_TOKEN` | los de la cuenta de Instagram (opcional) |
    | `INSTAGRAM_APP_SECRET`, `META_APP_SECRET`, `INSTAGRAM_WEBHOOK_TOKEN` | para responder comentarios y mensajes (opcional; vea abajo) |
    | `BREVO_API_KEY` o `SMTP_…`, y `CORREO_REMITENTE` | para enviar correos (opcional) |
+   | `OPENAI_API_KEY` (y `OPENAI_MODEL`, `OPENAI_BASE_URL` si es Azure) | para la inteligencia artificial (opcional; se enciende en Panel › Instagram) |
 
 4. Publique (**Deploy**). Las fotos de los vecinos se guardan solas en Netlify Blobs.
 
