@@ -493,3 +493,42 @@
     transition: none;
   }
 }
+
+/* Micrófono: mientras escucha, se marca con un aro que late (y el texto lo dice). */
+.microfono {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  flex: none;
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: background var(--duration-micro) var(--ease-flow);
+}
+.microfono:hover:not(:disabled) {
+  background: var(--color-primary-subtle);
+}
+.microfono:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.escuchando {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  animation: escucha var(--duration-progress) ease-in-out infinite;
+}
+.escuchando:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+@keyframes escucha {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 40%, transparent); }
+  50% { box-shadow: 0 0 0 8px color-mix(in srgb, var(--color-primary) 0%, transparent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .escuchando {
+    animation: none;
+  }
+}

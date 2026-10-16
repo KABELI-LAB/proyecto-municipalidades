@@ -1,8 +1,9 @@
 "use client";
 // Pawni, el quiltro guía del portal: un botón fijo con su cara, un saludo la
 // primera vez, un panel de conversación con preguntas sugeridas y el
-// recorrido guiado por el inicio. Responde con textos aprobados y enlaces del
-// portal (src/dominio/asistente.ts); nunca pide datos personales.
+// recorrido guiado por el inicio. Se le puede escribir o hablar por micrófono;
+// si le hablas, te responde en voz alta. Responde con textos aprobados y
+// enlaces del portal (src/dominio/asistente.ts); nunca pide datos personales.
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, useTransition, type FormEvent } from "react";
@@ -11,7 +12,7 @@ import { RECORRIDO, SUGERENCIAS, type AccionPawni, type AnimoPawni } from "@/dom
 import { preguntarAPawni } from "@/servidor/portal/acciones-pawni";
 import { AvatarPawni } from "./Avatar";
 import { Recorrido } from "./Recorrido";
-import { callar, decir, hayVoz } from "./voz";
+import { callar, decir, escuchar, hayMicrofono, hayVoz } from "./voz";
 import estilos from "./pawni.module.css";
 
 type Mensaje = { id: number; de: "pawni" | "tu"; texto: string; acciones?: AccionPawni[] };
@@ -49,6 +50,9 @@ export function Pawni({ nombre }: { nombre: string }) {
   const [texto, setTexto] = useState("");
   const [pensando, iniciar] = useTransition();
   const [voz, setVoz] = useState(false);
+  const [microfono, setMicrofono] = useState(false);
+  const [escuchando, setEscuchando] = useState(false);
+  const detenerMicrofono = useRef<(() => void) | null>(null);
   const boton = useRef<HTMLButtonElement>(null);
   const campo = useRef<HTMLInputElement>(null);
   const lista = useRef<HTMLDivElement>(null);
@@ -63,6 +67,9 @@ export function Pawni({ nombre }: { nombre: string }) {
 
   useEffect(() => {
     setVoz(hayVoz());
+    setMicrofono(hayMicrofono());
+    // Algunos navegadores cargan sus voces después: se piden antes de hablar.
+    if (hayVoz()) window.speechSynthesis.getVoices();
     despertar("saluda");
     // El saludo aparece solo la primera vez.
     const t = leer(SALUDO_VISTO) ? undefined : window.setTimeout(() => setSaludo(true), 1200);
@@ -106,6 +113,7 @@ export function Pawni({ nombre }: { nombre: string }) {
 
   const cerrar = () => {
     callar();
+    detenerMicrofono.current?.();
     setAbierto(false);
     despertar("atento");
     boton.current?.focus();
@@ -122,7 +130,13 @@ export function Pawni({ nombre }: { nombre: string }) {
     }
   };
 
-  const preguntar = (pregunta: string) => {
+  /** Pawni dice el texto en voz alta y, mientras habla, se le ve feliz. */
+  const hablar = (dicho: string) => {
+    despertar("feliz");
+    decir(dicho, () => despertar("atento"));
+  };
+
+  const preguntar = (pregunta: string, hablada = false) => {
     const limpia = pregunta.trim();
     if (!limpia || pensando) return;
     setMensajes((m) => [...m, { id: Date.now(), de: "tu", texto: limpia }]);
@@ -133,10 +147,38 @@ export function Pawni({ nombre }: { nombre: string }) {
         const r = await preguntarAPawni(limpia);
         setMensajes((m) => [...m, { id: Date.now() + 1, de: "pawni", texto: r.texto, acciones: r.acciones }]);
         despertar(r.animo);
+        // Si le hablaste, te responde en voz alta.
+        if (hablada) hablar(r.texto);
       } catch {
         setMensajes((m) => [...m, { id: Date.now() + 1, de: "pawni", texto: "No pude responder ahora. Inténtalo de nuevo en un momento." }]);
         despertar("atento");
       }
+    });
+  };
+
+  const decirPawni = (dicho: string) => setMensajes((m) => [...m, { id: Date.now(), de: "pawni", texto: dicho }]);
+
+  /** Escucha una pregunta por el micrófono y la envía al terminar de hablar. */
+  const alternarMicrofono = () => {
+    if (escuchando) return detenerMicrofono.current?.();
+    setEscuchando(true);
+    setTexto("");
+    despertar("atento");
+    detenerMicrofono.current = escuchar({
+      parcial: (dicho) => setTexto(dicho),
+      final: (dicho) => {
+        setTexto("");
+        preguntar(dicho, true);
+      },
+      error: (motivo) => {
+        if (motivo === "not-allowed" || motivo === "service-not-allowed") decirPawni("Para hablarme, permite el micrófono en tu navegador. También puedes escribirme.");
+        else if (motivo === "no-speech") decirPawni("No te escuché. Toca el micrófono y prueba de nuevo.");
+        else if (motivo !== "aborted") decirPawni("No pude escucharte ahora. Puedes escribirme.");
+      },
+      fin: () => {
+        setEscuchando(false);
+        detenerMicrofono.current = null;
+      },
     });
   };
 
@@ -193,7 +235,7 @@ export function Pawni({ nombre }: { nombre: string }) {
       {abierto && (
         <section className={estilos.panel} role="dialog" aria-labelledby="pawni-titulo">
           <header className={estilos.cabeza}>
-            <AvatarPawni animo={pensando ? "atento" : animo} tamano={88} className={estilos.avatarGrande} />
+            <AvatarPawni animo={pensando || escuchando ? "atento" : animo} tamano={88} className={estilos.avatarGrande} />
             <h2 id="pawni-titulo">{nombre}</h2>
             <p>Tu quiltro guía en el portal.</p>
             <button type="button" className={estilos.cerrarClaro} onClick={cerrar} aria-label={`Cerrar la conversación con ${nombre}`}>
@@ -228,7 +270,7 @@ export function Pawni({ nombre }: { nombre: string }) {
                           ),
                         )}
                         {voz && (
-                          <button type="button" className={estilos.enlaceTexto} onClick={() => decir(m.texto)}>
+                          <button type="button" className={estilos.enlaceTexto} onClick={() => hablar(m.texto)}>
                             <Icono nombre="escuchar" tamano={18} />
                             Escuchar
                           </button>
@@ -275,14 +317,27 @@ export function Pawni({ nombre }: { nombre: string }) {
                   if (animo !== "atento") despertar("atento");
                 }}
                 maxLength={300}
-                placeholder="Escribe tu pregunta"
+                placeholder={escuchando ? "Te escucho…" : "Escribe tu pregunta"}
                 autoComplete="off"
+                readOnly={escuchando}
               />
+              {microfono && (
+                <button
+                  type="button"
+                  className={escuchando ? `${estilos.microfono} ${estilos.escuchando}` : estilos.microfono}
+                  onClick={alternarMicrofono}
+                  disabled={pensando}
+                  aria-pressed={escuchando}
+                  aria-label={escuchando ? "Dejar de escuchar" : `Hablarle a ${nombre} por micrófono`}
+                >
+                  <Icono nombre={escuchando ? "detener" : "microfono"} tamano={22} />
+                </button>
+              )}
               <button type="submit" className={estilos.enviar} disabled={pensando || !texto.trim()} aria-label="Enviar pregunta">
                 <Icono nombre="enviar" tamano={22} />
               </button>
             </form>
-            <p className={estilos.aviso}>No escribas tu RUT, dirección ni teléfono.</p>
+            <p className={estilos.aviso}>{escuchando ? "Te escucho. Habla y espera un momento." : "No escribas ni digas tu RUT, dirección ni teléfono."}</p>
           </div>
         </section>
       )}

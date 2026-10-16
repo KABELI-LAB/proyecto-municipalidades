@@ -52,6 +52,12 @@ export default function Privacidad() {
           agrupadas, nunca datos de personas. Las respuestas siguen siendo textos aprobados por el equipo.
         </p>
 
+        <h2>Pawni, el guía del portal</h2>
+        <p>
+          Puedes escribirle o hablarle por micrófono. Si le hablas, tu navegador convierte la voz en texto con su propio servicio (en Chrome, el de
+          Google; en Edge, el de Microsoft). No guardamos tu voz ni tus preguntas.
+        </p>
+
         <h2>Cuánto tiempo los guardamos</h2>
         <p>Mientras tu trámite esté vigente y el tiempo que exija la normativa municipal: [plazo de conservación].</p>
 

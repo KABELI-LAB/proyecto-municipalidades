@@ -16,9 +16,11 @@ import {
   MapPin,
   Megaphone,
   MessageCircle,
+  Mic,
   PawPrint,
   Search,
   SendHorizontal,
+  Square,
   Settings,
   Stethoscope,
   TriangleAlert,
@@ -51,6 +53,8 @@ const ICONOS = {
   escuchar: Volume2,
   anterior: ChevronLeft,
   siguiente: ChevronRight,
+  microfono: Mic,
+  detener: Square,
 } satisfies Record<string, LucideIcon>;
 
 export type NombreIcono = keyof typeof ICONOS;
