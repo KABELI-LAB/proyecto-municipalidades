@@ -1,0 +1,129 @@
+.contenedor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Controles plegados en una sola franja: capa y período. */
+.controles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-4) var(--space-6);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
+}
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-weight: var(--weight-bold);
+}
+.control select {
+  min-height: var(--space-8);
+  min-width: 240px;
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width-strong) solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+.tiempo {
+  display: flex;
+  flex: 1;
+  min-width: 260px;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.tiempo[aria-disabled="true"] {
+  opacity: 0.5;
+}
+.tiempo input {
+  width: 100%;
+  min-height: var(--space-7);
+  accent-color: var(--color-primary);
+}
+.marcasTiempo {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--type-caption-size);
+}
+.explica {
+  max-width: 760px;
+}
+
+.cuerpo {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .cuerpo {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mapa {
+  width: 100%;
+  height: 560px;
+  border-radius: var(--radius-medium);
+  overflow: hidden;
+}
+
+.ficha {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
+}
+.datosFicha {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+}
+.datosFicha dt {
+  margin-top: var(--space-2);
+  font-weight: var(--weight-bold);
+  color: var(--color-primary);
+}
+.datosFicha dd {
+  margin: 0;
+}
+.accionesFicha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+}
+.zonas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding-left: var(--space-5);
+}
+
+.elegirSector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.elegirSector button {
+  min-height: var(--space-8);
+  padding: 0 var(--space-4);
+  background: var(--color-surface);
+  border: var(--border-width-strong) solid var(--color-primary);
+  border-radius: var(--radius-medium);
+  color: var(--color-primary);
+  font: inherit;
+  font-weight: var(--weight-bold);
+  cursor: pointer;
+}

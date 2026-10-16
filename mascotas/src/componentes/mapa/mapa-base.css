@@ -1,0 +1,54 @@
+/* Mapa base (Leaflet) con el sistema de diseño: un solo radio, sin sombras,
+   tipografía y colores de los tokens. Clases globales de Leaflet. */
+.leaflet-container {
+  isolation: isolate; /* las capas de Leaflet quedan bajo el encabezado y la franja de demostración */
+  z-index: 0;
+  background: var(--color-surface-muted);
+  font-family: var(--font-sans);
+}
+.leaflet-bar {
+  border: var(--border-width-strong) solid var(--color-border) !important;
+  border-radius: var(--radius-medium) !important;
+  box-shadow: none !important;
+}
+.leaflet-bar a {
+  width: var(--space-7) !important;
+  height: var(--space-7) !important;
+  line-height: var(--space-7) !important;
+  color: var(--color-primary) !important;
+}
+.leaflet-control-attribution {
+  font-size: var(--type-caption-size);
+}
+.etiqueta-mapa {
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-surface);
+  border: var(--border-width-strong) solid var(--color-border);
+  border-radius: var(--radius-medium);
+  box-shadow: none;
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
+  line-height: 1.25;
+}
+.etiqueta-mapa b {
+  color: var(--color-primary);
+  font-weight: var(--weight-bold);
+}
+/* Etiqueta de sector en el mapa en miniatura de la portada: letra de nota. */
+.etiqueta-mini {
+  padding: 0 var(--space-1);
+  font-size: var(--type-caption-size);
+}
+.etiqueta-mapa::before {
+  display: none;
+}
+/* Cambio de capa o de mes con fundido breve. */
+.leaflet-overlay-pane path {
+  transition: fill-opacity 200ms ease, stroke-opacity 200ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .leaflet-overlay-pane path {
+    transition: none;
+  }
+}

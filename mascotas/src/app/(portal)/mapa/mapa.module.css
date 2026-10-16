@@ -1,0 +1,43 @@
+/* Selector de capa: cinco opciones, una activa. En celular se desliza en una fila. */
+.capas {
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+  padding-bottom: var(--space-1);
+}
+.capas a {
+  flex: none;
+}
+@media (min-width: 900px) {
+  .capas {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+}
+.capas a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: var(--space-4);
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius-full);
+  color: var(--color-primary);
+  font-size: var(--type-label-size);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  transition: background-color var(--duration-micro) var(--ease-flow), color var(--duration-micro) var(--ease-flow);
+}
+.capas a:hover {
+  background: var(--color-primary-subtle);
+}
+.capas a[aria-current="page"] {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .capas a {
+    transition: none;
+  }
+}

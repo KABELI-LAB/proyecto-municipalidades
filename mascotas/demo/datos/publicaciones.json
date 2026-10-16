@@ -1,0 +1,1058 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "datos": [
+    {
+      "id": "pub-001",
+      "tipo": "perdida",
+      "animal_id": "ani-035",
+      "sector_id": "la-huerta",
+      "localidad_id": "orilla-de-valdes",
+      "fecha": "2026-09-07",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 64,
+        "dy_m": 153,
+        "lat": -35.06563,
+        "lng": -71.6993
+      },
+      "contacto": "protegido",
+      "persona_id": "per-031",
+      "resuelta": "2026-09-10",
+      "via_coincidencia": true
+    },
+    {
+      "id": "pub-002",
+      "tipo": "encontrada",
+      "animal_id": "ani-035",
+      "sector_id": "la-huerta",
+      "localidad_id": "orilla-de-valdes",
+      "fecha": "2026-09-08",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -599,
+        "dy_m": 359,
+        "lat": -35.06378,
+        "lng": -71.70657
+      },
+      "contacto": "protegido",
+      "persona_id": "per-032",
+      "par_id": "pub-001"
+    },
+    {
+      "id": "pub-003",
+      "tipo": "perdida",
+      "animal_id": "ani-036",
+      "sector_id": "la-huerta",
+      "localidad_id": "la-huerta",
+      "fecha": "2026-03-08",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -581,
+        "dy_m": 769,
+        "lat": -35.08259,
+        "lng": -71.66208
+      },
+      "contacto": "protegido",
+      "persona_id": "per-033",
+      "resuelta": "2026-03-10",
+      "via_coincidencia": true
+    },
+    {
+      "id": "pub-004",
+      "tipo": "encontrada",
+      "animal_id": "ani-036",
+      "sector_id": "la-huerta",
+      "localidad_id": "orilla-de-navarro",
+      "fecha": "2026-03-10",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 13,
+        "dy_m": -299,
+        "lat": -35.06969,
+        "lng": -71.61686
+      },
+      "contacto": "protegido",
+      "persona_id": "per-034",
+      "par_id": "pub-003"
+    },
+    {
+      "id": "pub-005",
+      "tipo": "perdida",
+      "animal_id": "ani-037",
+      "sector_id": "hualane",
+      "localidad_id": "la-higuera",
+      "fecha": "2026-01-16",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 691,
+        "dy_m": -139,
+        "lat": -34.98125,
+        "lng": -71.78242
+      },
+      "contacto": "protegido",
+      "persona_id": "per-035",
+      "resuelta": "2026-01-20",
+      "via_coincidencia": false
+    },
+    {
+      "id": "pub-006",
+      "tipo": "encontrada",
+      "animal_id": "ani-037",
+      "sector_id": "hualane",
+      "localidad_id": "el-molino",
+      "fecha": "2026-01-20",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -172,
+        "dy_m": -136,
+        "lat": -34.95122,
+        "lng": -71.77689
+      },
+      "contacto": "protegido",
+      "persona_id": "per-036",
+      "par_id": "pub-005"
+    },
+    {
+      "id": "pub-007",
+      "tipo": "perdida",
+      "animal_id": "ani-038",
+      "sector_id": "la-huerta",
+      "localidad_id": "orilla-de-valdes",
+      "fecha": "2025-12-03",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -1034,
+        "dy_m": -137,
+        "lat": -35.06823,
+        "lng": -71.71135
+      },
+      "contacto": "protegido",
+      "persona_id": "per-037",
+      "resuelta": "2025-12-11",
+      "via_coincidencia": true
+    },
+    {
+      "id": "pub-008",
+      "tipo": "encontrada",
+      "animal_id": "ani-038",
+      "sector_id": "la-huerta",
+      "localidad_id": "orilla-de-navarro",
+      "fecha": "2025-12-06",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 237,
+        "dy_m": -23,
+        "lat": -35.06721,
+        "lng": -71.6144
+      },
+      "contacto": "protegido",
+      "persona_id": "per-038",
+      "par_id": "pub-007"
+    },
+    {
+      "id": "pub-009",
+      "tipo": "perdida",
+      "animal_id": "ani-039",
+      "sector_id": "hualane",
+      "localidad_id": "mira-rio",
+      "fecha": "2026-09-14",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -59,
+        "dy_m": 196,
+        "lat": -34.91824,
+        "lng": -71.85065
+      },
+      "contacto": "protegido",
+      "persona_id": "per-039",
+      "resuelta": "2026-09-19",
+      "via_coincidencia": false
+    },
+    {
+      "id": "pub-010",
+      "tipo": "encontrada",
+      "animal_id": "ani-039",
+      "sector_id": "hualane",
+      "localidad_id": "hualane",
+      "fecha": "2026-09-14",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -541,
+        "dy_m": -95,
+        "lat": -34.97685,
+        "lng": -71.81093
+      },
+      "contacto": "protegido",
+      "persona_id": "per-040",
+      "par_id": "pub-009"
+    },
+    {
+      "id": "pub-011",
+      "tipo": "perdida",
+      "animal_id": "ani-040",
+      "sector_id": "hualane",
+      "localidad_id": "el-molino",
+      "fecha": "2025-10-17",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 941,
+        "dy_m": 880,
+        "lat": -34.94209,
+        "lng": -71.76469
+      },
+      "contacto": "protegido",
+      "persona_id": "per-041",
+      "resuelta": "2025-10-26",
+      "via_coincidencia": false
+    },
+    {
+      "id": "pub-012",
+      "tipo": "encontrada",
+      "animal_id": "ani-040",
+      "sector_id": "hualane",
+      "localidad_id": "peralillo",
+      "fecha": "2025-10-18",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -198,
+        "dy_m": 528,
+        "lat": -35.01026,
+        "lng": -71.69217
+      },
+      "contacto": "protegido",
+      "persona_id": "per-042",
+      "par_id": "pub-011"
+    },
+    {
+      "id": "pub-013",
+      "tipo": "perdida",
+      "animal_id": "ani-041",
+      "sector_id": "hualane",
+      "localidad_id": "el-molino",
+      "fecha": "2026-09-24",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -90,
+        "dy_m": 10,
+        "lat": -34.94991,
+        "lng": -71.77599
+      },
+      "contacto": "protegido",
+      "persona_id": "per-043",
+      "resuelta": "2026-10-01",
+      "via_coincidencia": true
+    },
+    {
+      "id": "pub-014",
+      "tipo": "encontrada",
+      "animal_id": "ani-041",
+      "sector_id": "hualane",
+      "localidad_id": "mira-rio",
+      "fecha": "2026-09-27",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -76,
+        "dy_m": -609,
+        "lat": -34.92547,
+        "lng": -71.85083
+      },
+      "contacto": "protegido",
+      "persona_id": "per-044",
+      "par_id": "pub-013"
+    },
+    {
+      "id": "pub-015",
+      "tipo": "perdida",
+      "animal_id": "ani-042",
+      "sector_id": "la-huerta",
+      "localidad_id": "orilla-de-navarro",
+      "fecha": "2026-03-15",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -201,
+        "dy_m": 136,
+        "lat": -35.06578,
+        "lng": -71.61921
+      },
+      "contacto": "protegido",
+      "persona_id": "per-045",
+      "resuelta": "2026-03-23",
+      "via_coincidencia": true
+    },
+    {
+      "id": "pub-016",
+      "tipo": "encontrada",
+      "animal_id": "ani-042",
+      "sector_id": "la-huerta",
+      "localidad_id": "la-huerta",
+      "fecha": "2026-03-18",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -44,
+        "dy_m": 31,
+        "lat": -35.08922,
+        "lng": -71.65618
+      },
+      "contacto": "protegido",
+      "persona_id": "per-046",
+      "par_id": "pub-015"
+    },
+    {
+      "id": "pub-017",
+      "tipo": "perdida",
+      "animal_id": "ani-043",
+      "sector_id": "hualane",
+      "localidad_id": "barandica",
+      "fecha": "2026-04-15",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -91,
+        "dy_m": -97,
+        "lat": -34.95087,
+        "lng": -71.821
+      },
+      "contacto": "protegido",
+      "persona_id": "per-047",
+      "resuelta": "2026-04-24",
+      "via_coincidencia": false
+    },
+    {
+      "id": "pub-018",
+      "tipo": "encontrada",
+      "animal_id": "ani-043",
+      "sector_id": "hualane",
+      "localidad_id": "mira-rio",
+      "fecha": "2026-04-18",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 209,
+        "dy_m": 64,
+        "lat": -34.91943,
+        "lng": -71.84771
+      },
+      "contacto": "protegido",
+      "persona_id": "per-048",
+      "par_id": "pub-017"
+    },
+    {
+      "id": "pub-019",
+      "tipo": "perdida",
+      "animal_id": "ani-044",
+      "sector_id": "los-coipos",
+      "localidad_id": "barba-rubia",
+      "fecha": "2026-01-18",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 267,
+        "dy_m": -565,
+        "lat": -34.97208,
+        "lng": -71.71407
+      },
+      "contacto": "protegido",
+      "persona_id": "per-049",
+      "resuelta": "2026-01-26",
+      "via_coincidencia": true
+    },
+    {
+      "id": "pub-020",
+      "tipo": "encontrada",
+      "animal_id": "ani-044",
+      "sector_id": "los-coipos",
+      "localidad_id": "caone",
+      "fecha": "2026-01-22",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -167,
+        "dy_m": 133,
+        "lat": -34.96581,
+        "lng": -71.65183
+      },
+      "contacto": "protegido",
+      "persona_id": "per-050",
+      "par_id": "pub-019"
+    },
+    {
+      "id": "pub-021",
+      "tipo": "perdida",
+      "animal_id": "ani-045",
+      "sector_id": "hualane",
+      "localidad_id": "el-rincon",
+      "fecha": "2026-01-05",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 642,
+        "dy_m": -77,
+        "lat": -34.96069,
+        "lng": -71.75296
+      },
+      "contacto": "protegido",
+      "persona_id": "per-051",
+      "resuelta": "2026-01-08",
+      "via_coincidencia": false
+    },
+    {
+      "id": "pub-022",
+      "tipo": "encontrada",
+      "animal_id": "ani-045",
+      "sector_id": "hualane",
+      "localidad_id": "el-porvenir",
+      "fecha": "2026-01-06",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 250,
+        "dy_m": -509,
+        "lat": -34.97457,
+        "lng": -71.78226
+      },
+      "contacto": "protegido",
+      "persona_id": "per-052",
+      "par_id": "pub-021"
+    },
+    {
+      "id": "pub-023",
+      "tipo": "perdida",
+      "animal_id": "ani-046",
+      "sector_id": "los-coipos",
+      "localidad_id": "el-cobre",
+      "fecha": "2026-03-20",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -31,
+        "dy_m": -668,
+        "lat": -34.989,
+        "lng": -71.65034
+      },
+      "contacto": "protegido",
+      "persona_id": "per-053",
+      "resuelta": "2026-03-22",
+      "via_coincidencia": false
+    },
+    {
+      "id": "pub-024",
+      "tipo": "encontrada",
+      "animal_id": "ani-046",
+      "sector_id": "los-coipos",
+      "localidad_id": "el-cobre",
+      "fecha": "2026-03-22",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 37,
+        "dy_m": 485,
+        "lat": -34.97864,
+        "lng": -71.64959
+      },
+      "contacto": "protegido",
+      "persona_id": "per-054",
+      "par_id": "pub-023"
+    },
+    {
+      "id": "pub-025",
+      "tipo": "perdida",
+      "animal_id": "ani-047",
+      "sector_id": "hualane",
+      "localidad_id": "barandica",
+      "fecha": "2026-09-19",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -462,
+        "dy_m": -369,
+        "lat": -34.95331,
+        "lng": -71.82506
+      },
+      "contacto": "protegido",
+      "persona_id": "per-055",
+      "resuelta": "2026-09-22",
+      "via_coincidencia": false
+    },
+    {
+      "id": "pub-026",
+      "tipo": "encontrada",
+      "animal_id": "ani-047",
+      "sector_id": "hualane",
+      "localidad_id": "el-molino",
+      "fecha": "2026-09-19",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 41,
+        "dy_m": 18,
+        "lat": -34.94984,
+        "lng": -71.77455
+      },
+      "contacto": "protegido",
+      "persona_id": "per-056",
+      "par_id": "pub-025"
+    },
+    {
+      "id": "pub-027",
+      "tipo": "perdida",
+      "animal_id": "ani-048",
+      "sector_id": "patacon",
+      "localidad_id": "los-sauces",
+      "fecha": "2025-12-07",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -973,
+        "dy_m": 189,
+        "lat": -34.9153,
+        "lng": -71.87766
+      },
+      "contacto": "protegido",
+      "persona_id": "per-057",
+      "resuelta": "2025-12-14",
+      "via_coincidencia": true
+    },
+    {
+      "id": "pub-028",
+      "tipo": "encontrada",
+      "animal_id": "ani-048",
+      "sector_id": "patacon",
+      "localidad_id": "espinalillo",
+      "fecha": "2025-12-08",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 506,
+        "dy_m": 376,
+        "lat": -34.89662,
+        "lng": -71.94446
+      },
+      "contacto": "protegido",
+      "persona_id": "per-058",
+      "par_id": "pub-027"
+    },
+    {
+      "id": "pub-029",
+      "tipo": "perdida",
+      "animal_id": "ani-049",
+      "sector_id": "hualane",
+      "localidad_id": "barandica",
+      "fecha": "2026-04-30",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -204,
+        "dy_m": 591,
+        "lat": -34.94469,
+        "lng": -71.82224
+      },
+      "contacto": "protegido",
+      "persona_id": "per-059",
+      "resuelta": "2026-05-09",
+      "via_coincidencia": true
+    },
+    {
+      "id": "pub-030",
+      "tipo": "encontrada",
+      "animal_id": "ani-049",
+      "sector_id": "hualane",
+      "localidad_id": "el-rincon",
+      "fecha": "2026-05-02",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -650,
+        "dy_m": 924,
+        "lat": -34.9517,
+        "lng": -71.76712
+      },
+      "contacto": "protegido",
+      "persona_id": "per-060",
+      "par_id": "pub-029"
+    },
+    {
+      "id": "pub-031",
+      "tipo": "perdida",
+      "animal_id": "ani-050",
+      "sector_id": "hualane",
+      "localidad_id": "el-porvenir",
+      "fecha": "2026-03-09",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -68,
+        "dy_m": -894,
+        "lat": -34.97803,
+        "lng": -71.78575
+      },
+      "contacto": "protegido",
+      "persona_id": "per-061",
+      "resuelta": "2026-03-14",
+      "via_coincidencia": false
+    },
+    {
+      "id": "pub-032",
+      "tipo": "encontrada",
+      "animal_id": "ani-050",
+      "sector_id": "hualane",
+      "localidad_id": "el-porvenir",
+      "fecha": "2026-03-11",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -881,
+        "dy_m": -360,
+        "lat": -34.97323,
+        "lng": -71.79466
+      },
+      "contacto": "protegido",
+      "persona_id": "per-062",
+      "par_id": "pub-031"
+    },
+    {
+      "id": "pub-033",
+      "tipo": "encontrada",
+      "animal_id": "ani-051",
+      "sector_id": "hualane",
+      "localidad_id": "el-porvenir",
+      "fecha": "2026-09-17",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -792,
+        "dy_m": 908,
+        "lat": -34.96184,
+        "lng": -71.79368
+      },
+      "contacto": "protegido",
+      "persona_id": "per-063",
+      "resguardado": null
+    },
+    {
+      "id": "pub-034",
+      "tipo": "perdida",
+      "animal_id": "ani-052",
+      "sector_id": "hualane",
+      "localidad_id": "el-rincon",
+      "fecha": "2026-10-05",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -298,
+        "dy_m": 128,
+        "lat": -34.95885,
+        "lng": -71.76327
+      },
+      "contacto": "protegido",
+      "persona_id": "per-064",
+      "resguardado": null
+    },
+    {
+      "id": "pub-035",
+      "tipo": "perdida",
+      "animal_id": "ani-053",
+      "sector_id": "hualane",
+      "localidad_id": "la-higuera",
+      "fecha": "2026-09-11",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 54,
+        "dy_m": -731,
+        "lat": -34.98657,
+        "lng": -71.78941
+      },
+      "contacto": "protegido",
+      "persona_id": "per-065",
+      "resguardado": null
+    },
+    {
+      "id": "pub-036",
+      "tipo": "perdida",
+      "animal_id": "ani-054",
+      "sector_id": "patacon",
+      "localidad_id": "boquil",
+      "fecha": "2026-09-28",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -1149,
+        "dy_m": 427,
+        "lat": -34.87916,
+        "lng": -71.92958
+      },
+      "contacto": "protegido",
+      "persona_id": "per-066",
+      "resguardado": null
+    },
+    {
+      "id": "pub-037",
+      "tipo": "perdida",
+      "animal_id": "ani-055",
+      "sector_id": "la-huerta",
+      "localidad_id": "parronal",
+      "fecha": "2026-10-02",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -819,
+        "dy_m": 127,
+        "lat": -35.01586,
+        "lng": -71.69198
+      },
+      "contacto": "protegido",
+      "persona_id": "per-067",
+      "resguardado": null
+    },
+    {
+      "id": "pub-038",
+      "tipo": "perdida",
+      "animal_id": "ani-056",
+      "sector_id": "la-huerta",
+      "localidad_id": "remolino",
+      "fecha": "2026-09-21",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 99,
+        "dy_m": -374,
+        "lat": -35.10336,
+        "lng": -71.68191
+      },
+      "contacto": "protegido",
+      "persona_id": "per-068",
+      "resguardado": null
+    },
+    {
+      "id": "pub-039",
+      "tipo": "encontrada",
+      "animal_id": "ani-057",
+      "sector_id": "la-huerta",
+      "localidad_id": "la-huerta",
+      "fecha": "2026-09-15",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -307,
+        "dy_m": 763,
+        "lat": -35.08265,
+        "lng": -71.65907
+      },
+      "contacto": "protegido",
+      "persona_id": "per-069",
+      "resguardado": null
+    },
+    {
+      "id": "pub-040",
+      "tipo": "encontrada",
+      "animal_id": "ani-058",
+      "sector_id": "patacon",
+      "localidad_id": "los-sauces",
+      "fecha": "2026-09-21",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -378,
+        "dy_m": 470,
+        "lat": -34.91278,
+        "lng": -71.87114
+      },
+      "contacto": "protegido",
+      "persona_id": "per-070",
+      "resguardado": true
+    },
+    {
+      "id": "pub-041",
+      "tipo": "perdida",
+      "animal_id": "ani-059",
+      "sector_id": "la-huerta",
+      "localidad_id": "orilla-de-navarro",
+      "fecha": "2026-10-05",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -415,
+        "dy_m": -549,
+        "lat": -35.07193,
+        "lng": -71.62155
+      },
+      "contacto": "protegido",
+      "persona_id": "per-071",
+      "resguardado": null
+    },
+    {
+      "id": "pub-042",
+      "tipo": "perdida",
+      "animal_id": "ani-060",
+      "sector_id": "patacon",
+      "localidad_id": "los-cristales",
+      "fecha": "2026-09-19",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 230,
+        "dy_m": -842,
+        "lat": -34.90756,
+        "lng": -71.84748
+      },
+      "contacto": "protegido",
+      "persona_id": "per-072",
+      "resguardado": null
+    },
+    {
+      "id": "pub-043",
+      "tipo": "perdida",
+      "animal_id": "ani-061",
+      "sector_id": "hualane",
+      "localidad_id": "el-rincon",
+      "fecha": "2026-09-09",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 351,
+        "dy_m": 5,
+        "lat": -34.95996,
+        "lng": -71.75615
+      },
+      "contacto": "protegido",
+      "persona_id": "per-073",
+      "resguardado": null
+    },
+    {
+      "id": "pub-044",
+      "tipo": "perdida",
+      "animal_id": "ani-062",
+      "sector_id": "hualane",
+      "localidad_id": "el-buche",
+      "fecha": "2026-09-30",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 744,
+        "dy_m": -487,
+        "lat": -34.98637,
+        "lng": -71.69184
+      },
+      "contacto": "protegido",
+      "persona_id": "per-074",
+      "resguardado": null
+    },
+    {
+      "id": "pub-045",
+      "tipo": "perdida",
+      "animal_id": "ani-063",
+      "sector_id": "hualane",
+      "localidad_id": "el-rincon",
+      "fecha": "2026-09-12",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -245,
+        "dy_m": 145,
+        "lat": -34.9587,
+        "lng": -71.76269
+      },
+      "contacto": "protegido",
+      "persona_id": "per-075",
+      "resguardado": null
+    },
+    {
+      "id": "pub-046",
+      "tipo": "perdida",
+      "animal_id": "ani-064",
+      "sector_id": "los-coipos",
+      "localidad_id": "el-llano",
+      "fecha": "2026-09-27",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 39,
+        "dy_m": -219,
+        "lat": -34.98497,
+        "lng": -71.61657
+      },
+      "contacto": "protegido",
+      "persona_id": "per-076",
+      "resguardado": null
+    },
+    {
+      "id": "pub-047",
+      "tipo": "perdida",
+      "animal_id": "ani-065",
+      "sector_id": "la-huerta",
+      "localidad_id": "orilla-de-valdes",
+      "fecha": "2026-10-02",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 62,
+        "dy_m": -762,
+        "lat": -35.07385,
+        "lng": -71.69932
+      },
+      "contacto": "protegido",
+      "persona_id": "per-077",
+      "nota_demo": "Escena demo: coincidencia sugerida"
+    },
+    {
+      "id": "pub-048",
+      "tipo": "encontrada",
+      "animal_id": "ani-066",
+      "sector_id": "la-huerta",
+      "localidad_id": "la-huerta",
+      "fecha": "2026-10-04",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -500,
+        "dy_m": 552,
+        "lat": -35.08454,
+        "lng": -71.66119
+      },
+      "contacto": "protegido",
+      "persona_id": "per-078",
+      "resguardado": true,
+      "nota_demo": "Escena demo: coincidencia sugerida",
+      "coincidencia_con": "pub-047"
+    },
+    {
+      "id": "pub-049",
+      "tipo": "encontrada",
+      "animal_id": "ani-067",
+      "sector_id": "hualane",
+      "localidad_id": "el-buche",
+      "fecha": "2026-01-26",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 374,
+        "dy_m": 512,
+        "lat": -34.9774,
+        "lng": -71.6959
+      },
+      "contacto": "protegido",
+      "persona_id": "per-079"
+    },
+    {
+      "id": "pub-050",
+      "tipo": "encontrada",
+      "animal_id": "ani-068",
+      "sector_id": "los-coipos",
+      "localidad_id": "alto-de-caone",
+      "fecha": "2026-04-23",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 614,
+        "dy_m": -72,
+        "lat": -34.96765,
+        "lng": -71.64327
+      },
+      "contacto": "protegido",
+      "persona_id": "per-080"
+    },
+    {
+      "id": "pub-051",
+      "tipo": "encontrada",
+      "animal_id": "ani-069",
+      "sector_id": "la-huerta",
+      "localidad_id": "orilla-de-valdes",
+      "fecha": "2026-01-29",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": -135,
+        "dy_m": 362,
+        "lat": -35.06375,
+        "lng": -71.70148
+      },
+      "contacto": "protegido",
+      "persona_id": "per-081"
+    },
+    {
+      "id": "pub-052",
+      "tipo": "encontrada",
+      "animal_id": "ani-070",
+      "sector_id": "los-coipos",
+      "localidad_id": "los-coipos",
+      "fecha": "2026-05-06",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 427,
+        "dy_m": 82,
+        "lat": -34.91476,
+        "lng": -71.65642
+      },
+      "contacto": "protegido",
+      "persona_id": "per-082"
+    },
+    {
+      "id": "pub-053",
+      "tipo": "encontrada",
+      "animal_id": "ani-071",
+      "sector_id": "hualane",
+      "localidad_id": "el-molino",
+      "fecha": "2026-03-18",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 534,
+        "dy_m": -225,
+        "lat": -34.95202,
+        "lng": -71.76915
+      },
+      "contacto": "protegido",
+      "persona_id": "per-083"
+    },
+    {
+      "id": "pub-054",
+      "tipo": "encontrada",
+      "animal_id": "ani-072",
+      "sector_id": "patacon",
+      "localidad_id": "los-cristales",
+      "fecha": "2026-04-09",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 639,
+        "dy_m": 218,
+        "lat": -34.89804,
+        "lng": -71.843
+      },
+      "contacto": "protegido",
+      "persona_id": "per-084"
+    },
+    {
+      "id": "pub-055",
+      "tipo": "encontrada",
+      "animal_id": "ani-073",
+      "sector_id": "patacon",
+      "localidad_id": "quilico",
+      "fecha": "2026-02-18",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 503,
+        "dy_m": 953,
+        "lat": -34.89144,
+        "lng": -71.84449
+      },
+      "contacto": "protegido",
+      "persona_id": "per-085"
+    },
+    {
+      "id": "pub-056",
+      "tipo": "encontrada",
+      "animal_id": "ani-074",
+      "sector_id": "la-huerta",
+      "localidad_id": "orilla-de-navarro",
+      "fecha": "2026-01-16",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 366,
+        "dy_m": -50,
+        "lat": -35.06745,
+        "lng": -71.61298
+      },
+      "contacto": "protegido",
+      "persona_id": "per-086"
+    },
+    {
+      "id": "pub-057",
+      "tipo": "perdida",
+      "animal_id": "ani-075",
+      "sector_id": "la-huerta",
+      "localidad_id": "orilla-de-navarro",
+      "fecha": "2026-01-13",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": -243,
+        "dy_m": -663,
+        "lat": -35.07296,
+        "lng": -71.61967
+      },
+      "contacto": "protegido",
+      "persona_id": "per-087"
+    },
+    {
+      "id": "pub-058",
+      "tipo": "perdida",
+      "animal_id": "ani-076",
+      "sector_id": "hualane",
+      "localidad_id": "el-buche",
+      "fecha": "2026-02-26",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": -366,
+        "dy_m": -161,
+        "lat": -34.98345,
+        "lng": -71.70401
+      },
+      "contacto": "protegido",
+      "persona_id": "per-088"
+    }
+  ]
+}

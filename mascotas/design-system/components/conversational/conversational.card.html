@@ -1,0 +1,21 @@
+<!-- @dsCard group="Components" viewport="420x640" name="Conversational — Asistente Hualañé" subtitle="Messages, quick replies, handoff, composer" -->
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{padding:24px;background:var(--color-surface)}.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}.col{display:flex;flex-direction:column;gap:16px}.lab{font:700 12px/1 var(--font-sans);letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-muted);margin:4px 0 -4px}.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}</style>
+</head><body><div id="root"></div><script type="text/babel">
+const NS = window.HualaDesignSystem_c0b80f;
+const {ChatMessage,QuickReplies,ChatComposer,HandoffCard}=NS;
+function App(){return <div className="col" style={{background:'var(--neutral-50)',margin:-24,padding:16,minHeight:640,gap:12}}>
+<ChatMessage from="system">Hoy · 10:02</ChatMessage>
+<ChatMessage from="assistant" name="Asistente Hualañé" time="10:02">Hola, soy el Asistente de la Municipalidad de Hualañé. ¿Qué necesitas hacer?</ChatMessage>
+<QuickReplies options={[{label:'Certificado de residencia',icon:'file-text'},{label:'Pagar permiso',icon:'credit-card'},{label:'Hablar con alguien',icon:'headset'}]}/>
+<ChatMessage from="citizen" time="10:03" status="read">Necesito el certificado de residencia</ChatMessage>
+<ChatMessage from="assistant" time="10:03">Es gratis y demora 1 día hábil. Necesitas tu cédula y una cuenta de luz o agua a tu nombre.</ChatMessage>
+<ChatMessage from="system">Te estamos derivando con un funcionario</ChatMessage>
+<HandoffCard name="Marcela Rojas" role="Oficina de Partes" eta="5 minutos" caseId="HUA-2026-04812"/>
+<div style={{marginTop:'auto'}}><ChatComposer/></div>
+</div>}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);</script></body></html>

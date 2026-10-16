@@ -1,0 +1,36 @@
+/* Insignia de estado del sistema (feedback/StatusBadge): fondo suave, texto
+   del mismo tono, ícono y texto; nunca solo color. */
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: var(--weight-bold);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.recibido,
+.cerrado {
+  background: var(--color-surface-muted);
+  color: var(--neutral-800);
+}
+.informacion {
+  background: var(--blue-50);
+  color: var(--blue-700);
+}
+.espera {
+  background: var(--yellow-100);
+  color: var(--yellow-800);
+}
+.confirmado {
+  background: var(--green-50);
+  color: var(--green-700);
+}
+.finalizado {
+  background: var(--blue-700);
+  color: var(--color-text-inverse);
+}

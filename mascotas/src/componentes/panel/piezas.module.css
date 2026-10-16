@@ -1,0 +1,129 @@
+
+.indicador {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
+}
+.tituloIndicador {
+  font-weight: var(--weight-bold);
+  color: var(--color-primary);
+}
+.cifra {
+  font-family: var(--font-mono);
+  font-size: var(--type-data-size);
+  font-weight: var(--weight-medium);
+  line-height: var(--type-h1-lh);
+  color: var(--color-primary);
+}
+
+/* ── Ocupación ── */
+.ocupacion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.filaOcupacion {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-4);
+}
+.filaOcupacion b {
+  font-weight: var(--weight-bold);
+}
+.medidor {
+  height: var(--space-2);
+  margin-top: var(--space-1);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface-muted);
+  overflow: hidden;
+}
+.medidor span {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-medium);
+  background: var(--color-primary);
+}
+
+.motivos {
+  margin: var(--space-1) 0 0;
+  padding-left: var(--space-5);
+}
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+/* ── Bandeja ── */
+.bandeja {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.bandeja li {
+  display: grid;
+  grid-template-columns: var(--space-5) var(--space-7) 1fr;
+  align-items: center;
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+  border-top: var(--border-width-strong) solid var(--color-border);
+}
+.bandeja li:first-child {
+  border-top: 0;
+}
+.bandeja svg {
+  color: var(--color-primary);
+}
+.cantidadBandeja {
+  font-family: var(--font-sans);
+  font-size: var(--type-h3-size);
+  font-weight: var(--weight-bold);
+  color: var(--color-primary);
+  text-align: right;
+}
+
+/* ── Tablas del panel (TablaDatos) ── */
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-surface);
+}
+/* Tabla del sistema (data/DataTable): encabezado en sobretítulo, filas con filete de 1 px, cifras en mono. */
+.tabla th,
+.tabla td {
+  padding: 14px 16px;
+  border-bottom: var(--border-width) solid var(--color-border);
+  text-align: left;
+  vertical-align: middle;
+}
+.tabla thead th {
+  padding-block: 12px;
+  border-bottom-width: var(--border-width-strong);
+  background: var(--color-surface-sunken);
+  font-size: var(--type-overline-size);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+.tabla tbody tr:hover > * {
+  background: var(--color-surface-sunken);
+}
+.numero {
+  text-align: right !important;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.desplazable {
+  overflow-x: auto;
+}

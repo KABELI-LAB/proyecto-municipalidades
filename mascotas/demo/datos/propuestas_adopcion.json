@@ -1,0 +1,162 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "datos": [
+    {
+      "adopcion_id": "adp-01",
+      "persona_id": "per-031",
+      "codigo": "TR-0101",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "adp-02",
+      "persona_id": "per-042",
+      "codigo": "TR-0102",
+      "relacion": "RESCATADO"
+    },
+    {
+      "adopcion_id": "adp-03",
+      "persona_id": "per-053",
+      "codigo": "TR-0103",
+      "relacion": "HOGAR_TEMPORAL"
+    },
+    {
+      "adopcion_id": "adp-04",
+      "persona_id": "per-064",
+      "codigo": "TR-0104",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "adp-05",
+      "persona_id": "per-075",
+      "codigo": "TR-0105",
+      "relacion": "COMUNITARIO"
+    },
+    {
+      "adopcion_id": "adp-06",
+      "persona_id": "per-086",
+      "codigo": "TR-0106",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "adp-07",
+      "persona_id": "per-097",
+      "codigo": "TR-0107",
+      "relacion": "RESCATADO"
+    },
+    {
+      "adopcion_id": "adp-08",
+      "persona_id": "per-108",
+      "codigo": "TR-0108",
+      "relacion": "HOGAR_TEMPORAL"
+    },
+    {
+      "adopcion_id": "adp-09",
+      "persona_id": "per-119",
+      "codigo": "TR-0109",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "adp-10",
+      "persona_id": "per-130",
+      "codigo": "TR-0110",
+      "relacion": "COMUNITARIO"
+    },
+    {
+      "adopcion_id": "adp-11",
+      "persona_id": "per-141",
+      "codigo": "TR-0111",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "adp-12",
+      "persona_id": "per-152",
+      "codigo": "TR-0112",
+      "relacion": "RESCATADO"
+    },
+    {
+      "adopcion_id": "adp-13",
+      "persona_id": "per-163",
+      "codigo": "TR-0113",
+      "relacion": "HOGAR_TEMPORAL"
+    },
+    {
+      "adopcion_id": "adp-14",
+      "persona_id": "per-040",
+      "codigo": "TR-0114",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "adr-01",
+      "persona_id": "per-051",
+      "codigo": "TR-0115",
+      "relacion": "COMUNITARIO"
+    },
+    {
+      "adopcion_id": "adr-02",
+      "persona_id": "per-062",
+      "codigo": "TR-0116",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "adr-03",
+      "persona_id": "per-073",
+      "codigo": "TR-0117",
+      "relacion": "RESCATADO"
+    },
+    {
+      "adopcion_id": "adr-04",
+      "persona_id": "per-084",
+      "codigo": "TR-0118",
+      "relacion": "HOGAR_TEMPORAL"
+    },
+    {
+      "adopcion_id": "adr-05",
+      "persona_id": "per-095",
+      "codigo": "TR-0119",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "adr-06",
+      "persona_id": "per-106",
+      "codigo": "TR-0120",
+      "relacion": "COMUNITARIO"
+    },
+    {
+      "adopcion_id": "adr-07",
+      "persona_id": "per-117",
+      "codigo": "TR-0121",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "adr-08",
+      "persona_id": "per-128",
+      "codigo": "TR-0122",
+      "relacion": "RESCATADO"
+    },
+    {
+      "adopcion_id": "adr-09",
+      "persona_id": "per-139",
+      "codigo": "TR-0123",
+      "relacion": "HOGAR_TEMPORAL"
+    },
+    {
+      "adopcion_id": "adr-10",
+      "persona_id": "per-150",
+      "codigo": "TR-0124",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "adr-11",
+      "persona_id": "per-161",
+      "codigo": "TR-0125",
+      "relacion": "COMUNITARIO"
+    },
+    {
+      "adopcion_id": "adr-12",
+      "persona_id": "per-038",
+      "codigo": "TR-0126",
+      "relacion": "PROPIO"
+    }
+  ]
+}
