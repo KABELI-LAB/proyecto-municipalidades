@@ -7,10 +7,8 @@ import { Icono } from "@/componentes/Icono";
 import { Logo } from "@/componentes/Logo";
 import { FranjaDemo } from "@/componentes/FranjaDemo";
 import { Pawni } from "@/componentes/portal/pawni/Pawni";
-import { frasesFijasPawni } from "@/dominio/asistente";
 import { municipioActivo } from "@/lib/municipio";
 import { hayDemoEnCache } from "@/servidor/portal/enCache";
-import { firmasVoz } from "@/servidor/portal/voz";
 import estilos from "./portal.module.css";
 
 // Las páginas públicas se guardan armadas hasta 60 segundos (o hasta que una
@@ -67,7 +65,7 @@ export default async function LayoutPortal({ children }: { children: ReactNode }
         </div>
       </footer>
       {/* Pawni, el quiltro guía: conversación y recorrido por el portal. */}
-      <Pawni nombre={municipio.plataforma} firmasVoz={firmasVoz(frasesFijasPawni(municipio.plataforma))} />
+      <Pawni nombre={municipio.plataforma} />
     </>
   );
 }

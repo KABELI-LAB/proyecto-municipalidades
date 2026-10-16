@@ -10,7 +10,7 @@ export type TemaPawni = Intencion | "QUE_ES" | "COSTO" | "SEGUIMIENTO" | "COMUNI
 export type AnimoPawni = "reposo" | "saluda" | "feliz" | "atento";
 
 export type AccionPawni = { texto: string; href: string };
-export type RespuestaPawni = { texto: string; acciones: AccionPawni[]; animo: AnimoPawni; /** Firma para leerla con la voz del servidor. */ voz?: string };
+export type RespuestaPawni = { texto: string; acciones: AccionPawni[]; animo: AnimoPawni };
 
 /** Enlace especial: inicia el recorrido guiado por el inicio. */
 export const RECORRIDO = "#recorrido";
@@ -41,35 +41,6 @@ export function temaDe(texto: string): TemaPawni {
   for (const [tema, patron] of PROPIAS) if (patron.test(t)) return tema;
   return reglas;
 }
-
-/** Primer mensaje de Pawni en la conversación. */
-export const saludoPawni = (nombre: string) => `¡Hola! Soy ${nombre}. Te cuento todo lo que puedes hacer en el portal. ¿Qué te gustaría saber?`;
-
-/** Lo que dice Pawni cuando algo falla (sin datos de nadie). */
-export const AVISOS_PAWNI = {
-  sinRespuesta: "No pude responder ahora. Inténtalo de nuevo en un momento.",
-  sinPermiso: "Para hablarme, permite el micrófono en tu navegador. También puedes escribirme.",
-  noEscuche: "No te escuché. Toca el micrófono y prueba de nuevo.",
-  sinMicrofono: "No pude escucharte ahora. Puedes escribirme.",
-} as const;
-
-export type PasoRecorrido = { marca: string; titulo: string; texto: string; animo: AnimoPawni };
-
-/** Pasos del recorrido guiado por el inicio (cada uno resalta su data-recorrido). */
-export const PASOS_RECORRIDO: PasoRecorrido[] = [
-  { marca: "operativos", titulo: "Operativos", texto: "Revisa fechas, servicios y cupos, e inscríbete en el de tu sector.", animo: "feliz" },
-  { marca: "mascotas", titulo: "Mascotas perdidas y avistadas", texto: "Avisa si perdiste o viste una mascota. Te ayudamos a difundirlo.", animo: "atento" },
-  { marca: "sos", titulo: "SOS Mascotas", texto: "Si ves un animal herido o en peligro, avísanos aquí.", animo: "atento" },
-  { marca: "otros", titulo: "Más para hacer", texto: "Adopta, pide un servicio o conoce a los perros comunitarios.", animo: "feliz" },
-  { marca: "mapa", titulo: "Tu comuna en el mapa", texto: "Mira las mascotas perdidas y avistadas por sector.", animo: "atento" },
-  { marca: "solicitudes", titulo: "Mis solicitudes", texto: "Sigue el estado de tus trámites cuando quieras.", animo: "saluda" },
-];
-
-/** Cómo se lee en voz alta un paso del recorrido. */
-export const vozDePaso = (p: PasoRecorrido) => `${p.titulo}. ${p.texto}`;
-
-/** Textos fijos que Pawni puede leer en voz alta (el servidor los firma de antemano). */
-export const frasesFijasPawni = (nombre: string) => [saludoPawni(nombre), ...Object.values(AVISOS_PAWNI), ...PASOS_RECORRIDO.map(vozDePaso)];
 
 /** Datos del próximo operativo publicado, ya formateados en el servidor. */
 export type OperativoPawni = { id: string; cuando: string; donde: string; abierto: boolean; conCupos: string[] } | null;

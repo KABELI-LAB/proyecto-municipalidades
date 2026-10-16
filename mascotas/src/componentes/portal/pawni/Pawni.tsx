@@ -8,14 +8,14 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, useTransition, type FormEvent } from "react";
 import { Icono } from "@/componentes/Icono";
-import { AVISOS_PAWNI, RECORRIDO, SUGERENCIAS, saludoPawni, type AccionPawni, type AnimoPawni } from "@/dominio/asistente";
+import { RECORRIDO, SUGERENCIAS, type AccionPawni, type AnimoPawni } from "@/dominio/asistente";
 import { preguntarAPawni } from "@/servidor/portal/acciones-pawni";
 import { AvatarPawni } from "./Avatar";
 import { Recorrido } from "./Recorrido";
 import { callar, decir, escuchar, hayMicrofono, hayVoz } from "./voz";
 import estilos from "./pawni.module.css";
 
-type Mensaje = { id: number; de: "pawni" | "tu"; texto: string; acciones?: AccionPawni[]; voz?: string };
+type Mensaje = { id: number; de: "pawni" | "tu"; texto: string; acciones?: AccionPawni[] };
 
 const SALUDO_VISTO = "pawni-saludo";
 const RECORRIDO_PENDIENTE = "pawni-recorrido";
@@ -37,11 +37,7 @@ const guardar = (clave: string, valor: string) => {
   }
 };
 
-/**
- * `firmasVoz`: textos fijos de Pawni firmados por el servidor para leerlos con
- * la voz de Pawni (vacío si esa voz no está configurada).
- */
-export function Pawni({ nombre, firmasVoz }: { nombre: string; firmasVoz: Record<string, string> }) {
+export function Pawni({ nombre }: { nombre: string }) {
   const ruta = usePathname();
   const router = useRouter();
   const [abierto, setAbierto] = useState(false);
@@ -49,7 +45,7 @@ export function Pawni({ nombre, firmasVoz }: { nombre: string; firmasVoz: Record
   const [recorrido, setRecorrido] = useState(false);
   const [animo, setAnimo] = useState<AnimoPawni>("saluda");
   const [mensajes, setMensajes] = useState<Mensaje[]>(() => [
-    { id: 0, de: "pawni", texto: saludoPawni(nombre) },
+    { id: 0, de: "pawni", texto: `¡Hola! Soy ${nombre}. Te cuento todo lo que puedes hacer en el portal. ¿Qué te gustaría saber?` },
   ]);
   const [texto, setTexto] = useState("");
   const [pensando, iniciar] = useTransition();
@@ -135,9 +131,9 @@ export function Pawni({ nombre, firmasVoz }: { nombre: string; firmasVoz: Record
   };
 
   /** Pawni dice el texto en voz alta y, mientras habla, se le ve feliz. */
-  const hablar = (dicho: string, firma?: string) => {
+  const hablar = (dicho: string) => {
     despertar("feliz");
-    decir(dicho, firma ?? firmasVoz[dicho], () => despertar("atento"));
+    decir(dicho, () => despertar("atento"));
   };
 
   const preguntar = (pregunta: string, hablada = false) => {
@@ -149,12 +145,12 @@ export function Pawni({ nombre, firmasVoz }: { nombre: string; firmasVoz: Record
     iniciar(async () => {
       try {
         const r = await preguntarAPawni(limpia);
-        setMensajes((m) => [...m, { id: Date.now() + 1, de: "pawni", texto: r.texto, acciones: r.acciones, voz: r.voz }]);
+        setMensajes((m) => [...m, { id: Date.now() + 1, de: "pawni", texto: r.texto, acciones: r.acciones }]);
         despertar(r.animo);
         // Si le hablaste, te responde en voz alta.
-        if (hablada) hablar(r.texto, r.voz);
+        if (hablada) hablar(r.texto);
       } catch {
-        setMensajes((m) => [...m, { id: Date.now() + 1, de: "pawni", texto: AVISOS_PAWNI.sinRespuesta }]);
+        setMensajes((m) => [...m, { id: Date.now() + 1, de: "pawni", texto: "No pude responder ahora. Inténtalo de nuevo en un momento." }]);
         despertar("atento");
       }
     });
@@ -175,9 +171,9 @@ export function Pawni({ nombre, firmasVoz }: { nombre: string; firmasVoz: Record
         preguntar(dicho, true);
       },
       error: (motivo) => {
-        if (motivo === "not-allowed" || motivo === "service-not-allowed") decirPawni(AVISOS_PAWNI.sinPermiso);
-        else if (motivo === "no-speech") decirPawni(AVISOS_PAWNI.noEscuche);
-        else if (motivo !== "aborted") decirPawni(AVISOS_PAWNI.sinMicrofono);
+        if (motivo === "not-allowed" || motivo === "service-not-allowed") decirPawni("Para hablarme, permite el micrófono en tu navegador. También puedes escribirme.");
+        else if (motivo === "no-speech") decirPawni("No te escuché. Toca el micrófono y prueba de nuevo.");
+        else if (motivo !== "aborted") decirPawni("No pude escucharte ahora. Puedes escribirme.");
       },
       fin: () => {
         setEscuchando(false);
@@ -195,7 +191,6 @@ export function Pawni({ nombre, firmasVoz }: { nombre: string; firmasVoz: Record
     <>
       {recorrido && (
         <Recorrido
-          decir={(dicho) => hablar(dicho)}
           alTerminar={() => {
             callar();
             setRecorrido(false);
@@ -275,7 +270,7 @@ export function Pawni({ nombre, firmasVoz }: { nombre: string; firmasVoz: Record
                           ),
                         )}
                         {voz && (
-                          <button type="button" className={estilos.enlaceTexto} onClick={() => hablar(m.texto, m.voz)}>
+                          <button type="button" className={estilos.enlaceTexto} onClick={() => hablar(m.texto)}>
                             <Icono nombre="escuchar" tamano={18} />
                             Escuchar
                           </button>

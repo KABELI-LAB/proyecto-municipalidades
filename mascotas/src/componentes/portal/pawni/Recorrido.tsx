@@ -4,11 +4,21 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Boton } from "@/componentes/Boton";
 import { Icono } from "@/componentes/Icono";
-import { PASOS_RECORRIDO, vozDePaso } from "@/dominio/asistente";
+import type { AnimoPawni } from "@/dominio/asistente";
 import { AvatarPawni } from "./Avatar";
+import { decir } from "./voz";
 import estilos from "./pawni.module.css";
 
+type Paso = { marca: string; titulo: string; texto: string; animo: AnimoPawni };
 
+const PASOS: Paso[] = [
+  { marca: "operativos", titulo: "Operativos", texto: "Revisa fechas, servicios y cupos, e inscríbete en el de tu sector.", animo: "feliz" },
+  { marca: "mascotas", titulo: "Mascotas perdidas y avistadas", texto: "Avisa si perdiste o viste una mascota. Te ayudamos a difundirlo.", animo: "atento" },
+  { marca: "sos", titulo: "SOS Mascotas", texto: "Si ves un animal herido o en peligro, avísanos aquí.", animo: "atento" },
+  { marca: "otros", titulo: "Más para hacer", texto: "Adopta, pide un servicio o conoce a los perros comunitarios.", animo: "feliz" },
+  { marca: "mapa", titulo: "Tu comuna en el mapa", texto: "Mira las mascotas perdidas y avistadas por sector.", animo: "atento" },
+  { marca: "solicitudes", titulo: "Mis solicitudes", texto: "Sigue el estado de tus trámites cuando quieras.", animo: "saluda" },
+];
 
 type Caja = { top: number; left: number; width: number; height: number };
 
@@ -20,8 +30,8 @@ const MARGEN = 16;
 const buscar = (marca: string) =>
   [...document.querySelectorAll<HTMLElement>(`[data-recorrido="${marca}"]`)].find((e) => e.getClientRects().length > 0) ?? null;
 
-export function Recorrido({ alTerminar, decir }: { alTerminar: () => void; decir: (texto: string) => void }) {
-  const [pasos] = useState(() => PASOS_RECORRIDO.filter((p) => document.querySelector(`[data-recorrido="${p.marca}"]`)));
+export function Recorrido({ alTerminar }: { alTerminar: () => void }) {
+  const [pasos] = useState(() => PASOS.filter((p) => document.querySelector(`[data-recorrido="${p.marca}"]`)));
   const [i, setI] = useState(0);
   const [caja, setCaja] = useState<Caja | null>(null);
   const [tarjeta, setTarjeta] = useState<{ top: number; left: number } | null>(null);
@@ -115,7 +125,7 @@ export function Recorrido({ alTerminar, decir }: { alTerminar: () => void; decir
         <h2 id="pawni-paso-titulo">{paso.titulo}</h2>
         <p id="pawni-paso-texto">{paso.texto}</p>
         <div className={estilos.pasoEnlaces}>
-          <button type="button" className={estilos.enlaceTexto} onClick={() => decir(vozDePaso(paso))}>
+          <button type="button" className={estilos.enlaceTexto} onClick={() => decir(`${paso.titulo}. ${paso.texto}`)}>
             <Icono nombre="escuchar" tamano={18} />
             Escuchar
           </button>
