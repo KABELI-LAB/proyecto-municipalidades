@@ -17,10 +17,9 @@ const LIMITE = 12;
 
 export async function configuracionInstagram() {
   const municipio = municipioActivo();
-  const m = await db.municipio.findUnique({ where: { id: municipio.id }, select: { redesPublicarAuto: true, redesIncluirDemo: true, redesResponderAuto: true } });
+  const m = await db.municipio.findUnique({ where: { id: municipio.id }, select: { redesPublicarAuto: true, redesResponderAuto: true } });
   return {
     automatica: m?.redesPublicarAuto ?? true,
-    incluirDemo: m?.redesIncluirDemo ?? false,
     responder: m?.redesResponderAuto ?? false,
     integracion: estadoIntegracion(),
     faltanParaResponder: faltantesRespuestas(),
@@ -32,10 +31,11 @@ export async function configuracionInstagram() {
  * avisos aprobados y vigentes, fichas de adopción publicadas y operativos
  * publicados que aún no ocurren. El de demostración solo si está habilitado.
  */
-export async function pendientesInstagram(incluirDemo: boolean, tipos: TipoRed[]): Promise<PendienteInstagram[]> {
+export async function pendientesInstagram(tipos: TipoRed[]): Promise<PendienteInstagram[]> {
   if (!tipos.length) return [];
   const municipio = municipioActivo();
-  const demo = incluirDemo ? {} : { loteDemoId: null };
+  // En esta demostración, el contenido de demostración también se publica (con su marca).
+  const demo = {};
   const hoy = new Date(new Date().toDateString());
   const quiere = (t: TipoRed) => tipos.includes(t);
   const [avisos, fichas, operativos] = await Promise.all([

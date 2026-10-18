@@ -495,18 +495,18 @@ Un CRUD simple:
 Aceptar o publicar un contenido en el panel lo publica en la web y en
 Instagram a la vez; no hay una bandeja de redes aparte.
 
-- **Instagram en el panel** (`/panel/instagram`): quien aprueba o publica ve
+- **Configuración** (`/panel/configuracion`): Instagram e inteligencia artificial. Quien aprueba o publica ve
   lo suyo; administración además cambia los interruptores.
   - «Publicar automáticamente», encendido por omisión. Apagado: lo que se
     aprueba o publica sale solo en el portal, y el mensaje de la acción lo
     dice.
   - Lista «Sin publicar en Instagram»: contenido público que aún no sale o
     cuyo intento falló, con «Publicar en Instagram» o «Reintentar».
-  - «Incluir datos de demostración», solo para pruebas.
+  - El contenido de demostración también se publica, con su marca.
   - «Responder comentarios y mensajes» (apagado por omisión) y la lista de lo
     último que escribieron y qué se respondió.
   - «Usar inteligencia artificial (ChatGPT)», apagado por omisión; exige
-    `OPENAI_API_KEY` en el servidor.
+    `OPENAI_API_KEY` en el servidor. Está en esta misma página.
 - **Respuestas automáticas** (reglas por palabras clave, sin inteligencia
   artificial; `src/dominio/respuestas.ts`): Instagram avisa cada comentario y
   mensaje al webhook `/api/instagram/webhook` (firma de Meta validada).

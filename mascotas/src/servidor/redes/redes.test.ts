@@ -231,20 +231,15 @@ describe("operativos, adopciones y demostración", () => {
     expect(await db.publicacionRed.findFirstOrThrow({ where: { tipo: "OPERATIVO", origenId: o.id } })).toMatchObject({ estado: "PUBLICADO" });
   }, 60_000);
 
-  it("el contenido de demostración no sale a Instagram, salvo que administración lo permita para pruebas", async () => {
+  it("en la demostración, el contenido de demostración también sale a Instagram", async () => {
     configurarInstagram();
     apiSimulada();
     sesion = await sesionDe("COORDINADOR");
     const { FICHA_PUBLICA } = await import("@/servidor/conFoto");
     const ficha = await db.fichaAdopcion.findFirstOrThrow({ where: { AND: [FICHA_PUBLICA, { OR: [{ proponenteId: null }, { autorizaPublicar: true }] }, { loteDemoId: { not: null } }] } });
-    expect(await redes.publicarEnInstagram("ADOPCION", ficha.id)).toEqual({ ok: false, mensaje: "Son datos de demostración: no se publicaron en Instagram." });
-    expect((await redes.guardarDemoInstagram(true)).ok).toBe(false); // coordinación no puede
-    sesion = await sesionDe("ADMINISTRADOR");
-    expect((await redes.guardarDemoInstagram(true)).ok).toBe(true);
     expect(await redes.publicarEnInstagram("ADOPCION", ficha.id)).toEqual({ ok: true, mensaje: "Publicado en Instagram." });
     const red = await db.publicacionRed.findFirstOrThrow({ where: { tipo: "ADOPCION", origenId: ficha.id } });
     expect(red.texto).not.toMatch(/vacun|esteriliz/i);
-    expect((await redes.guardarDemoInstagram(false)).ok).toBe(true);
   }, 60_000);
 
   it("no publica contenido que no es público ni tipos no permitidos, y respeta los permisos", async () => {

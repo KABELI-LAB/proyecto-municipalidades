@@ -20,16 +20,15 @@ import { generarPieza, type DatosPieza } from "./pieza";
 
 export type Respuesta = { ok: boolean; mensaje: string; id?: string };
 
-/** ¿Se permite publicar en Instagram contenido de demostración? Solo para pruebas (Configuración). */
 /** Si al aprobar o publicar un contenido también sale en Instagram (configuración del panel). */
 export async function publicacionAutomatica() {
   const m = await db.municipio.findUnique({ where: { id: municipioActivo().id }, select: { redesPublicarAuto: true } });
   return m?.redesPublicarAuto ?? true;
 }
 
+/** En esta demostración, el contenido de demostración siempre sale a Instagram (con su marca). */
 export async function demoEnInstagram() {
-  const m = await db.municipio.findUnique({ where: { id: municipioActivo().id }, select: { redesIncluirDemo: true } });
-  return m?.redesIncluirDemo ?? false;
+  return true;
 }
 
 const especie = (e: string) => (e === "OTRA" ? "animal" : ESPECIE[e].toLowerCase());

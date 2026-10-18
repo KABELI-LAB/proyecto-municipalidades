@@ -46,10 +46,8 @@ const PERMISOS = {
   verConfiguracion: ["COORDINADOR", "DIRECTIVO", "ADMINISTRADOR"],
   /** Guardar la configuración (pesos de priorización). */
   configurar: ["ADMINISTRADOR"],
-  /** Instagram: publicación y respuestas automáticas, y contenido de demostración. */
+  /** Configuración: Instagram (publicación y respuestas automáticas) e inteligencia artificial. */
   configurarRedes: ["ADMINISTRADOR"],
-  /** Encender o apagar la inteligencia artificial y ver su uso. */
-  configurarIA: ["ADMINISTRADOR"],
 } as const satisfies Record<string, readonly Rol[]>;
 
 export type Permiso = keyof typeof PERMISOS;

@@ -23,7 +23,7 @@ export async function publicarEnInstagram(tipo: string, origenId: string): Promi
   if (!u) return SIN_PERMISO;
   const r = await difundirEnInstagram(tipo as TipoRed, origenId, u.id);
   revalidatePath(RUTA[tipo as TipoRed]);
-  revalidatePath("/panel/instagram");
+  revalidatePath("/panel/configuracion");
   return { ok: r.estado === "publicado" || r.estado === "ya-publicado", mensaje: r.mensaje };
 }
 
@@ -31,7 +31,7 @@ export async function publicarEnInstagram(tipo: string, origenId: string): Promi
 export async function guardarPublicacionAutomatica(encendida: boolean): Promise<Respuesta> {
   if (!(await autorizar("configurarRedes"))) return SIN_PERMISO;
   await db.municipio.update({ where: { id: municipioActivo().id }, data: { redesPublicarAuto: encendida } });
-  revalidatePath("/panel/instagram");
+  revalidatePath("/panel/configuracion");
   return {
     ok: true,
     mensaje: encendida
@@ -40,19 +40,11 @@ export async function guardarPublicacionAutomatica(encendida: boolean): Promise<
   };
 }
 
-/** Solo para pruebas: permite publicar en Instagram el contenido de demostración (lleva la marca). */
-export async function guardarDemoInstagram(incluir: boolean): Promise<Respuesta> {
-  if (!(await autorizar("configurarRedes"))) return SIN_PERMISO;
-  await db.municipio.update({ where: { id: municipioActivo().id }, data: { redesIncluirDemo: incluir } });
-  revalidatePath("/panel/instagram");
-  return { ok: true, mensaje: incluir ? "El contenido de demostración también se publicará en Instagram, con su marca." : "El contenido de demostración ya no se publicará en Instagram." };
-}
-
 /** Enciende o apaga las respuestas automáticas a comentarios y mensajes de Instagram. */
 export async function guardarRespuestasAutomaticas(encendidas: boolean): Promise<Respuesta> {
   if (!(await autorizar("configurarRedes"))) return SIN_PERMISO;
   await db.municipio.update({ where: { id: municipioActivo().id }, data: { redesResponderAuto: encendidas } });
-  revalidatePath("/panel/instagram");
+  revalidatePath("/panel/configuracion");
   return {
     ok: true,
     mensaje: encendidas

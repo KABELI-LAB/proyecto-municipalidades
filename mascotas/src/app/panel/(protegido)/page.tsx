@@ -19,14 +19,13 @@ const OTROS: { href: string; titulo: string; detalle: string; icono: NombreIcono
   { href: "/panel/mapa", titulo: "Mapa", detalle: "Avisos y reportes por sector", icono: "ubicacion", tono: "azul", permisos: ["verInteligencia"] },
   { href: "/panel/avisos", titulo: "Avisos a vecinos", detalle: "Publicar y quitar avisos", icono: "megafono", tono: "amarillo", permisos: ["gestionarAvisos"] },
   {
-    href: "/panel/instagram",
-    titulo: "Instagram",
-    detalle: "Publicación y pendientes",
+    href: "/panel/configuracion",
+    titulo: "Configuración",
+    detalle: "Instagram e inteligencia artificial",
     icono: "ajustes",
     tono: "azul",
     permisos: ["configurarRedes", ...new Set(Object.values(PERMISO_RED))],
   },
-  { href: "/panel/inteligencia", titulo: "Inteligencia artificial", detalle: "ChatGPT: encender y ver su uso", icono: "cerebro", tono: "azul", permisos: ["configurarIA"] },
 ];
 
 const capitalizar = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);

@@ -8,35 +8,37 @@ import { PERMISO_RED, type TipoRed } from "@/dominio/redes";
 import { requerir } from "@/servidor/auth";
 import { INTENCION, type Intencion } from "@/dominio/respuestas";
 import { fechaCorta } from "@/servidor/formato";
-import { guardarDemoInstagram, guardarPublicacionAutomatica, guardarRespuestasAutomaticas } from "@/servidor/panel/acciones-redes";
+import { guardarIaActiva } from "@/servidor/panel/acciones-ia";
+import { guardarPublicacionAutomatica, guardarRespuestasAutomaticas } from "@/servidor/panel/acciones-redes";
+import { iaActiva, iaConfigurada, modeloIA } from "@/servidor/ia/openai";
 import { ultimasInteracciones } from "@/servidor/redes/respuestas";
 import { configuracionInstagram, pendientesInstagram } from "@/servidor/panel/instagram";
 import estilos from "@/estilos/paginas.module.css";
-import propios from "./instagram.module.css";
+import propios from "./configuracion.module.css";
 
-export const metadata: Metadata = { title: "Instagram · Panel municipal" };
+export const metadata: Metadata = { title: "Configuración · Panel municipal" };
 
-// Responde: ¿qué falta publicar en Instagram? Quien aprueba o publica ve lo
-// suyo, con su botón; administración además enciende o apaga la publicación
-// automática.
-export default async function Instagram() {
+// Responde: ¿cómo está configurada la difusión y la inteligencia artificial, y
+// qué falta publicar en Instagram? Quien aprueba o publica ve lo suyo, con su
+// botón; administración además enciende o apaga cada función.
+export default async function Configuracion() {
   const usuario = await requerir();
   const administra = puede(usuario.rol, "configurarRedes");
   const tipos = (Object.keys(PERMISO_RED) as TipoRed[]).filter((t) => puede(usuario.rol, PERMISO_RED[t]));
   if (!administra && !tipos.length) redirect(inicioDe(usuario.rol));
-  const { automatica, incluirDemo, responder, integracion, faltanParaResponder } = await configuracionInstagram();
-  const [pendientes, conversaciones] = await Promise.all([pendientesInstagram(incluirDemo, tipos), ultimasInteracciones(15)]);
+  const { automatica, responder, integracion, faltanParaResponder } = await configuracionInstagram();
+  const [pendientes, conversaciones, conIA] = await Promise.all([pendientesInstagram(tipos), ultimasInteracciones(15), iaActiva()]);
 
   return (
     <div className={`contenedor ${estilos.pagina}`}>
       <div className={estilos.cabecera}>
-        <h1>Instagram</h1>
-        <p>Lo que se publica en el portal y su difusión en Instagram.</p>
+        <h1>Configuración</h1>
+        <p>Instagram e inteligencia artificial.</p>
       </div>
 
       <section className={propios.tarjeta} aria-labelledby="publicacion">
         <div className={propios.titulo}>
-          <h2 id="publicacion">Publicación</h2>
+          <h2 id="publicacion">Instagram</h2>
           {integracion.configurada ? (
             <span className={`${propios.insignia} ${propios.ok}`}>
               <Icono nombre="check" tamano={14} />
@@ -72,13 +74,6 @@ export default async function Instagram() {
             {faltanParaResponder.length > 0 && (
               <p className={propios.nota}>Para que Instagram nos avise de comentarios y mensajes falta configurar: {faltanParaResponder.join(", ")}.</p>
             )}
-            <Interruptor
-              id="incluir-demo"
-              etiqueta="Incluir datos de demostración"
-              descripcion="Solo para pruebas: el contenido de demostración también se publica, con su marca."
-              inicial={incluirDemo}
-              guardar={guardarDemoInstagram}
-            />
           </>
         ) : (
           <p>
@@ -92,6 +87,33 @@ export default async function Instagram() {
           </p>
         )}
       </section>
+
+      {administra && (
+        <section className={propios.tarjeta} aria-labelledby="inteligencia">
+          <div className={propios.titulo}>
+            <h2 id="inteligencia">Inteligencia artificial</h2>
+            {iaConfigurada() ? (
+              <span className={`${propios.insignia} ${propios.ok}`}>
+                <Icono nombre="check" tamano={14} />
+                Conectada · <span className="dato">{modeloIA()}</span>
+              </span>
+            ) : (
+              <span className={`${propios.insignia} ${propios.falta}`}>
+                <Icono nombre="alerta" tamano={14} />
+                Falta configurar
+              </span>
+            )}
+          </div>
+          <Interruptor
+            id="usar-ia"
+            etiqueta="Usar inteligencia artificial (ChatGPT)"
+            descripcion="Ayuda a Pawni y a las respuestas de Instagram a entender lo que escriben, y escribe el resumen para el equipo. Solo se envían textos y cifras agrupadas, nunca datos de personas."
+            inicial={conIA}
+            guardar={guardarIaActiva}
+          />
+          {!iaConfigurada() && <p className={propios.nota}>Para usarla falta configurar en el servidor: OPENAI_API_KEY.</p>}
+        </section>
+      )}
 
       {integracion.configurada && tipos.length > 0 && (
         <section className={propios.tarjeta} aria-labelledby="pendientes">
