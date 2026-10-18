@@ -36,16 +36,33 @@ function openai(contenido: unknown, estado = 200) {
 }
 
 describe("resumen para el equipo", () => {
-  it("envía solo las cifras agrupadas y suaviza un «debe»", async () => {
+  const BUENO = {
+    titular: "Esterilización es lo más pedido, sobre todo en el Centro",
+    destacados: [
+      { titulo: "Esterilización", cifra: 9, detalle: "De 12 solicitudes pendientes.", tono: "normal" },
+      { titulo: "Centro", cifra: 7, detalle: "El sector con más solicitudes.", tono: "atencion" },
+    ],
+    recomendaciones: [{ texto: "Se debe revisar un operativo en el Centro.", porque: "Concentra 7 de 12 solicitudes." }],
+  };
+
+  it("envía solo las cifras agrupadas, devuelve la estructura y suaviza un «debe»", async () => {
     process.env.OPENAI_API_KEY = "clave-de-prueba";
-    const enviados = openai({ resumen: "Esterilización concentra 9 de 12 solicitudes. Se debe revisar el Centro." });
-    expect(await ia.resumenConIA(DATOS)).toBe("Esterilización concentra 9 de 12 solicitudes. Se recomienda revisar el Centro.");
+    const enviados = openai(BUENO);
+    const r = await ia.resumenConIA(DATOS);
+    expect(r?.destacados.map((d) => d.cifra)).toEqual([9, 7]);
+    expect(r?.recomendaciones[0].texto).toBe("Se recomienda revisar un operativo en el Centro.");
     expect(JSON.parse(enviados[0].messages[1].content)).toEqual(DATOS);
+  });
+
+  it("descarta un resumen con cifras que no están en los datos", async () => {
+    process.env.OPENAI_API_KEY = "clave-de-prueba";
+    openai({ ...BUENO, titular: "Hay 85 solicitudes de esterilización en el Centro" });
+    expect(await ia.resumenConIA(DATOS)).toBeNull();
   });
 
   it("sin clave no consulta; con error o respuesta inválida devuelve null", async () => {
     delete process.env.OPENAI_API_KEY;
-    const enviados = openai({ resumen: "Texto suficiente para el resumen del equipo." });
+    const enviados = openai({ titular: "Texto suficiente para el resumen." });
     expect(await ia.resumenConIA(DATOS)).toBeNull();
     expect(enviados).toHaveLength(0);
     process.env.OPENAI_API_KEY = "clave-de-prueba";

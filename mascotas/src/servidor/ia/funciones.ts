@@ -3,11 +3,13 @@
 //     clave no entendieron (devuelve solo la intención; la respuesta sigue
 //     saliendo de los textos aprobados);
 //   - entender lo que se le escribe o dice a Pawni, el guía del portal;
-//   - escribir el resumen para el equipo a partir de cifras agrupadas.
+//   - escribir el resumen para el equipo a partir de cifras agrupadas
+//     (titular, destacados y recomendaciones; sin cifras inventadas).
 import "server-only";
 import { z } from "zod";
 import { TEMAS_PAWNI, type TemaPawni } from "@/dominio/asistente";
 import { INTENCION, type Intencion } from "@/dominio/respuestas";
+import { cifrasInventadas, esquemaResumen, suavizarResumen, type ResumenEquipo } from "@/dominio/resumen";
 import { municipioActivo } from "@/lib/municipio";
 import { pedirJSON } from "./openai";
 
@@ -60,24 +62,30 @@ export type CifrasResumen = {
   porTipo: { nombre: string; cantidad: number }[];
 };
 
-/** Resumen corto para el equipo municipal, o null si la IA no responde. */
-export async function resumenConIA(datos: CifrasResumen): Promise<string | null> {
+/** Resumen estructurado para el equipo municipal, o null si la IA no responde o inventa cifras. */
+export async function resumenConIA(datos: CifrasResumen): Promise<ResumenEquipo | null> {
   const r = await pedirJSON({
     sistema: [
       `Eres analista del programa de tenencia responsable de mascotas de la ${municipioActivo().nombreOficial}, en Chile.`,
-      "Recibes cifras agrupadas de lo que vecinas y vecinos hacen en el portal: solicitudes de servicio pendientes, avisos de mascotas perdidas y avistadas, reportes SOS de los últimos 30 días, postulaciones a adopción y perros comunitarios.",
-      "Escribe un resumen para el equipo municipal en español de Chile, tuteando, en 3 a 5 frases cortas (20 palabras o menos cada una).",
-      "Di qué destaca y dónde, citando las cifras. Termina con una o dos recomendaciones que empiecen con «Se recomienda evaluar».",
-      "Nunca uses «debe» ni «deben». No inventes cifras ni datos que no estén. Sin emoji, sin mayúsculas sostenidas, sin siglas sin explicar.",
-      "Usa coma decimal y espacio antes de %. Responde solo un JSON {\"resumen\": \"...\"}.",
+      "Recibes cifras agrupadas de lo que vecinas y vecinos hacen en el portal: solicitudes de servicio pendientes (por servicio y sector), avisos de mascotas perdidas y avistadas, reportes SOS de los últimos 30 días (por tipo y sector), postulaciones a adopción y perros comunitarios.",
+      "Escribe un resumen para el equipo municipal en español de Chile, tuteando. Responde solo este JSON:",
+      '{"titular": "una frase de 12 palabras o menos con lo más importante",',
+      ' "destacados": [2 o 3 objetos {"titulo": "2 a 4 palabras", "cifra": la cifra principal tal como viene en los datos o null, "detalle": "una frase de 20 palabras o menos, con el sector si aplica", "tono": "atencion" si pide mirarse con prioridad (por ejemplo reportes SOS concentrados) o "normal"}],',
+      ' "recomendaciones": [1 o 2 objetos {"texto": "empieza con «Se recomienda evaluar», 20 palabras o menos", "porque": "las cifras que la explican, 20 palabras o menos"}]}',
+      "Usa solo cifras que estén en los datos, sin calcular porcentajes ni sumas nuevas. Nunca uses «debe» ni «deben».",
+      "Sin emoji, sin mayúsculas sostenidas, sin siglas sin explicar, sin nombres de personas.",
     ].join("\n"),
     usuario: JSON.stringify(datos),
-    esquema: z.object({ resumen: z.string().trim().min(20).max(1500) }),
-    maxTokens: 2_000,
+    esquema: esquemaResumen,
+    maxTokens: 2_500,
     espera: 9_000,
     razonamiento: "low",
   });
   if (!r) return null;
-  // Si a pesar de la instrucción aparece un «debe», se suaviza.
-  return r.resumen.replace(/\b(se )?deben?\b/gi, (m) => (/^[SD]/.test(m) ? "Se recomienda" : "se recomienda"));
+  const inventadas = cifrasInventadas(r, datos);
+  if (inventadas.length) {
+    console.error(`Resumen descartado: trae cifras que no están en los datos (${inventadas.join(", ")}).`);
+    return null;
+  }
+  return suavizarResumen(r);
 }

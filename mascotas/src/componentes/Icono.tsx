@@ -3,6 +3,7 @@
 import {
   ArrowLeft,
   ArrowRight,
+  Brain,
   CalendarDays,
   ChevronLeft,
   ChevronRight,
@@ -13,6 +14,7 @@ import {
   House,
   Info,
   LifeBuoy,
+  Lightbulb,
   MapPin,
   Megaphone,
   MessageCircle,
@@ -55,6 +57,8 @@ const ICONOS = {
   siguiente: ChevronRight,
   microfono: Mic,
   detener: Square,
+  cerebro: Brain,
+  idea: Lightbulb,
 } satisfies Record<string, LucideIcon>;
 
 export type NombreIcono = keyof typeof ICONOS;

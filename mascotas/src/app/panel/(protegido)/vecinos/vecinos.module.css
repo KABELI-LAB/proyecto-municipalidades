@@ -97,3 +97,15 @@
   background: var(--blue-50);
   color: var(--blue-700);
 }
+
+.fechaResumen {
+  margin-left: auto;
+  font-size: var(--type-body-sm-size);
+  color: var(--color-text-secondary);
+}
+.resumenPie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}

@@ -6,6 +6,7 @@ import { CUPO_OCUPA } from "@/dominio/cupos";
 import { SOLICITUD_PENDIENTE } from "@/dominio/solicitudes";
 import { municipioActivo } from "@/lib/municipio";
 import { COMUNITARIO_PUBLICO, FICHA_PUBLICA, PUBLICACION_CON_FOTO } from "@/servidor/conFoto";
+import { leerResumen } from "@/dominio/resumen";
 import { db } from "@/servidor/db";
 
 const DIA = 86_400_000;
@@ -66,7 +67,8 @@ export async function loQuePidenLosVecinos() {
   };
 }
 
-/** El último resumen escrito por la IA, si lo hay. */
-export function ultimoResumen() {
-  return db.resumenIA.findFirst({ where: { municipioId: municipioActivo().id }, orderBy: { creadoEn: "desc" }, select: { texto: true, creadoEn: true } });
+/** El último resumen escrito por la IA, si lo hay (estructurado, o el texto de uno antiguo). */
+export async function ultimoResumen() {
+  const r = await db.resumenIA.findFirst({ where: { municipioId: municipioActivo().id }, orderBy: { creadoEn: "desc" }, select: { texto: true, creadoEn: true } });
+  return r ? { contenido: leerResumen(r.texto), creadoEn: r.creadoEn } : null;
 }

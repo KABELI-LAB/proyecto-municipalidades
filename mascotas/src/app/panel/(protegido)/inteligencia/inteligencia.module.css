@@ -1,0 +1,122 @@
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 880px;
+  padding: var(--space-6);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
+}
+.titulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+.titulo h2 {
+  font-size: var(--type-h4-size);
+  line-height: var(--type-h4-lh);
+}
+.cerebro {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-medium);
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+.nota {
+  display: block;
+  margin: 0;
+  font-size: var(--type-body-sm-size);
+  line-height: var(--type-body-sm-lh);
+  color: var(--color-text-secondary);
+}
+.insignia {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: var(--weight-bold);
+  line-height: 1;
+}
+.ok {
+  background: var(--green-50);
+  color: var(--green-700);
+}
+.falta {
+  background: var(--yellow-100);
+  color: var(--yellow-800);
+}
+
+/* Tres usos, en mosaico. */
+.usos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: var(--space-4);
+  max-width: 880px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.usos li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
+}
+.usos b {
+  font-size: var(--type-body-lg-size);
+}
+.recuadro {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: var(--space-1);
+  border-radius: var(--radius-medium);
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+}
+.enlace {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  margin-top: auto;
+  font-weight: var(--weight-bold);
+}
+
+.cifras {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: var(--space-4);
+  margin: 0;
+}
+.cifras > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.cifras dt {
+  font-size: 15px;
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-secondary);
+}
+.cifras dd {
+  margin: 0;
+}
+.cifra {
+  font-family: var(--font-mono);
+  font-size: var(--type-data-size);
+  font-weight: var(--weight-medium);
+  line-height: var(--type-data-lh);
+  color: var(--color-text);
+}

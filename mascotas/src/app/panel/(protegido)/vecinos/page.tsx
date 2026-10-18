@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cifra } from "@/componentes/Cifra";
 import { Icono } from "@/componentes/Icono";
 import { BotonAccion } from "@/componentes/panel/BotonAccion";
+import { ResumenEquipo } from "@/componentes/panel/ResumenEquipo";
 import { numero } from "@/dominio/formato";
 import { requerir } from "@/servidor/auth";
 import { fechaCorta, hora } from "@/servidor/formato";
@@ -66,21 +67,28 @@ export default async function LoQuePiden() {
           <div className={propios.resumenTitulo}>
             <h2 id="resumen">Resumen para el equipo</h2>
             <span className={propios.insignia}>
-              <Icono nombre="info" tamano={14} />
+              <Icono nombre="cerebro" tamano={14} />
               Escrito con inteligencia artificial
             </span>
+            {resumen && (
+              <span className={propios.fechaResumen}>
+                {fechaCorta(resumen.creadoEn)}, <span className="dato">{hora(resumen.creadoEn)}</span>
+              </span>
+            )}
           </div>
           {resumen ? (
-            <>
-              <p className={propios.resumenTexto}>{resumen.texto}</p>
-              <p className="nota">
-                Con las cifras de esta página al {fechaCorta(resumen.creadoEn)}, <span className="dato">{hora(resumen.creadoEn)}</span>. Revísalo antes de decidir.
-              </p>
-            </>
+            typeof resumen.contenido === "string" ? (
+              <p className={propios.resumenTexto}>{resumen.contenido}</p>
+            ) : (
+              <ResumenEquipo resumen={resumen.contenido} />
+            )
           ) : (
-            <p className="nota">Un párrafo con lo que destaca y dónde. Solo se envían las cifras agrupadas, nunca datos de personas.</p>
+            <p className="nota">Lo que destaca, dónde y qué evaluar, con sus cifras. Solo se envían cifras agrupadas, nunca datos de personas.</p>
           )}
-          {conIA && <BotonAccion accion={generarResumen} texto={resumen ? "Actualizar resumen" : "Generar resumen"} />}
+          <div className={propios.resumenPie}>
+            {conIA && <BotonAccion accion={generarResumen} texto={resumen ? "Actualizar resumen" : "Generar resumen"} />}
+            {resumen && <p className="nota">Hecho con las cifras de esta página. Revísalo antes de decidir.</p>}
+          </div>
         </section>
       )}
 

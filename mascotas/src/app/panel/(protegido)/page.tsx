@@ -26,6 +26,7 @@ const OTROS: { href: string; titulo: string; detalle: string; icono: NombreIcono
     tono: "azul",
     permisos: ["configurarRedes", ...new Set(Object.values(PERMISO_RED))],
   },
+  { href: "/panel/inteligencia", titulo: "Inteligencia artificial", detalle: "ChatGPT: encender y ver su uso", icono: "cerebro", tono: "azul", permisos: ["configurarIA"] },
 ];
 
 const capitalizar = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
