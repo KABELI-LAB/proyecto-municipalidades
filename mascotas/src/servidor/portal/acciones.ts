@@ -20,6 +20,7 @@ import {
   correoValido,
   esquemaCupo,
   esquemaMensaje,
+  esquemaRespuestaMensaje,
   esquemaNovedad,
   esquemaPostulacion,
   esquemaPropuesta,
@@ -410,8 +411,8 @@ export async function publicarMascota(entrada: unknown): Promise<ResultadoPublic
         create: { perdidaId: vinculada.id, encontradaId: creada.pub.id, puntaje: coincidencias.find((c) => c.id === vinculada.id)?.puntaje ?? 0, motivos },
         update: { motivos },
       });
-      const duena = await db.publicacionMascota.findUnique({ where: { id: vinculada.id }, select: { codigo: true, loteDemoId: true, persona: { select: { telefono: true, correo: true } } } });
-      if (duena) await notificar(db, duena.persona, "Alguien informó que vio una mascota", `Una persona informó que vio una mascota que podría ser la de tu aviso ${duena.codigo ?? ""}. Verás el avistamiento en tu aviso cuando el municipio lo revise; no podemos asegurar que sea el mismo animal.`, duena.loteDemoId);
+      const duena = await db.publicacionMascota.findUnique({ where: { id: vinculada.id }, select: { loteDemoId: true, persona: { select: { telefono: true, correo: true } } } });
+      if (duena) await notificar(db, duena.persona, "Alguien informó que vio una mascota", "Una persona informó que vio una mascota que podría ser la de tu aviso. Verás el avistamiento en tu aviso cuando el municipio lo revise; no podemos asegurar que sea el mismo animal.", duena.loteDemoId);
     }
 
     revalidatePath("/mascotas");
@@ -455,14 +456,58 @@ export async function enviarMensaje(valores: unknown): Promise<ResultadoMensaje>
     if (!pub) return fallo("Esta publicación ya no está disponible.");
     await db.$transaction(async (tx) => {
       await tx.mensajeProtegido.create({
-        data: { publicacionId: pub.id, remitenteNombre: d.nombre, remitenteContacto: d.correo || d.telefono, texto: d.texto },
+        data: { publicacionId: pub.id, remitenteNombre: d.nombre, remitenteContacto: d.correo.trim().toLowerCase(), texto: d.texto },
       });
-      await notificar(tx, pub.persona, "Recibiste un mensaje sobre tu publicación", "Una persona te escribió sobre tu publicación. Puedes leer el mensaje y responder a través de la plataforma.", pub.loteDemoId);
+      await notificar(
+        tx,
+        pub.persona,
+        "Te escribieron sobre tu aviso",
+        `${d.nombre} te escribió sobre tu aviso:\n\n«${d.texto}»\n\nPara responderle, entra a Mis solicitudes con tu correo. Tu respuesta le llegará sin mostrarle tu correo ni tu teléfono.`,
+        pub.loteDemoId,
+      );
     });
     return { ok: true };
   } catch (e) {
     console.error(e);
     return fallo(ERROR_GENERAL);
+  }
+}
+
+/**
+ * Quien publicó responde un mensaje (desde Mis solicitudes, con su sesión). La
+ * respuesta le llega por correo a quien escribió; ninguno ve el contacto del otro.
+ */
+export async function responderMensaje(valores: unknown): Promise<{ ok: boolean; mensaje: string; errores?: Errores }> {
+  const filtro = await filtroVecino();
+  if (!filtro) return { ok: false, mensaje: SESION_VENCIDA };
+  const r = esquemaRespuestaMensaje.safeParse(valores);
+  if (!r.success) return { ok: false, mensaje: REVISE, errores: validarCampos(esquemaRespuestaMensaje, valores) };
+  try {
+    const m = await db.mensajeProtegido.findFirst({
+      where: { id: r.data.mensajeId, publicacion: { persona: filtro } },
+      include: { publicacion: { include: { sector: true } } },
+    });
+    if (!m) return { ok: false, mensaje: NO_ENCONTRADO };
+    if (m.respuesta) return { ok: false, mensaje: "Ya respondiste este mensaje." };
+    const p = m.publicacion;
+    const base = process.env.APP_URL?.trim().replace(/\/+$/, "");
+    const enlace = base ? ` Si quieres seguir la conversación, escríbele de nuevo desde el aviso: ${base}/mascotas/${p.id}` : "";
+    const correo = correoValido(m.remitenteContacto) ? m.remitenteContacto : null;
+    await db.$transaction(async (tx) => {
+      const cambio = await tx.mensajeProtegido.updateMany({ where: { id: m.id, respuesta: null }, data: { respuesta: r.data.texto, respondidoEn: new Date() } });
+      if (!cambio.count) throw new Error("Ya respondido");
+      await notificar(
+        tx,
+        { correo, telefono: correo ? null : m.remitenteContacto },
+        "Te respondieron sobre la mascota",
+        `Quien publicó el aviso de ${ESPECIE[p.especie].toLowerCase()} ${p.colorPrincipal} en ${p.sector.nombre} respondió tu mensaje:\n\n«${r.data.texto}»\n\n${enlace.trim()}`.trim(),
+        p.loteDemoId,
+      );
+    });
+    return { ok: true, mensaje: "Enviamos tu respuesta. Le llegará por correo, sin mostrar tu contacto." };
+  } catch (e) {
+    console.error(e);
+    return { ok: false, mensaje: ERROR_GENERAL };
   }
 }
 
@@ -864,6 +909,9 @@ export async function decidirPostulacion(valores: unknown): Promise<{ ok: boolea
  * ambos de una vez si el reencuentro vino de uno de ellos.
  */
 export type CoincidenciaAviso = { id: string; detalle: string };
+/** Mensaje que una persona le escribió a quien publicó el aviso (sin su contacto). */
+export type MensajeRecibido = { id: string; nombre: string; texto: string; fecha: string; respuesta: string | null };
+
 export type Tramite = {
   codigo: string | null;
   tipo: string;
@@ -871,7 +919,7 @@ export type Tramite = {
   fecha: string;
   estado: Estado;
   nota?: string;
-  aviso?: { tipo: "PERDIDA" | "ENCONTRADA"; coincidencias: CoincidenciaAviso[] };
+  aviso?: { tipo: "PERDIDA" | "ENCONTRADA"; coincidencias: CoincidenciaAviso[]; mensajes: MensajeRecibido[] };
   /** Invitación prioritaria abierta: la persona puede confirmar interés o decir que no podrá. */
   invitacion?: { responder: boolean };
   /** Cupo propio vigente de un operativo que aún no comienza: la persona puede cancelarlo (o salir de la lista de espera). */
@@ -969,6 +1017,7 @@ async function tramitesDe(personas: { id: string; correo: string | null; telefon
       where: { personaId: ids },
       include: {
         sector: true,
+        mensajes: { orderBy: { creadoEn: "desc" }, take: 20 },
         coincidenciasPerdida: { where: { estado: { not: "DESCARTADA" }, encontrada: CONTRAPARTE_ABIERTA }, include: { encontrada: { include: { sector: true } } } },
         coincidenciasEncontrada: { where: { estado: { not: "DESCARTADA" }, perdida: CONTRAPARTE_ABIERTA }, include: { perdida: { include: { sector: true } } } },
       },
@@ -1042,6 +1091,7 @@ async function tramitesDe(personas: { id: string; correo: string | null; telefon
                 ...p.coincidenciasPerdida.map((c) => ({ id: c.id, detalle: describir(c.encontrada) })),
                 ...p.coincidenciasEncontrada.map((c) => ({ id: c.id, detalle: describir(c.perdida) })),
               ],
+              mensajes: p.mensajes.map((m) => ({ id: m.id, nombre: m.remitenteNombre, texto: m.texto, fecha: fechaCorta(m.creadoEn), respuesta: m.respuesta })),
             }
           : undefined,
       orden: p.creadaEn.getTime(),

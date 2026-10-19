@@ -24,11 +24,7 @@ export function FormularioMensaje({ publicacionId }: { publicacionId: string }) 
           <Icono nombre="check" tamano={28} />
           Tu mensaje fue enviado
         </h3>
-        <p>
-          Lo hicimos llegar a la persona que publicó, sin mostrarle tu teléfono ni tu correo. Si decide responder, te
-          llegará un aviso por la plataforma.
-        </p>
-        <p className="nota">En este prototipo, el aviso por correo o SMS es simulado.</p>
+        <p>Se lo enviamos a la persona que publicó, sin mostrarle tu correo ni tu teléfono. Si te responde, te llegará a tu correo.</p>
       </div>
     );
   }
@@ -52,10 +48,10 @@ export function FormularioMensaje({ publicacionId }: { publicacionId: string }) 
     <form className={estilos.formulario} onSubmit={enviar} noValidate>
       <CampoTexto id="nombre" etiqueta="Tu nombre" valor={v.nombre} alCambiar={cambiar("nombre")} error={errores.nombre} autoComplete="name" maxLength={100} />
       <div className={estilos.fila}>
-        <CampoTexto id="telefono" etiqueta="Teléfono" tipo="tel" valor={v.telefono} alCambiar={cambiar("telefono")} error={errores.telefono} autoComplete="tel" maxLength={20} />
-        <CampoTexto id="correo" etiqueta="Correo" tipo="email" valor={v.correo} alCambiar={cambiar("correo")} error={errores.correo} autoComplete="email" maxLength={120} />
+        <CampoTexto id="correo" etiqueta="Tu correo" tipo="email" valor={v.correo} alCambiar={cambiar("correo")} error={errores.correo} autoComplete="email" maxLength={120} />
+        <CampoTexto id="telefono" etiqueta="Teléfono (opcional)" tipo="tel" valor={v.telefono} alCambiar={cambiar("telefono")} error={errores.telefono} autoComplete="tel" maxLength={20} />
       </div>
-      <p className={estilos.ayuda}>Indica al menos uno, para avisarte si te responden. No se muestra a la otra persona.</p>
+      <p className={estilos.ayuda}>Ahí te llegará la respuesta. No se muestra a la otra persona.</p>
       <CampoArea id="texto" etiqueta="Mensaje" valor={v.texto} alCambiar={cambiar("texto")} error={errores.texto} maxLength={500} ayuda="Por ejemplo, dónde y cuándo viste al animal. No incluyas direcciones exactas." />
       {mensaje && (
         <p className={estilos.mensaje} role="alert">

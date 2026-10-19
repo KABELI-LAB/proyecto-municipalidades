@@ -13,6 +13,7 @@ import { GestionAviso } from "./GestionAviso";
 import { GestionComunitario } from "./GestionComunitario";
 import { GestionCupo } from "./GestionCupo";
 import { GestionInvitacion } from "./GestionInvitacion";
+import { GestionMensajes } from "./GestionMensajes";
 import { GestionPropuesta } from "./GestionPropuesta";
 import estilos from "./mis-solicitudes.module.css";
 
@@ -181,6 +182,7 @@ export function ConsultaSolicitudes() {
                 {t.invitacion?.responder && t.codigo && <GestionInvitacion codigo={t.codigo} alTerminar={alTerminar} />}
                 {t.comunitario && t.codigo && <GestionComunitario codigo={t.codigo} perro={t.comunitario} alTerminar={alTerminar} />}
                 {t.cupo && t.codigo && <GestionCupo codigo={t.codigo} enEspera={t.cupo.enEspera} alTerminar={alTerminar} />}
+                {t.aviso && t.aviso.mensajes.length > 0 && <GestionMensajes mensajes={t.aviso.mensajes} alTerminar={alTerminar} />}
                 {t.aviso && t.codigo && <GestionAviso codigo={t.codigo} tipo={t.aviso.tipo} coincidencias={t.aviso.coincidencias} alTerminar={alTerminar} />}
                 {t.propuesta && t.codigo && (t.propuesta.corregir || t.propuesta.cerrar || t.propuesta.postulaciones > 0) && (
                   <GestionPropuesta codigo={t.codigo} corregir={t.propuesta.corregir} cerrar={t.propuesta.cerrar} postulaciones={t.propuesta.postulaciones} alTerminar={alTerminar} />

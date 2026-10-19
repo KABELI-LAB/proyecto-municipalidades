@@ -173,3 +173,31 @@
     animation: none;
   }
 }
+
+/* Mensajes recibidos en un aviso propio. */
+.subtitulo {
+  margin: 0;
+  font-size: var(--type-body-lg-size);
+}
+.mensajes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mensaje {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: var(--color-surface-sunken);
+  border-radius: var(--radius-medium);
+}
+.mensaje p {
+  margin: 0;
+}
+.respuesta {
+  color: var(--color-text-secondary);
+}

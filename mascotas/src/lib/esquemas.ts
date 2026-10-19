@@ -256,7 +256,14 @@ export const esquemaMensaje = z
     correo: opcional(120),
     texto: texto(10, 500, "Escribe un mensaje de al menos 10 caracteres."),
   })
-  .superRefine(contacto, SIEMPRE);
+  // Con el correo le llega la respuesta, sin que nadie vea la dirección del otro.
+  .superRefine(contactoConCorreo, SIEMPRE);
+
+/** Respuesta de quien publicó a un mensaje recibido. */
+export const esquemaRespuestaMensaje = z.object({
+  mensajeId: z.string().min(1),
+  texto: texto(5, 500, "Escribe una respuesta de al menos 5 caracteres."),
+});
 
 export type Errores = Record<string, string>;
 

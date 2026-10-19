@@ -454,6 +454,9 @@ model MensajeProtegido {
   remitenteContacto String // privado: nunca se muestra al otro ciudadano
   texto             String
   creadoEn          DateTime @default(now())
+  /// Respuesta de quien publicó (desde Mis solicitudes); le llega por correo a quien escribió.
+  respuesta         String?
+  respondidoEn      DateTime?
 
   publicacion PublicacionMascota @relation(fields: [publicacionId], references: [id], onDelete: Cascade)
 }

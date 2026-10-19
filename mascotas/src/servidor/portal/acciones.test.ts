@@ -243,3 +243,39 @@ describe("cancelar mi cupo desde Mis solicitudes", () => {
     expect((await acciones.cancelarMiCupo({ codigo: codigo(c) })).mensaje).toBe("Saliste de la lista de espera.");
    }, 60_000);
 });
+
+describe("mensajes protegidos sobre un aviso", () => {
+  it("el mensaje llega completo a quien publicó, lo ve en Mis solicitudes y su respuesta le llega a quien escribió", async () => {
+    const huerta = await localidad("la-huerta");
+    const r = await acciones.publicarMascota({
+      tipo: "PERDIDA", especie: "PERRO", tamano: "MEDIANO", sexo: "MACHO", nombreAnimal: "Toby", collar: "NO", colorCollar: "", microchip: "NO", senas: "",
+      fechaEvento: (await import("@/servidor/formato")).hoyISO(), resguardada: "", colorPrincipal: "café", localidadId: huerta.id, ...PERSONA,
+    });
+    if (!r.ok) throw new Error(JSON.stringify(r));
+    await db.publicacionMascota.update({ where: { id: r.id }, data: { moderacion: "APROBADA" } });
+
+    // Sin correo no se puede escribir: es donde llega la respuesta.
+    const sinCorreo = await acciones.enviarMensaje({ publicacionId: r.id, nombre: "Vecina", telefono: "987654321", correo: "", texto: "Lo vi ayer cerca de la plaza." });
+    expect(sinCorreo.ok).toBe(false);
+    expect((await acciones.enviarMensaje({ publicacionId: r.id, nombre: "Vecina", telefono: "", correo: "Vecina.Vio@correo.cl", texto: "Lo vi ayer cerca de la plaza." })).ok).toBe(true);
+    const aviso = await db.notificacion.findFirstOrThrow({ where: { destinatario: PERSONA.correo, asunto: "Te escribieron sobre tu aviso" }, orderBy: { creadaEn: "desc" } });
+    expect(aviso.contenido).toContain("«Lo vi ayer cerca de la plaza.»");
+    expect(aviso.contenido).not.toContain("vecina.vio@correo.cl");
+
+    vecino.correo = PERSONA.correo;
+    const mis = await acciones.misSolicitudes();
+    if (!mis.ok) throw new Error("sin sesión");
+    const mensajes = mis.tramites.find((t) => t.aviso?.mensajes.length)?.aviso?.mensajes ?? [];
+    expect(mensajes[0]).toMatchObject({ nombre: "Vecina", texto: "Lo vi ayer cerca de la plaza.", respuesta: null });
+
+    // Otra persona no puede responder; la dueña sí, una vez.
+    vecino.correo = "otra.persona@correo.cl";
+    expect((await acciones.responderMensaje({ mensajeId: mensajes[0].id, texto: "Gracias, voy a buscarlo." })).ok).toBe(false);
+    vecino.correo = PERSONA.correo;
+    expect((await acciones.responderMensaje({ mensajeId: mensajes[0].id, texto: "Gracias, voy a buscarlo." })).ok).toBe(true);
+    expect((await acciones.responderMensaje({ mensajeId: mensajes[0].id, texto: "Otra vez." })).ok).toBe(false);
+    const respuesta = await db.notificacion.findFirstOrThrow({ where: { destinatario: "vecina.vio@correo.cl" } });
+    expect(respuesta.contenido).toContain("«Gracias, voy a buscarlo.»");
+    expect(respuesta.contenido).not.toContain(PERSONA.correo);
+  });
+});
