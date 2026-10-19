@@ -26,7 +26,8 @@ La plataforma tiene tres partes:
 - **Ubicación mínima: el sector.** La persona elige su localidad de una lista
   cerrada y de ella se deduce el sector. Nunca se pide ni se muestra una
   dirección exacta.
-- **Contacto protegido.** Los mensajes entre vecinos pasan por la plataforma.
+- **Contacto protegido.** Los mensajes entre vecinos pasan por la plataforma
+  como **conversaciones** (vea «Conversaciones entre vecinos»).
   Nunca se muestran teléfonos ni correos.
 - **Solo animales con foto.** Fichas, listas, mapa público y bandejas muestran
   y cuentan únicamente los animales que tienen foto.
@@ -328,6 +329,23 @@ postulaciones, etc.) salen por correo cuando el envío está configurado
 `docs/despliegue-netlify.md`). Quedan en cola y se envían después de guardar la acción;
 cada una queda como enviada o fallida, con el motivo. Sin configuración, o con
 datos de demostración, quedan simuladas y se ven en Mis solicitudes.
+
+### Conversaciones entre vecinos
+
+En un aviso de mascota **perdida** («¿La has visto?»), **avistada** («¿Es tu
+mascota?») o en una ficha de **adopción** de un vecino («¿Tienes una
+pregunta?»), cualquiera puede escribir a quien publicó.
+
+- Quien escribe deja su nombre y su **correo** (teléfono opcional). Le llega un
+  **enlace privado** a su conversación (`/conversacion/<id>?t=…`, firmado por el
+  servidor): ahí la ve completa y responde, sin registrarse.
+- Quien publicó recibe el mensaje completo por correo y ve todas sus
+  conversaciones en **Mis solicitudes** (entrando con su correo), donde responde.
+- Cada mensaje le llega al otro por correo con el texto. Si la misma persona
+  vuelve a escribir desde el aviso, sigue la misma conversación.
+- **Compartir mi contacto:** cada uno, si quiere y tras confirmar, le muestra su
+  correo y teléfono al otro (por ejemplo, para coordinar el reencuentro o la
+  entrega). Sin eso, ninguno ve el contacto del otro.
 
 ### Pawni, el quiltro guía
 

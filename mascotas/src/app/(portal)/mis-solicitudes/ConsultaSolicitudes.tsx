@@ -7,13 +7,14 @@ import { Boton } from "@/componentes/Boton";
 import { EtiquetaEstado } from "@/componentes/EtiquetaEstado";
 import { CampoTexto } from "@/componentes/formulario/Campos";
 import { Icono } from "@/componentes/Icono";
+import { conversacionesComoDueno, type ConversacionVista } from "@/servidor/portal/conversaciones";
 import { entrarConCodigoAcceso, misSolicitudes, pedirCodigoAcceso, salirDeMisSolicitudes, type AvisoPersona, type ResultadoConsulta, type Tramite } from "@/servidor/portal/acciones";
 import formulario from "@/componentes/formulario/formulario.module.css";
 import { GestionAviso } from "./GestionAviso";
 import { GestionComunitario } from "./GestionComunitario";
 import { GestionCupo } from "./GestionCupo";
 import { GestionInvitacion } from "./GestionInvitacion";
-import { GestionMensajes } from "./GestionMensajes";
+import { Conversaciones } from "./Conversaciones";
 import { GestionPropuesta } from "./GestionPropuesta";
 import estilos from "./mis-solicitudes.module.css";
 
@@ -26,6 +27,7 @@ export function ConsultaSolicitudes() {
   const [mensaje, setMensaje] = useState<string | null>(null);
   const [tramites, setTramites] = useState<Tramite[] | null>(null);
   const [avisos, setAvisos] = useState<AvisoPersona[]>([]);
+  const [conversaciones, setConversaciones] = useState<ConversacionVista[]>([]);
   // Al abrir la página se revisa si ya hay una sesión: mientras tanto, un bloque de espera.
   const [revisando, setRevisando] = useState(true);
   const [consultando, iniciar] = useTransition();
@@ -35,6 +37,8 @@ export function ConsultaSolicitudes() {
     if (r.ok) {
       setTramites(r.tramites);
       setAvisos(r.avisos);
+      // Las conversaciones se leen aparte, con la misma sesión.
+      conversacionesComoDueno().then(setConversaciones);
     } else {
       setTramites(null);
       setErrores(r.errores ?? {});
@@ -165,6 +169,7 @@ export function ConsultaSolicitudes() {
               Tienes una invitación prioritaria a un operativo por responder.
             </p>
           )}
+          {conversaciones.length > 0 && <Conversaciones conversaciones={conversaciones} alTerminar={alTerminar} />}
           {tramites.length === 0 ? (
             <p>No encontramos trámites con este correo. Si hiciste uno con otro correo, sal y entra con ese.</p>
           ) : (
@@ -182,9 +187,7 @@ export function ConsultaSolicitudes() {
                 {t.invitacion?.responder && t.codigo && <GestionInvitacion codigo={t.codigo} alTerminar={alTerminar} />}
                 {t.comunitario && t.codigo && <GestionComunitario codigo={t.codigo} perro={t.comunitario} alTerminar={alTerminar} />}
                 {t.cupo && t.codigo && <GestionCupo codigo={t.codigo} enEspera={t.cupo.enEspera} alTerminar={alTerminar} />}
-                {t.aviso && t.aviso.mensajes.length > 0 && <GestionMensajes mensajes={t.aviso.mensajes} alTerminar={alTerminar} />}
                 {t.aviso && t.codigo && <GestionAviso codigo={t.codigo} tipo={t.aviso.tipo} coincidencias={t.aviso.coincidencias} alTerminar={alTerminar} />}
-                {t.propuesta && t.propuesta.mensajes.length > 0 && <GestionMensajes mensajes={t.propuesta.mensajes} alTerminar={alTerminar} />}
                 {t.propuesta && t.codigo && (t.propuesta.corregir || t.propuesta.cerrar || t.propuesta.postulaciones > 0) && (
                   <GestionPropuesta codigo={t.codigo} corregir={t.propuesta.corregir} cerrar={t.propuesta.cerrar} postulaciones={t.propuesta.postulaciones} alTerminar={alTerminar} />
                 )}

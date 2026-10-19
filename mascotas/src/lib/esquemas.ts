@@ -262,12 +262,6 @@ export const esquemaMensaje = z
   .superRefine(contactoConCorreo, SIEMPRE)
   .refine((d) => Boolean(d.publicacionId) !== Boolean(d.fichaId), { message: "Falta indicar sobre qué es el mensaje.", path: ["texto"] });
 
-/** Respuesta de quien publicó a un mensaje recibido. */
-export const esquemaRespuestaMensaje = z.object({
-  mensajeId: z.string().min(1),
-  texto: texto(5, 500, "Escribe una respuesta de al menos 5 caracteres."),
-});
-
 export type Errores = Record<string, string>;
 
 /** Valida solo los campos de un paso y devuelve el primer error de cada uno. */

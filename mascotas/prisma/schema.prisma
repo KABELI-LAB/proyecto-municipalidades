@@ -416,15 +416,15 @@ model PublicacionMascota {
   resueltaEn                 DateTime?
   loteDemoId                 String?
 
-  animal                  Animal?            @relation(fields: [animalId], references: [id])
-  sector                  Sector             @relation(fields: [sectorId], references: [id])
-  localidad               Localidad?         @relation("ubicacion", fields: [localidadId], references: [id])
-  resguardoLocalidad      Localidad?         @relation("resguardo", fields: [resguardoLocalidadId], references: [id])
-  persona                 Persona            @relation(fields: [personaId], references: [id])
-  loteDemo                LoteDemo?          @relation(fields: [loteDemoId], references: [id])
-  coincidenciasPerdida    Coincidencia[]     @relation("perdida")
-  coincidenciasEncontrada Coincidencia[]     @relation("encontrada")
-  mensajes                MensajeProtegido[]
+  animal                  Animal?        @relation(fields: [animalId], references: [id])
+  sector                  Sector         @relation(fields: [sectorId], references: [id])
+  localidad               Localidad?     @relation("ubicacion", fields: [localidadId], references: [id])
+  resguardoLocalidad      Localidad?     @relation("resguardo", fields: [resguardoLocalidadId], references: [id])
+  persona                 Persona        @relation(fields: [personaId], references: [id])
+  loteDemo                LoteDemo?      @relation(fields: [loteDemoId], references: [id])
+  coincidenciasPerdida    Coincidencia[] @relation("perdida")
+  coincidenciasEncontrada Coincidencia[] @relation("encontrada")
+  conversaciones          Conversacion[]
 
   @@index([tipo, estado, especie])
   @@index([loteDemoId])
@@ -446,22 +446,41 @@ model Coincidencia {
   @@unique([perdidaId, encontradaId])
 }
 
-/// Contacto protegido: los mensajes pasan por la plataforma sin exponer teléfonos.
-model MensajeProtegido {
-  id                String    @id @default(cuid())
-  /// Sobre un aviso de mascota (perdida o avistada) o sobre una ficha de adopción de un vecino: uno de los dos.
-  publicacionId     String?
-  fichaId           String?
-  remitenteNombre   String
-  remitenteContacto String // privado: nunca se muestra al otro ciudadano
-  texto             String
-  creadoEn          DateTime  @default(now())
-  /// Respuesta de quien publicó (desde Mis solicitudes); le llega por correo a quien escribió.
-  respuesta         String?
-  respondidoEn      DateTime?
+/// Conversación protegida entre quien publicó (un aviso de mascota o una ficha
+/// de adopción de un vecino) y una persona interesada. Pasa por la plataforma:
+/// cada uno ve el contacto del otro solo si este decide compartirlo.
+model Conversacion {
+  id                 String   @id @default(cuid())
+  publicacionId      String?
+  fichaId            String?
+  interesadoNombre   String
+  /// Privado: ahí le llegan los mensajes y el enlace a la conversación.
+  interesadoCorreo   String
+  interesadoTelefono String?
+  duenoComparte      Boolean  @default(false)
+  interesadoComparte Boolean  @default(false)
+  creadaEn           DateTime @default(now())
+  actualizadaEn      DateTime @default(now())
 
-  publicacion PublicacionMascota? @relation(fields: [publicacionId], references: [id], onDelete: Cascade)
-  ficha       FichaAdopcion?      @relation(fields: [fichaId], references: [id], onDelete: Cascade)
+  publicacion PublicacionMascota?   @relation(fields: [publicacionId], references: [id], onDelete: Cascade)
+  ficha       FichaAdopcion?        @relation(fields: [fichaId], references: [id], onDelete: Cascade)
+  mensajes    MensajeConversacion[]
+
+  @@unique([publicacionId, interesadoCorreo])
+  @@unique([fichaId, interesadoCorreo])
+}
+
+model MensajeConversacion {
+  id             String   @id @default(cuid())
+  conversacionId String
+  /// true: lo escribió quien publicó; false: la persona interesada.
+  deDueno        Boolean
+  texto          String
+  creadoEn       DateTime @default(now())
+
+  conversacion Conversacion @relation(fields: [conversacionId], references: [id], onDelete: Cascade)
+
+  @@index([conversacionId, creadoEn])
 }
 
 /// Las publica el municipio, propias o propuestas por vecinos tras revisarlas (sección 7).
@@ -506,7 +525,7 @@ model FichaAdopcion {
   sectorAdoptante Sector?               @relation("sectorAdoptante", fields: [sectorAdoptanteId], references: [id])
   loteDemo        LoteDemo?             @relation(fields: [loteDemoId], references: [id])
   postulaciones   PostulacionAdopcion[]
-  mensajes        MensajeProtegido[]
+  conversaciones  Conversacion[]
   proponente      Persona?              @relation("propuestas", fields: [proponenteId], references: [id])
   sector          Sector?               @relation("sectorFicha", fields: [sectorId], references: [id])
   localidad       Localidad?            @relation(fields: [localidadId], references: [id])

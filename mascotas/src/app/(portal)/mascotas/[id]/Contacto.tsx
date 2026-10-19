@@ -4,7 +4,8 @@ import { Boton } from "@/componentes/Boton";
 import { CampoArea, CampoTexto } from "@/componentes/formulario/Campos";
 import { Icono } from "@/componentes/Icono";
 import { esquemaMensaje, validarCampos, type Errores } from "@/lib/esquemas";
-import { enviarMensaje, reportarPublicacion } from "@/servidor/portal/acciones";
+import { reportarPublicacion } from "@/servidor/portal/acciones";
+import { escribirAQuienPublico } from "@/servidor/portal/conversaciones";
 import estilos from "@/componentes/formulario/formulario.module.css";
 
 /**
@@ -27,7 +28,10 @@ export function FormularioMensaje({ publicacionId = "", fichaId = "", ayudaTexto
           <Icono nombre="check" tamano={28} />
           Tu mensaje fue enviado
         </h3>
-        <p>Se lo enviamos a la persona que publicó, sin mostrarle tu correo ni tu teléfono. Si te responde, te llegará a tu correo.</p>
+        <p>
+          Se lo enviamos a la persona que publicó, sin mostrarle tu correo ni tu teléfono. Te llegó a tu correo un enlace privado para seguir la
+          conversación; si te responde, también te avisaremos por correo.
+        </p>
       </div>
     );
   }
@@ -38,7 +42,7 @@ export function FormularioMensaje({ publicacionId = "", fichaId = "", ayudaTexto
     setErrores(err);
     if (Object.keys(err).length > 0) return;
     iniciar(async () => {
-      const r = await enviarMensaje(v);
+      const r = await escribirAQuienPublico(v);
       if (r.ok) setEnviado(true);
       else {
         setErrores(r.errores ?? {});

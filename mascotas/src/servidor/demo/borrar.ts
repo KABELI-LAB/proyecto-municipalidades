@@ -33,7 +33,7 @@ export async function borrarDatosDemo(db: PrismaClient) {
     db.postulacionAdopcion.deleteMany({ where: esDemo }),
     db.fichaAdopcion.deleteMany({ where: esDemo }),
     db.coincidencia.deleteMany({ where: { OR: [{ perdida: esDemo }, { encontrada: esDemo }] } }),
-    db.mensajeProtegido.deleteMany({ where: publicacionesDemo }),
+    db.conversacion.deleteMany({ where: { OR: [publicacionesDemo, { ficha: esDemo }] } }),
     db.publicacionMascota.deleteMany({ where: esDemo }),
     db.reporteCiudadano.deleteMany({ where: esDemo }),
     // Novedades y cuidadores de perros o personas de demostración.
