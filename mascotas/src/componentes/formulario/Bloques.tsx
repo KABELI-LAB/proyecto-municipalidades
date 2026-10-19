@@ -55,8 +55,9 @@ export function BloqueAnimal({ valores, errores, cambiar }: Props) {
 /**
  * `sinLocalidad`: el formulario ya pregunta la localidad en otro lugar (por ejemplo, dónde ocurre un reporte).
  * `rut`: «obligatorio» (cupos, adopción, pérdida), «opcional» (solicitar un servicio) o «no» (SOS, avistamiento, novedad).
+ * `correoOpcional`: SOS y novedades, donde basta un teléfono o un correo; en el resto el correo es obligatorio.
  */
-export function BloquePersona({ valores, errores, cambiar, sectores, etiquetaLocalidad = "Localidad donde vives", sinLocalidad = false, rut = "obligatorio" }: Props & { sectores: SectorOpcion[]; etiquetaLocalidad?: string; sinLocalidad?: boolean; rut?: "obligatorio" | "opcional" | "no" }) {
+export function BloquePersona({ valores, errores, cambiar, sectores, etiquetaLocalidad = "Localidad donde vives", sinLocalidad = false, rut = "obligatorio", correoOpcional = false }: Props & { sectores: SectorOpcion[]; etiquetaLocalidad?: string; sinLocalidad?: boolean; rut?: "obligatorio" | "opcional" | "no"; correoOpcional?: boolean }) {
   return (
     <>
       <CampoTexto id="nombre" etiqueta="Nombre y apellido" valor={v(valores, "nombre")} alCambiar={(x) => cambiar("nombre", x)} error={errores.nombre} autoComplete="name" maxLength={100} />
@@ -67,15 +68,19 @@ export function BloquePersona({ valores, errores, cambiar, sectores, etiquetaLoc
           valor={v(valores, "rut")}
           alCambiar={(x) => cambiar("rut", x)}
           error={errores.rut}
-          ayuda={rut === "opcional" ? "Si lo indicas, podrás revisar tu trámite en Mis solicitudes." : "Por ejemplo, 12.345.678-5. Lo usarás junto al código para revisar tu trámite."}
+          ayuda="Por ejemplo, 12.345.678-5."
           maxLength={12}
         />
       )}
       <div className={estilos.fila}>
-        <CampoTexto id="telefono" etiqueta="Teléfono" tipo="tel" inputMode="tel" autoComplete="tel" valor={v(valores, "telefono")} alCambiar={(x) => cambiar("telefono", x)} error={errores.telefono} maxLength={20} />
         <CampoTexto id="correo" etiqueta="Correo" tipo="email" inputMode="email" autoComplete="email" valor={v(valores, "correo")} alCambiar={(x) => cambiar("correo", x)} error={errores.correo} maxLength={120} />
+        <CampoTexto id="telefono" etiqueta={correoOpcional ? "Teléfono" : "Teléfono (opcional)"} tipo="tel" inputMode="tel" autoComplete="tel" valor={v(valores, "telefono")} alCambiar={(x) => cambiar("telefono", x)} error={errores.telefono} maxLength={20} />
       </div>
-      <p className={estilos.ayuda}>Indica al menos un teléfono o un correo. No los mostraremos públicamente.</p>
+      <p className={estilos.ayuda}>
+        {correoOpcional
+          ? "Indica al menos un teléfono o un correo. No los mostraremos públicamente."
+          : "Te avisaremos por correo, y con él entras a Mis solicitudes. No lo mostraremos públicamente."}
+      </p>
       {!sinLocalidad && (
         <CampoLocalidad etiqueta={etiquetaLocalidad} valor={v(valores, "localidadId")} alCambiar={(x) => cambiar("localidadId", x)} error={errores.localidadId} sectores={sectores} />
       )}

@@ -3,11 +3,25 @@
 // datos internos de los perros comunitarios.
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { crearBaseTemporal } from "@/pruebas/baseTemporal";
+import { SESION_VENCIDA } from "./sesionVecino";
 
 const CORTE = "2026-10-06";
 // Fuera de una petición no hay caché de Next que revalidar.
 vi.mock("next/cache", () => ({ revalidatePath: () => {} }));
-const PERSONA = { nombre: "Persona de prueba", rut: "11.111.111-1", telefono: "912345678", correo: "" };
+// La sesión de Mis solicitudes vive en una cookie; fuera de una petición se simula en memoria.
+const vecino = vi.hoisted(() => ({ correo: null as string | null }));
+vi.mock("@/servidor/portal/sesionVecino", async (original) => {
+  const m = await original<typeof import("@/servidor/portal/sesionVecino")>();
+  const { municipioActivo } = await import("@/lib/municipio");
+  return {
+    ...m,
+    abrirSesionVecino: async (c: string) => { vecino.correo = m.normalizarCorreo(c); },
+    cerrarSesionVecino: async () => { vecino.correo = null; },
+    correoDeSesion: async () => vecino.correo,
+    filtroVecino: async () => (vecino.correo ? { municipioId: municipioActivo().id, correo: vecino.correo } : null),
+  };
+});
+const PERSONA = { nombre: "Persona de prueba", rut: "17.654.321-3", telefono: "912345678", correo: "persona.prueba@correo.cl" };
 
 let base: Awaited<ReturnType<typeof crearBaseTemporal>>;
 let db: typeof import("@/servidor/db").db;
@@ -110,14 +124,19 @@ describe("cierre y vigencia de un aviso propio", () => {
     return r.codigo;
   }
 
-  it("solo quien publicó, con su RUT y el código, puede cerrar el aviso", async () => {
+  it("solo quien publicó, con su sesión, puede cerrar el aviso", async () => {
     const codigo = await publicar();
-    expect((await acciones.gestionarAviso({ rut: "22.222.222-2", codigo, accion: "no_aplica" })).ok).toBe(false);
-    expect((await acciones.gestionarAviso({ rut: PERSONA.rut, codigo, accion: "reencontrada", porCoincidencia: "" })).ok).toBe(false);
-    expect((await acciones.gestionarAviso({ rut: PERSONA.rut, codigo, accion: "reencontrada", porCoincidencia: "SI" })).ok).toBe(true);
+    vecino.correo = null;
+    expect(await acciones.gestionarAviso({ codigo, accion: "no_aplica" })).toEqual({ ok: false, mensaje: SESION_VENCIDA });
+    vecino.correo = "otra.persona@correo.cl";
+    expect((await acciones.gestionarAviso({ codigo, accion: "no_aplica" })).ok).toBe(false);
+    expect((await db.publicacionMascota.findFirstOrThrow({ where: { codigo } })).estado).toBe("ABIERTA");
+    vecino.correo = PERSONA.correo;
+    expect((await acciones.gestionarAviso({ codigo, accion: "reencontrada", porCoincidencia: "" })).ok).toBe(false);
+    expect((await acciones.gestionarAviso({ codigo, accion: "reencontrada", porCoincidencia: "SI" })).ok).toBe(true);
     const p = await db.publicacionMascota.findFirstOrThrow({ where: { codigo } });
     expect([p.estado, p.reencuentroPorCoincidencia, p.resueltaEn !== null]).toEqual(["REENCONTRADA", true, true]);
-    expect((await acciones.gestionarAviso({ rut: PERSONA.rut, codigo, accion: "confirmar" })).ok).toBe(false);
+    expect((await acciones.gestionarAviso({ codigo, accion: "confirmar" })).ok).toBe(false);
   });
 
   it("si el reencuentro vino de una coincidencia, se cierran ambos avisos y se avisa a la otra persona", async () => {
@@ -130,13 +149,14 @@ describe("cierre y vigencia de un aviso propio", () => {
       update: { estado: "SUGERIDA" },
     });
 
-    const consulta = await acciones.consultarSolicitudes({ rut: PERSONA.rut, codigo });
+    vecino.correo = PERSONA.correo;
+    const consulta = await acciones.misSolicitudes();
     if (!consulta.ok) throw new Error("consulta");
     const tramite = consulta.tramites.find((t) => t.codigo === codigo);
     expect(tramite?.aviso?.coincidencias.map((x) => x.id)).toContain(c.id);
 
     const antes = await db.notificacion.count();
-    expect((await acciones.gestionarAviso({ rut: PERSONA.rut, codigo, accion: "reencontrada", porCoincidencia: "SI", coincidenciaId: c.id })).ok).toBe(true);
+    expect((await acciones.gestionarAviso({ codigo, accion: "reencontrada", porCoincidencia: "SI", coincidenciaId: c.id })).ok).toBe(true);
     const ambas = await db.publicacionMascota.findMany({ where: { id: { in: [propia.id, otra.id] } } });
     expect(ambas.map((p) => [p.estado, p.reencuentroPorCoincidencia])).toEqual([
       ["REENCONTRADA", true],
@@ -148,8 +168,9 @@ describe("cierre y vigencia de un aviso propio", () => {
 
   it("no cierra el aviso de otra persona con una coincidencia ajena", async () => {
     const codigo = await publicar();
+    vecino.correo = PERSONA.correo;
     const ajena = await db.coincidencia.findFirstOrThrow({ where: { perdida: { codigo: { not: codigo } } } });
-    expect((await acciones.gestionarAviso({ rut: PERSONA.rut, codigo, accion: "reencontrada", porCoincidencia: "SI", coincidenciaId: ajena.id })).ok).toBe(false);
+    expect((await acciones.gestionarAviso({ codigo, accion: "reencontrada", porCoincidencia: "SI", coincidenciaId: ajena.id })).ok).toBe(false);
     expect((await db.publicacionMascota.findFirstOrThrow({ where: { codigo } })).estado).toBe("ABIERTA");
   });
 
@@ -166,7 +187,8 @@ describe("cierre y vigencia de un aviso propio", () => {
     const pedida = await db.publicacionMascota.findFirstOrThrow({ where: { codigo: a } });
     expect(pedida.vigenciaPedidaEn).not.toBeNull();
 
-    expect((await acciones.gestionarAviso({ rut: PERSONA.rut, codigo: a, accion: "confirmar" })).ok).toBe(true);
+    vecino.correo = PERSONA.correo;
+    expect((await acciones.gestionarAviso({ codigo: a, accion: "confirmar" })).ok).toBe(true);
     const confirmada = await db.publicacionMascota.findFirstOrThrow({ where: { codigo: a } });
     expect(confirmada.vigenciaPedidaEn).toBeNull();
 
@@ -177,36 +199,47 @@ describe("cierre y vigencia de un aviso propio", () => {
 });
 
 describe("cancelar mi cupo desde Mis solicitudes", () => {
-  it("solo con su RUT; el lugar pasa a la lista de espera, que avanza en orden", async () => {
+  it("solo con su sesión; el lugar pasa a la lista de espera, que avanza en orden", async () => {
     const huerta = await localidad("la-huerta");
     // Solo en esta base de prueba: el operativo de octubre se publica con 1 cupo de esterilización.
     const o = await db.operativo.findFirstOrThrow({ where: { estado: "BORRADOR" }, include: { capacidades: { include: { servicio: true } } } });
     await db.operativo.update({ where: { id: o.id }, data: { estado: "PUBLICADO" } });
     const cap = o.capacidades.find((c) => c.servicio.clave === "esterilizacion")!;
     await db.capacidadServicio.update({ where: { operativoId_servicioId: { operativoId: o.id, servicioId: cap.servicioId } }, data: { cupos: (await db.cupo.count({ where: { operativoId: o.id, servicioId: cap.servicioId, estado: { in: ["INVITADO", "CONFIRMADO", "ASISTIO"] } } })) + 1 } });
-    const inscribir = (nombre: string, rut: string) =>
-      acciones.solicitarCupo({ operativoId: o.id, servicioId: cap.servicioId, especie: "GATO", nombreAnimal: "", sexo: "HEMBRA", tamano: "", edad: "36", nombre, rut, telefono: "912345678", correo: "", localidadId: huerta.id });
-    const a = await inscribir("Primera persona", "15.234.567-4");
-    const b = await inscribir("Segunda persona", "12.345.678-5");
-    const c = await inscribir("Tercera persona", "11.111.111-1");
+    const inscribir = (nombre: string, rut: string, correo: string) =>
+      acciones.solicitarCupo({ operativoId: o.id, servicioId: cap.servicioId, especie: "GATO", nombreAnimal: "", sexo: "HEMBRA", tamano: "", edad: "36", nombre, rut, telefono: "912345678", correo, localidadId: huerta.id });
+    const a = await inscribir("Primera persona", "15.234.567-4", "primera.persona@correo.cl");
+    const b = await inscribir("Segunda persona", "12.345.678-5", "segunda.persona@correo.cl");
+    const c = await inscribir("Tercera persona", PERSONA.rut, PERSONA.correo);
     expect([a, b, c].map((r) => (r.ok ? r.estado : r))).toEqual(["CONFIRMADO", "EN_LISTA_ESPERA", "EN_LISTA_ESPERA"]);
     const codigo = (r: typeof a) => (r.ok ? r.codigo : "");
+    const estado = async (r: typeof a) => db.cupo.findUniqueOrThrow({ where: { codigo: codigo(r) }, select: { estado: true, posicionEspera: true } });
+    // Si el RUT ya existía con otro correo, se conserva el guardado: se entra con ese.
+    const entrarComo = async (r: typeof a) => {
+      vecino.correo = (await db.cupo.findUniqueOrThrow({ where: { codigo: codigo(r) }, include: { persona: true } })).persona.correo;
+    };
 
     // Mis solicitudes ofrece cancelar.
-    const consulta = await acciones.consultarSolicitudes({ rut: "15.234.567-4", codigo: codigo(a) });
+    await entrarComo(a);
+    const consulta = await acciones.misSolicitudes();
     expect(consulta.ok && consulta.tramites.find((t) => t.codigo === codigo(a))?.cupo).toEqual({ enEspera: false });
 
-    // Con un RUT ajeno, no.
-    expect((await acciones.cancelarMiCupo({ rut: "12.345.678-5", codigo: codigo(a) })).ok).toBe(false);
+    // Sin sesión, o con la sesión de otra persona, no.
+    vecino.correo = null;
+    expect(await acciones.cancelarMiCupo({ codigo: codigo(a) })).toEqual({ ok: false, mensaje: SESION_VENCIDA });
+    await entrarComo(b);
+    expect((await acciones.cancelarMiCupo({ codigo: codigo(a) })).ok).toBe(false);
+    expect(await estado(a)).toEqual({ estado: "CONFIRMADO", posicionEspera: null });
     // Con el propio, sí: el primero en espera queda confirmado y el siguiente avanza al lugar 1.
-    expect(await acciones.cancelarMiCupo({ rut: "15.234.567-4", codigo: codigo(a) })).toEqual({ ok: true, mensaje: "Cancelamos tu cupo. Gracias por avisar: quedó libre para otra persona." });
-    const estado = async (r: typeof a) => db.cupo.findUniqueOrThrow({ where: { codigo: codigo(r) }, select: { estado: true, posicionEspera: true } });
+    await entrarComo(a);
+    expect(await acciones.cancelarMiCupo({ codigo: codigo(a) })).toEqual({ ok: true, mensaje: "Cancelamos tu cupo. Gracias por avisar: quedó libre para otra persona." });
     expect(await estado(a)).toEqual({ estado: "CANCELADO_PERSONA", posicionEspera: null });
     expect(await estado(b)).toEqual({ estado: "CONFIRMADO", posicionEspera: null });
     expect(await estado(c)).toEqual({ estado: "EN_LISTA_ESPERA", posicionEspera: 1 });
     // No se cancela dos veces.
-    expect((await acciones.cancelarMiCupo({ rut: "15.234.567-4", codigo: codigo(a) })).ok).toBe(false);
+    expect((await acciones.cancelarMiCupo({ codigo: codigo(a) })).ok).toBe(false);
     // Salir de la lista de espera.
-    expect((await acciones.cancelarMiCupo({ rut: "11.111.111-1", codigo: codigo(c) })).mensaje).toBe("Saliste de la lista de espera.");
+    await entrarComo(c);
+    expect((await acciones.cancelarMiCupo({ codigo: codigo(c) })).mensaje).toBe("Saliste de la lista de espera.");
    }, 60_000);
 });

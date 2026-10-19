@@ -4,11 +4,14 @@ import { EnlaceBoton } from "@/componentes/Boton";
 import { Icono } from "@/componentes/Icono";
 import estilos from "./formulario.module.css";
 
-/** `conRut`: false si el trámite se hizo sin RUT (no aparece en Mis solicitudes). */
-type Props = { titulo: string; codigo: string; conRut?: boolean; children?: ReactNode };
+/**
+ * `seguimiento`: false si el trámite se hizo sin correo (por ejemplo, un SOS
+ * anónimo): no aparece en Mis solicitudes.
+ */
+type Props = { titulo: string; seguimiento?: boolean; children?: ReactNode };
 
-/** Cierre de todo trámite: código de seguimiento y cómo consultarlo. */
-export function ResultadoTramite({ titulo, codigo, conRut = true, children }: Props) {
+/** Cierre de todo trámite: qué sigue y dónde ver su estado. No hay números que guardar. */
+export function ResultadoTramite({ titulo, seguimiento = true, children }: Props) {
   const ref = useRef<HTMLHeadingElement>(null);
   useEffect(() => ref.current?.focus(), []);
 
@@ -18,20 +21,15 @@ export function ResultadoTramite({ titulo, codigo, conRut = true, children }: Pr
         <Icono nombre="check" tamano={32} />
         {titulo}
       </h2>
-      <div className={estilos.codigo}>
-        <span>Tu código de seguimiento</span>
-        <strong>{codigo}</strong>
-      </div>
       {children}
       <p>
-        {conRut
-          ? "Guarda este código. Con él y tu RUT puedes revisar el estado en Mis solicitudes. También te lo enviamos por correo o SMS."
-          : "Guarda este código. Si necesitamos más información, te escribiremos al contacto que nos dejaste."}
+        {seguimiento
+          ? "Te enviamos la confirmación a tu correo. Para ver su estado, entra a Mis solicitudes con tu correo: te enviaremos un código para entrar."
+          : "Si necesitamos más información, te escribiremos al contacto que nos dejaste."}
       </p>
-      <p className="nota">En este prototipo, el envío por correo o SMS es simulado.</p>
       <div className={estilos.navegacion}>
-        {conRut && <EnlaceBoton href="/mis-solicitudes">Ir a Mis solicitudes</EnlaceBoton>}
-        <EnlaceBoton href="/" variante={conRut ? "secundario" : "primario"}>
+        {seguimiento && <EnlaceBoton href="/mis-solicitudes">Ir a Mis solicitudes</EnlaceBoton>}
+        <EnlaceBoton href="/" variante={seguimiento ? "secundario" : "primario"}>
           Volver al inicio
         </EnlaceBoton>
       </div>

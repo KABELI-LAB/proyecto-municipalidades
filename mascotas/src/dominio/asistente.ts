@@ -164,7 +164,7 @@ export function responderPawni(tema: TemaPawni, operativo: OperativoPawni, nombr
       };
     case "SEGUIMIENTO":
       return {
-        texto: "En Mis solicitudes ves el estado de tus trámites. Entras con tu RUT y un código, sin registrarte.",
+        texto: "En Mis solicitudes ves el estado de tus trámites. Entras con tu correo y un código que te enviamos, sin contraseña.",
         acciones: [{ texto: "Ir a Mis solicitudes", href: "/mis-solicitudes" }],
         animo: "feliz",
       };

@@ -45,7 +45,7 @@ export function FormularioCupo({ operativoId, sectores, servicios, requisitos, l
   if (hecho) {
     const confirmado = hecho.estado === "CONFIRMADO";
     return (
-      <ResultadoTramite titulo={confirmado ? "¡Listo! Tu cupo está confirmado" : "Quedó en lista de espera"} codigo={hecho.codigo}>
+      <ResultadoTramite titulo={confirmado ? "¡Listo! Tu cupo está confirmado" : "Quedó en lista de espera"}>
         {confirmado ? (
           <p>
             {hecho.servicio}: {hecho.fecha}, {hecho.horario}, en {hecho.lugar.toLowerCase()}. Te enviaremos un recordatorio 48

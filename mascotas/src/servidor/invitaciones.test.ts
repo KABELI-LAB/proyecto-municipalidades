@@ -5,6 +5,7 @@
 // siguiente persona; límite por hogar; cancelar cierra; permisos.
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { crearBaseTemporal } from "@/pruebas/baseTemporal";
+import { SESION_VENCIDA } from "@/servidor/portal/sesionVecino";
 
 const CORTE = "2026-10-06";
 const OP = "ope-05";
@@ -18,6 +19,19 @@ vi.mock("@/lib/municipio", async (original) => {
 });
 type Sesion = { id: string; nombre: string; rol: "COORDINADOR" | "COMUNICACIONES"; municipioId: string; loteDemoId: null };
 let sesion: Sesion | null = null;
+// La sesión de Mis solicitudes vive en una cookie; fuera de una petición se simula en memoria.
+const vecino = vi.hoisted(() => ({ correo: null as string | null }));
+vi.mock("@/servidor/portal/sesionVecino", async (original) => {
+  const m = await original<typeof import("@/servidor/portal/sesionVecino")>();
+  const { municipioActivo } = await import("@/lib/municipio");
+  return {
+    ...m,
+    abrirSesionVecino: async (c: string) => { vecino.correo = m.normalizarCorreo(c); },
+    cerrarSesionVecino: async () => { vecino.correo = null; },
+    correoDeSesion: async () => vecino.correo,
+    filtroVecino: async () => (vecino.correo ? { municipioId: municipioActivo().id, correo: vecino.correo } : null),
+  };
+});
 vi.mock("@/servidor/auth", async () => {
   const { puede } = await import("@/dominio/permisos");
   return { autorizar: async (p: Parameters<typeof puede>[1]) => (sesion && puede(sesion.rol, p) ? sesion : null) };
@@ -31,7 +45,17 @@ let inv: typeof import("./invitaciones");
 let coordinacion: Sesion;
 let servicio: Record<string, string>;
 // Una vecina de La Huerta con tres perros que esperan esterilización (límite por hogar: 2).
-const VECINA = { nombre: "Vecina con tres perros", rut: "33.333.333-3", telefono: "955554444" };
+const VECINA = { nombre: "Vecina con tres perros", rut: "33.333.333-3", telefono: "955554444", correo: "vecina.tres.perros@correo.cl" };
+
+/** Entra a Mis solicitudes como esa persona (si la demo no le dio correo, se le asigna uno). */
+async function entrarComo(persona: { id: string; correo: string | null }) {
+  let correo = persona.correo;
+  if (!correo) {
+    correo = `persona.${persona.id.toLowerCase()}@correo.cl`;
+    await db.persona.update({ where: { id: persona.id }, data: { correo } });
+  }
+  vecino.correo = correo;
+}
 
 beforeAll(async () => {
   base = await crearBaseTemporal();
@@ -53,7 +77,7 @@ beforeAll(async () => {
   await db.capacidadServicio.delete({ where: { operativoId_servicioId: { operativoId: OP, servicioId: servicio.microchip } } });
   const { nuevoCodigo } = await import("@/servidor/codigos");
   const huerta = await db.localidad.findUniqueOrThrow({ where: { clave: "la-huerta" } });
-  const persona = await db.persona.create({ data: { municipioId: "hualane", rut: "33333333-3", nombre: VECINA.nombre, telefono: VECINA.telefono, sectorId: huerta.sectorId, localidadId: huerta.id } });
+  const persona = await db.persona.create({ data: { municipioId: "hualane", rut: "33333333-3", nombre: VECINA.nombre, telefono: VECINA.telefono, correo: VECINA.correo, sectorId: huerta.sectorId, localidadId: huerta.id } });
   // Las más antiguas de la comuna: quedan primeras en la prioridad de su sector.
   for (let i = 0; i < 3; i++) {
     const animal = await db.animal.create({ data: { especie: "PERRO", nombre: `Perro ${i + 1}`, personaId: persona.id } });
@@ -107,14 +131,22 @@ describe("invitaciones prioritarias", () => {
 
   it("confirmar interés asigna el cupo efectivo; la invitación y el aviso se ven en Mis solicitudes", async () => {
     const [primera] = await abiertas(servicio.esterilizacion);
-    const r = await portal.responderInvitacion({ rut: VECINA.rut, codigo: primera.codigo, accion: "interes" });
+    // Sin sesión no se puede responder.
+    vecino.correo = null;
+    expect(await portal.responderInvitacion({ codigo: primera.codigo, accion: "interes" })).toEqual({ ok: false, mensaje: SESION_VENCIDA });
+    // Con la sesión de otra persona, tampoco.
+    vecino.correo = "otra.persona@correo.cl";
+    expect((await portal.responderInvitacion({ codigo: primera.codigo, accion: "interes" })).ok).toBe(false);
+    expect((await db.invitacionOperativo.findUniqueOrThrow({ where: { id: primera.id } })).estado).toBe("ENVIADA");
+    vecino.correo = VECINA.correo;
+    const r = await portal.responderInvitacion({ codigo: primera.codigo, accion: "interes" });
     expect(r).toMatchObject({ ok: true, mensaje: expect.stringContaining("Te asignamos el cupo") });
     const i = await db.invitacionOperativo.findUniqueOrThrow({ where: { id: primera.id }, include: { cupo: true, solicitud: true } });
     expect([i.estado, i.cupo?.estado, i.solicitud.estado, i.respondidaEn !== null, i.asignadaEn !== null]).toEqual(["ASIGNADA", "CONFIRMADO", "CUPO_CONFIRMADO", true, true]);
     // Ya respondida: no se puede responder de nuevo.
-    expect((await portal.responderInvitacion({ rut: VECINA.rut, codigo: primera.codigo, accion: "rechazo" })).ok).toBe(false);
+    expect((await portal.responderInvitacion({ codigo: primera.codigo, accion: "rechazo" })).ok).toBe(false);
 
-    const c = await portal.consultarSolicitudes({ rut: VECINA.rut, codigo: primera.codigo });
+    const c = await portal.misSolicitudes();
     if (!c.ok) throw new Error("consulta");
     expect(c.tramites.find((t) => t.codigo === primera.codigo)).toMatchObject({ tipo: "Invitación prioritaria a operativo", estado: { texto: "Cupo asignado" } });
     expect(c.avisos.some((a) => a.asunto === "Invitación prioritaria a un operativo")).toBe(true);
@@ -123,9 +155,10 @@ describe("invitaciones prioritarias", () => {
 
   it("confirmar interés no reserva: sin cupo disponible queda esperando, y se asigna cuando se libera", async () => {
     const [segunda] = await abiertas(servicio.esterilizacion);
+    vecino.correo = VECINA.correo;
     // El municipio redujo la capacidad a 1 (ya ocupada): no hay cupo para asignar.
     await db.capacidadServicio.update({ where: { operativoId_servicioId: { operativoId: OP, servicioId: servicio.esterilizacion } }, data: { cupos: 1 } });
-    const r = await portal.responderInvitacion({ rut: VECINA.rut, codigo: segunda.codigo, accion: "interes" });
+    const r = await portal.responderInvitacion({ codigo: segunda.codigo, accion: "interes" });
     expect(r).toMatchObject({ ok: true, mensaje: expect.stringContaining("Aún no hay un cupo") });
     expect((await db.invitacionOperativo.findUniqueOrThrow({ where: { id: segunda.id } })).estado).toBe("INTERESADA");
 
@@ -141,7 +174,8 @@ describe("invitaciones prioritarias", () => {
     await operativos.invitarNuevamente(OP);
     const [tercera] = await abiertas(servicio.esterilizacion);
     expect(tercera.persona.rut).not.toBe("33333333-3"); // la vecina ya tiene 2 cupos: límite por hogar
-    const r = await portal.responderInvitacion({ rut: tercera.persona.rut, codigo: tercera.codigo, accion: "rechazo" });
+    await entrarComo(tercera.persona);
+    const r = await portal.responderInvitacion({ codigo: tercera.codigo, accion: "rechazo" });
     expect(r.ok).toBe(true);
     const cerrada = await db.invitacionOperativo.findUniqueOrThrow({ where: { id: tercera.id }, include: { solicitud: true } });
     expect([cerrada.estado, cerrada.solicitud.estado]).toEqual(["RECHAZADA", "RECIBIDA"]);
@@ -157,14 +191,15 @@ describe("invitaciones prioritarias", () => {
     expect(r.vencidas).toBe(1);
     const vencida = await db.invitacionOperativo.findUniqueOrThrow({ where: { id: pendiente.id }, include: { solicitud: true } });
     expect([vencida.estado, vencida.solicitud.estado, vencida.motivoCierre]).toEqual(["VENCIDA", "RECIBIDA", "Venció el plazo sin respuesta"]);
-    expect((await portal.responderInvitacion({ rut: pendiente.persona.rut, codigo: pendiente.codigo, accion: "interes" })).ok).toBe(false);
+    await entrarComo(pendiente.persona);
+    expect((await portal.responderInvitacion({ codigo: pendiente.codigo, accion: "interes" })).ok).toBe(false);
     const [nueva] = await abiertas(servicio.esterilizacion);
     expect(nueva?.orden).toBeGreaterThan(pendiente.orden);
   });
 
   it("la inscripción pública queda en lista de espera si los cupos están ocupados o retenidos", async () => {
     const huerta = await db.localidad.findUniqueOrThrow({ where: { clave: "la-huerta" } });
-    const r = await portal.solicitarCupo({ operativoId: OP, servicioId: servicio.esterilizacion, especie: "PERRO", nombreAnimal: "Toby", sexo: "MACHO", tamano: "MEDIANO", edad: "36", nombre: "Persona del público", rut: "44.444.444-4", telefono: "966667777", correo: "", localidadId: huerta.id });
+    const r = await portal.solicitarCupo({ operativoId: OP, servicioId: servicio.esterilizacion, especie: "PERRO", nombreAnimal: "Toby", sexo: "MACHO", tamano: "MEDIANO", edad: "36", nombre: "Persona del público", rut: "44.444.444-4", telefono: "966667777", correo: "persona.publico@correo.cl", localidadId: huerta.id });
     expect(r).toMatchObject({ ok: true, estado: "EN_LISTA_ESPERA" });
   });
 

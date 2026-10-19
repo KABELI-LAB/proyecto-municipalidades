@@ -6,16 +6,16 @@ import { Boton } from "@/componentes/Boton";
 import { cancelarMiCupo } from "@/servidor/portal/acciones";
 import estilos from "./mis-solicitudes.module.css";
 
-type Props = { rut: string; codigo: string; enEspera: boolean; alTerminar: (mensaje: string) => void };
+type Props = { codigo: string; enEspera: boolean; alTerminar: (mensaje: string) => void };
 
-export function GestionCupo({ rut, codigo, enEspera, alTerminar }: Props) {
+export function GestionCupo({ codigo, enEspera, alTerminar }: Props) {
   const [confirmar, setConfirmar] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [enviando, iniciar] = useTransition();
 
   const cancelar = () =>
     iniciar(async () => {
-      const r = await cancelarMiCupo({ rut, codigo });
+      const r = await cancelarMiCupo({ codigo });
       if (r.ok) alTerminar(r.mensaje);
       else setError(r.mensaje);
     });

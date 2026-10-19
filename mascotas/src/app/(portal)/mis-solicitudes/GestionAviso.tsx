@@ -9,12 +9,12 @@ import { CampoOpciones } from "@/componentes/formulario/Campos";
 import { gestionarAviso, type CoincidenciaAviso } from "@/servidor/portal/acciones";
 import estilos from "./mis-solicitudes.module.css";
 
-type Props = { rut: string; codigo: string; tipo: "PERDIDA" | "ENCONTRADA"; coincidencias: CoincidenciaAviso[]; alTerminar: (mensaje: string) => void };
+type Props = { codigo: string; tipo: "PERDIDA" | "ENCONTRADA"; coincidencias: CoincidenciaAviso[]; alTerminar: (mensaje: string) => void };
 
 // Valor de la opción que elige una coincidencia concreta.
 const PREFIJO = "coincidencia:";
 
-export function GestionAviso({ rut, codigo, tipo, coincidencias, alTerminar }: Props) {
+export function GestionAviso({ codigo, tipo, coincidencias, alTerminar }: Props) {
   const [paso, setPaso] = useState<"inicio" | "reencuentro" | "no_aplica">("inicio");
   const [porCoincidencia, setPorCoincidencia] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +23,7 @@ export function GestionAviso({ rut, codigo, tipo, coincidencias, alTerminar }: P
   const enviar = (accion: "confirmar" | "reencontrada" | "no_aplica") =>
     iniciar(async () => {
       const coincidenciaId = porCoincidencia.startsWith(PREFIJO) ? porCoincidencia.slice(PREFIJO.length) : "";
-      const r = await gestionarAviso({ rut, codigo, accion, porCoincidencia: coincidenciaId ? "SI" : porCoincidencia, coincidenciaId });
+      const r = await gestionarAviso({ codigo, accion, porCoincidencia: coincidenciaId ? "SI" : porCoincidencia, coincidenciaId });
       if (r.ok) alTerminar(r.mensaje);
       else setError(r.mensaje);
     });

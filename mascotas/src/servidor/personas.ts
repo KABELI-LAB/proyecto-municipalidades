@@ -15,7 +15,8 @@ type Ubicacion = { sectorId: string; localidadId: string };
  */
 export async function obtenerPersona(tx: Prisma.TransactionClient, municipioId: string, d: DatosPersona, u: Ubicacion) {
   const telefono = d.telefono || null;
-  const correo = d.correo || null;
+  // El correo se guarda en minúsculas: así se compara al entrar a Mis solicitudes.
+  const correo = d.correo ? d.correo.trim().toLowerCase() : null;
   if (!d.rut?.trim()) {
     return tx.persona.create({ data: { municipioId, rut: null, nombre: d.nombre, telefono, correo, sectorId: u.sectorId, localidadId: u.localidadId } });
   }

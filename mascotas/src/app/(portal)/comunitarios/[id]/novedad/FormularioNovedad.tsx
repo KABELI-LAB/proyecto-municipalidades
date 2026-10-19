@@ -21,7 +21,7 @@ export function FormularioNovedad({ perroId, nombre, sectores }: { perroId: stri
 
   if (resultado) {
     return (
-      <ResultadoTramite titulo="Recibimos tu novedad" codigo={resultado} conRut={false}>
+      <ResultadoTramite seguimiento={Boolean(v.correo)} titulo="Recibimos tu novedad">
         <p>Se la enviamos a quien cuida a {nombre}; no verá tu teléfono ni tu correo. Si el perro está herido y es urgente, usa también SOS Mascotas.</p>
       </ResultadoTramite>
     );
@@ -69,7 +69,7 @@ export function FormularioNovedad({ perroId, nombre, sectores }: { perroId: stri
       {t.paso === 1 && (
         <>
           <p>No se publican ni se los mostramos a quien lo cuida.</p>
-          <BloquePersona valores={v} errores={errores} cambiar={cambiar} sectores={sectores} rut="no" />
+          <BloquePersona valores={v} errores={errores} cambiar={cambiar} sectores={sectores} rut="no" correoOpcional />
         </>
       )}
 

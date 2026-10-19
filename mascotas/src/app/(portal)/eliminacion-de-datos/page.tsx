@@ -20,10 +20,10 @@ export default function EliminacionDeDatos() {
         <h2>Tus avisos y trámites</h2>
         <ul>
           <li>
-            Entra a <Link href="/mis-solicitudes">Mis solicitudes</Link> con tu RUT y tu código, y retira tus avisos o propuestas de adopción. Dejan
+            Entra a <Link href="/mis-solicitudes">Mis solicitudes</Link> con tu correo, y retira tus avisos o propuestas de adopción. Dejan
             de mostrarse de inmediato.
           </li>
-          <li>Para borrar también tus datos de contacto, escríbenos indicando el código de tu trámite.</li>
+          <li>Para borrar también tus datos de contacto, escríbenos desde el correo que usaste en tus trámites.</li>
         </ul>
 
         <h2>Comentarios y mensajes de Instagram</h2>

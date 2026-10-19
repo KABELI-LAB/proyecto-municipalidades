@@ -14,13 +14,15 @@ La plataforma tiene tres partes:
 
 ## 1. Reglas que valen en toda la plataforma
 
-- **Sin cuenta para la ciudadanía.** Cada trámite termina con un código de
-  seguimiento (formato TR-NNNN). Con el RUT y ese código la persona consulta
-  todos sus trámites.
+- **Sin cuenta ni contraseña para la ciudadanía.** Se entra a Mis solicitudes
+  con el **correo**: cada vez llega un código de un solo uso. No hay números de
+  trámite que guardar (el código interno TR-NNNN solo lo ve el municipio).
+- **Correo obligatorio en los trámites con seguimiento** (servicio, cupos,
+  mascotas perdidas y avistadas, adopción, perros comunitarios); el teléfono es
+  opcional. En SOS y novedades basta un teléfono o un correo.
 - **RUT solo donde hace falta.** Obligatorio en cupos, adopción (postular y
   dar) y mascota perdida; opcional al solicitar un servicio; no se pide en SOS,
-  mascota avistada ni novedad de perro comunitario (salvo el cuidador). Lo
-  hecho sin RUT no aparece en Mis solicitudes.
+  mascota avistada ni novedad de perro comunitario (salvo el cuidador).
 - **Ubicación mínima: el sector.** La persona elige su localidad de una lista
   cerrada y de ella se deduce el sector. Nunca se pide ni se muestra una
   dirección exacta.
@@ -228,10 +230,10 @@ Siempre a cargo de vecinos; el municipio no interviene. El fin es que sean públ
 - **Registrar** (`/comunitarios/registrar`): foto obligatoria, apodo, sexo,
   tamaño, color y señas; lugar público de referencia (nunca un domicilio);
   esterilización, vacunas y microchip con «No sé»; datos de quien registra
-  (RUT obligatorio). **Se publica de inmediato** y quien lo registra queda como
-  su **cuidador**, con un código TR que es su credencial.
-- **Gestión por su cuidador** (en Mis solicitudes, con su RUT y su código, o
-  con el código que llega al correo): «Lo vi hoy» (queda como última revisión,
+  (RUT y correo obligatorios). **Se publica de inmediato** y quien lo registra
+  queda como su **cuidador**.
+- **Gestión por su cuidador** (en Mis solicitudes, entrando con su correo):
+  «Lo vi hoy» (queda como última revisión,
   visible en la ficha), actualizar la ficha (con foto nueva opcional), leer las
   novedades de los vecinos y marcarlas como vistas, y «Ya no está» (la ficha deja
   de mostrarse).
@@ -321,8 +323,9 @@ de la lista de espera. Si se activan, funcionan así:
 
 Las notificaciones (cupo confirmado, se liberó un cupo, aviso publicado,
 postulaciones, etc.) salen por correo cuando el envío está configurado
-(`SMTP_*` de la casilla institucional o `BREVO_API_KEY`, más `CORREO_REMITENTE`;
-vea `.env.example`). Quedan en cola y se envían después de guardar la acción;
+(`SMTP_*`, por ejemplo una cuenta de Gmail con contraseña de aplicación, o
+`BREVO_API_KEY`, más `CORREO_REMITENTE`; vea `.env.example` y
+`docs/despliegue-netlify.md`). Quedan en cola y se envían después de guardar la acción;
 cada una queda como enviada o fallida, con el motivo. Sin configuración, o con
 datos de demostración, quedan simuladas y se ven en Mis solicitudes.
 
@@ -350,15 +353,15 @@ a dormir. Sin movimiento si el sistema pide reducirlo.
 
 ### Mis solicitudes (`/mis-solicitudes`)
 
-- **Dos formas de entrar, sin registrarse:**
-  - **«Recibir un código en mi correo»:** escribe solo su RUT y le enviamos un
-    código de 6 dígitos al correo que dejó en sus trámites. Vence en 10
-    minutos, sirve una vez y admite 5 intentos; se pueden pedir hasta 3 cada
-    15 minutos. La respuesta es la misma exista o no el RUT. Sin envío de
-    correos configurado, fuera de producción el código se muestra en pantalla
-    (modo de prueba) y en producción la opción avisa que no está disponible.
-  - **«Tengo un código de trámite»:** RUT y cualquier código propio.
-- Ve todos sus trámites con su estado:
+- **Entrar con el correo, sin registrarse ni recordar nada:** escribe su
+  correo y le enviamos un código de 6 dígitos. Vence en 10 minutos, sirve una
+  vez y admite 5 intentos; se pueden pedir hasta 3 cada 15 minutos. La
+  respuesta es la misma exista o no el correo. Con el código queda una
+  **sesión de 2 horas** en ese navegador (cookie firmada que guarda solo el
+  correo); «Salir» la cierra. Sin envío de correos configurado, fuera de
+  producción el código se muestra en pantalla (modo de prueba) y en producción
+  no es posible entrar.
+- Ve los trámites de **todas las personas registradas con ese correo**:
   - solicitudes de servicio
   - cupos (con el lugar en la lista de espera, si corresponde)
   - reportes

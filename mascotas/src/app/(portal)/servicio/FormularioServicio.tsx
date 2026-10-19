@@ -28,7 +28,7 @@ export function FormularioServicio({ sectores, servicios }: Props) {
 
   if (hecho) {
     return (
-      <ResultadoTramite titulo="Tu solicitud fue recibida" codigo={hecho.codigo} conRut={Boolean(v.rut)}>
+      <ResultadoTramite titulo="Tu solicitud fue recibida">
         {hecho.operativo ? (
           <p>
             Hay un operativo publicado en {hecho.operativo.sector} el {hecho.operativo.fecha} que ofrece{" "}

@@ -48,10 +48,33 @@ chat: van solo en las variables de entorno de Netlify y en `.env.produccion`
    | `APP_URL` | la dirección del sitio en Netlify, por ejemplo `https://….netlify.app` |
    | `INSTAGRAM_USER_ID`, `INSTAGRAM_ACCESS_TOKEN` | los de la cuenta de Instagram (opcional) |
    | `INSTAGRAM_APP_SECRET`, `META_APP_SECRET`, `INSTAGRAM_WEBHOOK_TOKEN` | para responder comentarios y mensajes (opcional; vea abajo) |
-   | `BREVO_API_KEY` o `SMTP_…`, y `CORREO_REMITENTE` | para enviar correos (opcional) |
+   | `SMTP_HOST`, `SMTP_PUERTO`, `SMTP_USUARIO`, `SMTP_CLAVE` y `CORREO_REMITENTE` (o `BREVO_API_KEY`) | para enviar correos: **necesario para entrar a Mis solicitudes** (vea abajo) |
    | `OPENAI_API_KEY` (y `OPENAI_MODEL`, `OPENAI_BASE_URL` si es Azure) | para la inteligencia artificial (opcional; se enciende en Panel › Configuración) |
 
 4. Publique (**Deploy**). Las fotos de los vecinos se guardan solas en Netlify Blobs.
+
+## Correos con Gmail
+
+Los vecinos entran a Mis solicitudes con un código que les llega al correo, y
+los avisos de sus trámites también salen por correo. Sin esto, en el sitio
+publicado no se puede entrar a Mis solicitudes.
+
+1. Usa una cuenta de Gmail para la plataforma (mejor una nueva, solo para esto).
+2. Activa la **verificación en dos pasos**: Cuenta de Google › Seguridad.
+3. Crea una **contraseña de aplicación**: Cuenta de Google › Seguridad ›
+   Verificación en dos pasos › Contraseñas de aplicaciones. Ponle un nombre
+   (por ejemplo «Pawni») y copia las 16 letras.
+4. En Netlify (y en tu `.env`, para probar en tu computador):
+   - `SMTP_HOST` = `smtp.gmail.com`
+   - `SMTP_PUERTO` = `587`
+   - `SMTP_USUARIO` = la cuenta de Gmail
+   - `SMTP_CLAVE` = la contraseña de aplicación (sin espacios)
+   - `CORREO_REMITENTE` = la misma cuenta de Gmail
+5. Vuelve a publicar (Deploys › Trigger deploy).
+
+Gmail permite unos 500 correos al día; sobra para una comuna. Los correos
+pueden llegar a spam las primeras veces: pide a quien pruebe que lo marque como
+«No es spam».
 
 ## Respuestas automáticas en Instagram (opcional)
 

@@ -79,7 +79,7 @@ export function FormularioPropuesta({ sectores, inicial = PROPUESTA_VACIA, corre
 
   if (resultado) {
     return (
-      <ResultadoTramite titulo={resultado.corregida ? "Recibimos tu propuesta corregida" : "Recibimos tu propuesta"} codigo={resultado.codigo}>
+      <ResultadoTramite titulo={resultado.corregida ? "Recibimos tu propuesta corregida" : "Recibimos tu propuesta"}>
         <p>
           El equipo municipal la revisará antes de publicarla en el catálogo de adopción. Puede que te pidamos corregir algún
           dato. Cuando esté publicada, revisa las postulaciones y elige en Mis solicitudes.

@@ -19,7 +19,21 @@ vi.mock("@/servidor/auth", async () => {
   return { autorizar: async (p: Parameters<typeof puede>[1]) => (sesion && puede(sesion.rol, p) ? sesion : null) };
 });
 
-const PERSONA = { nombre: "Persona SOS", rut: "11.111.111-1", telefono: "912345678", correo: "" };
+// La sesión de Mis solicitudes vive en una cookie; fuera de una petición se simula en memoria.
+const vecino = vi.hoisted(() => ({ correo: null as string | null }));
+vi.mock("@/servidor/portal/sesionVecino", async (original) => {
+  const m = await original<typeof import("@/servidor/portal/sesionVecino")>();
+  const { municipioActivo } = await import("@/lib/municipio");
+  return {
+    ...m,
+    abrirSesionVecino: async (c: string) => { vecino.correo = m.normalizarCorreo(c); },
+    cerrarSesionVecino: async () => { vecino.correo = null; },
+    correoDeSesion: async () => vecino.correo,
+    filtroVecino: async () => (vecino.correo ? { municipioId: municipioActivo().id, correo: vecino.correo } : null),
+  };
+});
+
+const PERSONA = { nombre: "Persona SOS", rut: "17.654.321-3", telefono: "912345678", correo: "persona.sos@correo.cl" };
 const ALMACEN = mkdtempSync(join(tmpdir(), "tenencia-almacen-"));
 
 let base: Awaited<ReturnType<typeof crearBaseTemporal>>;
@@ -110,7 +124,8 @@ describe("SOS Mascotas", () => {
   it("en Mis solicitudes se ve como SOS Mascotas, recibido y aún sin revisar", async () => {
     const r = await acciones.reportarSituacion(await datos({ urgencia: "PRONTO" }));
     if (!r.ok) throw new Error("reporte");
-    const c = await acciones.consultarSolicitudes({ rut: PERSONA.rut, codigo: r.codigo });
+    vecino.correo = PERSONA.correo;
+    const c = await acciones.misSolicitudes();
     if (!c.ok) throw new Error("consulta");
     expect(c.tramites.find((x) => x.codigo === r.codigo)).toMatchObject({ tipo: "SOS Mascotas", estado: { texto: "Recibido" }, nota: "Lo recibimos; aún no ha sido revisado." });
   });

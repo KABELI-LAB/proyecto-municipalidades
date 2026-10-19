@@ -48,7 +48,22 @@ const personaSinRut = { ...persona, rut: rutOpcional };
 // para mostrar todos los errores de un paso de una sola vez.
 const SIEMPRE = { when: () => true };
 
-/** Teléfono o correo: al menos uno, y bien escrito. */
+/**
+ * Correo obligatorio (teléfono opcional): con el correo se avisa del trámite y
+ * se entra a Mis solicitudes. Para los trámites con seguimiento.
+ */
+function contactoConCorreo(d: { telefono: string; correo: string }, ctx: z.RefinementCtx) {
+  if (!d.correo) {
+    ctx.addIssue({ code: "custom", path: ["correo"], message: "Escribe tu correo: ahí te avisamos y con él entras a Mis solicitudes." });
+  } else if (!correoValido(d.correo)) {
+    ctx.addIssue({ code: "custom", path: ["correo"], message: "Revisa el correo; por ejemplo, nombre@correo.cl." });
+  }
+  if (d.telefono && !telefonoValido(d.telefono)) {
+    ctx.addIssue({ code: "custom", path: ["telefono"], message: "Escribe el teléfono con 9 dígitos, por ejemplo 9 1234 5678." });
+  }
+}
+
+/** Teléfono o correo: al menos uno, y bien escrito (SOS, novedades y mensajes, sin seguimiento obligatorio). */
 function contacto(d: { telefono: string; correo: string }, ctx: z.RefinementCtx) {
   if (!d.telefono && !d.correo) {
     ctx.addIssue({ code: "custom", path: ["telefono"], message: "Indica un teléfono o un correo para avisarte." });
@@ -80,12 +95,12 @@ function tamanoDePerro(d: { especie: string; tamano: string }, ctx: z.Refinement
 
 export const esquemaServicio = z
   .object({ servicioId: eleccion("Elige el servicio que necesitas."), ...animal, ...personaSinRut })
-  .superRefine(contacto, SIEMPRE)
+  .superRefine(contactoConCorreo, SIEMPRE)
   .superRefine(tamanoDePerro, SIEMPRE);
 
 export const esquemaCupo = z
   .object({ operativoId: z.string().min(1), servicioId: eleccion("Elige un servicio."), ...animal, ...persona })
-  .superRefine(contacto, SIEMPRE)
+  .superRefine(contactoConCorreo, SIEMPRE)
   .superRefine(tamanoDePerro, SIEMPRE);
 
 export const esquemaReporte = z
@@ -132,7 +147,7 @@ export const esquemaPublicacion = z
     // Obligatorio solo al reportar una pérdida: con él, el dueño gestiona su aviso en Mis solicitudes.
     ...personaSinRut,
   })
-  .superRefine(contacto, SIEMPRE)
+  .superRefine(contactoConCorreo, SIEMPRE)
   .superRefine((d, ctx) => {
     if (d.tipo === "PERDIDA" && !d.rut) {
       ctx.addIssue({ code: "custom", path: ["rut"], message: "Indica tu RUT: con él podrás revisar y cerrar tu aviso." });
@@ -179,12 +194,12 @@ export const esquemaPropuesta = z
     autoriza: z.literal("SI", "Debes declarar que puedes darlo en adopción para enviar la propuesta."),
     ...persona,
   })
-  .superRefine(contacto, SIEMPRE);
+  .superRefine(contactoConCorreo, SIEMPRE);
 
 /**
  * Perro comunitario registrado por un vecino: se publica de inmediato y quien
- * lo registra queda como su cuidador (con su RUT y un código lo gestiona en
- * Mis solicitudes). La ubicación es un lugar público de referencia, nunca un domicilio.
+ * lo registra queda como su cuidador (lo gestiona en Mis solicitudes, entrando
+ * con su correo). La ubicación es un lugar público de referencia, nunca un domicilio.
  */
 export const esquemaDatosComunitario = z.object({
   apodo: texto(2, 60, "Indica cómo lo conocen en el barrio."),
@@ -198,9 +213,9 @@ export const esquemaDatosComunitario = z.object({
   microchip: SI_NO_NO_SE("Indica si tiene microchip o elige «No sé»."),
 });
 const cuidador = { nombre: persona.nombre, rut: persona.rut, telefono: persona.telefono, correo: persona.correo };
-export const esquemaRegistroComunitario = esquemaDatosComunitario.extend(cuidador).superRefine(contacto, SIEMPRE);
+export const esquemaRegistroComunitario = esquemaDatosComunitario.extend(cuidador).superRefine(contactoConCorreo, SIEMPRE);
 /** Hacerse cargo de un perro comunitario que no tiene cuidador. */
-export const esquemaCuidarComunitario = z.object({ perroId: z.string().min(1), ...cuidador }).superRefine(contacto, SIEMPRE);
+export const esquemaCuidarComunitario = z.object({ perroId: z.string().min(1), ...cuidador }).superRefine(contactoConCorreo, SIEMPRE);
 
 /**
  * Novedad de un vecino sobre un perro comunitario: le llega a quien lo cuida
@@ -226,7 +241,7 @@ export const esquemaPostulacion = z
     // Animales propuestos por vecinos: el servidor exige «SI» (ver postularAdopcion).
     compartir: z.enum(["SI", ""]).default(""),
   })
-  .superRefine(contacto, SIEMPRE)
+  .superRefine(contactoConCorreo, SIEMPRE)
   .superRefine((d, ctx) => {
     if (d.tieneOtros === "SI" && (d.otrosAnimales ?? "").trim().length < 3) {
       ctx.addIssue({ code: "custom", path: ["otrosAnimales"], message: "Cuéntanos qué animales tienes; por ejemplo, «un perro adulto»." });
@@ -242,15 +257,6 @@ export const esquemaMensaje = z
     texto: texto(10, 500, "Escribe un mensaje de al menos 10 caracteres."),
   })
   .superRefine(contacto, SIEMPRE);
-
-export const esquemaConsulta = z.object({
-  rut: persona.rut,
-  codigo: z
-    .string()
-    .trim()
-    .toUpperCase()
-    .regex(FORMATO_CODIGO, "Escribe el código tal como lo recibiste, por ejemplo TR-4043."),
-});
 
 export type Errores = Record<string, string>;
 

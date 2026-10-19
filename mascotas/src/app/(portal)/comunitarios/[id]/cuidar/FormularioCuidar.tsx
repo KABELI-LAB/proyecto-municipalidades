@@ -19,8 +19,8 @@ export function FormularioCuidar({ perroId, nombre }: { perroId: string; nombre:
 
   if (codigo) {
     return (
-      <ResultadoTramite titulo={`Quedaste a cargo de ${nombre}`} codigo={codigo}>
-        <p>Este código es tu credencial de cuidador: con tu RUT y este código, en Mis solicitudes, puedes actualizar la ficha, anotar que lo viste y leer las novedades de los vecinos.</p>
+      <ResultadoTramite titulo={`Quedaste a cargo de ${nombre}`}>
+        <p>Como su cuidador, en Mis solicitudes (entrando con tu correo) puedes actualizar la ficha, anotar que lo viste y leer las novedades de los vecinos.</p>
       </ResultadoTramite>
     );
   }
@@ -45,10 +45,10 @@ export function FormularioCuidar({ perroId, nombre }: { perroId: string; nombre:
         <CampoTexto id="rut" etiqueta="RUT" valor={v.rut} alCambiar={(x) => cambiar("rut", x)} error={errores.rut} ayuda="Por ejemplo, 12.345.678-5." maxLength={12} />
       </div>
       <div className={estilos.fila}>
-        <CampoTexto id="telefono" etiqueta="Teléfono" tipo="tel" inputMode="tel" autoComplete="tel" valor={v.telefono} alCambiar={(x) => cambiar("telefono", x)} error={errores.telefono} maxLength={20} />
+        <CampoTexto id="telefono" etiqueta="Teléfono (opcional)" tipo="tel" inputMode="tel" autoComplete="tel" valor={v.telefono} alCambiar={(x) => cambiar("telefono", x)} error={errores.telefono} maxLength={20} />
         <CampoTexto id="correo" etiqueta="Correo" tipo="email" inputMode="email" autoComplete="email" valor={v.correo} alCambiar={(x) => cambiar("correo", x)} error={errores.correo} maxLength={120} />
       </div>
-      <p className={estilos.ayuda}>Indica al menos un teléfono o un correo: por ahí te llegarán las novedades.</p>
+      <p className={estilos.ayuda}>Por correo te llegarán las novedades, y con él entras a Mis solicitudes.</p>
       {mensaje && (
         <p className={estilos.mensaje} role="alert">
           <Icono nombre="alerta" tamano={20} />

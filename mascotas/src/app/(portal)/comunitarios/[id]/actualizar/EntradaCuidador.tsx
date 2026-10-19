@@ -1,10 +1,9 @@
 "use client";
-// Entrada del cuidador desde la ficha del perro: RUT y código de cuidador, y
-// luego la misma gestión que en Mis solicitudes (lo vi hoy, actualizar ficha,
-// novedades por leer, ya no está). El RUT viaja en el cuerpo, nunca en la URL.
-import { useState, useTransition } from "react";
-import { Boton } from "@/componentes/Boton";
-import { CampoTexto } from "@/componentes/formulario/Campos";
+// Entrada del cuidador desde la ficha del perro: con la sesión de Mis
+// solicitudes (entró con su correo), la misma gestión que allí (lo vi hoy,
+// actualizar ficha, novedades por leer, ya no está). Sin sesión, lleva a entrar.
+import { useCallback, useEffect, useState, useTransition } from "react";
+import { EnlaceBoton } from "@/componentes/Boton";
 import { Icono } from "@/componentes/Icono";
 import { entrarComoCuidador, type PerroACargo } from "@/servidor/portal/acciones-comunitarios";
 import { GestionComunitario } from "../../../mis-solicitudes/GestionComunitario";
@@ -12,26 +11,28 @@ import formulario from "@/componentes/formulario/formulario.module.css";
 import estilos from "../../../mis-solicitudes/mis-solicitudes.module.css";
 
 export function EntradaCuidador({ perroId }: { perroId: string }) {
-  const [v, setV] = useState({ rut: "", codigo: "" });
-  const [perro, setPerro] = useState<PerroACargo | null>(null);
+  const [perro, setPerro] = useState<{ datos: PerroACargo; codigo: string } | null>(null);
   const [mensaje, setMensaje] = useState<string | null>(null);
   const [aviso, setAviso] = useState<string | null>(null);
-  const [enviando, iniciar] = useTransition();
+  const [cargando, iniciar] = useTransition();
 
-  const entrar = (e?: React.FormEvent) => {
-    e?.preventDefault();
-    iniciar(async () => {
-      const r = await entrarComoCuidador({ perroId, ...v });
-      if (r.ok) {
-        setPerro(r.perro);
-        setMensaje(null);
-      } else setMensaje(r.mensaje);
-    });
-  };
+  const cargar = useCallback(
+    () =>
+      iniciar(async () => {
+        const r = await entrarComoCuidador({ perroId });
+        if (r.ok) {
+          setPerro({ datos: r.perro, codigo: r.codigo });
+          setMensaje(null);
+        } else setMensaje(r.mensaje);
+      }),
+    [perroId],
+  );
+
+  useEffect(cargar, [cargar]);
 
   if (perro) {
     return (
-      <section className={`${formulario.formulario} ${formulario.formularioCorto}`} aria-label={`Gestión de ${perro.apodo}`} aria-live="polite">
+      <section className={`${formulario.formulario} ${formulario.formularioCorto}`} aria-label={`Gestión de ${perro.datos.apodo}`} aria-live="polite">
         {aviso && (
           <p className={estilos.confirmacion} role="status">
             <Icono nombre="check" tamano={20} />
@@ -40,37 +41,26 @@ export function EntradaCuidador({ perroId }: { perroId: string }) {
         )}
         <GestionComunitario
           key={aviso ?? "inicio"}
-          rut={v.rut}
-          codigo={v.codigo}
-          perro={perro}
+          codigo={perro.codigo}
+          perro={perro.datos}
           alTerminar={(texto) => {
             setAviso(texto);
             // Vuelve a leer las novedades y el estado tras cada acción.
-            entrar();
+            cargar();
           }}
         />
       </section>
     );
   }
 
+  if (!mensaje) return <div className={estilos.esqueleto} aria-label="Cargando" aria-busy={cargando} />;
+
   return (
-    <form className={`${formulario.formulario} ${formulario.formularioCorto}`} onSubmit={entrar} noValidate aria-label="Entrar como cuidador">
-      <p>Usa el RUT y el código de cuidador que recibiste al registrarlo o al hacerte cargo. También los encuentras en Mis solicitudes.</p>
-      <div className={formulario.fila}>
-        <CampoTexto id="rut" etiqueta="RUT" valor={v.rut} alCambiar={(x) => setV((s) => ({ ...s, rut: x }))} ayuda="Por ejemplo, 12.345.678-5." maxLength={12} />
-        <CampoTexto id="codigo" etiqueta="Código de cuidador" valor={v.codigo} alCambiar={(x) => setV((s) => ({ ...s, codigo: x.toUpperCase() }))} ayuda="Por ejemplo, TR-4043." maxLength={7} />
-      </div>
-      {mensaje && (
-        <p className={formulario.mensaje} role="alert">
-          <Icono nombre="alerta" tamano={20} />
-          {mensaje}
-        </p>
-      )}
+    <div className={`${formulario.formulario} ${formulario.formularioCorto}`}>
+      <p role="alert">{mensaje}</p>
       <div className={formulario.navegacion}>
-        <Boton type="submit" disabled={enviando}>
-          {enviando ? "Un momento…" : "Entrar"}
-        </Boton>
+        <EnlaceBoton href="/mis-solicitudes">Ir a Mis solicitudes</EnlaceBoton>
       </div>
-    </form>
+    </div>
   );
 }

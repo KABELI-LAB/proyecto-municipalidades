@@ -32,7 +32,7 @@ export default async function PaginaMascota({ params }: { params: Promise<{ id: 
           {tituloAviso(p)} en {p.sector.nombre}
         </h1>
         <p>
-          Publicado {haceDias(p.creadaEn)}.{p.codigo && ` Código ${p.codigo}.`}
+          Publicado {haceDias(p.creadaEn)}.
         </p>
       </div>
 

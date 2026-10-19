@@ -158,7 +158,7 @@ export async function cargarOrigen(tipo: TipoRed, id: string): Promise<Origen | 
     texto,
     alternativo,
     loteDemoId: p.loteDemoId,
-    descripcion: `${perdida ? "Aviso de mascota perdida" : "Aviso de mascota avistada"}${p.codigo ? ` ${p.codigo}` : ""}`,
+    descripcion: perdida ? "Aviso de mascota perdida" : "Aviso de mascota avistada",
   };
 }
 

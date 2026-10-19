@@ -6,16 +6,16 @@ import { Boton } from "@/componentes/Boton";
 import { responderInvitacion } from "@/servidor/portal/acciones";
 import estilos from "./mis-solicitudes.module.css";
 
-type Props = { rut: string; codigo: string; alTerminar: (mensaje: string) => void };
+type Props = { codigo: string; alTerminar: (mensaje: string) => void };
 
-export function GestionInvitacion({ rut, codigo, alTerminar }: Props) {
+export function GestionInvitacion({ codigo, alTerminar }: Props) {
   const [confirmarRechazo, setConfirmarRechazo] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [enviando, iniciar] = useTransition();
 
   const responder = (accion: "interes" | "rechazo") =>
     iniciar(async () => {
-      const r = await responderInvitacion({ rut, codigo, accion });
+      const r = await responderInvitacion({ codigo, accion });
       if (r.ok) alTerminar(r.mensaje);
       else setError(r.mensaje);
     });

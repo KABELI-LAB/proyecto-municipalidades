@@ -154,3 +154,22 @@
   border-color: var(--color-primary);
   color: var(--color-surface);
 }
+
+/* Mientras se revisa si ya hay una sesión abierta. */
+.esqueleto {
+  height: 220px;
+  max-width: 640px;
+  border-radius: var(--radius-large);
+  background: var(--color-surface-sunken);
+  animation: late var(--duration-progress) ease-in-out infinite;
+}
+@keyframes late {
+  50% {
+    opacity: 0.55;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .esqueleto {
+    animation: none;
+  }
+}

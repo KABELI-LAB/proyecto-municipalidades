@@ -8,6 +8,7 @@ import { join } from "node:path";
 import sharp from "sharp";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { crearBaseTemporal } from "@/pruebas/baseTemporal";
+import { SESION_VENCIDA } from "./sesionVecino";
 
 const CORTE = "2026-10-06";
 vi.mock("next/cache", () => ({ revalidatePath: () => {} }));
@@ -18,8 +19,23 @@ vi.mock("@/servidor/auth", async () => {
   return { autorizar: async (p: Parameters<typeof puede>[1]) => (sesion && puede(sesion.rol, p) ? sesion : null) };
 });
 
-const VECINA = { nombre: "Vecina que da en adopción", rut: "11.111.111-1", telefono: "912345678", correo: "" };
-const OTRA = { nombre: "Otra vecina", rut: "22.222.222-2", telefono: "987654321", correo: "" };
+// La sesión de Mis solicitudes vive en una cookie; fuera de una petición se simula en memoria.
+const vecino = vi.hoisted(() => ({ correo: null as string | null }));
+vi.mock("@/servidor/portal/sesionVecino", async (original) => {
+  const m = await original<typeof import("@/servidor/portal/sesionVecino")>();
+  const { municipioActivo } = await import("@/lib/municipio");
+  return {
+    ...m,
+    abrirSesionVecino: async (c: string) => { vecino.correo = m.normalizarCorreo(c); },
+    cerrarSesionVecino: async () => { vecino.correo = null; },
+    correoDeSesion: async () => vecino.correo,
+    filtroVecino: async () => (vecino.correo ? { municipioId: municipioActivo().id, correo: vecino.correo } : null),
+  };
+});
+
+const VECINA = { nombre: "Vecina que da en adopción", rut: "17.654.321-3", telefono: "912345678", correo: "vecina.adopcion@correo.cl" };
+const OTRA = { nombre: "Otra vecina", rut: "22.222.222-2", telefono: "987654321", correo: "otra.vecina@correo.cl" };
+const RUT_VECINA = "17654321-3";
 
 let base: Awaited<ReturnType<typeof crearBaseTemporal>>;
 let db: typeof import("@/servidor/db").db;
@@ -129,13 +145,14 @@ describe("Dar en adopción", () => {
     expect((await db.fichaAdopcion.findUniqueOrThrow({ where: { id: f.id } })).revision).toBe("PENDIENTE");
   });
 
-  it("correcciones: el municipio las pide con motivo y la vecina corrige con su RUT; las fotos nuevas reemplazan a las anteriores", async () => {
+  it("correcciones: el municipio las pide con motivo y la vecina corrige con su sesión; las fotos nuevas reemplazan a las anteriores", async () => {
     sesion = coordinacion;
-    const f = await db.fichaAdopcion.findFirstOrThrow({ where: { revision: "PENDIENTE", animal: { nombre: "Canela" }, proponente: { rut: "11111111-1" } } });
+    const f = await db.fichaAdopcion.findFirstOrThrow({ where: { revision: "PENDIENTE", animal: { nombre: "Canela" }, proponente: { rut: RUT_VECINA } } });
     expect((await panel.pedirCorrecciones(f.id, "corto")).ok).toBe(false);
     expect((await panel.pedirCorrecciones(f.id, "Agregue una foto donde se vea su cara.")).ok).toBe(true);
 
-    const c = await portal.consultarSolicitudes({ rut: VECINA.rut, codigo: f.codigo });
+    vecino.correo = VECINA.correo;
+    const c = await portal.misSolicitudes();
     if (!c.ok) throw new Error("consulta");
     expect(c.tramites.find((t) => t.codigo === f.codigo)).toMatchObject({
       tipo: "Dar en adopción",
@@ -144,12 +161,23 @@ describe("Dar en adopción", () => {
       propuesta: { corregir: true },
     });
 
-    expect(await portal.propuestaParaCorregir({ rut: OTRA.rut, codigo: f.codigo })).toMatchObject({ ok: false });
-    const cargada = await portal.propuestaParaCorregir({ rut: VECINA.rut, codigo: f.codigo });
+    vecino.correo = null;
+    expect(await portal.propuestaParaCorregir({ codigo: f.codigo })).toEqual({ ok: false, mensaje: SESION_VENCIDA });
+    vecino.correo = OTRA.correo;
+    expect(await portal.propuestaParaCorregir({ codigo: f.codigo })).toMatchObject({ ok: false });
+    vecino.correo = VECINA.correo;
+    const cargada = await portal.propuestaParaCorregir({ codigo: f.codigo });
     if (!cargada.ok) throw new Error("cargar");
     expect([cargada.fotos, cargada.valores.vacunas, cargada.valores.nombreAnimal]).toEqual([2, "NO_SE", "Canela"]);
 
-    const r = await portal.proponerAdopcion(formulario({ ...cargada.valores, autoriza: "SI", vacunas: "SI" }, [await foto(10, 200, 10)]));
+    const corregir = async () => portal.proponerAdopcion(formulario({ ...cargada.valores, autoriza: "SI", vacunas: "SI" }, [await foto(10, 200, 10)]));
+    // Corregir también exige la sesión de quien la propuso.
+    vecino.correo = null;
+    expect(await corregir()).toMatchObject({ ok: false, mensaje: SESION_VENCIDA });
+    vecino.correo = OTRA.correo;
+    expect((await corregir()).ok).toBe(false);
+    vecino.correo = VECINA.correo;
+    const r = await corregir();
     expect(r).toMatchObject({ ok: true, codigo: f.codigo, corregida: true });
     const corregida = await db.fichaAdopcion.findUniqueOrThrow({ where: { id: f.id }, include: { animal: true } });
     expect([corregida.revision, corregida.animal.vacunasAlDia, corregida.fotos.split(",").length, corregida.motivoRevision]).toEqual(["PENDIENTE", true, 1, null]);
@@ -157,7 +185,7 @@ describe("Dar en adopción", () => {
 
   it("aprobada: entra al catálogo con su foto pública; la postulación avisa a quien la propuso", async () => {
     sesion = coordinacion;
-    const f = await db.fichaAdopcion.findFirstOrThrow({ where: { revision: "PENDIENTE", animal: { nombre: "Canela" }, proponente: { rut: "11111111-1" } } });
+    const f = await db.fichaAdopcion.findFirstOrThrow({ where: { revision: "PENDIENTE", animal: { nombre: "Canela" }, proponente: { rut: RUT_VECINA } } });
     expect((await panel.aprobarPropuesta(f.id)).ok).toBe(true);
     expect((await panel.aprobarPropuesta(f.id)).ok).toBe(false);
     const aprobada = await db.fichaAdopcion.findUniqueOrThrow({ where: { id: f.id } });
@@ -179,7 +207,7 @@ describe("Dar en adopción", () => {
 
   it("ocultar exige motivo, saca la ficha del catálogo y deja su foto privada; se puede volver a publicar", async () => {
     sesion = coordinacion;
-    const f = await db.fichaAdopcion.findFirstOrThrow({ where: { revision: "APROBADA", animal: { nombre: "Canela" }, proponente: { rut: "11111111-1" } } });
+    const f = await db.fichaAdopcion.findFirstOrThrow({ where: { revision: "APROBADA", animal: { nombre: "Canela" }, proponente: { rut: RUT_VECINA } } });
     expect((await panel.ocultarFichaAdopcion(f.id, "")).ok).toBe(false);
     expect((await panel.ocultarFichaAdopcion(f.id, "Recibimos un reclamo sobre la ficha.")).ok).toBe(true);
     expect(await enCatalogo(f.id)).toBe(false);
@@ -191,9 +219,13 @@ describe("Dar en adopción", () => {
   });
 
   it("la vecina avisa que encontró hogar: sale del catálogo sin contar como adopción de la plataforma", async () => {
-    const f = await db.fichaAdopcion.findFirstOrThrow({ where: { revision: "APROBADA", animal: { nombre: "Canela" }, proponente: { rut: "11111111-1" } } });
-    expect((await portal.gestionarPropuesta({ rut: OTRA.rut, codigo: f.codigo, accion: "encontro_hogar" })).ok).toBe(false);
-    expect(await portal.gestionarPropuesta({ rut: VECINA.rut, codigo: f.codigo, accion: "encontro_hogar" })).toMatchObject({ ok: true });
+    const f = await db.fichaAdopcion.findFirstOrThrow({ where: { revision: "APROBADA", animal: { nombre: "Canela" }, proponente: { rut: RUT_VECINA } } });
+    vecino.correo = null;
+    expect(await portal.gestionarPropuesta({ codigo: f.codigo, accion: "encontro_hogar" })).toEqual({ ok: false, mensaje: SESION_VENCIDA });
+    vecino.correo = OTRA.correo;
+    expect((await portal.gestionarPropuesta({ codigo: f.codigo, accion: "encontro_hogar" })).ok).toBe(false);
+    vecino.correo = VECINA.correo;
+    expect(await portal.gestionarPropuesta({ codigo: f.codigo, accion: "encontro_hogar" })).toMatchObject({ ok: true });
     const cerrada = await db.fichaAdopcion.findUniqueOrThrow({ where: { id: f.id } });
     expect([cerrada.revision, cerrada.cierre, cerrada.estado]).toEqual(["RETIRADA", "ENCONTRO_HOGAR", "DISPONIBLE"]);
     expect(await enCatalogo(f.id)).toBe(false);
@@ -204,14 +236,15 @@ describe("Dar en adopción", () => {
     const f = await proponer(await campos({ nombreAnimal: "Pelusa", especie: "GATO", tamano: "NO_SE" }), [await foto(30, 30, 200)]);
     expect((await panel.rechazarPropuesta(f.id, "La foto no corresponde a un animal.")).ok).toBe(true);
     expect(await enCatalogo(f.id)).toBe(false);
-    const c = await portal.consultarSolicitudes({ rut: VECINA.rut, codigo: f.codigo });
+    vecino.correo = VECINA.correo;
+    const c = await portal.misSolicitudes();
     if (!c.ok) throw new Error("consulta");
     expect(c.tramites.find((t) => t.codigo === f.codigo)).toMatchObject({ estado: { texto: "No publicada" }, nota: "No la publicamos. La foto no corresponde a un animal." });
   });
 });
 
 describe("las postulaciones a un animal de un vecino las decide esa persona, no el municipio", () => {
-  const TERCERA = { nombre: "Tercera persona", rut: "33.333.333-3", telefono: "955554444", correo: "" };
+  const TERCERA = { nombre: "Tercera persona", rut: "33.333.333-3", telefono: "955554444", correo: "tercera.persona@correo.cl" };
 
   async function publicada() {
     sesion = null;
@@ -229,10 +262,14 @@ describe("las postulaciones a un animal de un vecino las decide esa persona, no 
 
   it("elige a una persona: se comparten los contactos de ambos; el municipio no puede intervenir", async () => {
     const f = await publicada();
-    const yo = { rut: VECINA.rut, codigo: f.codigo };
+    const yo = { codigo: f.codigo };
 
     // Sin contactos mientras no elige; nadie más ve las postulaciones.
-    expect(await portal.postulacionesDePropuesta({ rut: OTRA.rut, codigo: f.codigo })).toMatchObject({ ok: false });
+    vecino.correo = null;
+    expect(await portal.postulacionesDePropuesta({ codigo: f.codigo })).toMatchObject({ ok: false });
+    vecino.correo = OTRA.correo;
+    expect(await portal.postulacionesDePropuesta({ codigo: f.codigo })).toMatchObject({ ok: false });
+    vecino.correo = VECINA.correo;
     const lista = await portal.postulacionesDePropuesta(yo);
     if (!lista.ok) throw new Error("lista");
     expect(lista.postulaciones.map((p) => [p.nombre, p.contacto, p.pendiente])).toEqual([
@@ -241,6 +278,12 @@ describe("las postulaciones a un animal de un vecino las decide esa persona, no 
     ]);
 
     const [otra, tercera] = lista.postulaciones;
+    // Sin sesión, o con otra, no se decide.
+    vecino.correo = OTRA.correo;
+    expect((await portal.decidirPostulacion({ ...yo, postulacionId: otra.id, accion: "elegir" })).ok).toBe(false);
+    vecino.correo = null;
+    expect((await portal.decidirPostulacion({ ...yo, postulacionId: otra.id, accion: "elegir" })).ok).toBe(false);
+    vecino.correo = VECINA.correo;
     expect((await portal.decidirPostulacion({ ...yo, postulacionId: otra.id, accion: "elegir" })).ok).toBe(true);
     expect((await db.fichaAdopcion.findUniqueOrThrow({ where: { id: f.id } })).estado).toBe("EN_PROCESO");
     // Solo una persona elegida a la vez.
@@ -253,15 +296,17 @@ describe("las postulaciones a un animal de un vecino las decide esa persona, no 
 
     // Quien fue elegida ve el contacto de quien da en adopción en Mis solicitudes.
     const suya = await db.postulacionAdopcion.findUniqueOrThrow({ where: { id: otra.id } });
-    const c = await portal.consultarSolicitudes({ rut: OTRA.rut, codigo: suya.codigo });
+    vecino.correo = OTRA.correo;
+    const c = await portal.misSolicitudes();
     if (!c.ok) throw new Error("consulta");
     const persona = await db.persona.findFirstOrThrow({ where: { id: f.proponenteId! } });
     expect(c.tramites.find((t) => t.codigo === suya.codigo)?.nota).toContain(persona.telefono!);
   });
 
   it("si no se concreta, la ficha vuelve a estar disponible; si se concreta, queda adoptada con sus compromisos", async () => {
-    const f = await db.fichaAdopcion.findFirstOrThrow({ where: { animal: { nombre: "Rocky" }, proponente: { rut: "11111111-1" } } });
-    const yo = { rut: VECINA.rut, codigo: f.codigo };
+    const f = await db.fichaAdopcion.findFirstOrThrow({ where: { animal: { nombre: "Rocky" }, proponente: { rut: RUT_VECINA } } });
+    const yo = { codigo: f.codigo };
+    vecino.correo = VECINA.correo;
     const lista = await portal.postulacionesDePropuesta(yo);
     if (!lista.ok) throw new Error("lista");
     const [otra, tercera] = lista.postulaciones;

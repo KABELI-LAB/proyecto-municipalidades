@@ -18,7 +18,6 @@ import formulario from "@/componentes/formulario/formulario.module.css";
 import estilos from "./mis-solicitudes.module.css";
 
 type Props = {
-  rut: string;
   codigo: string;
   perro: { id: string; apodo: string; novedades: { codigo: string; tipo: string; texto: string; fecha: string }[] };
   alTerminar: (mensaje: string) => void;
@@ -27,7 +26,7 @@ type Props = {
 const opciones = (m: Record<string, string>): Opcion[] => Object.entries(m).map(([valor, texto]) => ({ valor, texto }));
 const SI_NO = opciones(SI_NO_SE);
 
-export function GestionComunitario({ rut, codigo, perro, alTerminar }: Props) {
+export function GestionComunitario({ codigo, perro, alTerminar }: Props) {
   const [modo, setModo] = useState<"inicio" | "editar" | "baja">("inicio");
   const [ficha, setFicha] = useState<FichaParaEditar | null>(null);
   const [foto, setFoto] = useState<Blob | null>(null);
@@ -48,7 +47,7 @@ export function GestionComunitario({ rut, codigo, perro, alTerminar }: Props) {
 
   const abrirEdicion = () =>
     iniciar(async () => {
-      const r = await fichaParaEditar({ rut, codigo });
+      const r = await fichaParaEditar({ codigo });
       if (!r.ok) return setError(r.mensaje);
       setFicha({ valores: r.valores, lugares: r.lugares });
       setModo("editar");
@@ -58,7 +57,6 @@ export function GestionComunitario({ rut, codigo, perro, alTerminar }: Props) {
     e.preventDefault();
     if (!ficha) return;
     const datos = new FormData();
-    datos.set("rut", rut);
     datos.set("codigo", codigo);
     datos.set("datos", JSON.stringify(ficha.valores));
     if (foto) datos.set("foto", foto, "foto.jpg");
@@ -101,7 +99,7 @@ export function GestionComunitario({ rut, codigo, perro, alTerminar }: Props) {
         <p>{perro.apodo} dejará de mostrarse en el portal y en el mapa. Úsalo si ya no está en su lugar. ¿Quieres continuar?</p>
         {error && <p role="alert">{error}</p>}
         <div className={estilos.botones}>
-          <Boton onClick={() => ejecutar(() => darDeBajaComunitario({ rut, codigo }))} disabled={enviando}>
+          <Boton onClick={() => ejecutar(() => darDeBajaComunitario({ codigo }))} disabled={enviando}>
             {enviando ? "Un momento…" : "Sí, ya no está"}
           </Boton>
           <Boton variante="secundario" onClick={() => setModo("inicio")} disabled={enviando}>
@@ -121,7 +119,7 @@ export function GestionComunitario({ rut, codigo, perro, alTerminar }: Props) {
               <b>{n.tipo}</b> · {n.fecha}
               <p>{n.texto}</p>
               <div className={estilos.botones}>
-                <Boton variante="secundario" onClick={() => ejecutar(() => marcarNovedadVista({ rut, codigo, novedad: n.codigo }))} disabled={enviando}>
+                <Boton variante="secundario" onClick={() => ejecutar(() => marcarNovedadVista({ codigo, novedad: n.codigo }))} disabled={enviando}>
                   Marcar como vista
                 </Boton>
               </div>
@@ -131,7 +129,7 @@ export function GestionComunitario({ rut, codigo, perro, alTerminar }: Props) {
       )}
       {error && <p role="alert">{error}</p>}
       <div className={estilos.botones}>
-        <Boton onClick={() => ejecutar(() => registrarVistoHoy({ rut, codigo }))} disabled={enviando}>
+        <Boton onClick={() => ejecutar(() => registrarVistoHoy({ codigo }))} disabled={enviando}>
           Lo vi hoy
         </Boton>
         <Boton variante="secundario" onClick={abrirEdicion} disabled={enviando}>

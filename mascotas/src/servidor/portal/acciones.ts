@@ -1,6 +1,6 @@
 "use server";
 // Trámites del portal ciudadano. Cada acción vuelve a validar en el servidor,
-// guarda en una transacción y termina con un código de seguimiento.
+// guarda en una transacción; se sigue en Mis solicitudes, entrando con el correo.
 //
 // Datos de demostración: un registro que cuelga de un padre simulado
 // (operativo, ficha o publicación de la demo) hereda su lote, para que borrar
@@ -17,7 +17,7 @@ import { ESTADO_INVITACION, INVITACION_ABIERTA } from "@/dominio/invitaciones";
 import { aSiNoNoSe, MAXIMO_FOTOS, mesesDeEdad, normalizarNombre, REVISION_ABIERTA, siNoNoSe } from "@/dominio/propuestas";
 import { normalizarRut } from "@/dominio/rut";
 import {
-  esquemaConsulta,
+  correoValido,
   esquemaCupo,
   esquemaMensaje,
   esquemaNovedad,
@@ -43,6 +43,7 @@ import { FICHA_PUBLICA } from "@/servidor/conFoto";
 import { notificar } from "@/servidor/notificaciones";
 import { obtenerPersona } from "@/servidor/personas";
 import { coincidenciasDe, operativoCercano, publicacion, publicacionPropia } from "@/servidor/portal/consultas";
+import { abrirSesionVecino, cerrarSesionVecino, filtroVecino, normalizarCorreo, SESION_VENCIDA } from "@/servidor/portal/sesionVecino";
 
 export type Fallo = { ok: false; errores?: Errores; mensaje?: string };
 const fallo = (mensaje: string, errores?: Errores): Fallo => ({ ok: false, mensaje, errores });
@@ -91,7 +92,7 @@ export async function solicitarServicio(valores: unknown): Promise<ResultadoServ
       await tx.solicitudServicio.create({
         data: { codigo, personaId: persona.id, animalId: animal.id, servicioId: servicio.id, ...u.ids },
       });
-      await notificar(tx, persona, "Tu solicitud fue recibida", `Registramos tu solicitud de ${servicio.nombre.toLowerCase()} en el sector ${sector.nombre}. Tu código de seguimiento es ${codigo}.`);
+      await notificar(tx, persona, "Tu solicitud fue recibida", `Registramos tu solicitud de ${servicio.nombre.toLowerCase()} en el sector ${sector.nombre}. Puedes ver su estado en Mis solicitudes, entrando con tu correo.`);
     });
 
     const cercano = await operativoCercano(sector.id, servicio.id, u.localidad.id);
@@ -157,7 +158,7 @@ export async function solicitarCupo(valores: unknown): Promise<ResultadoCupo> {
         },
       });
       const detalle = dec.estado === "CONFIRMADO" ? "Tu cupo está confirmado" : `Quedaste en lista de espera, en el lugar ${dec.posicion}`;
-      await notificar(tx, persona, "Solicitud de cupo recibida", `${detalle} para ${capacidad.servicio.nombre.toLowerCase()} el ${fechaLarga(operativo.fecha)}. Tu código es ${codigo}. Te enviaremos un recordatorio 48 horas antes.`, operativo.loteDemoId);
+      await notificar(tx, persona, "Solicitud de cupo recibida", `${detalle} para ${capacidad.servicio.nombre.toLowerCase()} el ${fechaLarga(operativo.fecha)}. Te enviaremos un recordatorio 48 horas antes.`, operativo.loteDemoId);
       return dec;
     });
 
@@ -236,7 +237,7 @@ export async function reportarSituacion(entrada: unknown): Promise<ResultadoRepo
           historial: { create: { estado: "ABIERTO" } },
         },
       });
-      await notificar(tx, persona, "Tu reporte fue recibido", `Recibimos tu reporte de SOS Mascotas. El equipo municipal lo revisará en horario de atención. Tu código de seguimiento es ${codigo}.`);
+      await notificar(tx, persona, "Tu reporte fue recibido", "Recibimos tu reporte de SOS Mascotas. El equipo municipal lo revisará en horario de atención.");
     });
     return { ok: true, codigo };
   } catch (e) {
@@ -280,11 +281,11 @@ export async function informarNovedad(valores: unknown): Promise<ResultadoNoveda
           tx,
           c.persona,
           `Novedad sobre ${perro.apodo}`,
-          `Un vecino informó sobre ${perro.apodo}: ${TIPO_NOVEDAD[d.tipo]}. «${d.texto}» Revísala y márcala como vista en Mis solicitudes con tu RUT y el código ${c.codigo}.`,
+          `Un vecino informó sobre ${perro.apodo}: ${TIPO_NOVEDAD[d.tipo]}. «${d.texto}» Revísala y márcala como vista en Mis solicitudes, entrando con tu correo.`,
           perro.loteDemoId,
         );
       }
-      await notificar(tx, persona, "Recibimos tu novedad", `Le enviamos tu novedad sobre ${perro.apodo} a quien lo cuida. Tu código es ${codigo}.`, perro.loteDemoId);
+      await notificar(tx, persona, "Recibimos tu novedad", `Le enviamos tu novedad sobre ${perro.apodo} a quien lo cuida.`, perro.loteDemoId);
     });
     return { ok: true, codigo };
   } catch (e) {
@@ -378,7 +379,7 @@ export async function publicarMascota(entrada: unknown): Promise<ResultadoPublic
           vigenteHasta: new Date(Date.now() + 30 * 86_400_000),
         },
       });
-      await notificar(tx, persona, "Recibimos tu aviso", `Recibimos tu aviso. Tu código es ${codigo}. Lo publicaremos en el portal y en las redes sociales del municipio cuando lo revisemos, y te avisaremos si aparece una publicación que podría corresponder.`);
+      await notificar(tx, persona, "Recibimos tu aviso", `Recibimos tu aviso. Lo publicaremos en el portal y en las redes sociales del municipio cuando lo revisemos, y te avisaremos si aparece una publicación que podría corresponder.`);
       return { pub, persona };
     });
     guardado = true;
@@ -456,7 +457,7 @@ export async function enviarMensaje(valores: unknown): Promise<ResultadoMensaje>
       await tx.mensajeProtegido.create({
         data: { publicacionId: pub.id, remitenteNombre: d.nombre, remitenteContacto: d.correo || d.telefono, texto: d.texto },
       });
-      await notificar(tx, pub.persona, "Recibiste un mensaje sobre tu publicación", `Una persona te escribió sobre tu publicación ${pub.codigo}. Puedes leer el mensaje y responder a través de la plataforma.`, pub.loteDemoId);
+      await notificar(tx, pub.persona, "Recibiste un mensaje sobre tu publicación", "Una persona te escribió sobre tu publicación. Puedes leer el mensaje y responder a través de la plataforma.", pub.loteDemoId);
     });
     return { ok: true };
   } catch (e) {
@@ -515,16 +516,16 @@ export async function postularAdopcion(valores: unknown): Promise<ResultadoPostu
         },
       });
       const quien = ficha.proponente ? "Quien lo da en adopción revisará tu postulación" : "La revisaremos y te contactaremos";
-      await notificar(tx, persona, "Recibimos tu postulación", `Recibimos tu postulación para adoptar a ${ficha.animal.nombre ?? "este animal"}. ${quien}. Tu código es ${codigo}.`, ficha.loteDemoId);
+      await notificar(tx, persona, "Recibimos tu postulación", `Recibimos tu postulación para adoptar a ${ficha.animal.nombre ?? "este animal"}. ${quien}. Puedes ver su estado en Mis solicitudes, entrando con tu correo.`, ficha.loteDemoId);
       // La postulación le llega a quien propuso: la revisa y decide en Mis solicitudes.
       if (ficha.proponente) {
-        await notificar(tx, ficha.proponente, "Alguien postuló para adoptar", `Recibiste una postulación para ${ficha.animal.nombre ?? "el animal que diste en adopción"}. Revísala y decide en Mis solicitudes con tu RUT y el código ${ficha.codigo}.`, ficha.loteDemoId);
+        await notificar(tx, ficha.proponente, "Alguien postuló para adoptar", `Recibiste una postulación para ${ficha.animal.nombre ?? "el animal que diste en adopción"}. Revísala y decide en Mis solicitudes, entrando con tu correo.`, ficha.loteDemoId);
       }
     });
     return { ok: true, codigo, nombre: ficha.animal.nombre ?? "este animal" };
   } catch (e) {
     if (e instanceof PostulacionRepetida) {
-      return fallo(e.codigo ? `Ya postulaste a este animal con tu RUT. Puedes revisar el estado con el código ${e.codigo}.` : "Ya postulaste a este animal con tu RUT.");
+      return fallo("Ya postulaste a este animal. Revisa su estado en Mis solicitudes, entrando con tu correo.");
     }
     console.error(e);
     return fallo(ERROR_GENERAL);
@@ -568,9 +569,10 @@ export async function proponerAdopcion(entrada: unknown): Promise<ResultadoPropu
   const rut = normalizarRut(d.rut)!;
   if (fotos.length > MAXIMO_FOTOS) return fallo(REVISE, { fotos: `Puedes enviar hasta ${MAXIMO_FOTOS} fotos.` });
 
-  const anterior = d.corregir
-    ? await db.fichaAdopcion.findFirst({ where: { codigo: d.corregir, proponente: { municipioId: municipio.id, rut } } })
-    : null;
+  // Corregir una propuesta: solo desde Mis solicitudes, con la sesión de quien la hizo.
+  const filtro = d.corregir ? await filtroVecino() : null;
+  if (d.corregir && !filtro) return fallo(SESION_VENCIDA);
+  const anterior = d.corregir && filtro ? await db.fichaAdopcion.findFirst({ where: { codigo: d.corregir, proponente: filtro } }) : null;
   if (d.corregir && !anterior) return fallo(NO_ENCONTRADO);
   if (anterior && anterior.revision !== "CORRECCIONES") return fallo("Esta propuesta ya no espera correcciones. Revisa su estado en Mis solicitudes.");
   if (!anterior && fotos.length === 0) return fallo(REVISE, { fotos: "Agrega al menos una foto del animal." });
@@ -603,7 +605,7 @@ export async function proponerAdopcion(entrada: unknown): Promise<ResultadoPropu
       const repetida = propias.find((p) => p.animal.nombre && normalizarNombre(p.animal.nombre) === normalizarNombre(d.nombreAnimal));
       if (repetida) {
         await descartar();
-        return fallo(`Ya propusiste a ${d.nombreAnimal} para adopción${repetida.codigo ? ` con el código ${repetida.codigo}` : ""}. Revisa su estado en Mis solicitudes.`);
+        return fallo(`Ya propusiste a ${d.nombreAnimal} para adopción. Revisa su estado en Mis solicitudes.`);
       }
     }
 
@@ -646,7 +648,7 @@ export async function proponerAdopcion(entrada: unknown): Promise<ResultadoPropu
         tx,
         persona,
         anterior ? "Recibimos tu propuesta corregida" : "Recibimos tu propuesta de adopción",
-        `El equipo municipal revisará tu propuesta antes de publicarla. Tu código de seguimiento es ${codigo}.`,
+        "El equipo municipal revisará tu propuesta antes de publicarla. Puedes ver su estado en Mis solicitudes, entrando con tu correo.",
       );
     });
     // Las fotos reemplazadas en una corrección ya no se usan.
@@ -664,18 +666,18 @@ export type PropuestaParaCorregir =
   | { ok: false; mensaje: string };
 
 const esquemaGestionPropuesta = z.object({
-  rut: z.string(),
   codigo: z.string().trim().toUpperCase().regex(FORMATO_CODIGO),
   accion: z.enum(["encontro_hogar", "retirar"]),
 });
 
-/** Con RUT + código, los datos de una propuesta devuelta con correcciones, para editarla. */
+/** Con la sesión de quien la hizo, los datos de una propuesta devuelta con correcciones, para editarla. */
 export async function propuestaParaCorregir(valores: unknown): Promise<PropuestaParaCorregir> {
-  const r = esquemaGestionPropuesta.pick({ rut: true, codigo: true }).safeParse(valores);
-  const rut = r.success ? normalizarRut(r.data.rut) : null;
-  if (!r.success || !rut) return { ok: false, mensaje: NO_ENCONTRADO };
+  const filtro = await filtroVecino();
+  if (!filtro) return { ok: false, mensaje: SESION_VENCIDA };
+  const r = esquemaGestionPropuesta.pick({ codigo: true }).safeParse(valores);
+  if (!r.success) return { ok: false, mensaje: NO_ENCONTRADO };
   const f = await db.fichaAdopcion.findFirst({
-    where: { codigo: r.data.codigo, proponente: { municipioId: municipioActivo().id, rut } },
+    where: { codigo: r.data.codigo, proponente: filtro },
     include: { animal: true, proponente: true },
   });
   if (!f || !f.proponente) return { ok: false, mensaje: NO_ENCONTRADO };
@@ -700,7 +702,7 @@ export async function propuestaParaCorregir(valores: unknown): Promise<Propuesta
       relacion: f.relacion ?? "",
       autoriza: "",
       nombre: f.proponente.nombre,
-      rut: r.data.rut,
+      rut: f.proponente.rut ?? "",
       telefono: f.proponente.telefono ?? "",
       correo: f.proponente.correo ?? "",
       localidadId: f.localidadId ?? "",
@@ -714,11 +716,12 @@ export async function propuestaParaCorregir(valores: unknown): Promise<Propuesta
  * curso (postulación aprobada), debe coordinarlo con el municipio.
  */
 export async function gestionarPropuesta(valores: unknown): Promise<{ ok: boolean; mensaje: string }> {
+  const filtro = await filtroVecino();
+  if (!filtro) return { ok: false, mensaje: SESION_VENCIDA };
   const r = esquemaGestionPropuesta.safeParse(valores);
-  const rut = r.success ? normalizarRut(r.data.rut) : null;
-  if (!r.success || !rut) return { ok: false, mensaje: NO_ENCONTRADO };
+  if (!r.success) return { ok: false, mensaje: NO_ENCONTRADO };
   try {
-    const f = await db.fichaAdopcion.findFirst({ where: { codigo: r.data.codigo, proponente: { municipioId: municipioActivo().id, rut } } });
+    const f = await db.fichaAdopcion.findFirst({ where: { codigo: r.data.codigo, proponente: filtro } });
     if (!f) return { ok: false, mensaje: NO_ENCONTRADO };
     if (f.estado === "EN_PROCESO") return { ok: false, mensaje: "Elegiste a una persona para la adopción. Primero indica en las postulaciones si se concretó o no." };
     const cambio = await db.fichaAdopcion.updateMany({
@@ -736,7 +739,7 @@ export async function gestionarPropuesta(valores: unknown): Promise<{ ok: boolea
 }
 
 // ───────────── Postulaciones a un animal propuesto por un vecino ─────────────
-// Las decide quien lo propuso (con su RUT y el código de la propuesta), no el
+// Las decide quien lo propuso (desde Mis solicitudes, con su sesión), no el
 // municipio. Los contactos solo se comparten al elegir a una persona, que lo
 // aceptó al postular.
 
@@ -755,14 +758,14 @@ export type PostulacionRecibida = {
   contacto: string | null;
 };
 
-const esquemaPropia = z.object({ rut: z.string(), codigo: z.string().trim().toUpperCase().regex(FORMATO_CODIGO) });
+const esquemaPropia = z.object({ codigo: z.string().trim().toUpperCase().regex(FORMATO_CODIGO) });
 
 async function propuestaPropia(valores: unknown) {
+  const filtro = await filtroVecino();
   const r = esquemaPropia.safeParse(valores);
-  const rut = r.success ? normalizarRut(r.data.rut) : null;
-  if (!r.success || !rut) return null;
+  if (!filtro || !r.success) return null;
   return db.fichaAdopcion.findFirst({
-    where: { codigo: r.data.codigo, proponente: { municipioId: municipioActivo().id, rut } },
+    where: { codigo: r.data.codigo, proponente: filtro },
     include: { animal: true, proponente: true },
   });
 }
@@ -885,28 +888,29 @@ export type ResultadoConsulta = { ok: true; tramites: Tramite[]; avisos: AvisoPe
 /** Un aviso de la contraparte que todavía se puede cerrar junto con el propio. */
 const CONTRAPARTE_ABIERTA = { estado: "ABIERTA" as const, moderacion: { not: "OCULTA" as const } };
 
-const NO_ENCONTRADO = "No encontramos un trámite con ese RUT y código. Revisa que estén escritos tal como los recibiste.";
+const NO_ENCONTRADO = "No encontramos ese trámite entre los tuyos. Vuelve a entrar a Mis solicitudes para ver su estado.";
 
 /** Un cupo se puede cancelar mientras esté vigente y el operativo no haya comenzado. */
 function cupoCancelable(c: { estado: string; operativo: { estado: string; fecha: Date } }) {
   return (CUPO_VIGENTE as readonly string[]).includes(c.estado) && ["PUBLICADO", "INSCRIPCIONES_CERRADAS"].includes(c.operativo.estado) && c.operativo.fecha >= inicioDeHoy();
 }
 
-const esquemaCancelarCupo = z.object({ rut: z.string().trim().min(1), codigo: z.string().trim().toUpperCase().regex(FORMATO_CODIGO) });
+const esquemaCancelarCupo = z.object({ codigo: z.string().trim().toUpperCase().regex(FORMATO_CODIGO) });
 
 /**
- * La persona cancela su propio cupo (con su RUT y el código del cupo). El
+ * La persona cancela su propio cupo (desde Mis solicitudes, con su sesión). El
  * lugar se libera y pasa a la primera persona de la lista de espera; si venía
  * de una solicitud de servicio, esta vuelve a contar como necesidad.
  */
 export async function cancelarMiCupo(valores: unknown): Promise<{ ok: boolean; mensaje: string }> {
+  const filtro = await filtroVecino();
+  if (!filtro) return { ok: false, mensaje: SESION_VENCIDA };
   const r = esquemaCancelarCupo.safeParse(valores);
-  const rut = r.success ? normalizarRut(r.data.rut) : null;
-  if (!r.success || !rut) return { ok: false, mensaje: NO_ENCONTRADO };
+  if (!r.success) return { ok: false, mensaje: NO_ENCONTRADO };
   try {
-    const persona = await db.persona.findUnique({ where: { municipioId_rut: { municipioId: municipioActivo().id, rut } } });
-    const c = persona ? await db.cupo.findFirst({ where: { codigo: r.data.codigo, personaId: persona.id }, include: { operativo: true, servicio: true } }) : null;
-    if (!persona || !c) return { ok: false, mensaje: NO_ENCONTRADO };
+    const c = await db.cupo.findFirst({ where: { codigo: r.data.codigo, persona: filtro }, include: { operativo: true, servicio: true, persona: true } });
+    if (!c) return { ok: false, mensaje: NO_ENCONTRADO };
+    const persona = c.persona;
     if (!cupoCancelable(c)) return { ok: false, mensaje: "Este cupo ya no se puede cancelar desde aquí. Si necesitas ayuda, comunícate con el municipio." };
     const enEspera = c.estado === "EN_LISTA_ESPERA";
     await db.$transaction(
@@ -919,7 +923,7 @@ export async function cancelarMiCupo(valores: unknown): Promise<{ ok: boolean; m
         // Quienes siguen en espera avanzan un lugar: la lista queda numerada desde 1.
         const espera = await tx.cupo.findMany({ where: { operativoId: c.operativoId, servicioId: c.servicioId, estado: "EN_LISTA_ESPERA" }, orderBy: [{ posicionEspera: "asc" }, { creadoEn: "asc" }], select: { id: true } });
         for (const [i, e] of espera.entries()) await tx.cupo.update({ where: { id: e.id }, data: { posicionEspera: i + 1 } });
-        await notificar(tx, persona, enEspera ? "Saliste de la lista de espera" : "Cancelamos tu cupo", `${enEspera ? "Saliste de la lista de espera" : "Cancelamos tu cupo"} de ${c.servicio.nombre.toLowerCase()} (${c.codigo}). Gracias por avisar.`, c.loteDemoId);
+        await notificar(tx, persona, enEspera ? "Saliste de la lista de espera" : "Cancelamos tu cupo", `${enEspera ? "Saliste de la lista de espera" : "Cancelamos tu cupo"} de ${c.servicio.nombre.toLowerCase()}. Gracias por avisar.`, c.loteDemoId);
       },
       { timeout: 30_000 },
     );
@@ -932,61 +936,60 @@ export async function cancelarMiCupo(valores: unknown): Promise<{ ok: boolean; m
   }
 }
 
-/** Con RUT + un código válido, muestra todos los trámites de esa persona. */
-export async function consultarSolicitudes(valores: unknown): Promise<ResultadoConsulta> {
-  const r = esquemaConsulta.safeParse(valores);
-  if (!r.success) return fallo(REVISE, validarCampos(esquemaConsulta, valores));
-  const rut = normalizarRut(r.data.rut)!;
-  const codigo = r.data.codigo;
-  const municipio = municipioActivo();
+/**
+ * Los trámites de quien tiene la sesión abierta (entró con el código enviado a
+ * su correo). Sin sesión, `sinSesion`: la página pide entrar.
+ */
+export async function misSolicitudes(): Promise<ResultadoConsulta | { ok: false; sinSesion: true }> {
+  const filtro = await filtroVecino();
+  if (!filtro) return { ok: false, sinSesion: true };
+  return tramitesDe(await db.persona.findMany({ where: filtro, select: { id: true, correo: true, telefono: true } }));
+}
 
-  const persona = await db.persona.findUnique({ where: { municipioId_rut: { municipioId: municipio.id, rut } } });
-  if (!persona) return fallo(NO_ENCONTRADO);
-  return tramitesDe(persona, codigo);
+/** Cierra la sesión de Mis solicitudes en este navegador. */
+export async function salirDeMisSolicitudes(): Promise<void> {
+  await cerrarSesionVecino();
 }
 
 /**
- * Todos los trámites de una persona ya identificada. Con `codigo`, además
- * comprueba que ese código sea suyo (entrada con código de trámite); con null,
- * la identidad ya se comprobó con el código enviado a su correo.
+ * Todos los trámites de las personas registradas con un mismo correo (cada
+ * trámite pudo crear su propia persona, con o sin RUT).
  */
-async function tramitesDe(persona: { id: string; correo: string | null; telefono: string | null }, codigo: string | null): Promise<ResultadoConsulta> {
+async function tramitesDe(personas: { id: string; correo: string | null; telefono: string | null }[]): Promise<ResultadoConsulta> {
+  const ids = { in: personas.map((p) => p.id) };
   // Antes de mostrar, se vencen las invitaciones sin respuesta de los operativos donde la persona tiene una.
-  for (const { operativoId } of await db.invitacionOperativo.findMany({ where: { personaId: persona.id, estado: "ENVIADA", venceEn: { lt: new Date() } }, select: { operativoId: true }, distinct: ["operativoId"] })) {
+  for (const { operativoId } of await db.invitacionOperativo.findMany({ where: { personaId: ids, estado: "ENVIADA", venceEn: { lt: new Date() } }, select: { operativoId: true }, distinct: ["operativoId"] })) {
     await db.$transaction((tx) => procesarOperativo(tx, operativoId), { timeout: 30_000 });
   }
   const [solicitudes, cupos, reportes, publicaciones, postulaciones, propuestas, novedades, invitaciones, cuidados, avisos] = await Promise.all([
-    db.solicitudServicio.findMany({ where: { personaId: persona.id }, include: { servicio: true, sector: true, animal: true } }),
-    db.cupo.findMany({ where: { personaId: persona.id }, include: { servicio: true, operativo: { include: { sector: true } } } }),
-    db.reporteCiudadano.findMany({ where: { personaId: persona.id }, include: { sector: true, tipo: true, historial: { orderBy: { creadoEn: "asc" } } } }),
+    db.solicitudServicio.findMany({ where: { personaId: ids }, include: { servicio: true, sector: true, animal: true } }),
+    db.cupo.findMany({ where: { personaId: ids }, include: { servicio: true, operativo: { include: { sector: true } } } }),
+    db.reporteCiudadano.findMany({ where: { personaId: ids }, include: { sector: true, tipo: true, historial: { orderBy: { creadoEn: "asc" } } } }),
     db.publicacionMascota.findMany({
-      where: { personaId: persona.id },
+      where: { personaId: ids },
       include: {
         sector: true,
         coincidenciasPerdida: { where: { estado: { not: "DESCARTADA" }, encontrada: CONTRAPARTE_ABIERTA }, include: { encontrada: { include: { sector: true } } } },
         coincidenciasEncontrada: { where: { estado: { not: "DESCARTADA" }, perdida: CONTRAPARTE_ABIERTA }, include: { perdida: { include: { sector: true } } } },
       },
     }),
-    db.postulacionAdopcion.findMany({ where: { personaId: persona.id }, include: { ficha: { include: { animal: true, proponente: true } } } }),
-    db.fichaAdopcion.findMany({ where: { proponenteId: persona.id }, include: { animal: true, sector: true, _count: { select: { postulaciones: true } } } }),
-    db.novedadComunitario.findMany({ where: { personaId: persona.id }, include: { perro: { include: { animal: true } } } }),
-    db.invitacionOperativo.findMany({ where: { personaId: persona.id }, include: { servicio: true, cupo: true, operativo: { include: { sector: true, lugar: true } } } }),
+    db.postulacionAdopcion.findMany({ where: { personaId: ids }, include: { ficha: { include: { animal: true, proponente: true } } } }),
+    db.fichaAdopcion.findMany({ where: { proponenteId: ids }, include: { animal: true, sector: true, _count: { select: { postulaciones: true } } } }),
+    db.novedadComunitario.findMany({ where: { personaId: ids }, include: { perro: { include: { animal: true } } } }),
+    db.invitacionOperativo.findMany({ where: { personaId: ids }, include: { servicio: true, cupo: true, operativo: { include: { sector: true, lugar: true } } } }),
     db.cuidadorAutorizado.findMany({
-      where: { personaId: persona.id, activo: true },
+      where: { personaId: ids, activo: true },
       include: { perro: { include: { lugar: true, novedades: { where: { estado: "PENDIENTE", cuidadorId: null }, orderBy: { creadaEn: "desc" } } } } },
     }),
     // Notificaciones internas: las que se registraron a su contacto.
     db.notificacion.findMany({
-      where: { destinatario: { in: [persona.correo, persona.telefono].filter((x): x is string => Boolean(x)) } },
+      where: { destinatario: { in: [...new Set(personas.flatMap((p) => [p.correo, p.telefono]).filter((x): x is string => Boolean(x)))] } },
       orderBy: { creadaEn: "desc" },
       take: 8,
     }),
   ]);
   const describir = (o: { tipo: "PERDIDA" | "ENCONTRADA"; especie: string; colorPrincipal: string; sector: { nombre: string }; creadaEn: Date }) =>
     `Aviso de mascota ${TIPO_PUBLICACION[o.tipo].toLowerCase()}: ${ESPECIE[o.especie].toLowerCase()} ${o.colorPrincipal} · ${o.sector.nombre} · ${fechaCorta(o.creadaEn)}`;
-
-  const codigos = [solicitudes, cupos, reportes, publicaciones, postulaciones, propuestas, novedades, invitaciones, cuidados].flat().map((t) => t.codigo);
-  if (codigo !== null && !codigos.includes(codigo)) return fallo(NO_ENCONTRADO);
 
   const tramites: (Tramite & { orden: number })[] = [
     ...solicitudes.map((s) => ({
@@ -1166,7 +1169,7 @@ function notaInvitacion(i: { estado: string; venceEn: Date; motivoCierre: string
     case "INTERESADA":
       return `Confirmaste tu interés. Te asignaremos el cupo apenas haya uno disponible; te avisaremos.${condiciones}`;
     case "ASIGNADA":
-      return `Tu cupo quedó asignado${i.cupo ? ` con el código ${i.cupo.codigo}` : ""}.${condiciones}`;
+      return `Tu cupo quedó asignado.${condiciones}`;
     case "RECHAZADA":
       return "Nos indicaste que no podrás asistir. Tu solicitud sigue registrada para un próximo operativo.";
     case "VENCIDA":
@@ -1179,23 +1182,23 @@ function notaInvitacion(i: { estado: string; venceEn: Date; motivoCierre: string
 // ───────────── Responder una invitación prioritaria ─────────────
 
 const esquemaRespuestaInvitacion = z.object({
-  rut: z.string(),
   codigo: z.string().trim().toUpperCase().regex(FORMATO_CODIGO),
   accion: z.enum(["interes", "rechazo"]),
 });
 
 /**
- * Con RUT + código de la invitación: «Me interesa» (el sistema asigna el cupo
+ * Desde Mis solicitudes, con su sesión: «Me interesa» (el sistema asigna el cupo
  * si hay disponibilidad; si no, queda esperando) o «No podré asistir» (su
  * solicitud vuelve a la demanda pendiente y se invita a la siguiente persona).
  */
 export async function responderInvitacion(valores: unknown): Promise<{ ok: boolean; mensaje: string }> {
+  const filtro = await filtroVecino();
+  if (!filtro) return { ok: false, mensaje: SESION_VENCIDA };
   const r = esquemaRespuestaInvitacion.safeParse(valores);
-  const rut = r.success ? normalizarRut(r.data.rut) : null;
-  if (!r.success || !rut) return { ok: false, mensaje: NO_ENCONTRADO };
+  if (!r.success) return { ok: false, mensaje: NO_ENCONTRADO };
   const ahora = new Date();
   try {
-    const i = await db.invitacionOperativo.findFirst({ where: { codigo: r.data.codigo, persona: { municipioId: municipioActivo().id, rut } } });
+    const i = await db.invitacionOperativo.findFirst({ where: { codigo: r.data.codigo, persona: filtro } });
     if (!i) return { ok: false, mensaje: NO_ENCONTRADO };
     const mensaje = await db.$transaction(async (tx) => {
       // Si venció mientras tanto, se procesa el vencimiento y ya no se puede responder.
@@ -1216,7 +1219,7 @@ export async function responderInvitacion(valores: unknown): Promise<{ ok: boole
       await asignarInteresadas(tx, i.operativoId, ahora);
       const despues = await tx.invitacionOperativo.findUniqueOrThrow({ where: { id: i.id }, include: { cupo: true } });
       return despues.estado === "ASIGNADA"
-        ? `¡Listo! Te asignamos el cupo. Tu código de cupo es ${despues.cupo?.codigo}.`
+        ? "¡Listo! Te asignamos el cupo. Te enviamos los detalles por correo."
         : "Registramos tu interés. Aún no hay un cupo disponible para asignarte: te avisaremos apenas lo haya.";
     }, { timeout: 30_000 });
     if (!mensaje) return { ok: false, mensaje: "Esta invitación ya no se puede responder. Consulta nuevamente para ver su estado." };
@@ -1239,7 +1242,6 @@ function notaReporte(estado: string, desde: Date | null | undefined): string {
 // ───────────── Cierre y vigencia de un aviso propio ─────────────
 
 const esquemaGestionAviso = z.object({
-  rut: z.string(),
   codigo: z.string().trim().toUpperCase().regex(FORMATO_CODIGO),
   accion: z.enum(["confirmar", "reencontrada", "no_aplica"]),
   porCoincidencia: z.enum(["SI", "NO", ""]).default(""),
@@ -1248,19 +1250,19 @@ const esquemaGestionAviso = z.object({
 });
 
 /**
- * Con RUT + código del aviso (sección 6, pasos 5 y 6): confirmar que sigue
+ * Desde Mis solicitudes, con su sesión (sección 6, pasos 5 y 6): confirmar que sigue
  * vigente, marcarlo Reencontrada (registrando si vino de una coincidencia
  * sugerida) o Ya no aplica. Si la persona indica la coincidencia que la
  * ayudó, también se cierra el aviso de la otra persona y se le avisa.
  */
 export async function gestionarAviso(valores: unknown): Promise<{ ok: boolean; mensaje: string }> {
+  const filtro = await filtroVecino();
+  if (!filtro) return { ok: false, mensaje: SESION_VENCIDA };
   const r = esquemaGestionAviso.safeParse(valores);
-  const rut = r.success ? normalizarRut(r.data.rut) : null;
-  if (!r.success || !rut) return { ok: false, mensaje: NO_ENCONTRADO };
+  if (!r.success) return { ok: false, mensaje: NO_ENCONTRADO };
   const d = r.data;
   try {
-    const persona = await db.persona.findUnique({ where: { municipioId_rut: { municipioId: municipioActivo().id, rut } } });
-    const p = persona ? await db.publicacionMascota.findFirst({ where: { codigo: d.codigo, personaId: persona.id } }) : null;
+    const p = await db.publicacionMascota.findFirst({ where: { codigo: d.codigo, persona: filtro } });
     if (!p) return { ok: false, mensaje: NO_ENCONTRADO };
     if (p.estado !== "ABIERTA") return { ok: false, mensaje: "Este aviso ya no está vigente." };
     const ahora = new Date();
@@ -1296,7 +1298,7 @@ export async function gestionarAviso(valores: unknown): Promise<{ ok: boolean; m
           tx,
           otra.persona,
           "La mascota volvió a casa",
-          `La otra persona confirmó el reencuentro, así que retiramos también tu aviso${otra.codigo ? ` ${otra.codigo}` : ""}. Gracias por ayudar. Si no corresponde, escríbenos.`,
+          "La otra persona confirmó el reencuentro, así que retiramos también tu aviso. Gracias por ayudar. Si no corresponde, escríbenos.",
           otra.loteDemoId,
         );
       });
@@ -1325,46 +1327,42 @@ export async function gestionarAviso(valores: unknown): Promise<{ ok: boolean; m
 
 const MINUTOS_CODIGO = 10;
 const INTENTOS_CODIGO = 5;
-/** Códigos que se pueden pedir por persona en 15 minutos (evita llenar el correo de alguien). */
+/** Códigos que se pueden pedir por correo en 15 minutos (evita llenar el correo de alguien). */
 const MAXIMO_PEDIDOS = 3;
 
 const huellaCodigo = (personaId: string, codigo: string) => createHash("sha256").update(`${process.env.SESION_SECRETO ?? ""}:${personaId}:${codigo}`).digest("hex");
 
-/** «mi****@gmail.com»: pista del correo al que se envió, sin mostrarlo entero. */
-function pistaCorreo(correo: string) {
-  const [usuario, dominio] = correo.split("@");
-  return `${usuario.slice(0, 2)}${"*".repeat(Math.max(2, usuario.length - 2))}@${dominio}`;
-}
+const MENSAJE_ENVIADO = "Si ese correo está en alguno de tus trámites, te enviamos un código de 6 dígitos. Revisa tu bandeja de entrada y la carpeta de spam; vence en 10 minutos.";
 
-const MENSAJE_ENVIADO = "Si tu RUT tiene un correo registrado en algún trámite, te enviamos un código de 6 dígitos. Revisa tu bandeja de entrada y la carpeta de spam; vence en 10 minutos.";
+const esquemaCorreoAcceso = z.object({ correo: z.string().trim().refine(correoValido, "Revisa el correo; por ejemplo, nombre@correo.cl.") });
 
-export type ResultadoPedirCodigo = { ok: true; mensaje: string; pista?: string; codigoPrueba?: string } | { ok: false; mensaje: string; errores?: Errores };
+/** La primera persona registrada con ese correo: a ella se asocia el código. */
+const personaDelCorreo = (correo: string) => db.persona.findFirst({ where: { municipioId: municipioActivo().id, correo: normalizarCorreo(correo) }, orderBy: { creadaEn: "asc" } });
+
+export type ResultadoPedirCodigo = { ok: true; mensaje: string; codigoPrueba?: string } | { ok: false; mensaje: string; errores?: Errores };
 
 /**
- * Paso 1: la persona escribe su RUT y le enviamos un código al correo que dejó.
+ * Paso 1: la persona escribe su correo y le enviamos un código de un solo uso.
  * Sin envío configurado y fuera de producción, el código se muestra en pantalla
- * (modo de prueba); en producción sin envío, la opción no está disponible.
+ * (modo de prueba); en producción sin envío, no es posible entrar.
  */
 export async function pedirCodigoAcceso(valores: unknown): Promise<ResultadoPedirCodigo> {
-  const r = z.object({ rut: z.string().trim().min(1, "Escribe tu RUT.") }).safeParse(valores);
-  const rut = r.success ? normalizarRut(r.data.rut) : null;
-  if (!rut) return { ok: false, mensaje: REVISE, errores: { rut: "Revisa el RUT, por ejemplo 12.345.678-5." } };
+  const r = esquemaCorreoAcceso.safeParse(valores);
+  if (!r.success) return { ok: false, mensaje: REVISE, errores: { correo: "Revisa el correo; por ejemplo, nombre@correo.cl." } };
   const { estadoCorreo, enviarCorreo } = await import("@/servidor/correo");
   const correoListo = estadoCorreo().configurado;
   const prueba = !correoListo && process.env.NODE_ENV !== "production";
-  if (!correoListo && !prueba) return { ok: false, mensaje: "Por ahora no podemos enviar códigos por correo. Usa el código de uno de tus trámites." };
+  if (!correoListo && !prueba) return { ok: false, mensaje: "Por ahora no podemos enviar códigos por correo. Intenta más tarde." };
   try {
     const municipio = municipioActivo();
-    const persona = await db.persona.findUnique({ where: { municipioId_rut: { municipioId: municipio.id, rut } } });
-    // Misma respuesta exista o no el RUT, para no revelar quién tiene trámites.
+    const persona = await personaDelCorreo(r.data.correo);
+    // Misma respuesta exista o no el correo, para no revelar quién tiene trámites.
     if (!persona?.correo) return { ok: true, mensaje: MENSAJE_ENVIADO };
     const recientes = await db.codigoAcceso.count({ where: { personaId: persona.id, creadoEn: { gte: new Date(Date.now() - 15 * 60_000) } } });
     if (recientes >= MAXIMO_PEDIDOS) return { ok: true, mensaje: `${MENSAJE_ENVIADO} Si no te llega, espera unos minutos antes de pedir otro.` };
     const codigo = String(randomInt(0, 1_000_000)).padStart(6, "0");
     await db.codigoAcceso.create({ data: { personaId: persona.id, huella: huellaCodigo(persona.id, codigo), venceEn: new Date(Date.now() + MINUTOS_CODIGO * 60_000) } });
-    if (prueba) {
-      return { ok: true, mensaje: "Modo de prueba: el envío de correos no está configurado, así que te mostramos el código aquí.", pista: pistaCorreo(persona.correo), codigoPrueba: codigo };
-    }
+    if (prueba) return { ok: true, mensaje: "Modo de prueba: el envío de correos no está configurado, así que te mostramos el código aquí.", codigoPrueba: codigo };
     const envio = await enviarCorreo(
       {
         para: persona.correo,
@@ -1375,23 +1373,22 @@ export async function pedirCodigoAcceso(valores: unknown): Promise<ResultadoPedi
     );
     if (!envio.ok) {
       console.error("No se pudo enviar el código de acceso", envio.error);
-      return { ok: false, mensaje: "No pudimos enviar el correo. Intenta en unos minutos o usa el código de uno de tus trámites." };
+      return { ok: false, mensaje: "No pudimos enviar el correo. Intenta en unos minutos." };
     }
-    return { ok: true, mensaje: MENSAJE_ENVIADO, pista: pistaCorreo(persona.correo) };
+    return { ok: true, mensaje: MENSAJE_ENVIADO };
   } catch (e) {
     console.error(e);
     return { ok: false, mensaje: ERROR_GENERAL };
   }
 }
 
-/** Paso 2: con el RUT y el código recibido, muestra todos sus trámites. El código sirve una vez. */
+/** Paso 2: con el correo y el código recibido, abre la sesión y muestra sus trámites. El código sirve una vez. */
 export async function entrarConCodigoAcceso(valores: unknown): Promise<ResultadoConsulta> {
-  const r = z.object({ rut: z.string().trim().min(1), codigo: z.string().trim().regex(/^\d{6}$/, "Escribe los 6 dígitos del código.") }).safeParse(valores);
-  const rut = r.success ? normalizarRut(r.data.rut) : null;
-  if (!r.success || !rut) return fallo(REVISE, { codigoCorreo: "Escribe los 6 dígitos del código." });
+  const r = esquemaCorreoAcceso.extend({ codigo: z.string().trim().regex(/^\d{6}$/) }).safeParse(valores);
+  if (!r.success) return fallo(REVISE, { codigoCorreo: "Escribe los 6 dígitos del código." });
   const invalido = "El código no es válido o ya venció. Pide uno nuevo.";
   try {
-    const persona = await db.persona.findUnique({ where: { municipioId_rut: { municipioId: municipioActivo().id, rut } } });
+    const persona = await personaDelCorreo(r.data.correo);
     if (!persona) return fallo(invalido);
     const vigente = await db.codigoAcceso.findFirst({ where: { personaId: persona.id, usadoEn: null, venceEn: { gt: new Date() }, intentos: { lt: INTENTOS_CODIGO } }, orderBy: { creadoEn: "desc" } });
     if (!vigente) return fallo(invalido);
@@ -1404,7 +1401,8 @@ export async function entrarConCodigoAcceso(valores: unknown): Promise<Resultado
     // Un solo uso: si dos pestañas lo intentan a la vez, solo una entra.
     const usado = await db.codigoAcceso.updateMany({ where: { id: vigente.id, usadoEn: null }, data: { usadoEn: new Date() } });
     if (!usado.count) return fallo(invalido);
-    return tramitesDe(persona, null);
+    await abrirSesionVecino(r.data.correo);
+    return tramitesDe(await db.persona.findMany({ where: { municipioId: municipioActivo().id, correo: normalizarCorreo(r.data.correo) }, select: { id: true, correo: true, telefono: true } }));
   } catch (e) {
     console.error(e);
     return fallo(ERROR_GENERAL);

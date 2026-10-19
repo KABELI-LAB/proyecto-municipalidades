@@ -8,7 +8,7 @@ import { EtiquetaEstado } from "@/componentes/EtiquetaEstado";
 import { decidirPostulacion, gestionarPropuesta, postulacionesDePropuesta, type PostulacionRecibida } from "@/servidor/portal/acciones";
 import estilos from "./mis-solicitudes.module.css";
 
-type Props = { rut: string; codigo: string; corregir: boolean; cerrar: boolean; postulaciones: number; alTerminar: (mensaje: string) => void };
+type Props = { codigo: string; corregir: boolean; cerrar: boolean; postulaciones: number; alTerminar: (mensaje: string) => void };
 type Decision = "elegir" | "descartar" | "adoptado" | "no_concreto";
 
 const PREGUNTA: Record<Decision, (n: string) => string> = {
@@ -19,7 +19,7 @@ const PREGUNTA: Record<Decision, (n: string) => string> = {
 };
 const BOTON: Record<Decision, string> = { elegir: "Sí, elegir", descartar: "Sí, descartar", adoptado: "Sí, se concretó", no_concreto: "No se concretó" };
 
-export function GestionPropuesta({ rut, codigo, corregir, cerrar, postulaciones, alTerminar }: Props) {
+export function GestionPropuesta({ codigo, corregir, cerrar, postulaciones, alTerminar }: Props) {
   const [confirmar, setConfirmar] = useState<"encontro_hogar" | "retirar" | null>(null);
   const [lista, setLista] = useState<PostulacionRecibida[] | null>(null);
   const [decision, setDecision] = useState<{ id: string; nombre: string; accion: Decision } | null>(null);
@@ -28,25 +28,25 @@ export function GestionPropuesta({ rut, codigo, corregir, cerrar, postulaciones,
 
   const cargar = () =>
     iniciar(async () => {
-      const r = await postulacionesDePropuesta({ rut, codigo });
+      const r = await postulacionesDePropuesta({ codigo });
       if (r.ok) setLista(r.postulaciones);
       else setError(r.mensaje);
     });
 
   const cerrarPropuesta = (accion: "encontro_hogar" | "retirar") =>
     iniciar(async () => {
-      const r = await gestionarPropuesta({ rut, codigo, accion });
+      const r = await gestionarPropuesta({ codigo, accion });
       if (r.ok) alTerminar(r.mensaje);
       else setError(r.mensaje);
     });
 
   const decidir = (d: { id: string; accion: Decision }) =>
     iniciar(async () => {
-      const r = await decidirPostulacion({ rut, codigo, postulacionId: d.id, accion: d.accion });
+      const r = await decidirPostulacion({ codigo, postulacionId: d.id, accion: d.accion });
       setDecision(null);
       if (!r.ok) return setError(r.mensaje);
       setError(null);
-      const nueva = await postulacionesDePropuesta({ rut, codigo });
+      const nueva = await postulacionesDePropuesta({ codigo });
       if (nueva.ok) setLista(nueva.postulaciones);
       alTerminar(r.mensaje);
     });
@@ -72,8 +72,7 @@ export function GestionPropuesta({ rut, codigo, corregir, cerrar, postulaciones,
     <div className={estilos.gestion}>
       {error && <p role="alert">{error}</p>}
       <div className={estilos.botones}>
-        {/* El RUT nunca viaja en la dirección: se vuelve a pedir en la página de corrección. */}
-        {corregir && <EnlaceBoton href={`/adoptar/dar?corregir=${codigo}`}>Corregir la propuesta</EnlaceBoton>}
+                {corregir && <EnlaceBoton href={`/adoptar/dar?corregir=${codigo}`}>Corregir la propuesta</EnlaceBoton>}
         {postulaciones > 0 && lista === null && (
           <Boton onClick={cargar} disabled={enviando}>
             Ver postulaciones ({postulaciones})

@@ -12,7 +12,7 @@ import { crearBaseTemporal } from "@/pruebas/baseTemporal";
 const CORTE = "2026-10-06";
 vi.mock("next/cache", () => ({ revalidatePath: () => {} }));
 vi.mock("@/servidor/auth", () => ({ autorizar: async () => null }));
-const VECINO = { nombre: "Vecino que la vio", rut: "11.111.111-1", telefono: "912345678", correo: "" };
+const VECINO = { nombre: "Vecino que la vio", rut: "11.111.111-1", telefono: "912345678", correo: "vecino.vio@correo.cl" };
 
 let base: Awaited<ReturnType<typeof crearBaseTemporal>>;
 let db: typeof import("@/servidor/db").db;

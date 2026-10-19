@@ -83,7 +83,7 @@ export function FormularioPublicacion({ sectores, colores, hoy, minimo, tipoInic
   if (hecho) {
     const n = hecho.coincidencias.length;
     return (
-      <ResultadoTramite titulo="Recibimos tu aviso" codigo={hecho.codigo} conRut={!encontrada}>
+      <ResultadoTramite titulo="Recibimos tu aviso">
         {hecho.conFoto ? (
           <p>
             El equipo municipal lo revisará y, al aceptarlo, lo publicaremos en el portal y en las redes sociales del

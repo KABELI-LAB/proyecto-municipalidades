@@ -418,7 +418,7 @@ export async function enviarRecordatorios(operativoId: string): Promise<Respuest
   const cupos = await db.cupo.findMany({ where: { operativoId, estado: { in: ["CONFIRMADO", "INVITADO"] } }, include: { persona: true, servicio: true } });
   await db.$transaction(async (tx) => {
     for (const c of cupos) {
-      await notificar(tx, c.persona, "Recordatorio de operativo", `Te recordamos tu cupo de ${c.servicio.nombre.toLowerCase()} el ${fechaLarga(o.fecha)}, de ${o.horaInicio} a ${o.horaFin} horas, en ${o.lugar.nombre}. Si no puedes asistir, avísanos para liberar el cupo. Código ${c.codigo}.`, o.loteDemoId);
+      await notificar(tx, c.persona, "Recordatorio de operativo", `Te recordamos tu cupo de ${c.servicio.nombre.toLowerCase()} el ${fechaLarga(o.fecha)}, de ${o.horaInicio} a ${o.horaFin} horas, en ${o.lugar.nombre}. Si no puedes asistir, cancélalo en Mis solicitudes para liberar el cupo.`, o.loteDemoId);
     }
   });
   return { ok: true, mensaje: `Registramos ${cupos.length === 1 ? "1 recordatorio" : `${cupos.length} recordatorios`} (envío simulado en el prototipo).` };

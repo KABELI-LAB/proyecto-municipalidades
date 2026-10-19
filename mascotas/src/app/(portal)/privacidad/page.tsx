@@ -24,7 +24,7 @@ export default function Privacidad() {
 
         <h2>Qué datos pedimos</h2>
         <ul>
-          <li>Tu nombre y un teléfono o correo, para avisarte del estado de tu trámite.</li>
+          <li>Tu nombre y tu correo, para avisarte del estado de tu trámite y para que entres a Mis solicitudes. El teléfono es opcional.</li>
           <li>Tu RUT, solo en los trámites que lo requieren (por ejemplo, inscribirte en un operativo o publicar una mascota perdida).</li>
           <li>Tu localidad o sector. Nunca pedimos ni mostramos una dirección exacta.</li>
           <li>Los datos y fotos del animal que tú decidas publicar. Las fotos se guardan sin la información de ubicación del teléfono.</li>

@@ -5,6 +5,19 @@ import { crearBaseTemporal } from "@/pruebas/baseTemporal";
 
 const CORTE = "2026-10-06";
 vi.mock("next/cache", () => ({ revalidatePath: () => {} }));
+// La sesión vive en una cookie; fuera de una petición se simula en memoria.
+const vecino = vi.hoisted(() => ({ correo: null as string | null }));
+vi.mock("@/servidor/portal/sesionVecino", async (original) => {
+  const m = await original<typeof import("@/servidor/portal/sesionVecino")>();
+  const { municipioActivo } = await import("@/lib/municipio");
+  return {
+    ...m,
+    abrirSesionVecino: async (c: string) => { vecino.correo = m.normalizarCorreo(c); },
+    cerrarSesionVecino: async () => { vecino.correo = null; },
+    correoDeSesion: async () => vecino.correo,
+    filtroVecino: async () => (vecino.correo ? { municipioId: municipioActivo().id, correo: vecino.correo } : null),
+  };
+});
 
 let base: Awaited<ReturnType<typeof crearBaseTemporal>>;
 let db: typeof import("@/servidor/db").db;
@@ -84,47 +97,60 @@ describe("envío de correos", () => {
 });
 
 describe("entrar a Mis solicitudes con un código al correo", () => {
-  it("modo de prueba (sin envío, fuera de producción): muestra el código; entra una sola vez", async () => {
-    const r = await acciones.pedirCodigoAcceso({ rut: VECINA.rut });
-    expect(r).toMatchObject({ ok: true, pista: "ve****@ejemplo.cl" });
+  it("modo de prueba (sin envío, fuera de producción): muestra el código; entra una sola vez y abre la sesión", async () => {
+    const r = await acciones.pedirCodigoAcceso({ correo: "  Vecina@Ejemplo.CL " });
+    expect(r).toMatchObject({ ok: true });
     const codigo = r.ok ? r.codigoPrueba! : "";
     expect(codigo).toMatch(/^\d{6}$/);
     // En la base solo queda la huella, nunca el código.
     expect((await db.codigoAcceso.findFirstOrThrow()).huella).not.toContain(codigo);
-    const dentro = await acciones.entrarConCodigoAcceso({ rut: VECINA.rut, codigo });
+    expect(await acciones.misSolicitudes()).toMatchObject({ ok: false, sinSesion: true });
+    const dentro = await acciones.entrarConCodigoAcceso({ correo: VECINA.correo, codigo });
     expect(dentro.ok && dentro.tramites.map((t) => t.tipo)).toContain("Solicitud de servicio");
-    expect((await acciones.entrarConCodigoAcceso({ rut: VECINA.rut, codigo })).ok).toBe(false); // un solo uso
+    expect(vecino.correo).toBe(VECINA.correo);
+    const conSesion = await acciones.misSolicitudes();
+    expect(conSesion.ok && conSesion.tramites.map((t) => t.tipo)).toContain("Solicitud de servicio");
+    expect((await acciones.entrarConCodigoAcceso({ correo: VECINA.correo, codigo })).ok).toBe(false); // un solo uso
+    await acciones.salirDeMisSolicitudes();
+    expect(await acciones.misSolicitudes()).toMatchObject({ ok: false, sinSesion: true });
   });
 
-  it("un RUT sin correo recibe la misma respuesta (no revela si existe); con envío configurado el código sale por correo", async () => {
-    const sinCorreo = await acciones.pedirCodigoAcceso({ rut: "12.345.678-5" });
-    expect(sinCorreo).toMatchObject({ ok: true });
-    expect(sinCorreo.ok && sinCorreo.codigoPrueba).toBeFalsy();
+  it("un correo sin trámites recibe la misma respuesta (no revela si existe); con envío configurado el código sale por correo", async () => {
+    const sinTramites = await acciones.pedirCodigoAcceso({ correo: "nadie@ejemplo.cl" });
+    expect(sinTramites).toMatchObject({ ok: true });
+    expect(sinTramites.ok && sinTramites.codigoPrueba).toBeFalsy();
+    expect((await acciones.pedirCodigoAcceso({ correo: "no es un correo" })).ok).toBe(false);
     process.env.BREVO_API_KEY = "clave-de-prueba";
     process.env.CORREO_REMITENTE = "tenencia@ejemplo.cl";
     let asunto = "";
+    let para = "";
     vi.stubGlobal("fetch", async (_: string, init?: RequestInit) => {
-      asunto = JSON.parse(String(init?.body)).subject;
+      const cuerpo = JSON.parse(String(init?.body));
+      asunto = cuerpo.subject;
+      para = cuerpo.to?.[0]?.email;
       return new Response("{}", { status: 201 });
     });
     await db.codigoAcceso.deleteMany();
-    const r = await acciones.pedirCodigoAcceso({ rut: VECINA.rut });
-    expect(r).toMatchObject({ ok: true, pista: "ve****@ejemplo.cl" });
+    const r = await acciones.pedirCodigoAcceso({ correo: VECINA.correo });
+    expect(r).toMatchObject({ ok: true, mensaje: sinTramites.mensaje });
     expect(r.ok && r.codigoPrueba).toBeFalsy(); // con envío real, nunca en pantalla
+    expect(para).toBe(VECINA.correo);
     const codigo = asunto.match(/\d{6}/)![0];
-    expect((await acciones.entrarConCodigoAcceso({ rut: VECINA.rut, codigo })).ok).toBe(true);
+    expect((await acciones.entrarConCodigoAcceso({ correo: VECINA.correo, codigo })).ok).toBe(true);
   });
 
   it("a los 5 intentos fallidos el código deja de servir, y no se pueden pedir códigos sin límite", async () => {
     await db.codigoAcceso.deleteMany();
-    const r = await acciones.pedirCodigoAcceso({ rut: VECINA.rut });
+    vecino.correo = null;
+    const r = await acciones.pedirCodigoAcceso({ correo: VECINA.correo });
     const codigo = r.ok ? r.codigoPrueba! : "";
     const otro = codigo === "000000" ? "111111" : "000000";
-    for (let i = 0; i < 5; i++) expect((await acciones.entrarConCodigoAcceso({ rut: VECINA.rut, codigo: otro })).ok).toBe(false);
-    expect((await acciones.entrarConCodigoAcceso({ rut: VECINA.rut, codigo })).ok).toBe(false);
-    await acciones.pedirCodigoAcceso({ rut: VECINA.rut });
-    await acciones.pedirCodigoAcceso({ rut: VECINA.rut });
-    const cuarto = await acciones.pedirCodigoAcceso({ rut: VECINA.rut });
+    for (let i = 0; i < 5; i++) expect((await acciones.entrarConCodigoAcceso({ correo: VECINA.correo, codigo: otro })).ok).toBe(false);
+    expect((await acciones.entrarConCodigoAcceso({ correo: VECINA.correo, codigo })).ok).toBe(false);
+    expect(vecino.correo).toBeNull();
+    await acciones.pedirCodigoAcceso({ correo: VECINA.correo });
+    await acciones.pedirCodigoAcceso({ correo: VECINA.correo });
+    const cuarto = await acciones.pedirCodigoAcceso({ correo: VECINA.correo });
     expect(cuarto.ok && cuarto.codigoPrueba).toBeFalsy();
     expect(await db.codigoAcceso.count()).toBe(3);
   });

@@ -34,7 +34,7 @@ export function FormularioReporte({ sectores, tipos, tipoInicial = "" }: { secto
 
   if (codigo) {
     return (
-      <ResultadoTramite titulo="Recibimos tu reporte" codigo={codigo} conRut={false}>
+      <ResultadoTramite seguimiento={Boolean(v.correo)} titulo="Recibimos tu reporte">
         <p>El equipo municipal lo revisará en horario de atención.</p>
         <p>
           <b>No garantiza atención inmediata. Si hay peligro para una persona, llama a los servicios de emergencia.</b>
@@ -136,7 +136,7 @@ export function FormularioReporte({ sectores, tipos, tipoInicial = "" }: { secto
           />
           <h3 className={estilos.subtitulo}>Tus datos</h3>
           <p>Los usamos solo para darte seguimiento. Tu identidad no se comparte con otras personas.</p>
-          <BloquePersona valores={v} errores={errores} cambiar={cambiar} sectores={sectores} sinLocalidad rut="no" />
+          <BloquePersona valores={v} errores={errores} cambiar={cambiar} sectores={sectores} sinLocalidad rut="no" correoOpcional />
         </>
       )}
       {t.paso === 2 && (

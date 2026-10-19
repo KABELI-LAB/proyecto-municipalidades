@@ -1,6 +1,6 @@
 // Perros comunitarios a cargo de vecinos, sobre la demo cargada: un vecino
 // registra al perro (o se hace cargo de uno sin cuidador) y queda como su
-// cuidador; con su RUT y su código lo gestiona desde Mis solicitudes; las
+// cuidador; con su sesión (entra con su correo) lo gestiona desde Mis solicitudes; las
 // novedades de los vecinos le llegan a él. El municipio no interviene.
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -8,13 +8,28 @@ import { join } from "node:path";
 import sharp from "sharp";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { crearBaseTemporal } from "@/pruebas/baseTemporal";
+import { SESION_VENCIDA } from "./sesionVecino";
 
 const CORTE = "2026-10-06";
 vi.mock("next/cache", () => ({ revalidatePath: () => {} }));
+// La sesión de Mis solicitudes vive en una cookie; fuera de una petición se simula en memoria.
+const vecino = vi.hoisted(() => ({ correo: null as string | null }));
+vi.mock("@/servidor/portal/sesionVecino", async (original) => {
+  const m = await original<typeof import("@/servidor/portal/sesionVecino")>();
+  const { municipioActivo } = await import("@/lib/municipio");
+  return {
+    ...m,
+    abrirSesionVecino: async (c: string) => { vecino.correo = m.normalizarCorreo(c); },
+    cerrarSesionVecino: async () => { vecino.correo = null; },
+    correoDeSesion: async () => vecino.correo,
+    filtroVecino: async () => (vecino.correo ? { municipioId: municipioActivo().id, correo: vecino.correo } : null),
+  };
+});
 
+// Las novedades piden teléfono o correo; registrar o hacerse cargo exige correo.
 const VECINA = { nombre: "Vecina que avisa", rut: "", telefono: "912345678", correo: "" };
-const CUIDADORA = { nombre: "Cuidadora de la plaza", rut: "22.222.222-2", telefono: "987654321", correo: "" };
-const OTRO = { nombre: "Vecino de la sede", rut: "11.111.111-1", telefono: "911112222", correo: "" };
+const CUIDADORA = { nombre: "Cuidadora de la plaza", rut: "22.222.222-2", telefono: "987654321", correo: "cuidadora.plaza@correo.cl" };
+const OTRO = { nombre: "Vecino de la sede", rut: "17.654.321-3", telefono: "911112222", correo: "vecino.sede@correo.cl" };
 
 let base: Awaited<ReturnType<typeof crearBaseTemporal>>;
 let db: typeof import("@/servidor/db").db;
@@ -80,8 +95,9 @@ describe("un vecino registra y cuida a un perro comunitario", () => {
     expect((await GET(new Request("http://localhost/"), { params: Promise.resolve({ id: perro }) })).status).toBe(200);
   });
 
-  it("en Mis solicitudes, con su RUT y su código, aparece el perro a su cuidado", async () => {
-    const c = await portal.consultarSolicitudes({ rut: CUIDADORA.rut, codigo });
+  it("en Mis solicitudes, con su sesión, aparece el perro a su cuidado", async () => {
+    vecino.correo = CUIDADORA.correo;
+    const c = await portal.misSolicitudes();
     if (!c.ok) throw new Error("consulta");
     expect(c.tramites.find((t) => t.codigo === codigo)).toMatchObject({ tipo: "Perro comunitario a tu cuidado", comunitario: { id: perro, apodo: "el del puente" } });
   });
@@ -89,37 +105,57 @@ describe("un vecino registra y cuida a un perro comunitario", () => {
   it("la novedad de un vecino le llega al cuidador (sin el contacto del vecino) y la marca como vista", async () => {
     const r = await novedad(perro);
     expect(r.ok).toBe(true);
-    const aviso = await db.notificacion.findFirstOrThrow({ where: { destinatario: CUIDADORA.telefono, asunto: "Novedad sobre el del puente" } });
+    const aviso = await db.notificacion.findFirstOrThrow({ where: { destinatario: CUIDADORA.correo, asunto: "Novedad sobre el del puente" } });
     expect(aviso.contenido).toContain("Cojea de la pata trasera");
     expect(aviso.contenido).not.toContain(VECINA.telefono);
 
-    const c = await portal.consultarSolicitudes({ rut: CUIDADORA.rut, codigo });
+    vecino.correo = CUIDADORA.correo;
+    const c = await portal.misSolicitudes();
     const t = c.ok ? c.tramites.find((x) => x.codigo === codigo) : undefined;
     expect(t?.comunitario?.novedades).toHaveLength(1);
     const n = r.ok ? r.codigo : "";
-    expect((await comunidad.marcarNovedadVista({ rut: OTRO.rut, codigo, novedad: n })).ok).toBe(false); // otro RUT
-    expect((await comunidad.marcarNovedadVista({ rut: CUIDADORA.rut, codigo, novedad: n })).ok).toBe(true);
+    vecino.correo = null;
+    expect((await comunidad.marcarNovedadVista({ codigo, novedad: n })).ok).toBe(false); // sin sesión
+    vecino.correo = OTRO.correo;
+    expect((await comunidad.marcarNovedadVista({ codigo, novedad: n })).ok).toBe(false); // otra persona
+    vecino.correo = CUIDADORA.correo;
+    expect((await comunidad.marcarNovedadVista({ codigo, novedad: n })).ok).toBe(true);
     expect((await db.novedadComunitario.findUniqueOrThrow({ where: { codigo: n } })).estado).toBe("ACEPTADA");
     expect(await db.notificacion.count({ where: { destinatario: VECINA.telefono, asunto: "Tu novedad llegó" } })).toBe(1);
   });
 
-  it("su cuidador anota que lo vio y actualiza la ficha; con otro RUT no puede", async () => {
-    expect((await comunidad.registrarVistoHoy({ rut: OTRO.rut, codigo })).ok).toBe(false);
-    expect((await comunidad.registrarVistoHoy({ rut: CUIDADORA.rut, codigo })).ok).toBe(true);
+  it("su cuidador anota que lo vio y actualiza la ficha; con otra sesión no puede", async () => {
+    vecino.correo = null;
+    expect((await comunidad.registrarVistoHoy({ codigo })).ok).toBe(false);
+    vecino.correo = OTRO.correo;
+    expect((await comunidad.registrarVistoHoy({ codigo })).ok).toBe(false);
+    expect((await comunidad.fichaParaEditar({ codigo })).ok).toBe(false);
+    vecino.correo = CUIDADORA.correo;
+    expect((await comunidad.registrarVistoHoy({ codigo })).ok).toBe(true);
     expect((await consultas.seguimientoComunitario(perro))?.historial[0].texto).toBe("Revisado por su cuidador");
 
-    const lugar = (await db.perroComunitario.findUniqueOrThrow({ where: { id: perro } })).lugarId;
-    const r = await comunidad.actualizarFichaComunitario(formulario({ ...DATOS, lugarId: lugar, apodo: "el negro del puente", vacunas: "SI" }, undefined, { rut: CUIDADORA.rut, codigo }));
+    const ficha = await comunidad.fichaParaEditar({ codigo });
+    if (!ficha.ok) throw new Error(JSON.stringify(ficha));
+    expect(ficha.valores.apodo).toBe("el del puente");
+    const cambios = () => formulario({ ...ficha.valores, apodo: "el negro del puente", vacunas: "SI" }, undefined, { codigo });
+    vecino.correo = OTRO.correo;
+    expect((await comunidad.actualizarFichaComunitario(cambios())).ok).toBe(false);
+    vecino.correo = CUIDADORA.correo;
+    const r = await comunidad.actualizarFichaComunitario(cambios());
     expect(r.ok).toBe(true);
     const c = await db.perroComunitario.findUniqueOrThrow({ where: { id: perro }, include: { animal: true } });
     expect([c.apodo, c.animal.vacunasAlDia]).toEqual(["el negro del puente", true]);
   });
 
-  it("desde la ficha, su cuidador entra con su RUT y su código; con otro perro u otro RUT, no", async () => {
-    const r = await comunidad.entrarComoCuidador({ perroId: perro, rut: CUIDADORA.rut, codigo });
-    expect(r).toMatchObject({ ok: true, perro: { id: perro } });
-    expect((await comunidad.entrarComoCuidador({ perroId: SIN_CUIDADOR, rut: CUIDADORA.rut, codigo })).ok).toBe(false);
-    expect((await comunidad.entrarComoCuidador({ perroId: perro, rut: OTRO.rut, codigo })).ok).toBe(false);
+  it("desde la ficha, su cuidador entra con su sesión; con otro perro u otra sesión, no", async () => {
+    vecino.correo = null;
+    expect(await comunidad.entrarComoCuidador({ perroId: perro })).toEqual({ ok: false, mensaje: SESION_VENCIDA, sinSesion: true });
+    vecino.correo = CUIDADORA.correo;
+    const r = await comunidad.entrarComoCuidador({ perroId: perro });
+    expect(r).toMatchObject({ ok: true, perro: { id: perro }, codigo });
+    expect((await comunidad.entrarComoCuidador({ perroId: SIN_CUIDADOR })).ok).toBe(false);
+    vecino.correo = OTRO.correo;
+    expect((await comunidad.entrarComoCuidador({ perroId: perro })).ok).toBe(false);
   });
 
   it("un vecino no puede informar una atención", async () => {
@@ -137,7 +173,8 @@ describe("perros sin un vecino a cargo", () => {
     const r = await comunidad.hacermeCargo({ perroId: SIN_CUIDADOR, ...OTRO });
     if (!r.ok) throw new Error(JSON.stringify(r));
     expect((await consultas.seguimientoComunitario(SIN_CUIDADOR))?.conCuidador).toBe(true);
-    expect((await comunidad.registrarVistoHoy({ rut: OTRO.rut, codigo: r.codigo })).ok).toBe(true);
+    vecino.correo = OTRO.correo;
+    expect((await comunidad.registrarVistoHoy({ codigo: r.codigo })).ok).toBe(true);
     expect((await comunidad.hacermeCargo({ perroId: SIN_CUIDADOR, ...CUIDADORA })).ok).toBe(false);
     expect((await novedad(SIN_CUIDADOR)).ok).toBe(true);
   });
@@ -145,7 +182,11 @@ describe("perros sin un vecino a cargo", () => {
 
 describe("dar de baja", () => {
   it("su cuidador lo da de baja cuando ya no está: deja de mostrarse", async () => {
-    expect((await comunidad.darDeBajaComunitario({ rut: CUIDADORA.rut, codigo })).ok).toBe(true);
+    vecino.correo = OTRO.correo;
+    expect((await comunidad.darDeBajaComunitario({ codigo })).ok).toBe(false);
+    expect(await consultas.perroComunitario(perro)).not.toBeNull();
+    vecino.correo = CUIDADORA.correo;
+    expect((await comunidad.darDeBajaComunitario({ codigo })).ok).toBe(true);
     expect(await consultas.perroComunitario(perro)).toBeNull();
     expect((await consultas.perrosComunitarios()).some((c) => c.id === perro)).toBe(false);
   });

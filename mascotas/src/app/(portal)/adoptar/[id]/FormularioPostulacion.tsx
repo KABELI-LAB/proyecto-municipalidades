@@ -28,7 +28,7 @@ export function FormularioPostulacion({ fichaId, nombre, convivencia, sectores, 
 
   if (codigo) {
     return (
-      <ResultadoTramite titulo="Recibimos tu postulación" codigo={codigo}>
+      <ResultadoTramite titulo="Recibimos tu postulación">
         {deVecino ? (
           <p>
             Le enviamos tu postulación a quien da en adopción a {nombre}. Si te elige, verás su contacto en Mis solicitudes y

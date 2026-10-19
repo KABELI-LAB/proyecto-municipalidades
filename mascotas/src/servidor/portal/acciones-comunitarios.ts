@@ -1,7 +1,7 @@
 "use server";
 // Perros comunitarios a cargo de vecinos (docs/concepto.md): un vecino registra
-// al perro, o se hace cargo de uno sin cuidador, y queda como su cuidador; con
-// su RUT y su código lo gestiona desde Mis solicitudes. El municipio no
+// al perro, o se hace cargo de uno sin cuidador, y queda como su cuidador; lo
+// gestiona desde Mis solicitudes, entrando con su correo. El municipio no
 // interviene: la ficha se publica de inmediato.
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -9,7 +9,6 @@ import { PREFIJO_SUBIDA } from "@/componentes/portal/fotoComunitario";
 import { FORMATO_CODIGO } from "@/dominio/codigo";
 import { TIPO_NOVEDAD } from "@/dominio/comunitarios";
 import { siNoNoSe, aSiNoNoSe } from "@/dominio/propuestas";
-import { normalizarRut } from "@/dominio/rut";
 import { esquemaCuidarComunitario, esquemaDatosComunitario, esquemaRegistroComunitario, validarCampos, type Errores } from "@/lib/esquemas";
 import { municipioActivo } from "@/lib/municipio";
 import { borrarFoto, guardarFoto } from "@/servidor/archivos";
@@ -18,11 +17,12 @@ import { db } from "@/servidor/db";
 import { fechaCorta } from "@/servidor/formato";
 import { notificar } from "@/servidor/notificaciones";
 import { obtenerPersona } from "@/servidor/personas";
+import { filtroVecino, SESION_VENCIDA } from "@/servidor/portal/sesionVecino";
 
 type Respuesta = { ok: true; mensaje: string; codigo?: string; id?: string } | { ok: false; mensaje: string; errores?: Errores };
 const REVISE = "Revisa los datos marcados.";
 const ERROR = "No pudimos guardar el cambio. Intenta nuevamente en unos minutos.";
-const NO_CUIDADOR = "No encontramos a un cuidador de este perro con ese RUT y código.";
+const NO_CUIDADOR = "No apareces como cuidador de este perro. Entra a Mis solicitudes con el correo que dejaste al registrarlo.";
 
 function revalidar() {
   revalidatePath("/", "layout");
@@ -95,7 +95,7 @@ export async function registrarComunitario(entrada: FormData): Promise<Respuesta
         tx,
         persona,
         `Publicamos a ${d.apodo}`,
-        `Gracias por registrar a ${d.apodo}. Ya está en el portal. Para actualizar su ficha o ver las novedades que te envíen, entra a Mis solicitudes con tu RUT y el código ${codigo}.`,
+        `Gracias por registrar a ${d.apodo}. Ya está en el portal. Para actualizar su ficha o ver las novedades que te envíen, entra a Mis solicitudes con tu correo.`,
       );
       return { id: perro.id, codigo };
     });
@@ -135,7 +135,7 @@ export async function hacermeCargo(valores: unknown): Promise<Respuesta> {
         tx,
         persona,
         `Quedó a cargo de ${perro.apodo}`,
-        `Gracias por hacerte cargo de ${perro.apodo}. Para actualizar su ficha o ver las novedades que te envíen, entra a Mis solicitudes con tu RUT y el código ${c.codigo}.`,
+        `Gracias por hacerte cargo de ${perro.apodo}. Para actualizar su ficha o ver las novedades que te envíen, entra a Mis solicitudes con tu correo.`,
         perro.loteDemoId,
       );
       return c.codigo;
@@ -150,15 +150,15 @@ export async function hacermeCargo(valores: unknown): Promise<Respuesta> {
 
 // ───────────── Gestión por su cuidador ─────────────
 
-const esquemaCuidador = z.object({ rut: z.string().trim(), codigo: z.string().trim().toUpperCase().regex(FORMATO_CODIGO) });
+const esquemaCuidador = z.object({ codigo: z.string().trim().toUpperCase().regex(FORMATO_CODIGO) });
 
-/** Cuidador vigente identificado por su RUT y su código; null si no corresponde. */
+/** Cuidador vigente con la sesión de Mis solicitudes (entró con su correo); null si no corresponde. */
 async function cuidadorPropio(valores: unknown) {
+  const filtro = await filtroVecino();
   const r = esquemaCuidador.safeParse(valores);
-  const rut = r.success ? normalizarRut(r.data.rut) : null;
-  if (!r.success || !rut) return null;
+  if (!filtro || !r.success) return null;
   return db.cuidadorAutorizado.findFirst({
-    where: { codigo: r.data.codigo, activo: true, persona: { municipioId: municipioActivo().id, rut }, perro: { oculto: false } },
+    where: { codigo: r.data.codigo, activo: true, persona: filtro, perro: { oculto: false } },
     include: { perro: { include: { animal: true, lugar: true } }, persona: true },
   });
 }
@@ -166,16 +166,20 @@ async function cuidadorPropio(valores: unknown) {
 export type PerroACargo = { id: string; apodo: string; novedades: { codigo: string; tipo: string; texto: string; fecha: string }[] };
 
 /**
- * Entrada del cuidador desde la ficha del perro: con su RUT y su código de
- * cuidador, devuelve el perro y sus novedades por leer para gestionarlo ahí mismo.
+ * Entrada del cuidador desde la ficha del perro: con la sesión de Mis
+ * solicitudes, devuelve el perro y sus novedades por leer para gestionarlo ahí mismo.
  */
-export async function entrarComoCuidador(valores: unknown): Promise<{ ok: true; perro: PerroACargo } | { ok: false; mensaje: string }> {
+export async function entrarComoCuidador(valores: unknown): Promise<{ ok: true; perro: PerroACargo; codigo: string } | { ok: false; mensaje: string; sinSesion?: boolean }> {
   const perroId = z.object({ perroId: z.string().min(1) }).safeParse(valores);
-  const c = await cuidadorPropio(valores);
-  if (!c || !perroId.success || c.perroId !== perroId.data.perroId) return { ok: false, mensaje: NO_CUIDADOR };
+  const filtro = await filtroVecino();
+  if (!filtro) return { ok: false, mensaje: SESION_VENCIDA, sinSesion: true };
+  if (!perroId.success) return { ok: false, mensaje: NO_CUIDADOR };
+  const c = await db.cuidadorAutorizado.findFirst({ where: { perroId: perroId.data.perroId, activo: true, persona: filtro, perro: { oculto: false } }, include: { perro: { include: { animal: true } } } });
+  if (!c) return { ok: false, mensaje: NO_CUIDADOR };
   const novedades = await db.novedadComunitario.findMany({ where: { perroId: c.perroId, estado: "PENDIENTE", cuidadorId: null }, orderBy: { creadaEn: "desc" } });
   return {
     ok: true,
+    codigo: c.codigo,
     perro: {
       id: c.perroId,
       apodo: c.perro.animal.nombre ?? c.perro.apodo,
@@ -225,9 +229,9 @@ export async function fichaParaEditar(valores: unknown): Promise<({ ok: true } &
   };
 }
 
-/** Su cuidador actualiza la ficha (FormData: «rut», «codigo», «datos» y una foto nueva opcional). */
+/** Su cuidador actualiza la ficha (FormData: «codigo», «datos» y una foto nueva opcional), con su sesión. */
 export async function actualizarFichaComunitario(entrada: FormData): Promise<Respuesta> {
-  const c = await cuidadorPropio({ rut: entrada.get("rut"), codigo: entrada.get("codigo") });
+  const c = await cuidadorPropio({ codigo: entrada.get("codigo") });
   if (!c) return { ok: false, mensaje: NO_CUIDADOR };
   const e = leer(entrada);
   if (!e) return { ok: false, mensaje: REVISE };
@@ -294,7 +298,7 @@ export async function marcarNovedadVista(valores: unknown): Promise<Respuesta> {
   await db.$transaction(async (tx) => {
     await tx.novedadComunitario.update({ where: { id: n.id }, data: { estado: "ACEPTADA", revisadaEn: new Date() } });
     await tx.historialComunitario.create({ data: { perroId: c.perroId, accion: "Novedad vista por su cuidador", detalle: `${n.codigo} · ${TIPO_NOVEDAD[n.tipo]}` } });
-    await notificar(tx, n.persona, "Tu novedad llegó", `Quien cuida a ${c.perro.apodo} vio tu novedad ${n.codigo}. Gracias por avisar.`, n.loteDemoId);
+    await notificar(tx, n.persona, "Tu novedad llegó", `Quien cuida a ${c.perro.apodo} vio tu novedad. Gracias por avisar.`, n.loteDemoId);
   });
   revalidar();
   return { ok: true, mensaje: "Marcamos la novedad como vista y avisamos a quien la envió." };

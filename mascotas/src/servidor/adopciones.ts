@@ -55,7 +55,7 @@ export async function concretarAdopcion(p: Postulacion, municipioId: string): Pr
     await notificar(tx, p.persona, "Adopción registrada", `Registramos la adopción de ${nombre}. Gracias por darle un hogar.${compromiso}`, p.loteDemoId);
     // Quien propuso la adopción sabe que el animal encontró hogar.
     const proponente = p.ficha.proponenteId ? await tx.persona.findUnique({ where: { id: p.ficha.proponenteId } }) : null;
-    if (proponente) await notificar(tx, proponente, "Encontró hogar", `${nombre} (${p.ficha.codigo}) fue adoptado a través de la plataforma. Gracias por darle una oportunidad.`, p.ficha.loteDemoId);
+    if (proponente) await notificar(tx, proponente, "Encontró hogar", `${nombre} fue adoptado a través de la plataforma. Gracias por darle una oportunidad.`, p.ficha.loteDemoId);
     return creados;
   });
 }

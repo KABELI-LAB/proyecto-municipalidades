@@ -22,7 +22,7 @@ vi.mock("@/servidor/auth", async () => {
 });
 
 // RUT que no está en la demo: la vecina es una persona real, no de demostración.
-const VECINA = { nombre: "Vecina que perdió su perro", rut: "15.234.567-4", telefono: "912345678", correo: "" };
+const VECINA = { nombre: "Vecina que perdió su perro", rut: "15.234.567-4", telefono: "912345678", correo: "vecina.perro@correo.cl" };
 
 let base: Awaited<ReturnType<typeof crearBaseTemporal>>;
 let db: typeof import("@/servidor/db").db;
