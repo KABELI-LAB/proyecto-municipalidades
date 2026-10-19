@@ -29,7 +29,7 @@ export type PublicacionBandeja = {
   sector: { nombre: string };
   localidad: { nombre: string } | null;
   animal: { foto: string | null } | null;
-  _count: { mensajes: number };
+  _count: { conversaciones: number };
 };
 
 /** `plegado`: una línea de resumen y los datos bajo «Más detalles» (tarjetas compactas de «Por aprobar»). */
@@ -78,8 +78,8 @@ export function ResumenPublicacion({ p, conModeracion = true, Titulo = "h2", ple
                 <dd>{textoResguardo(p)}</dd>
               </>
             )}
-            <dt>Mensajes recibidos</dt>
-            <dd>{p._count.mensajes}</dd>
+            <dt>Conversaciones</dt>
+            <dd>{p._count.conversaciones}</dd>
           </dl>
           {p.codigo && <p className="nota">Código {p.codigo}</p>}
           </details>
@@ -123,8 +123,8 @@ export function ResumenPublicacion({ p, conModeracion = true, Titulo = "h2", ple
               <dd>{textoResguardo(p)}</dd>
             </>
           )}
-          <dt>Mensajes recibidos</dt>
-          <dd>{p._count.mensajes}</dd>
+          <dt>Conversaciones</dt>
+          <dd>{p._count.conversaciones}</dd>
         </dl>
         {p.codigo && <p className="nota">Código {p.codigo}</p>}
         </>

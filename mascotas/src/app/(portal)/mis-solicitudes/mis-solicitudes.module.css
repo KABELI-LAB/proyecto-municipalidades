@@ -129,32 +129,6 @@
   border-top: 0;
 }
 
-/* Dos formas de entrar: con un código al correo o con un código de trámite. */
-.modos {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-.modo {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  min-height: var(--space-8);
-  padding: var(--space-2) var(--space-4);
-  background: var(--color-surface);
-  border: var(--border-width-strong) solid var(--color-border);
-  border-radius: var(--radius-medium);
-  color: var(--color-primary);
-  font: inherit;
-  font-weight: var(--weight-bold);
-  cursor: pointer;
-}
-.modo[aria-selected="true"] {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: var(--color-surface);
-}
-
 /* Mientras se revisa si ya hay una sesión abierta. */
 .esqueleto {
   height: 220px;

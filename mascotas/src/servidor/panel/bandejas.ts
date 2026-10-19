@@ -77,7 +77,7 @@ const camposPublicacion = {
   localidad: { select: { nombre: true } },
   fotoUrl: true,
   animal: { select: { foto: true } },
-  _count: { select: { mensajes: true } },
+  _count: { select: { conversaciones: true } },
 } as const;
 
 export function publicacionesBandeja(grupo: GrupoPublicaciones) {
