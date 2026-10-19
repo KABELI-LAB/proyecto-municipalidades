@@ -279,3 +279,38 @@ describe("mensajes protegidos sobre un aviso", () => {
     expect(respuesta.contenido).not.toContain(PERSONA.correo);
   });
 });
+
+describe("mensajes protegidos en adopción y en avisos de mascota avistada", () => {
+  it("adopción: el mensaje llega a quien la da, lo ve en Mis solicitudes y responde", async () => {
+    const f = await db.fichaAdopcion.findFirstOrThrow({ where: { revision: "APROBADA", estado: "DISPONIBLE", proponenteId: { not: null } } });
+    await db.persona.update({ where: { id: f.proponenteId! }, data: { correo: "da.adopcion@correo.cl" } });
+    expect((await acciones.enviarMensaje({ fichaId: f.id, nombre: "Interesada", telefono: "", correo: "interesada@correo.cl", texto: "¿Convive bien con gatos?" })).ok).toBe(true);
+    const aviso = await db.notificacion.findFirstOrThrow({ where: { destinatario: "da.adopcion@correo.cl" }, orderBy: { creadaEn: "desc" } });
+    expect(aviso.contenido).toContain("«¿Convive bien con gatos?»");
+
+    vecino.correo = "da.adopcion@correo.cl";
+    const mis = await acciones.misSolicitudes();
+    if (!mis.ok) throw new Error("sin sesión");
+    const m = mis.tramites.find((t) => t.propuesta?.mensajes.length)?.propuesta?.mensajes[0];
+    expect(m).toMatchObject({ nombre: "Interesada", respuesta: null });
+    expect((await acciones.responderMensaje({ mensajeId: m!.id, texto: "Sí, vive con dos gatos." })).ok).toBe(true);
+    const respuesta = await db.notificacion.findFirstOrThrow({ where: { destinatario: "interesada@correo.cl" } });
+    expect(respuesta.contenido).toContain("«Sí, vive con dos gatos.»");
+    expect(respuesta.contenido).toContain("da en adopción");
+  });
+
+  it("un aviso de mascota avistada también recibe mensajes («¿es tu mascota?»)", async () => {
+    const huerta = await localidad("la-huerta");
+    const r = await acciones.publicarMascota({
+      tipo: "ENCONTRADA", especie: "GATO", tamano: "PEQUENO", sexo: "HEMBRA", nombreAnimal: "", collar: "NO", colorCollar: "", microchip: "", senas: "",
+      fechaEvento: (await import("@/servidor/formato")).hoyISO(), resguardada: "no", colorPrincipal: "gris", localidadId: huerta.id, ...PERSONA, rut: "",
+    });
+    if (!r.ok) throw new Error(JSON.stringify(r));
+    await db.publicacionMascota.update({ where: { id: r.id }, data: { moderacion: "APROBADA" } });
+    expect((await acciones.enviarMensaje({ publicacionId: r.id, nombre: "Dueño", telefono: "", correo: "dueno@correo.cl", texto: "Creo que es mi gata, tiene una mancha blanca." })).ok).toBe(true);
+    vecino.correo = PERSONA.correo;
+    const mis = await acciones.misSolicitudes();
+    if (!mis.ok) throw new Error("sin sesión");
+    expect(mis.tramites.some((t) => t.aviso?.tipo === "ENCONTRADA" && t.aviso.mensajes.some((x) => x.nombre === "Dueño"))).toBe(true);
+  });
+});

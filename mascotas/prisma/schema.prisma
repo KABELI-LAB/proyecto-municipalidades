@@ -448,17 +448,20 @@ model Coincidencia {
 
 /// Contacto protegido: los mensajes pasan por la plataforma sin exponer teléfonos.
 model MensajeProtegido {
-  id                String   @id @default(cuid())
-  publicacionId     String
+  id                String    @id @default(cuid())
+  /// Sobre un aviso de mascota (perdida o avistada) o sobre una ficha de adopción de un vecino: uno de los dos.
+  publicacionId     String?
+  fichaId           String?
   remitenteNombre   String
   remitenteContacto String // privado: nunca se muestra al otro ciudadano
   texto             String
-  creadoEn          DateTime @default(now())
+  creadoEn          DateTime  @default(now())
   /// Respuesta de quien publicó (desde Mis solicitudes); le llega por correo a quien escribió.
   respuesta         String?
   respondidoEn      DateTime?
 
-  publicacion PublicacionMascota @relation(fields: [publicacionId], references: [id], onDelete: Cascade)
+  publicacion PublicacionMascota? @relation(fields: [publicacionId], references: [id], onDelete: Cascade)
+  ficha       FichaAdopcion?      @relation(fields: [fichaId], references: [id], onDelete: Cascade)
 }
 
 /// Las publica el municipio, propias o propuestas por vecinos tras revisarlas (sección 7).
@@ -503,6 +506,7 @@ model FichaAdopcion {
   sectorAdoptante Sector?               @relation("sectorAdoptante", fields: [sectorAdoptanteId], references: [id])
   loteDemo        LoteDemo?             @relation(fields: [loteDemoId], references: [id])
   postulaciones   PostulacionAdopcion[]
+  mensajes        MensajeProtegido[]
   proponente      Persona?              @relation("propuestas", fields: [proponenteId], references: [id])
   sector          Sector?               @relation("sectorFicha", fields: [sectorId], references: [id])
   localidad       Localidad?            @relation(fields: [localidadId], references: [id])

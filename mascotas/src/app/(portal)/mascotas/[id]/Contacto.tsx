@@ -7,9 +7,12 @@ import { esquemaMensaje, validarCampos, type Errores } from "@/lib/esquemas";
 import { enviarMensaje, reportarPublicacion } from "@/servidor/portal/acciones";
 import estilos from "@/componentes/formulario/formulario.module.css";
 
-/** Contacto protegido: el mensaje queda en la plataforma y se avisa a quien publicó. */
-export function FormularioMensaje({ publicacionId }: { publicacionId: string }) {
-  const vacio = { publicacionId, nombre: "", telefono: "", correo: "", texto: "" };
+/**
+ * Contacto protegido: el mensaje va por la plataforma a quien publicó un aviso
+ * (`publicacionId`) o a quien da en adopción (`fichaId`).
+ */
+export function FormularioMensaje({ publicacionId = "", fichaId = "", ayudaTexto = "Por ejemplo, dónde y cuándo viste al animal. No incluyas direcciones exactas." }: { publicacionId?: string; fichaId?: string; ayudaTexto?: string }) {
+  const vacio = { publicacionId, fichaId, nombre: "", telefono: "", correo: "", texto: "" };
   const [v, setV] = useState(vacio);
   const [errores, setErrores] = useState<Errores>({});
   const [mensaje, setMensaje] = useState<string | null>(null);
@@ -52,7 +55,7 @@ export function FormularioMensaje({ publicacionId }: { publicacionId: string }) 
         <CampoTexto id="telefono" etiqueta="Teléfono (opcional)" tipo="tel" valor={v.telefono} alCambiar={cambiar("telefono")} error={errores.telefono} autoComplete="tel" maxLength={20} />
       </div>
       <p className={estilos.ayuda}>Ahí te llegará la respuesta. No se muestra a la otra persona.</p>
-      <CampoArea id="texto" etiqueta="Mensaje" valor={v.texto} alCambiar={cambiar("texto")} error={errores.texto} maxLength={500} ayuda="Por ejemplo, dónde y cuándo viste al animal. No incluyas direcciones exactas." />
+      <CampoArea id="texto" etiqueta="Mensaje" valor={v.texto} alCambiar={cambiar("texto")} error={errores.texto} maxLength={500} ayuda={ayudaTexto} />
       {mensaje && (
         <p className={estilos.mensaje} role="alert">
           <Icono nombre="alerta" tamano={20} />

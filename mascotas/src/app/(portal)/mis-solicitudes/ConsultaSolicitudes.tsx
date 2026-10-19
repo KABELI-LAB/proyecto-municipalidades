@@ -184,6 +184,7 @@ export function ConsultaSolicitudes() {
                 {t.cupo && t.codigo && <GestionCupo codigo={t.codigo} enEspera={t.cupo.enEspera} alTerminar={alTerminar} />}
                 {t.aviso && t.aviso.mensajes.length > 0 && <GestionMensajes mensajes={t.aviso.mensajes} alTerminar={alTerminar} />}
                 {t.aviso && t.codigo && <GestionAviso codigo={t.codigo} tipo={t.aviso.tipo} coincidencias={t.aviso.coincidencias} alTerminar={alTerminar} />}
+                {t.propuesta && t.propuesta.mensajes.length > 0 && <GestionMensajes mensajes={t.propuesta.mensajes} alTerminar={alTerminar} />}
                 {t.propuesta && t.codigo && (t.propuesta.corregir || t.propuesta.cerrar || t.propuesta.postulaciones > 0) && (
                   <GestionPropuesta codigo={t.codigo} corregir={t.propuesta.corregir} cerrar={t.propuesta.cerrar} postulaciones={t.propuesta.postulaciones} alTerminar={alTerminar} />
                 )}

@@ -248,16 +248,19 @@ export const esquemaPostulacion = z
     }
   }, SIEMPRE);
 
+/** Mensaje protegido sobre un aviso de mascota (`publicacionId`) o una ficha de adopción de un vecino (`fichaId`). */
 export const esquemaMensaje = z
   .object({
-    publicacionId: z.string().min(1),
+    publicacionId: z.string().default(""),
+    fichaId: z.string().default(""),
     nombre: texto(3, 100, "Indica tu nombre."),
     telefono: opcional(20),
     correo: opcional(120),
     texto: texto(10, 500, "Escribe un mensaje de al menos 10 caracteres."),
   })
   // Con el correo le llega la respuesta, sin que nadie vea la dirección del otro.
-  .superRefine(contactoConCorreo, SIEMPRE);
+  .superRefine(contactoConCorreo, SIEMPRE)
+  .refine((d) => Boolean(d.publicacionId) !== Boolean(d.fichaId), { message: "Falta indicar sobre qué es el mensaje.", path: ["texto"] });
 
 /** Respuesta de quien publicó a un mensaje recibido. */
 export const esquemaRespuestaMensaje = z.object({

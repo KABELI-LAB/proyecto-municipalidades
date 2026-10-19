@@ -443,12 +443,31 @@ export async function publicarMascota(entrada: unknown): Promise<ResultadoPublic
 
 export type ResultadoMensaje = { ok: true } | Fallo;
 
-/** El mensaje pasa por la plataforma: nadie ve el teléfono de la otra persona. */
+/**
+ * El mensaje pasa por la plataforma: nadie ve el correo ni el teléfono de la
+ * otra persona. Va a quien publicó un aviso de mascota (perdida o avistada) o
+ * a quien da en adopción un animal (ficha de un vecino, ya publicada).
+ */
 export async function enviarMensaje(valores: unknown): Promise<ResultadoMensaje> {
   const r = esquemaMensaje.safeParse(valores);
   if (!r.success) return fallo(REVISE, validarCampos(esquemaMensaje, valores));
   const d = r.data;
+  const contacto = d.correo.trim().toLowerCase();
+  const pie = "Para responderle, entra a Mis solicitudes con tu correo. Tu respuesta le llegará sin mostrarle tu correo ni tu teléfono.";
   try {
+    if (d.fichaId) {
+      const f = await db.fichaAdopcion.findFirst({
+        where: { id: d.fichaId, revision: "APROBADA", estado: { not: "ADOPTADO" }, proponenteId: { not: null } },
+        select: { id: true, loteDemoId: true, animal: { select: { nombre: true, especie: true } }, proponente: { select: { telefono: true, correo: true } } },
+      });
+      if (!f?.proponente) return fallo("Esta ficha ya no está disponible.");
+      const nombre = f.animal.nombre ?? ESPECIE[f.animal.especie].toLowerCase();
+      await db.$transaction(async (tx) => {
+        await tx.mensajeProtegido.create({ data: { fichaId: f.id, remitenteNombre: d.nombre, remitenteContacto: contacto, texto: d.texto } });
+        await notificar(tx, f.proponente!, `Te escribieron sobre ${nombre}`, `${d.nombre} te escribió sobre ${nombre}, que das en adopción:\n\n«${d.texto}»\n\n${pie}`, f.loteDemoId);
+      });
+      return { ok: true };
+    }
     const pub = await db.publicacionMascota.findFirst({
       where: { id: d.publicacionId, estado: "ABIERTA", moderacion: "APROBADA" },
       select: { id: true, codigo: true, loteDemoId: true, persona: { select: { telefono: true, correo: true } } },
@@ -456,13 +475,13 @@ export async function enviarMensaje(valores: unknown): Promise<ResultadoMensaje>
     if (!pub) return fallo("Esta publicación ya no está disponible.");
     await db.$transaction(async (tx) => {
       await tx.mensajeProtegido.create({
-        data: { publicacionId: pub.id, remitenteNombre: d.nombre, remitenteContacto: d.correo.trim().toLowerCase(), texto: d.texto },
+        data: { publicacionId: pub.id, remitenteNombre: d.nombre, remitenteContacto: contacto, texto: d.texto },
       });
       await notificar(
         tx,
         pub.persona,
         "Te escribieron sobre tu aviso",
-        `${d.nombre} te escribió sobre tu aviso:\n\n«${d.texto}»\n\nPara responderle, entra a Mis solicitudes con tu correo. Tu respuesta le llegará sin mostrarle tu correo ni tu teléfono.`,
+        `${d.nombre} te escribió sobre tu aviso:\n\n«${d.texto}»\n\n${pie}`,
         pub.loteDemoId,
       );
     });
@@ -484,14 +503,19 @@ export async function responderMensaje(valores: unknown): Promise<{ ok: boolean;
   if (!r.success) return { ok: false, mensaje: REVISE, errores: validarCampos(esquemaRespuestaMensaje, valores) };
   try {
     const m = await db.mensajeProtegido.findFirst({
-      where: { id: r.data.mensajeId, publicacion: { persona: filtro } },
-      include: { publicacion: { include: { sector: true } } },
+      where: { id: r.data.mensajeId, OR: [{ publicacion: { persona: filtro } }, { ficha: { proponente: filtro } }] },
+      include: { publicacion: { include: { sector: true } }, ficha: { include: { animal: true } } },
     });
     if (!m) return { ok: false, mensaje: NO_ENCONTRADO };
     if (m.respuesta) return { ok: false, mensaje: "Ya respondiste este mensaje." };
     const p = m.publicacion;
+    const f = m.ficha;
     const base = process.env.APP_URL?.trim().replace(/\/+$/, "");
-    const enlace = base ? ` Si quieres seguir la conversación, escríbele de nuevo desde el aviso: ${base}/mascotas/${p.id}` : "";
+    const ruta = p ? `/mascotas/${p.id}` : `/adoptar/${f?.id}`;
+    const enlace = base ? `Si quieres seguir la conversación, escríbele de nuevo desde ${p ? "el aviso" : "su ficha"}: ${base}${ruta}` : "";
+    const quien = p
+      ? `Quien publicó el aviso de ${ESPECIE[p.especie].toLowerCase()} ${p.colorPrincipal} en ${p.sector.nombre}`
+      : `Quien da en adopción a ${f?.animal.nombre ?? (f ? ESPECIE[f.animal.especie].toLowerCase() : "este animal")}`;
     const correo = correoValido(m.remitenteContacto) ? m.remitenteContacto : null;
     await db.$transaction(async (tx) => {
       const cambio = await tx.mensajeProtegido.updateMany({ where: { id: m.id, respuesta: null }, data: { respuesta: r.data.texto, respondidoEn: new Date() } });
@@ -500,8 +524,8 @@ export async function responderMensaje(valores: unknown): Promise<{ ok: boolean;
         tx,
         { correo, telefono: correo ? null : m.remitenteContacto },
         "Te respondieron sobre la mascota",
-        `Quien publicó el aviso de ${ESPECIE[p.especie].toLowerCase()} ${p.colorPrincipal} en ${p.sector.nombre} respondió tu mensaje:\n\n«${r.data.texto}»\n\n${enlace.trim()}`.trim(),
-        p.loteDemoId,
+        `${quien} respondió tu mensaje:\n\n«${r.data.texto}»\n\n${enlace}`.trim(),
+        p?.loteDemoId ?? f?.loteDemoId ?? null,
       );
     });
     return { ok: true, mensaje: "Enviamos tu respuesta. Le llegará por correo, sin mostrar tu contacto." };
@@ -925,7 +949,7 @@ export type Tramite = {
   /** Cupo propio vigente de un operativo que aún no comienza: la persona puede cancelarlo (o salir de la lista de espera). */
   cupo?: { enEspera: boolean };
   /** Propuesta propia de «Dar en adopción»: qué puede hacer la persona con ella y cuántas postulaciones tiene. */
-  propuesta?: { corregir: boolean; cerrar: boolean; postulaciones: number };
+  propuesta?: { corregir: boolean; cerrar: boolean; postulaciones: number; mensajes: MensajeRecibido[] };
   /** Perro comunitario a su cuidado: lo gestiona y lee las novedades pendientes de los vecinos. */
   comunitario?: { id: string; apodo: string; novedades: { codigo: string; tipo: string; texto: string; fecha: string }[] };
 };
@@ -1023,7 +1047,7 @@ async function tramitesDe(personas: { id: string; correo: string | null; telefon
       },
     }),
     db.postulacionAdopcion.findMany({ where: { personaId: ids }, include: { ficha: { include: { animal: true, proponente: true } } } }),
-    db.fichaAdopcion.findMany({ where: { proponenteId: ids }, include: { animal: true, sector: true, _count: { select: { postulaciones: true } } } }),
+    db.fichaAdopcion.findMany({ where: { proponenteId: ids }, include: { animal: true, sector: true, mensajes: { orderBy: { creadoEn: "desc" }, take: 20 }, _count: { select: { postulaciones: true } } } }),
     db.novedadComunitario.findMany({ where: { personaId: ids }, include: { perro: { include: { animal: true } } } }),
     db.invitacionOperativo.findMany({ where: { personaId: ids }, include: { servicio: true, cupo: true, operativo: { include: { sector: true, lugar: true } } } }),
     db.cuidadorAutorizado.findMany({
@@ -1157,7 +1181,12 @@ async function tramitesDe(personas: { id: string; correo: string | null; telefon
         // Publicada: se muestra el estado de la adopción (disponible, en proceso, adoptado).
         estado: f.revision === "APROBADA" ? ESTADO_ADOPCION[f.estado] : REVISION_ADOPCION[f.revision],
         nota: notaPropuesta(f),
-        propuesta: { corregir: f.revision === "CORRECCIONES", cerrar: abierta, postulaciones: f.revision === "APROBADA" ? f._count.postulaciones : 0 },
+        propuesta: {
+          corregir: f.revision === "CORRECCIONES",
+          cerrar: abierta,
+          postulaciones: f.revision === "APROBADA" ? f._count.postulaciones : 0,
+          mensajes: f.mensajes.map((m) => ({ id: m.id, nombre: m.remitenteNombre, texto: m.texto, fecha: fechaCorta(m.creadoEn), respuesta: m.respuesta })),
+        },
         orden: f.creadaEn.getTime(),
       };
     }),

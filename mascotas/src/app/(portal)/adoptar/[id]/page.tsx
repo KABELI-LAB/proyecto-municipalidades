@@ -7,6 +7,7 @@ import { SiNo } from "@/componentes/portal/TarjetaAdopcion";
 import { ESPECIE, ESTADO_ADOPCION, oracion, SEXO, TAMANO, textoEdad } from "@/dominio/etiquetas";
 import { fichaAdopcion, territorio } from "@/servidor/portal/consultas";
 import estilos from "@/estilos/paginas.module.css";
+import { FormularioMensaje } from "../../mascotas/[id]/Contacto";
 import { FormularioPostulacion } from "./FormularioPostulacion";
 
 export const metadata: Metadata = { title: "Ficha de adopción" };
@@ -111,6 +112,14 @@ export default async function PaginaFicha({ params }: { params: Promise<{ id: st
           <h2 id="postular">Postular para adoptar a {nombre}</h2>
           <FormularioPostulacion fichaId={f.id} nombre={nombre} convivencia={textoConvivencia(f)} sectores={lista} deVecino={Boolean(f.proponenteId)} />
         </section>
+
+        {f.proponenteId && (
+          <section className={estilos.seccion} aria-labelledby="preguntar">
+            <h2 id="preguntar">¿Tienes una pregunta?</h2>
+            <p>Escríbele a quien lo da en adopción. Tu mensaje pasa por la plataforma: ninguno ve el correo ni el teléfono del otro.</p>
+            <FormularioMensaje fichaId={f.id} ayudaTexto="Por ejemplo, cómo es su carácter o si convive con otros animales. No incluyas tu dirección." />
+          </section>
+        )}
       </div>
     </div>
   );
