@@ -1,0 +1,73 @@
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 880px;
+  padding: var(--space-6);
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-large);
+}
+.titulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+.titulo h2 {
+  font-size: var(--type-h4-size);
+  line-height: var(--type-h4-lh);
+}
+.nota {
+  display: block;
+  font-size: var(--type-body-sm-size);
+  line-height: var(--type-body-sm-lh);
+  color: var(--color-text-secondary);
+}
+
+/* Insignia de estado: fondo suave, ícono y texto. */
+.insignia {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: var(--weight-bold);
+  line-height: 1;
+}
+.ok {
+  background: var(--green-50);
+  color: var(--green-700);
+}
+.falta {
+  background: var(--yellow-100);
+  color: var(--yellow-800);
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lista li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-5);
+  padding-block: var(--space-4);
+  border-top: var(--border-width) solid var(--color-border);
+}
+.lista li > span {
+  display: flex;
+  flex-direction: column;
+}
+.lista li > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}

@@ -1,0 +1,78 @@
+.accion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.confirmacion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 520px;
+  padding: var(--space-4);
+  background: var(--color-warning-bg);
+  border-radius: var(--radius-medium);
+}
+.botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.exito,
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  max-width: 520px;
+  font-weight: var(--weight-bold);
+}
+.exito svg {
+  flex: none;
+  color: var(--color-secondary);
+}
+.error svg {
+  flex: none;
+  color: var(--color-error);
+}
+
+/* Mensaje de la última acción, arriba del contenido. */
+.mensajeGlobal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  margin-bottom: var(--space-5);
+  padding-block: var(--space-3);
+  border: 1.5px solid var(--green-200);
+  background: var(--color-success-bg);
+  border-radius: var(--radius-medium);
+}
+.mensajeGlobal:has(.error) {
+  border-color: var(--red-100);
+  background: var(--color-error-bg);
+}
+.mensajeGlobal .exito,
+.mensajeGlobal .error {
+  max-width: none;
+}
+.cerrarMensaje {
+  border: 0;
+  background: none;
+  color: var(--color-primary);
+  font: inherit;
+  font-weight: var(--weight-bold);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Motivo escrito de una decisión (correcciones, rechazo, ocultar). */
+.motivo {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width-strong) solid var(--color-text);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  resize: vertical;
+}

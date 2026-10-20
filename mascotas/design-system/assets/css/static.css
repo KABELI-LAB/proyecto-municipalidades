@@ -1,0 +1,5 @@
+/* Shared reset for fixed-size static artboards (social, print, slides, signage). Not imported by styles.css. */
+html,body{margin:0;height:100%;overflow:hidden;background:var(--neutral-200)}
+.fit{position:absolute;top:0;left:0;transform-origin:0 0;overflow:hidden;font-family:var(--font-sans);color:var(--color-text)}
+[data-i]{display:inline-block;line-height:0;flex:none}[data-i] svg{display:block;width:100%;height:100%}
+.mono{font-family:var(--font-mono)}

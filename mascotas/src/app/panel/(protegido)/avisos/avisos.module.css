@@ -1,0 +1,8 @@
+/* Estado y acciones de cada aviso, en una fila a la derecha (más específico que la lista). */
+.acciones.acciones {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}

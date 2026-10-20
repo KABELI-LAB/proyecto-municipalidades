@@ -1,0 +1,39 @@
+.ciudadano {
+  display: block;
+  height: var(--space-8);
+  width: auto;
+}
+.blanco {
+  display: block;
+  height: var(--space-10);
+  width: auto;
+}
+
+.institucional {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.institucional img {
+  display: block;
+  height: var(--space-8);
+  width: auto;
+}
+.texto {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+.antes {
+  color: var(--color-text-secondary);
+  font-size: var(--type-overline-size);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.nombre {
+  color: var(--color-primary);
+  font-size: var(--type-h4-size);
+  font-weight: var(--weight-black);
+  letter-spacing: -0.01em;
+}

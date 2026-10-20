@@ -1,0 +1,21 @@
+/* Llamado fijo: amarillo 400 con texto Blue 950 (nunca texto sobre amarillo claro). */
+.franja {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-accent);
+  color: var(--blue-950);
+  font-size: var(--type-body-sm-size);
+  line-height: var(--type-body-sm-lh);
+}
+.franja svg {
+  flex: none;
+}
+.franja b {
+  font-weight: var(--weight-bold);
+}

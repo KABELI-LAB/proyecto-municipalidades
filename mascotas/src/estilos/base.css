@@ -1,0 +1,170 @@
+@import "./tokens.css";
+
+/*
+  Base del sistema de diseño (design-system/tokens/base.css), adaptada:
+  Atkinson Hyperlegible Next y Mono las sirve next/font (src/app/layout.tsx)
+  con los nombres --fuente-sans y --fuente-mono. Cuerpo de 18 px.
+  En pantallas angostas los títulos bajan un paso de la escala.
+*/
+:root {
+  --font-sans: var(--fuente-sans), "Atkinson Hyperlegible Next", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--fuente-mono), "Atkinson Hyperlegible Mono", ui-monospace, monospace;
+  --web-h1-tamano: var(--type-h1-size);
+  --web-h2-tamano: var(--type-h2-size);
+}
+@media (max-width: 640px) {
+  :root {
+    --web-h1-tamano: var(--type-h2-size);
+    --web-h2-tamano: var(--type-h3-size);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-lh);
+  font-weight: var(--weight-regular);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+h1 {
+  font-size: var(--web-h1-tamano);
+  line-height: var(--type-h1-lh);
+  font-weight: var(--type-h1-weight);
+  letter-spacing: var(--type-h1-track);
+}
+h2 {
+  font-size: var(--web-h2-tamano);
+  line-height: var(--type-h2-lh);
+  font-weight: var(--type-h2-weight);
+  letter-spacing: var(--type-h2-track);
+}
+h3 {
+  font-size: var(--type-h4-size);
+  line-height: var(--type-h4-lh);
+  font-weight: var(--type-h4-weight);
+}
+p {
+  margin: 0;
+}
+
+.nota {
+  font-size: var(--type-body-sm-size);
+  line-height: var(--type-body-sm-lh);
+  color: var(--color-text-secondary);
+}
+
+/* Etiqueta de categoría: única mayúscula del sistema, con su marcador amarillo. */
+.sobretitulo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--type-overline-size);
+  line-height: var(--type-overline-lh);
+  font-weight: var(--type-overline-weight);
+  letter-spacing: var(--type-overline-track);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+.sobretitulo::before {
+  content: "";
+  width: 14px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+}
+
+/* Cifras, RUT, folios y horas en la tipografía mono. */
+.dato {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-small);
+}
+
+@keyframes entrar {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Utilidades del portal ── */
+.contenedor {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-inline: var(--space-5);
+}
+@media (max-width: 640px) {
+  .contenedor {
+    padding-inline: var(--space-4);
+  }
+}
+
+a {
+  color: var(--color-text-link);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+a:hover {
+  color: var(--color-text-link-hover);
+  text-decoration-thickness: 2px;
+}
+
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.saltar {
+  position: absolute;
+  left: var(--space-4);
+  top: calc(-1 * var(--space-9));
+  z-index: 20;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-surface);
+  border-radius: var(--radius-medium);
+}
+.saltar:focus {
+  top: var(--space-4);
+}
+
+/* La franja de demostración es fija: lo enfocado no debe quedar bajo ella. */
+:focus,
+:target {
+  scroll-margin-top: var(--space-12);
+}

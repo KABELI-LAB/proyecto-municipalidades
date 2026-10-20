@@ -1,0 +1,1878 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "datos": [
+    {
+      "id": "rep-001",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": -62,
+        "dy_m": -163,
+        "lat": -35.06846,
+        "lng": -71.70068
+      },
+      "fecha": "2026-09-13",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-002",
+      "tipo": "atropello",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "remolino"
+      },
+      "posicion": {
+        "dx_m": 181,
+        "dy_m": 320,
+        "lat": -35.09713,
+        "lng": -71.68101
+      },
+      "fecha": "2026-09-09",
+      "estado": "abierto",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "rep-003",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": 136,
+        "dy_m": -7,
+        "lat": -35.06706,
+        "lng": -71.69851
+      },
+      "fecha": "2026-09-17",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-004",
+      "tipo": "atropello",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": 892,
+        "dy_m": 119,
+        "lat": -35.06593,
+        "lng": -71.69021
+      },
+      "fecha": "2026-09-21",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "rep-005",
+      "tipo": "jauria",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "estadio-municipal-de-hualane"
+      },
+      "posicion": {
+        "dx_m": -150,
+        "dy_m": 214,
+        "lat": -34.97408,
+        "lng": -71.80664
+      },
+      "fecha": "2026-09-09",
+      "estado": "abierto",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-006",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": -30,
+        "dy_m": -21,
+        "lat": -35.06719,
+        "lng": -71.70033
+      },
+      "fecha": "2026-09-23",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-007",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": 156,
+        "dy_m": -50,
+        "lat": -35.06745,
+        "lng": -71.69829
+      },
+      "fecha": "2026-09-22",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-008",
+      "tipo": "abandono",
+      "sector_id": "los-coipos",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "los-coipos"
+      },
+      "posicion": {
+        "dx_m": -539,
+        "dy_m": 419,
+        "lat": -34.91174,
+        "lng": -71.667
+      },
+      "fecha": "2026-09-07",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-009",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": -156,
+        "dy_m": 52,
+        "lat": -35.06653,
+        "lng": -71.70171
+      },
+      "fecha": "2026-09-19",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-010",
+      "tipo": "jauria",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "estadio-municipal-de-hualane"
+      },
+      "posicion": {
+        "dx_m": -172,
+        "dy_m": -294,
+        "lat": -34.97864,
+        "lng": -71.80689
+      },
+      "fecha": "2026-09-14",
+      "estado": "en revision",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-011",
+      "tipo": "jauria",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "estadio-municipal-de-hualane"
+      },
+      "posicion": {
+        "dx_m": 303,
+        "dy_m": 125,
+        "lat": -34.97488,
+        "lng": -71.80168
+      },
+      "fecha": "2026-09-30",
+      "estado": "abierto",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-012",
+      "tipo": "abandono",
+      "sector_id": "los-coipos",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "caone"
+      },
+      "posicion": {
+        "dx_m": -335,
+        "dy_m": -176,
+        "lat": -34.96858,
+        "lng": -71.65367
+      },
+      "fecha": "2026-09-13",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-013",
+      "tipo": "atropello",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "remolino"
+      },
+      "posicion": {
+        "dx_m": 3,
+        "dy_m": 161,
+        "lat": -35.09855,
+        "lng": -71.68297
+      },
+      "fecha": "2026-09-08",
+      "estado": "en revision",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "rep-014",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": 174,
+        "dy_m": -10,
+        "lat": -35.06709,
+        "lng": -71.69809
+      },
+      "fecha": "2026-09-30",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-015",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": -46,
+        "dy_m": 218,
+        "lat": -35.06504,
+        "lng": -71.7005
+      },
+      "fecha": "2026-09-13",
+      "estado": "abierto",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-016",
+      "tipo": "abandono",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "mira-rio"
+      },
+      "posicion": {
+        "dx_m": 1185,
+        "dy_m": -292,
+        "lat": -34.92262,
+        "lng": -71.83702
+      },
+      "fecha": "2026-09-20",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-017",
+      "tipo": "abandono",
+      "sector_id": "los-coipos",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "caone"
+      },
+      "posicion": {
+        "dx_m": 129,
+        "dy_m": 122,
+        "lat": -34.9659,
+        "lng": -71.64859
+      },
+      "fecha": "2026-09-19",
+      "estado": "abierto",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-018",
+      "tipo": "atropello",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "remolino"
+      },
+      "posicion": {
+        "dx_m": 108,
+        "dy_m": -75,
+        "lat": -35.10067,
+        "lng": -71.68181
+      },
+      "fecha": "2026-09-13",
+      "estado": "abierto",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "rep-019",
+      "tipo": "jauria",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-higuera"
+      },
+      "posicion": {
+        "dx_m": 67,
+        "dy_m": 320,
+        "lat": -34.97713,
+        "lng": -71.78927
+      },
+      "fecha": "2026-09-28",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-020",
+      "tipo": "jauria",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "estadio-municipal-de-hualane"
+      },
+      "posicion": {
+        "dx_m": -33,
+        "dy_m": -119,
+        "lat": -34.97707,
+        "lng": -71.80536
+      },
+      "fecha": "2026-09-23",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-021",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "plaza-de-armas-de-hualane"
+      },
+      "posicion": {
+        "dx_m": -12,
+        "dy_m": -165,
+        "lat": -34.97748,
+        "lng": -71.80513
+      },
+      "fecha": "2026-09-28",
+      "estado": "en revision",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "rep-022",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": 98,
+        "dy_m": 235,
+        "lat": -35.06489,
+        "lng": -71.69892
+      },
+      "fecha": "2026-10-01",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-023",
+      "tipo": "jauria",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "estadio-municipal-de-hualane"
+      },
+      "posicion": {
+        "dx_m": -182,
+        "dy_m": 370,
+        "lat": -34.97268,
+        "lng": -71.807
+      },
+      "fecha": "2026-09-28",
+      "estado": "en revision",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-024",
+      "tipo": "jauria",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "estadio-municipal-de-hualane"
+      },
+      "posicion": {
+        "dx_m": -242,
+        "dy_m": 2,
+        "lat": -34.97598,
+        "lng": -71.80765
+      },
+      "fecha": "2026-09-17",
+      "estado": "abierto",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-025",
+      "tipo": "atropello",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": -345,
+        "dy_m": 287,
+        "lat": -35.06442,
+        "lng": -71.70379
+      },
+      "fecha": "2026-09-08",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "rep-026",
+      "tipo": "jauria",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "estadio-municipal-de-hualane"
+      },
+      "posicion": {
+        "dx_m": -289,
+        "dy_m": 143,
+        "lat": -34.97472,
+        "lng": -71.80817
+      },
+      "fecha": "2026-09-21",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-027",
+      "tipo": "jauria",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "estadio-municipal-de-hualane"
+      },
+      "posicion": {
+        "dx_m": -141,
+        "dy_m": -212,
+        "lat": -34.9779,
+        "lng": -71.80655
+      },
+      "fecha": "2026-09-22",
+      "estado": "abierto",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-028",
+      "tipo": "atropello",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "remolino"
+      },
+      "posicion": {
+        "dx_m": 146,
+        "dy_m": 105,
+        "lat": -35.09906,
+        "lng": -71.6814
+      },
+      "fecha": "2026-09-20",
+      "estado": "en revision",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "rep-029",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "plaza-de-armas-de-hualane"
+      },
+      "posicion": {
+        "dx_m": 60,
+        "dy_m": 241,
+        "lat": -34.97384,
+        "lng": -71.80434
+      },
+      "fecha": "2026-10-06",
+      "estado": "en revision",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "rep-030",
+      "tipo": "jauria",
+      "sector_id": "los-coipos",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "camarico"
+      },
+      "posicion": {
+        "dx_m": -1112,
+        "dy_m": -930,
+        "lat": -34.97535,
+        "lng": -71.69519
+      },
+      "fecha": "2026-09-25",
+      "estado": "abierto",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-031",
+      "tipo": "atropello",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "remolino"
+      },
+      "posicion": {
+        "dx_m": 114,
+        "dy_m": 8,
+        "lat": -35.09993,
+        "lng": -71.68175
+      },
+      "fecha": "2026-09-16",
+      "estado": "abierto",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "rep-032",
+      "tipo": "abandono",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "el-porvenir"
+      },
+      "posicion": {
+        "dx_m": -885,
+        "dy_m": 17,
+        "lat": -34.96985,
+        "lng": -71.7947
+      },
+      "fecha": "2026-10-01",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-033",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-navarro"
+      },
+      "posicion": {
+        "dx_m": -312,
+        "dy_m": 891,
+        "lat": -35.059,
+        "lng": -71.62042
+      },
+      "fecha": "2026-10-02",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-034",
+      "tipo": "jauria",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": 452,
+        "dy_m": 788,
+        "lat": -35.05992,
+        "lng": -71.69504
+      },
+      "fecha": "2026-10-05",
+      "estado": "abierto",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-035",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": 109,
+        "dy_m": -71,
+        "lat": -35.06764,
+        "lng": -71.6988
+      },
+      "fecha": "2026-06-07",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-036",
+      "tipo": "atropello",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "remolino"
+      },
+      "posicion": {
+        "dx_m": 162,
+        "dy_m": 49,
+        "lat": -35.09956,
+        "lng": -71.68122
+      },
+      "fecha": "2026-04-02",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "rep-037",
+      "tipo": "abandono",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "el-rincon"
+      },
+      "posicion": {
+        "dx_m": -127,
+        "dy_m": -791,
+        "lat": -34.96711,
+        "lng": -71.76139
+      },
+      "fecha": "2026-07-03",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-038",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "plaza-de-armas-de-hualane"
+      },
+      "posicion": {
+        "dx_m": -85,
+        "dy_m": -151,
+        "lat": -34.97736,
+        "lng": -71.80593
+      },
+      "fecha": "2025-10-28",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "rep-039",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": -206,
+        "dy_m": -327,
+        "lat": -35.06994,
+        "lng": -71.70226
+      },
+      "fecha": "2026-08-04",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-040",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": -138,
+        "dy_m": -223,
+        "lat": -35.069,
+        "lng": -71.70151
+      },
+      "fecha": "2026-01-06",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-041",
+      "tipo": "abandono",
+      "sector_id": "los-coipos",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "caone"
+      },
+      "posicion": {
+        "dx_m": -17,
+        "dy_m": -125,
+        "lat": -34.96812,
+        "lng": -71.65019
+      },
+      "fecha": "2025-10-19",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-042",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "patacon",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "tilicura"
+      },
+      "posicion": {
+        "dx_m": -44,
+        "dy_m": -1265,
+        "lat": -34.91136,
+        "lng": -71.85048
+      },
+      "fecha": "2026-02-17",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "rep-043",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": -87,
+        "dy_m": 133,
+        "lat": -35.06581,
+        "lng": -71.70095
+      },
+      "fecha": "2026-02-17",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "rep-044",
+      "tipo": "maltrato",
+      "sector_id": "patacon",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "patacon"
+      },
+      "posicion": {
+        "dx_m": -1190,
+        "dy_m": 485,
+        "lat": -34.89564,
+        "lng": -71.79603
+      },
+      "fecha": "2026-02-14",
+      "estado": "cerrado",
+      "descripcion": "Reporte de maltrato (texto de demostración)."
+    },
+    {
+      "id": "rep-045",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": 138,
+        "dy_m": 86,
+        "lat": -35.06623,
+        "lng": -71.69849
+      },
+      "fecha": "2026-02-21",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-046",
+      "tipo": "atropello",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "remolino"
+      },
+      "posicion": {
+        "dx_m": -214,
+        "dy_m": -154,
+        "lat": -35.10138,
+        "lng": -71.68535
+      },
+      "fecha": "2025-11-17",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "rep-047",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "los-coipos",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "alto-de-caone"
+      },
+      "posicion": {
+        "dx_m": 1872,
+        "dy_m": -83,
+        "lat": -34.96775,
+        "lng": -71.62948
+      },
+      "fecha": "2026-04-21",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "rep-048",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-huerta"
+      },
+      "posicion": {
+        "dx_m": 55,
+        "dy_m": 618,
+        "lat": -35.08395,
+        "lng": -71.6551
+      },
+      "fecha": "2025-11-14",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-049",
+      "tipo": "jauria",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "estadio-municipal-de-hualane"
+      },
+      "posicion": {
+        "dx_m": -28,
+        "dy_m": 31,
+        "lat": -34.97572,
+        "lng": -71.80531
+      },
+      "fecha": "2026-01-09",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-050",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "plaza-de-armas-de-hualane"
+      },
+      "posicion": {
+        "dx_m": -215,
+        "dy_m": -180,
+        "lat": -34.97762,
+        "lng": -71.80736
+      },
+      "fecha": "2026-04-04",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "rep-051",
+      "tipo": "maltrato",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-navarro"
+      },
+      "posicion": {
+        "dx_m": -857,
+        "dy_m": -178,
+        "lat": -35.0686,
+        "lng": -71.62641
+      },
+      "fecha": "2026-05-26",
+      "estado": "cerrado",
+      "descripcion": "Reporte de maltrato (texto de demostración)."
+    },
+    {
+      "id": "rep-052",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-huerta"
+      },
+      "posicion": {
+        "dx_m": 310,
+        "dy_m": 349,
+        "lat": -35.08636,
+        "lng": -71.6523
+      },
+      "fecha": "2025-10-24",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-053",
+      "tipo": "atropello",
+      "sector_id": "patacon",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "patacon"
+      },
+      "posicion": {
+        "dx_m": -390,
+        "dy_m": 391,
+        "lat": -34.89649,
+        "lng": -71.78727
+      },
+      "fecha": "2025-10-22",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "rep-054",
+      "tipo": "animal herido",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "el-buche"
+      },
+      "posicion": {
+        "dx_m": -740,
+        "dy_m": 15,
+        "lat": -34.98187,
+        "lng": -71.70811
+      },
+      "fecha": "2026-06-18",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal herido (texto de demostración)."
+    },
+    {
+      "id": "rep-055",
+      "tipo": "animal herido",
+      "sector_id": "patacon",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "espinalillo"
+      },
+      "posicion": {
+        "dx_m": 538,
+        "dy_m": 125,
+        "lat": -34.89888,
+        "lng": -71.94411
+      },
+      "fecha": "2026-07-06",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal herido (texto de demostración)."
+    },
+    {
+      "id": "rep-056",
+      "tipo": "abandono",
+      "sector_id": "los-coipos",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "caone"
+      },
+      "posicion": {
+        "dx_m": -150,
+        "dy_m": 107,
+        "lat": -34.96604,
+        "lng": -71.65164
+      },
+      "fecha": "2026-02-10",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-057",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "plaza-de-armas-de-hualane"
+      },
+      "posicion": {
+        "dx_m": 67,
+        "dy_m": -70,
+        "lat": -34.97663,
+        "lng": -71.80427
+      },
+      "fecha": "2025-11-23",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "rep-058",
+      "tipo": "animal herido",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-huerta"
+      },
+      "posicion": {
+        "dx_m": 1489,
+        "dy_m": 850,
+        "lat": -35.08186,
+        "lng": -71.63935
+      },
+      "fecha": "2026-04-27",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal herido (texto de demostración)."
+    },
+    {
+      "id": "rep-059",
+      "tipo": "abandono",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "el-rincon"
+      },
+      "posicion": {
+        "dx_m": 60,
+        "dy_m": 80,
+        "lat": -34.95928,
+        "lng": -71.75934
+      },
+      "fecha": "2025-10-31",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-060",
+      "tipo": "animal herido",
+      "sector_id": "los-coipos",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "el-cobre"
+      },
+      "posicion": {
+        "dx_m": -241,
+        "dy_m": -848,
+        "lat": -34.99062,
+        "lng": -71.65264
+      },
+      "fecha": "2026-03-21",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal herido (texto de demostración)."
+    },
+    {
+      "id": "rep-061",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-huerta"
+      },
+      "posicion": {
+        "dx_m": -6,
+        "dy_m": 666,
+        "lat": -35.08352,
+        "lng": -71.65577
+      },
+      "fecha": "2026-03-24",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-062",
+      "tipo": "abandono",
+      "sector_id": "los-coipos",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "caone"
+      },
+      "posicion": {
+        "dx_m": -207,
+        "dy_m": 105,
+        "lat": -34.96606,
+        "lng": -71.65227
+      },
+      "fecha": "2026-05-07",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-063",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "parronal"
+      },
+      "posicion": {
+        "dx_m": 803,
+        "dy_m": 773,
+        "lat": -35.01006,
+        "lng": -71.67419
+      },
+      "fecha": "2026-02-11",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-064",
+      "tipo": "abandono",
+      "sector_id": "patacon",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "los-sauces"
+      },
+      "posicion": {
+        "dx_m": 329,
+        "dy_m": 1191,
+        "lat": -34.9063,
+        "lng": -71.8634
+      },
+      "fecha": "2026-04-20",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-065",
+      "tipo": "maltrato",
+      "sector_id": "los-coipos",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "alto-de-caone"
+      },
+      "posicion": {
+        "dx_m": 14,
+        "dy_m": 379,
+        "lat": -34.9636,
+        "lng": -71.64985
+      },
+      "fecha": "2026-03-27",
+      "estado": "cerrado",
+      "descripcion": "Reporte de maltrato (texto de demostración)."
+    },
+    {
+      "id": "rep-066",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "plaza-de-armas-de-hualane"
+      },
+      "posicion": {
+        "dx_m": 46,
+        "dy_m": -90,
+        "lat": -34.97681,
+        "lng": -71.8045
+      },
+      "fecha": "2025-11-25",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "rep-067",
+      "tipo": "jauria",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "estadio-municipal-de-hualane"
+      },
+      "posicion": {
+        "dx_m": 45,
+        "dy_m": 11,
+        "lat": -34.9759,
+        "lng": -71.80451
+      },
+      "fecha": "2026-07-29",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-068",
+      "tipo": "atropello",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "remolino"
+      },
+      "posicion": {
+        "dx_m": 127,
+        "dy_m": -2,
+        "lat": -35.10002,
+        "lng": -71.68161
+      },
+      "fecha": "2026-07-24",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "rep-069",
+      "tipo": "jauria",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": 1053,
+        "dy_m": -415,
+        "lat": -35.07073,
+        "lng": -71.68844
+      },
+      "fecha": "2025-12-07",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-070",
+      "tipo": "abandono",
+      "sector_id": "los-coipos",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "caone"
+      },
+      "posicion": {
+        "dx_m": -264,
+        "dy_m": -85,
+        "lat": -34.96776,
+        "lng": -71.65289
+      },
+      "fecha": "2025-12-23",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-071",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "plaza-de-armas-de-hualane"
+      },
+      "posicion": {
+        "dx_m": 9,
+        "dy_m": -201,
+        "lat": -34.97781,
+        "lng": -71.8049
+      },
+      "fecha": "2026-03-25",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "rep-072",
+      "tipo": "atropello",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "remolino"
+      },
+      "posicion": {
+        "dx_m": -30,
+        "dy_m": -94,
+        "lat": -35.10084,
+        "lng": -71.68333
+      },
+      "fecha": "2026-04-27",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "rep-073",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-huerta"
+      },
+      "posicion": {
+        "dx_m": 233,
+        "dy_m": 173,
+        "lat": -35.08795,
+        "lng": -71.65314
+      },
+      "fecha": "2026-08-08",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "rep-074",
+      "tipo": "jauria",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "estadio-municipal-de-hualane"
+      },
+      "posicion": {
+        "dx_m": 135,
+        "dy_m": 164,
+        "lat": -34.97453,
+        "lng": -71.80352
+      },
+      "fecha": "2025-12-02",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-075",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "plaza-de-armas-de-hualane"
+      },
+      "posicion": {
+        "dx_m": 131,
+        "dy_m": -103,
+        "lat": -34.97693,
+        "lng": -71.80356
+      },
+      "fecha": "2026-02-17",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "rep-076",
+      "tipo": "abandono",
+      "sector_id": "los-coipos",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "los-coipos"
+      },
+      "posicion": {
+        "dx_m": 627,
+        "dy_m": -847,
+        "lat": -34.92311,
+        "lng": -71.65423
+      },
+      "fecha": "2025-11-29",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-077",
+      "tipo": "jauria",
+      "sector_id": "los-coipos",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "el-llano"
+      },
+      "posicion": {
+        "dx_m": -136,
+        "dy_m": 633,
+        "lat": -34.97731,
+        "lng": -71.61849
+      },
+      "fecha": "2025-12-04",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-078",
+      "tipo": "abandono",
+      "sector_id": "los-coipos",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "el-cobre"
+      },
+      "posicion": {
+        "dx_m": -578,
+        "dy_m": -569,
+        "lat": -34.98811,
+        "lng": -71.65634
+      },
+      "fecha": "2026-08-22",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-079",
+      "tipo": "maltrato",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-huerta"
+      },
+      "posicion": {
+        "dx_m": -1132,
+        "dy_m": -258,
+        "lat": -35.09182,
+        "lng": -71.66813
+      },
+      "fecha": "2026-06-29",
+      "estado": "cerrado",
+      "descripcion": "Reporte de maltrato (texto de demostración)."
+    },
+    {
+      "id": "rep-080",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "los-coipos",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "caone"
+      },
+      "posicion": {
+        "dx_m": 600,
+        "dy_m": -28,
+        "lat": -34.96725,
+        "lng": -71.64342
+      },
+      "fecha": "2026-08-04",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "rep-081",
+      "tipo": "atropello",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "remolino"
+      },
+      "posicion": {
+        "dx_m": 10,
+        "dy_m": 7,
+        "lat": -35.09994,
+        "lng": -71.68289
+      },
+      "fecha": "2026-08-21",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "rep-082",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": -192,
+        "dy_m": -57,
+        "lat": -35.06751,
+        "lng": -71.70211
+      },
+      "fecha": "2025-10-18",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-083",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-navarro"
+      },
+      "posicion": {
+        "dx_m": 59,
+        "dy_m": -569,
+        "lat": -35.07211,
+        "lng": -71.61635
+      },
+      "fecha": "2026-07-29",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-084",
+      "tipo": "jauria",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "estadio-municipal-de-hualane"
+      },
+      "posicion": {
+        "dx_m": -173,
+        "dy_m": 257,
+        "lat": -34.97369,
+        "lng": -71.8069
+      },
+      "fecha": "2026-08-04",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-085",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "parronal"
+      },
+      "posicion": {
+        "dx_m": 641,
+        "dy_m": -1045,
+        "lat": -35.02639,
+        "lng": -71.67597
+      },
+      "fecha": "2026-03-28",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-086",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": -95,
+        "dy_m": -118,
+        "lat": -35.06806,
+        "lng": -71.70104
+      },
+      "fecha": "2026-03-16",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-087",
+      "tipo": "abandono",
+      "sector_id": "los-coipos",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "caone"
+      },
+      "posicion": {
+        "dx_m": -94,
+        "dy_m": 232,
+        "lat": -34.96492,
+        "lng": -71.65103
+      },
+      "fecha": "2026-02-23",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-088",
+      "tipo": "jauria",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "estadio-municipal-de-hualane"
+      },
+      "posicion": {
+        "dx_m": -52,
+        "dy_m": 162,
+        "lat": -34.97454,
+        "lng": -71.80557
+      },
+      "fecha": "2026-04-19",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-089",
+      "tipo": "abandono",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "orilla-de-valdes"
+      },
+      "posicion": {
+        "dx_m": -109,
+        "dy_m": 98,
+        "lat": -35.06612,
+        "lng": -71.7012
+      },
+      "fecha": "2026-05-26",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-090",
+      "tipo": "abandono",
+      "sector_id": "los-coipos",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "caone"
+      },
+      "posicion": {
+        "dx_m": 293,
+        "dy_m": 36,
+        "lat": -34.96668,
+        "lng": -71.64679
+      },
+      "fecha": "2025-11-06",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-091",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-huerta"
+      },
+      "posicion": {
+        "dx_m": 255,
+        "dy_m": -1083,
+        "lat": -35.09923,
+        "lng": -71.6529
+      },
+      "fecha": "2026-03-20",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "rep-092",
+      "tipo": "atropello",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "remolino"
+      },
+      "posicion": {
+        "dx_m": -300,
+        "dy_m": 5,
+        "lat": -35.09996,
+        "lng": -71.68629
+      },
+      "fecha": "2026-09-01",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "rep-093",
+      "tipo": "jauria",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "estadio-municipal-de-hualane"
+      },
+      "posicion": {
+        "dx_m": 62,
+        "dy_m": -46,
+        "lat": -34.97641,
+        "lng": -71.80432
+      },
+      "fecha": "2025-11-25",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-094",
+      "tipo": "jauria",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "estadio-municipal-de-hualane"
+      },
+      "posicion": {
+        "dx_m": -83,
+        "dy_m": 180,
+        "lat": -34.97438,
+        "lng": -71.80591
+      },
+      "fecha": "2026-06-02",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-095",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "plaza-de-armas-de-hualane"
+      },
+      "posicion": {
+        "dx_m": 136,
+        "dy_m": 50,
+        "lat": -34.97555,
+        "lng": -71.80351
+      },
+      "fecha": "2026-07-27",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "rep-096",
+      "tipo": "abandono",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "mira-rio"
+      },
+      "posicion": {
+        "dx_m": 614,
+        "dy_m": 1741,
+        "lat": -34.90436,
+        "lng": -71.84327
+      },
+      "fecha": "2026-07-24",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-097",
+      "tipo": "jauria",
+      "sector_id": "patacon",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "boquil"
+      },
+      "posicion": {
+        "dx_m": -19,
+        "dy_m": -193,
+        "lat": -34.88473,
+        "lng": -71.91721
+      },
+      "fecha": "2025-10-08",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-098",
+      "tipo": "jauria",
+      "sector_id": "hualane",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "estadio-municipal-de-hualane"
+      },
+      "posicion": {
+        "dx_m": -49,
+        "dy_m": 89,
+        "lat": -34.9752,
+        "lng": -71.80554
+      },
+      "fecha": "2026-07-20",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-099",
+      "tipo": "abandono",
+      "sector_id": "los-coipos",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "alto-de-caone"
+      },
+      "posicion": {
+        "dx_m": 296,
+        "dy_m": 1283,
+        "lat": -34.95547,
+        "lng": -71.64676
+      },
+      "fecha": "2025-10-24",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "rep-100",
+      "tipo": "jauria",
+      "sector_id": "patacon",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "los-cristales"
+      },
+      "posicion": {
+        "dx_m": 1003,
+        "dy_m": -810,
+        "lat": -34.90728,
+        "lng": -71.83901
+      },
+      "fecha": "2026-08-10",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-101",
+      "tipo": "atropello",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-huerta"
+      },
+      "posicion": {
+        "dx_m": -673,
+        "dy_m": -294,
+        "lat": -35.09214,
+        "lng": -71.66309
+      },
+      "fecha": "2026-06-12",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "rep-102",
+      "tipo": "atropello",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-huerta"
+      },
+      "posicion": {
+        "dx_m": 764,
+        "dy_m": -1676,
+        "lat": -35.10456,
+        "lng": -71.64731
+      },
+      "fecha": "2026-02-07",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "rep-103",
+      "tipo": "jauria",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "remolino"
+      },
+      "posicion": {
+        "dx_m": 577,
+        "dy_m": -1941,
+        "lat": -35.11744,
+        "lng": -71.67666
+      },
+      "fecha": "2025-12-10",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "rep-104",
+      "tipo": "animal herido",
+      "sector_id": "la-huerta",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "parronal"
+      },
+      "posicion": {
+        "dx_m": 474,
+        "dy_m": 113,
+        "lat": -35.01598,
+        "lng": -71.6778
+      },
+      "fecha": "2025-10-29",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal herido (texto de demostración)."
+    }
+  ]
+}
