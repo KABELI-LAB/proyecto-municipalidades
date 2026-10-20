@@ -185,22 +185,45 @@
   padding: 0;
   list-style: none;
 }
-.plegable {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-1);
-  width: 100%;
-  min-height: 48px;
-  padding: 0;
-  border: 0;
-  background: none;
-  font: inherit;
-  text-align: left;
-  color: inherit;
-  cursor: pointer;
-}
 .ultimo {
   font-size: var(--type-body-sm-size);
   color: var(--color-text-secondary);
+}
+
+.tituloIcono {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.tituloIcono svg {
+  color: var(--color-primary);
+}
+/* Conversación que espera tu respuesta: borde azul y marca «Mensaje nuevo» (color + ícono + texto). */
+.conversacionNueva {
+  border-color: var(--color-primary);
+  box-shadow: inset 4px 0 0 var(--color-primary);
+}
+.nuevo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--weight-bold);
+}
+
+/* Aviso arriba de todo cuando alguien espera tu respuesta. */
+.mensajeNuevo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-primary-subtle);
+  border-radius: var(--radius-medium);
+  color: var(--color-primary);
+  font-weight: var(--weight-bold);
 }

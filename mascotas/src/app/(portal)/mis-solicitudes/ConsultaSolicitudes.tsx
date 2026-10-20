@@ -14,7 +14,8 @@ import { GestionAviso } from "./GestionAviso";
 import { GestionComunitario } from "./GestionComunitario";
 import { GestionCupo } from "./GestionCupo";
 import { GestionInvitacion } from "./GestionInvitacion";
-import { Conversaciones } from "./Conversaciones";
+import { useActualizar } from "@/componentes/portal/useActualizar";
+import { Conversaciones, esperaRespuesta } from "./Conversaciones";
 import { GestionPropuesta } from "./GestionPropuesta";
 import estilos from "./mis-solicitudes.module.css";
 
@@ -63,6 +64,9 @@ export function ConsultaSolicitudes() {
       else if ("sinSesion" in r) setTramites(null);
     });
   }
+
+  // Mensajes nuevos sin recargar: se vuelven a leer las conversaciones cada 10 segundos.
+  useActualizar(() => conversacionesComoDueno().then(setConversaciones), 10_000, Boolean(tramites));
 
   function pedirCodigo(e: React.FormEvent) {
     e.preventDefault();
@@ -161,6 +165,12 @@ export function ConsultaSolicitudes() {
             <p className={estilos.confirmacion} role="status">
               <Icono nombre="check" tamano={20} />
               {aviso}
+            </p>
+          )}
+          {conversaciones.some(esperaRespuesta) && (
+            <p className={estilos.mensajeNuevo} role="status">
+              <Icono nombre="mensaje" tamano={20} />
+              {conversaciones.filter(esperaRespuesta).length === 1 ? "Tienes un mensaje nuevo esperando tu respuesta." : `Tienes ${conversaciones.filter(esperaRespuesta).length} mensajes nuevos esperando tu respuesta.`}
             </p>
           )}
           {tramites.some((t) => t.invitacion?.responder) && (

@@ -51,7 +51,7 @@ export function Conversacion({ conversacion: c, responder, compartir, alTerminar
         Sobre <Link href={c.enlaceSobre}>{c.sobre}</Link>
       </p>
 
-      <ol className={estilos.mensajes} aria-label={`Conversación con ${c.con}`}>
+      <ol className={estilos.mensajes} aria-label={`Conversación con ${c.con}`} aria-live="polite">
         {c.mensajes.map((m, i) => (
           <li key={i} className={m.mio ? estilos.mio : estilos.otro}>
             <span className={estilos.autor}>
