@@ -6,8 +6,9 @@
  * Con postgres-js a través del pooler, una conexión puede quedar muerta y una
  * consulta colgarse sin error (ver "Troubleshooting CONNECT_TIMEOUT or hanging
  * queries" en la documentación de Supabase). Por eso cada consulta tiene un
- * tiempo máximo: si se agota, la conexión se descarta y se abre otra. Las
- * lecturas se reintentan una vez; las escrituras no, para no duplicar datos.
+ * tiempo máximo; si nada ha respondido en ese lapso, el cliente se descarta y
+ * se abre otro. Las lecturas se reintentan una vez; las escrituras no, para no
+ * duplicar datos.
  */
 import postgres from 'postgres'
 import type { Territorio } from '../shared/contrato.ts'
@@ -17,7 +18,7 @@ type Sql = postgres.Sql
 /** `max_pipeline` existe en postgres-js (src/index.js) pero no está en sus tipos. */
 type OpcionesPostgres = NonNullable<Parameters<typeof postgres>[1]> & { max_pipeline?: number }
 
-const TIEMPO_MAXIMO_MS = 8_000
+const TIEMPO_MAXIMO_MS = 10_000
 
 /** La base no respondió a tiempo. El handler responde 503 con un mensaje para reintentar. */
 export class TiempoAgotadoError extends Error {
@@ -27,48 +28,66 @@ export class TiempoAgotadoError extends Error {
   }
 }
 
-let compartida: { url: string; sql: Sql } | null = null
+/**
+ * Dos clientes: el principal (inscripción, lecturas) y uno aparte para las
+ * métricas anónimas, para que una ráfaga de métricas nunca haga esperar a
+ * quien se está inscribiendo.
+ */
+type TipoCliente = 'principal' | 'metricas'
 
-/** Un cliente por instancia de función (se reutiliza entre invocaciones). */
-function cliente(url: string): Sql {
-  if (compartida?.url !== url) {
-    const opciones: OpcionesPostgres = {
-      prepare: false,
-      // Una consulta a la vez por conexión: el pooler en modo transacción no
-      // tolera varias consultas encadenadas en la misma conexión (pipelining),
-      // y quedaban colgadas hasta el statement timeout.
-      max_pipeline: 1,
-      max: 3,
-      idle_timeout: 20,
-      max_lifetime: 60 * 5,
-      connect_timeout: 10,
-      ssl: 'require',
-    }
-    compartida = { url, sql: postgres(url, opciones) }
+interface Cliente {
+  url: string
+  sql: Sql
+  /** Última vez que una consulta terminó bien: distingue "conexión muerta" de "hay fila". */
+  ultimoExito: number
+}
+
+const clientes = new Map<TipoCliente, Cliente>()
+
+function cliente(url: string, tipo: TipoCliente): Cliente {
+  const actual = clientes.get(tipo)
+  if (actual?.url === url) return actual
+  const opciones: OpcionesPostgres = {
+    prepare: false,
+    // Una consulta a la vez por conexión: el pooler en modo transacción no
+    // tolera varias consultas encadenadas en la misma conexión (pipelining),
+    // y quedaban colgadas hasta el statement timeout.
+    max_pipeline: 1,
+    max: tipo === 'principal' ? 4 : 2,
+    idle_timeout: 20,
+    max_lifetime: 60 * 5,
+    connect_timeout: 10,
+    ssl: 'require',
   }
-  return compartida.sql
+  const nuevo = { url, sql: postgres(url, opciones), ultimoExito: Date.now() }
+  clientes.set(tipo, nuevo)
+  return nuevo
 }
 
-/** Descarta el cliente actual (sus conexiones pueden estar muertas). */
-function reiniciar(): void {
-  const viejo = compartida?.sql
-  compartida = null
-  void viejo?.end({ timeout: 0 }).catch(() => undefined)
+/** Descarta un cliente cuyas conexiones dejaron de responder. */
+function reiniciar(tipo: TipoCliente, viejo: Cliente): void {
+  if (clientes.get(tipo) === viejo) clientes.delete(tipo)
+  void viejo.sql.end({ timeout: 0 }).catch(() => undefined)
 }
 
-async function conTiempo<T>(url: string, consulta: (sql: Sql) => Promise<T>): Promise<T> {
+async function conTiempo<T>(url: string, tipo: TipoCliente, consulta: (sql: Sql) => Promise<T>): Promise<T> {
+  const c = cliente(url, tipo)
   let temporizador: ReturnType<typeof setTimeout> | undefined
   const limite = new Promise<never>((_, rechazar) => {
     temporizador = setTimeout(() => rechazar(new TiempoAgotadoError()), TIEMPO_MAXIMO_MS)
   })
-  const promesa = consulta(cliente(url))
+  const promesa = consulta(c.sql)
   // Si gana el tiempo máximo, el error tardío de la consulta no debe quedar sin atender
   // (en Node, un rechazo sin atender cierra el proceso).
   promesa.catch(() => undefined)
   try {
-    return await Promise.race([promesa, limite])
+    const resultado = await Promise.race([promesa, limite])
+    c.ultimoExito = Date.now()
+    return resultado
   } catch (err) {
-    if (err instanceof TiempoAgotadoError) reiniciar()
+    // Solo se descarta si nada ha funcionado en todo este lapso (conexión muerta).
+    // Si hubo éxitos recientes, la consulta solo esperó en la fila: no se botan las demás.
+    if (err instanceof TiempoAgotadoError && Date.now() - c.ultimoExito >= TIEMPO_MAXIMO_MS) reiniciar(tipo, c)
     throw err
   } finally {
     clearTimeout(temporizador)
@@ -79,14 +98,16 @@ export function crearRepoPostgres(url: string): Repositorio {
   /** Lectura: si la conexión estaba muerta, se reintenta una vez con una nueva. */
   const leer = async <T>(consulta: (sql: Sql) => Promise<T>): Promise<T> => {
     try {
-      return await conTiempo(url, consulta)
+      return await conTiempo(url, 'principal', consulta)
     } catch (err) {
-      if (err instanceof TiempoAgotadoError) return conTiempo(url, consulta)
+      if (err instanceof TiempoAgotadoError) return conTiempo(url, 'principal', consulta)
       throw err
     }
   }
   /** Escritura: sin reintento automático (podría haberse guardado igual). */
-  const escribir = <T>(consulta: (sql: Sql) => Promise<T>): Promise<T> => conTiempo(url, consulta)
+  const escribir = <T>(consulta: (sql: Sql) => Promise<T>): Promise<T> => conTiempo(url, 'principal', consulta)
+  /** Métricas anónimas: cliente propio; si falla, se pierde el evento. */
+  const medir = <T>(consulta: (sql: Sql) => Promise<T>): Promise<T> => conTiempo(url, 'metricas', consulta)
 
   return {
     territorio: () =>
@@ -185,7 +206,7 @@ export function crearRepoPostgres(url: string): Repositorio {
       }),
 
     registrarEventoCuestionario: (sesionHash, paso, evento) =>
-      escribir(async (sql) => {
+      medir(async (sql) => {
         await sql`insert into registro.eventos_cuestionario (sesion_hash, paso, evento) values (${sesionHash}, ${paso}, ${evento})`
       }),
 

@@ -188,29 +188,6 @@
   gap: 2px;
 }
 
-/* Nombre del paso actual en una línea propia (solo en pantallas angostas). */
-.hitoActual {
-  display: none;
-  margin: 0;
-  font-size: var(--type-caption-size);
-  font-weight: 700;
-}
-
-@media (max-width: 520px) {
-  /* Bajo cada tramo no cabe el texto: se muestra solo el paso actual, completo.
-     Los nombres de cada tramo siguen disponibles para lectores de pantalla. */
-  .hitoTexto {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-  }
-  .hitoActual {
-    display: block;
-  }
-}
-
 /* ── Formulario ─────────────────────────────────────────────────────────── */
 .formulario {
   display: flex;
@@ -222,10 +199,27 @@
 .meta {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: var(--space-3);
-  flex-wrap: wrap;
   font-size: var(--type-body-sm-size);
   color: var(--color-text-secondary);
+}
+
+/* Escritorio: tiempo en palabras; celular: versión corta en la misma línea. */
+.metaCorto {
+  display: none;
+}
+
+.tiempoLargo {
+  margin-left: var(--space-3);
+}
+
+.movimientoMovil {
+  display: none;
+}
+
+.panelFranja {
+  display: none;
 }
 
 .paso {
@@ -573,21 +567,20 @@
 
 .celebracion {
   margin: 0;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: var(--space-2);
-  align-self: flex-start;
-  padding: var(--space-2) var(--space-4) var(--space-2) var(--space-2);
-  border-radius: var(--radius-large);
-  background: var(--color-success-bg);
+  min-height: 24px;
   color: var(--green-700);
   font-weight: 700;
+  line-height: 1.25;
   animation: entrar var(--duration-standard) var(--ease-flow) both;
 }
 
 .celebracionCheck {
-  width: 28px;
-  height: 28px;
+  flex: none;
+  width: 24px;
+  height: 24px;
   display: grid;
   place-items: center;
   border-radius: var(--radius-full);
@@ -743,5 +736,383 @@
   .raiz *::after {
     animation: none !important;
     transition: none !important;
+  }
+}
+
+/* ── Preguntas compactas ────────────────────────────────────────────────── */
+.listaCompacta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 620px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chips :global(.hds-chip) {
+  min-height: 48px;
+  cursor: pointer;
+}
+
+.chips :global(.hds-chip)[aria-pressed='true'] {
+  background: var(--blue-700);
+  border-color: var(--blue-700);
+  color: var(--color-text-inverse);
+}
+
+.consentimiento summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--color-text-link);
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.consentimiento[open] summary {
+  margin-bottom: var(--space-2);
+}
+
+/* ── Celular: cada pregunta entra completa en la pantalla ───────────────── */
+@media (max-width: 959px) {
+  /* --alto-libre lo calcula el componente: alto de la pantalla menos el encabezado del sitio. */
+  .raiz {
+    min-height: var(--alto-libre, auto);
+    gap: var(--space-3);
+  }
+
+  .layout {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .formulario {
+    flex: 1;
+    gap: var(--space-3);
+  }
+
+  /* La pregunta se estira: los botones y la franja quedan siempre al fondo. */
+  .pasoAnim {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .pasoAnim > .paso {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .accionesUbicacion {
+    flex-wrap: nowrap;
+  }
+
+  /* El mapa usa el alto que quede libre (mínimo 120 px). */
+  .mapa {
+    flex: 1 1 0;
+    min-height: 120px;
+  }
+
+  .panelCompleto,
+  .pieFormulario {
+    display: none;
+  }
+
+  .desbloqueo {
+    gap: 6px;
+  }
+
+  .desbloqueoTitulo,
+  .celebracion {
+    font-size: var(--type-body-sm-size);
+  }
+
+  .hitos {
+    gap: 4px;
+  }
+
+  .hitoBarra {
+    height: 6px;
+  }
+
+  .hitoTexto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .meta {
+    font-size: var(--type-caption-size);
+    min-height: 32px;
+  }
+
+  .metaTexto {
+    white-space: nowrap;
+  }
+
+  .metaLargo {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .metaCorto {
+    display: inline;
+  }
+
+  .movimientoMovil {
+    display: flex;
+  }
+
+  .movimientoMovil :global(.hds-switch) {
+    gap: var(--space-2);
+    font-size: var(--type-caption-size);
+    white-space: nowrap;
+  }
+
+  /* Atrás: solo la flecha (el nombre accesible sigue siendo "Atrás"). */
+  .textoAtras,
+  .textoCambiar {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .navegacion > :first-child:not(:last-child) {
+    flex: none;
+    min-width: 52px;
+    padding-inline: var(--space-3);
+  }
+
+  .opciones[data-columnas='2'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .consentimiento {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .paso {
+    gap: var(--space-3);
+  }
+
+  .pregunta {
+    font-size: 24px;
+  }
+
+  .ayudaPregunta {
+    font-size: var(--type-body-sm-size);
+    line-height: var(--type-body-sm-lh);
+  }
+
+  .input {
+    min-height: 52px;
+  }
+
+  .opciones {
+    gap: var(--space-2);
+  }
+
+  .opcion {
+    min-height: 52px;
+    padding: var(--space-2) var(--space-3);
+    gap: var(--space-2);
+  }
+
+  .opcionIcono {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+
+  .opcionCheck {
+    width: 24px;
+    height: 24px;
+  }
+
+  .contador {
+    padding: var(--space-3);
+  }
+
+  .resumenFila {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .cambiar {
+    min-width: 44px;
+    justify-content: center;
+  }
+
+  .resumenFila dd {
+    font-size: var(--type-body-sm-size);
+    line-height: var(--type-body-sm-lh);
+  }
+
+  .navegacion :global(.hds-btn) {
+    min-height: 52px;
+  }
+
+  /* Franja "Tu hogar": casa pequeña + mini tarjeta en texto legible. */
+  .panel {
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-medium);
+  }
+
+  .panelFranja {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .franjaCasa {
+    flex: none;
+    width: 76px;
+  }
+
+  .franjaCasa .casa {
+    display: block;
+    width: 76px;
+    max-width: none;
+  }
+
+  .miniTarjeta {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-medium);
+    background: var(--blue-700);
+    color: var(--color-text-inverse);
+    line-height: 1.25;
+  }
+
+  .miniMarca {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--yellow-400);
+  }
+
+  .miniNombre {
+    font-weight: 800;
+    font-size: var(--type-body-sm-size);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .miniDatos {
+    font-size: var(--type-caption-size);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* Celulares de poca altura (ej. iPhone SE, o con la barra del navegador visible):
+   todo un poco más compacto. Los botones y opciones mantienen 48 px para tocar. */
+@media (max-width: 959px) and (max-height: 780px) {
+  .raiz,
+  .layout,
+  .formulario {
+    gap: var(--space-2);
+  }
+
+  .paso {
+    gap: var(--space-2);
+  }
+
+  .pregunta {
+    font-size: 22px;
+    line-height: 1.12;
+  }
+
+  .opcion {
+    min-height: 48px;
+    padding-block: 6px;
+  }
+
+  .opcionDescripcion,
+  .opcion .ayuda {
+    font-size: var(--type-caption-size);
+    line-height: var(--type-caption-lh);
+  }
+
+  .input {
+    min-height: 48px;
+  }
+
+  .contador {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .contadorBtn {
+    width: 48px;
+    height: 48px;
+  }
+
+  .resumenFila {
+    padding-block: 6px;
+  }
+
+  .resumenFila dt {
+    font-size: 13px;
+  }
+
+  .resumenFila dd {
+    font-size: 15px;
+    line-height: 1.3;
+  }
+
+  .navegacion :global(.hds-btn) {
+    min-height: 48px;
+  }
+
+  .meta {
+    min-height: 28px;
+  }
+
+  .mapa {
+    min-height: 100px;
+  }
+
+  .panel {
+    padding: 6px var(--space-3);
+  }
+
+  .franjaCasa,
+  .franjaCasa .casa {
+    width: 60px;
+  }
+
+  .miniTarjeta {
+    padding: 6px var(--space-3);
+  }
+
+  .miniMarca {
+    font-size: 11px;
+  }
+}
+
+/* Pantallas muy bajas (iPhone SE): en las preguntas largas la franja "Tu hogar" cede su lugar. */
+@media (max-width: 959px) and (max-height: 700px) {
+  .raiz[data-largo] .panel {
+    display: none;
   }
 }

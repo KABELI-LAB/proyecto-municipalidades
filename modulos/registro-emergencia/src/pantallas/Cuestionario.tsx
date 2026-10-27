@@ -1,11 +1,11 @@
 import { Alert, Button, Icon, Loader } from '@muni/design-system'
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import type { Territorio } from '../../shared/contrato.ts'
 import type { Tenencia } from '../../shared/esquemas.ts'
 import { formatearRut } from '../../shared/rut.ts'
 import { formatearCelular, normalizarCelular } from '../../shared/telefono.ts'
-import { CONSENTIMIENTO, RECORDATORIOS } from '../../shared/textos.ts'
+import { CONSENTIMIENTO } from '../../shared/textos.ts'
 import { dentroDeHualane, MENSAJE_FUERA } from '../../shared/ubicacion.ts'
 import { CasaEnVivo } from '../componentes/CasaEnVivo'
 import { Campo, CampoRut, Contador, OpcionMultiple, Opciones } from '../componentes/controles'
@@ -65,6 +65,8 @@ const PASOS: Paso[] = [
 /** Pasos que avanzan solos al elegir una opción. */
 const AUTO_AVANCE: IdPaso[] = ['sector', 'tenencia', 'animales']
 const SEGUNDOS_POR_PASO = 7
+/** Preguntas con más contenido: en pantallas muy bajas ocultan la franja "Tu hogar" para entrar sin scroll. */
+const PASOS_LARGOS: IdPaso[] = ['direccion', 'especiales', 'resumen', 'activar']
 
 /** Campo del servidor → paso donde se corrige. */
 const PASO_DE_CAMPO: Record<string, IdPaso> = {
@@ -105,10 +107,12 @@ export function Cuestionario() {
   })
   const [intento, setIntento] = useState(false)
   const [celebracion, setCelebracion] = useState<string | null>(null)
-  const [desdeResumen, setDesdeResumen] = useState(false)
+  /** Editando desde el resumen: al terminar este paso se vuelve al resumen. */
+  const [volverTras, setVolverTras] = useState<IdPaso | null>(null)
   const [envio, setEnvio] = useState<Envio>({ estado: 'inactivo' })
   const [direccionAnim, setDireccionAnim] = useState<'adelante' | 'atras'>('adelante')
   const tituloRef = useRef<HTMLHeadingElement>(null)
+  const raizRef = useRef<HTMLDivElement>(null)
   const primerRender = useRef(true)
   const sesion = useMemo(() => {
     const previa = leer<string>(CLAVES.sesion)
@@ -119,7 +123,13 @@ export function Cuestionario() {
   }, [])
 
   const pedirTerritorio = useCallback(() => {
-    api.territorio().then(setTerritorio, () => setErrorCarga(true))
+    api.territorio().then(
+      (t) => {
+        setTerritorio(t)
+        setErrorCarga(false)
+      },
+      () => setErrorCarga(true),
+    )
   }, [api])
   useEffect(pedirTerritorio, [pedirTerritorio])
   const cargarTerritorio = () => {
@@ -155,6 +165,27 @@ export function Cuestionario() {
     return () => window.removeEventListener('pagehide', salir)
   }, [api, sesion, paso.id])
 
+  // El mensaje "Listo, …" se muestra unos segundos en el encabezado y desaparece.
+  useEffect(() => {
+    if (!celebracion) return
+    const t = setTimeout(() => setCelebracion(null), 3500)
+    return () => clearTimeout(t)
+  }, [celebracion])
+
+  // Celular: el cuestionario ocupa exactamente el alto libre bajo el encabezado del sitio,
+  // así cada pregunta, sus botones y la franja "Tu hogar" entran sin hacer scroll.
+  useLayoutEffect(() => {
+    const el = raizRef.current
+    if (!el) return
+    const medir = () => {
+      const arriba = el.getBoundingClientRect().top + window.scrollY
+      el.style.setProperty('--alto-libre', `calc(100dvh - ${Math.round(arriba) + 12}px)`)
+    }
+    medir()
+    window.addEventListener('resize', medir)
+    return () => window.removeEventListener('resize', medir)
+  }, [pendiente])
+
   const actualizar = (cambios: Partial<Borrador>) => setB((prev) => ajustarConteos({ ...prev, ...cambios }))
 
   const irA = (id: IdPaso, dir: 'adelante' | 'atras' = 'adelante') => {
@@ -172,8 +203,8 @@ export function Cuestionario() {
     api.evento(sesion, p.id, 'completado')
     const lista = PASOS.filter((x) => !x.visible || x.visible(borrador))
     const i = lista.findIndex((x) => x.id === p.id)
-    if (desdeResumen) {
-      setDesdeResumen(false)
+    if (volverTras === p.id) {
+      setVolverTras(null)
       irA('resumen')
       return
     }
@@ -190,8 +221,8 @@ export function Cuestionario() {
 
   const atras = () => {
     setCelebracion(null)
-    if (desdeResumen) {
-      setDesdeResumen(false)
+    if (volverTras) {
+      setVolverTras(null)
       irA('resumen', 'atras')
       return
     }
@@ -206,9 +237,11 @@ export function Cuestionario() {
     if (avanzar && AUTO_AVANCE.includes(pasoId)) setTimeout(() => siguiente(nuevo), menosMovimiento ? 0 : 220)
   }
 
-  const cambiarDesdeResumen = (id: IdPaso) => {
-    setDesdeResumen(true)
-    irA(id, 'atras')
+  /** Edita un grupo del resumen: recorre sus pasos y vuelve al resumen al terminar el último. */
+  const cambiarDesdeResumen = (desde: IdPaso, hasta: IdPaso) => {
+    const ultimo = visibles.some((x) => x.id === hasta) ? hasta : desde
+    setVolverTras(ultimo)
+    irA(desde, 'atras')
   }
 
   const enviar = async () => {
@@ -234,7 +267,7 @@ export function Cuestionario() {
         const destino = campo ? PASO_DE_CAMPO[campo] : undefined
         if (destino) {
           setEnvio({ estado: 'inactivo' })
-          setDesdeResumen(true)
+          setVolverTras(destino)
           irA(destino, 'atras')
           setIntento(true)
           return
@@ -296,55 +329,28 @@ export function Cuestionario() {
     )
   }
 
+  const nombreCorto = b.jefeNombre.trim() ? `Familia de ${b.jefeNombre.trim().split(/\s+/)[0]}` : null
+  const integrantes = alcanzado('personas') ? b.totalPersonas : null
+  const casa = (
+    <CasaEnVivo
+      adultos={Math.max(0, adultos)}
+      menores={b.menores18}
+      bebes={b.bebesMenores2}
+      mayores={b.mayores65}
+      mascotas={b.mascotas}
+      animales={b.tieneAnimales === true}
+      conUbicacion={respondido('direccion') || b.lat !== null}
+    />
+  )
+
   return (
-    <div className={`${s.raiz} ${asistido ? s.asistido : ''} ${menosMovimiento ? s.quieto : ''}`}>
-      <BarraDesbloqueo bloqueActual={bloqueActual} />
+    <div ref={raizRef} data-pantalla="cuestionario" data-largo={PASOS_LARGOS.includes(paso.id) || undefined} className={`${s.raiz} ${asistido ? s.asistido : ''} ${menosMovimiento ? s.quieto : ''}`}>
+      <Encabezado bloqueActual={bloqueActual} celebracion={celebracion} pregunta={indice + 1} total={visibles.length} restantes={restantes} />
 
       <div className={s.layout}>
-        <aside className={s.panel} aria-label="Tu hogar">
-          <p className={s.panelTitulo}>Tu hogar</p>
-          <div className={s.panelContenido}>
-            <CasaEnVivo
-              adultos={Math.max(0, adultos)}
-              menores={b.menores18}
-              bebes={b.bebesMenores2}
-              mayores={b.mayores65}
-              mascotas={b.mascotas}
-              animales={b.tieneAnimales === true}
-              conUbicacion={respondido('direccion') || b.lat !== null}
-            />
-            <div className={s.panelTarjeta}>
-              <TarjetaHogar
-                previa
-                datos={{
-                  nombre: b.jefeNombre.trim() ? `Familia de ${b.jefeNombre.trim().split(/\s+/)[0]}` : null,
-                  direccion: b.direccion.trim() || null,
-                  integrantes: alcanzado('personas') ? b.totalPersonas : null,
-                }}
-              />
-            </div>
-          </div>
-        </aside>
-
         <form className={s.formulario} onSubmit={onSubmit} noValidate>
-          <div className={s.meta}>
-            <span aria-live="polite">
-              Pregunta {indice + 1} de {visibles.length}
-            </span>
-            <span>{tiempoRestante(restantes)}</span>
-          </div>
-
-          {celebracion && (
-            <p className={s.celebracion} role="status">
-              <span className={s.celebracionCheck}>
-                <Icon name="check" size={18} />
-              </span>
-              {celebracion}
-            </p>
-          )}
-
           {!territorio && !errorCarga && <Loader label="Cargando…" />}
-          {errorCarga && (
+          {errorCarga && !territorio && (
             <Alert tone="error" title="No pudimos cargar los sectores" action={<Button variant="secondary" onClick={cargarTerritorio}>Reintentar</Button>}>
               Revisa tu conexión e inténtalo de nuevo.
             </Alert>
@@ -383,7 +389,7 @@ export function Cuestionario() {
           <div className={s.navegacion}>
             {indice > 0 && (
               <Button variant="ghost" size="lg" iconLeft="arrow-left" onClick={atras}>
-                Atrás
+                <span className={s.textoAtras}>Atrás</span>
               </Button>
             )}
             {/* En opción única el botón aparece al elegir (para quien usa teclado). */}
@@ -394,14 +400,37 @@ export function Cuestionario() {
                 </Button>
               ) : (
                 <Button type="submit" variant="primary" size="lg" iconRight="arrow-right" block>
-                  {desdeResumen ? 'Volver al resumen' : textoSiguiente(paso.id, b)}
+                  {volverTras === paso.id ? 'Volver al resumen' : textoSiguiente(paso.id, b)}
                 </Button>
               ))}
           </div>
-
         </form>
 
-        {/* Al final en celular (después del panel); bajo la pregunta en escritorio. */}
+        <aside className={s.panel} aria-label="Tu hogar">
+          {/* Escritorio: casa grande y tarjeta. */}
+          <div className={s.panelCompleto}>
+            <p className={s.panelTitulo}>Tu hogar</p>
+            <div className={s.panelContenido}>
+              {casa}
+              <div className={s.panelTarjeta}>
+                <TarjetaHogar previa datos={{ nombre: nombreCorto, direccion: b.direccion.trim() || null, integrantes }} />
+              </div>
+            </div>
+          </div>
+          {/* Celular: franja compacta para que la pregunta entre completa en la pantalla. */}
+          <div className={s.panelFranja}>
+            <div className={s.franjaCasa}>{casa}</div>
+            <div className={s.miniTarjeta}>
+              <span className={s.miniMarca}>Hogar Preparado</span>
+              <span className={s.miniNombre}>{nombreCorto ?? 'Tu familia'}</span>
+              <span className={s.miniDatos}>
+                {[integrantes && `${integrantes} ${integrantes === 1 ? 'persona' : 'personas'}`, b.direccion.trim()].filter(Boolean).join(' · ') ||
+                  'Se completa con tus respuestas'}
+              </span>
+            </div>
+          </div>
+        </aside>
+
         <div className={s.pieFormulario}>
           <InterruptorMovimiento />
           {asistido && <span className={s.etiquetaAsistido}>Modo asistido</span>}
@@ -413,31 +442,51 @@ export function Cuestionario() {
 
 function textoSiguiente(paso: IdPaso, b: Borrador): string {
   if (paso === 'especiales' && !b.especiales.ninguna && !b.especiales.noResponde && !b.especiales.discapacidad && !b.especiales.embarazada && !b.especiales.electrodependiente)
-    return 'Saltar esta pregunta'
+    return 'Saltar'
   if (paso === 'contacto' && !b.contactoNombre.trim() && !b.contactoTelefono.trim()) return 'Saltar por ahora'
   if (paso === 'encuentro' && !b.puntoEncuentro.trim()) return 'Usar el punto sugerido'
   if (paso === 'resumen') return 'Todo está bien'
   return 'Siguiente'
 }
 
-function tiempoRestante(pasos: number): string {
+function tiempoRestante(pasos: number): { corto: string; largo: string } {
   const seg = pasos * SEGUNDOS_POR_PASO
-  if (seg <= 0) return 'Último paso'
-  if (seg < 60) return `Quedan unos ${Math.max(10, Math.round(seg / 10) * 10)} segundos`
+  if (seg <= 0) return { corto: 'Último paso', largo: 'Último paso' }
+  if (seg < 60) {
+    const n = Math.max(10, Math.round(seg / 10) * 10)
+    return { corto: `Faltan ${n} s`, largo: `Quedan unos ${n} segundos` }
+  }
   const min = Math.round(seg / 60)
-  return min <= 1 ? 'Queda cerca de un minuto' : `Quedan unos ${min} minutos`
+  return min <= 1 ? { corto: 'Falta 1 min', largo: 'Queda cerca de un minuto' } : { corto: `Faltan ${min} min`, largo: `Quedan unos ${min} minutos` }
 }
 
-// ── Barra de progreso = barra de desbloqueo ──────────────────────────────────
+// ── Encabezado: barra de desbloqueo + avance + "Menos movimiento" ────────────
 
-function BarraDesbloqueo({ bloqueActual }: { bloqueActual: number }) {
+function Encabezado({ bloqueActual, celebracion, pregunta, total, restantes }: {
+  bloqueActual: number
+  celebracion: string | null
+  pregunta: number
+  total: number
+  restantes: number
+}) {
   const faltan = BLOQUES.length - 1 - bloqueActual
+  const tiempo = tiempoRestante(restantes)
   return (
     <div className={s.desbloqueo}>
-      <p className={s.desbloqueoTitulo}>
-        <Icon name={faltan === 0 ? 'credit-card' : 'lock'} size={18} />
-        {faltan === 0 ? 'Último paso para activar tu tarjeta' : `${faltan + 1} pasos para activar tu tarjeta`}
-      </p>
+      {/* El mensaje "Listo, …" ocupa el lugar del título unos segundos: no empuja la pregunta. */}
+      {celebracion ? (
+        <p className={s.celebracion} role="status">
+          <span className={s.celebracionCheck}>
+            <Icon name="check" size={16} />
+          </span>
+          {celebracion}
+        </p>
+      ) : (
+        <p className={s.desbloqueoTitulo}>
+          <Icon name={faltan === 0 ? 'credit-card' : 'lock'} size={18} />
+          {faltan === 0 ? 'Último paso para activar tu tarjeta' : `${faltan + 1} pasos para activar tu tarjeta`}
+        </p>
+      )}
       <ol className={s.hitos}>
         {BLOQUES.map((bl, i) => {
           const estado = i < bloqueActual ? 'listo' : i === bloqueActual ? 'actual' : 'pendiente'
@@ -447,15 +496,27 @@ function BarraDesbloqueo({ bloqueActual }: { bloqueActual: number }) {
               <span className={s.hitoTexto}>
                 {estado === 'listo' && <Icon name="check" size={14} />}
                 {bl.hito}
-                <span className={s.srOnly}>{estado === 'listo' ? ' (listo)' : estado === 'actual' ? ' (en curso)' : ''}</span>
+                {estado !== 'pendiente' && <span className={s.srOnly}>{`, ${estado === 'listo' ? 'listo' : 'en curso'}`}</span>}
               </span>
             </li>
           )
         })}
       </ol>
-      <p className={s.hitoActual} aria-hidden="true">
-        {BLOQUES[bloqueActual]?.hito}
-      </p>
+      <div className={s.meta}>
+        <span aria-live="polite" className={s.metaTexto}>
+          <span className={s.metaLargo}>
+            Pregunta {pregunta} de {total}
+            <span className={s.tiempoLargo}>{tiempo.largo}</span>
+          </span>
+          {/* Celular: versión corta en una línea (los lectores de pantalla leen la larga). */}
+          <span className={s.metaCorto} aria-hidden="true">
+            {pregunta} de {total} · {tiempo.corto}
+          </span>
+        </span>
+        <span className={s.movimientoMovil}>
+          <InterruptorMovimiento />
+        </span>
+      </div>
     </div>
   )
 }
@@ -473,7 +534,7 @@ interface ContenidoProps {
   tituloRef: React.RefObject<HTMLHeadingElement | null>
   menosMovimiento: boolean
   puntoSugerido: string | null
-  onCambiar: (id: IdPaso) => void
+  onCambiar: (desde: IdPaso, hasta: IdPaso) => void
 }
 
 function Pregunta({ titulo, ayuda, tituloRef, children, porque }: { titulo: string; ayuda?: ReactNode; porque?: string; tituloRef: ContenidoProps['tituloRef']; children: ReactNode }) {
@@ -574,7 +635,7 @@ function ContenidoPaso(p: ContenidoProps) {
 
     case 'tenencia':
       return (
-        <Pregunta titulo="¿La casa es propia, arrendada, cedida o vives como allegado?" tituloRef={tituloRef}>
+        <Pregunta titulo="¿De quién es la casa?" tituloRef={tituloRef}>
           <Opciones<Tenencia>
             nombre="tenencia"
             etiquetaGrupo="Tenencia de la casa"
@@ -585,7 +646,7 @@ function ContenidoPaso(p: ContenidoProps) {
               { valor: 'propia', etiqueta: 'Propia', icono: 'house' },
               { valor: 'arrendada', etiqueta: 'Arrendada', icono: 'wallet' },
               { valor: 'cedida', etiqueta: 'Cedida', descripcion: 'Te la prestan', icono: 'hand-heart' },
-              { valor: 'allegados', etiqueta: 'Allegados', descripcion: 'Vives en casa de otra familia', icono: 'users' },
+              { valor: 'allegados', etiqueta: 'Allegados', descripcion: 'En casa de otra familia', icono: 'users' },
             ]}
           />
           <ErrorPaso error={error} />
@@ -688,15 +749,16 @@ function ContenidoPaso(p: ContenidoProps) {
 
     case 'activar':
       return (
-        <Pregunta titulo="Activa tu Tarjeta Hogar Preparado" tituloRef={tituloRef}>
-          <div className={s.consentimiento}>
+        <Pregunta titulo="Activa tu tarjeta" tituloRef={tituloRef}>
+          <p className={s.ayudaPregunta}>Sin tu autorización no podemos crear la tarjeta.</p>
+          <details className={s.consentimiento}>
+            <summary>Leer la autorización completa</summary>
             {CONSENTIMIENTO.texto.split('\n').map((linea) => (
               <p key={linea}>{linea}</p>
             ))}
-          </div>
-          <p className={s.ayuda}>Para tener tu tarjeta necesitamos tu autorización. Sin ella no podemos crearla.</p>
+          </details>
           <OpcionMultiple etiqueta="Acepto que guarden los datos de mi hogar (obligatorio)" marcada={b.consentimiento} onChange={(v) => actualizar({ consentimiento: v })} icono="shield-check" />
-          <OpcionMultiple etiqueta="Recordatorios por WhatsApp" descripcion={RECORDATORIOS} marcada={b.recordatorios} onChange={(v) => actualizar({ recordatorios: v })} icono="message-circle" />
+          <OpcionMultiple etiqueta="Recordatorios por WhatsApp" descripcion="Cada 6 meses, para confirmar tus datos."  marcada={b.recordatorios} onChange={(v) => actualizar({ recordatorios: v })} icono="message-circle" />
           <ErrorPaso error={error} />
         </Pregunta>
       )
@@ -756,7 +818,7 @@ function PasoDireccion({ b, actualizar, tituloRef, error, menosMovimiento }: Con
         )}
         {b.lat !== null && (
           <Button variant="ghost" iconLeft="x" onClick={() => actualizar({ lat: null, lng: null })}>
-            Quitar ubicación
+            Quitar
           </Button>
         )}
       </div>
@@ -779,7 +841,7 @@ function PasoDireccion({ b, actualizar, tituloRef, error, menosMovimiento }: Con
             enfocar={enfocar}
             menosMovimiento={menosMovimiento}
           />
-          <p className={s.ayuda}>{b.lat !== null ? 'Listo. Toca otro punto o arrastra el pin si no quedó justo en tu casa.' : 'Toca tu casa en el mapa. Es opcional.'}</p>
+          <p className={s.ayuda}>{b.lat !== null ? 'Arrastra el pin si no quedó justo en tu casa.' : 'Toca tu casa en el mapa. Es opcional.'}</p>
         </Suspense>
       )}
     </Pregunta>
@@ -798,19 +860,26 @@ function PasoEspeciales({ b, actualizar, tituloRef }: ContenidoProps) {
   return (
     <Pregunta
       titulo="¿Hay alguna situación especial en tu hogar?"
-      ayuda="Es opcional. Puedes marcar más de una. No cambia tus beneficios."
-      porque="Nos ayuda a llegar primero donde hay personas que no pueden moverse solas o dependen de la electricidad."
+      ayuda="Es opcional. Nos ayuda a llegar primero a quien no puede moverse solo."
       tituloRef={tituloRef}
     >
-      <OpcionMultiple etiqueta="Persona con discapacidad o postrada" icono="accessibility" marcada={e.discapacidad > 0} onChange={(v) => set({ discapacidad: v ? 1 : 0 })}>
-        <div className={s.subcontador}>
-          <Contador etiqueta="¿Cuántas personas?" valor={e.discapacidad} min={1} max={b.totalPersonas} onChange={(v) => set({ discapacidad: v })} />
-        </div>
-      </OpcionMultiple>
-      <OpcionMultiple etiqueta="Embarazada" icono="baby" marcada={e.embarazada} onChange={(v) => set({ embarazada: v })} />
-      <OpcionMultiple etiqueta="Electrodependiente" descripcion="Necesita electricidad para un equipo médico" icono="heart-pulse" marcada={e.electrodependiente} onChange={(v) => set({ electrodependiente: v })} />
-      <OpcionMultiple etiqueta="Ninguna" marcada={e.ninguna} onChange={(v) => set({ ninguna: v })} />
-      <OpcionMultiple etiqueta="Prefiero no responder" marcada={e.noResponde} onChange={(v) => set({ noResponde: v })} />
+      <div className={s.listaCompacta}>
+        <OpcionMultiple etiqueta="Discapacidad o postración" icono="accessibility" marcada={e.discapacidad > 0} onChange={(v) => set({ discapacidad: v ? 1 : 0 })}>
+          <div className={s.subcontador}>
+            <Contador etiqueta="¿Cuántas personas?" valor={e.discapacidad} min={1} max={b.totalPersonas} onChange={(v) => set({ discapacidad: v })} />
+          </div>
+        </OpcionMultiple>
+        <OpcionMultiple etiqueta="Embarazada" icono="baby" marcada={e.embarazada} onChange={(v) => set({ embarazada: v })} />
+        <OpcionMultiple etiqueta="Electrodependiente" descripcion="Equipo médico eléctrico" icono="heart-pulse" marcada={e.electrodependiente} onChange={(v) => set({ electrodependiente: v })} />
+      </div>
+      <div className={s.chips} role="group" aria-label="Otras respuestas">
+        <button type="button" className="hds-chip" aria-pressed={e.ninguna} onClick={() => set({ ninguna: !e.ninguna })}>
+          Ninguna
+        </button>
+        <button type="button" className="hds-chip" aria-pressed={e.noResponde} onClick={() => set({ noResponde: !e.noResponde })}>
+          Prefiero no responder
+        </button>
+      </div>
     </Pregunta>
   )
 }
@@ -822,33 +891,59 @@ function PasoResumen({ b, territorio, tituloRef, onCambiar }: ContenidoProps) {
   const especiales = e.noResponde
     ? 'Prefiere no responder'
     : [e.discapacidad > 0 && `Discapacidad o postrados: ${e.discapacidad}`, e.embarazada && 'Embarazada', e.electrodependiente && 'Electrodependiente'].filter(Boolean).join(' · ') || 'Ninguna'
-  const filas: { titulo: string; valor: string; paso: IdPaso }[] = [
-    { titulo: 'Jefe o jefa de hogar', valor: b.jefeNombre, paso: 'nombre' },
-    { titulo: 'RUT', valor: b.sinRut ? 'Sin RUT (número provisorio)' : formatearRut(b.rut), paso: 'rut' },
-    { titulo: 'WhatsApp', valor: formatearCelular(normalizarCelular(b.whatsapp) ?? b.whatsapp), paso: 'whatsapp' },
-    { titulo: 'Sector', valor: sector ?? '', paso: 'sector' },
-    { titulo: 'Dirección', valor: b.direccion + (b.lat !== null ? ' (marcada en el mapa)' : ''), paso: 'direccion' },
-    { titulo: 'Casa', valor: tenencia, paso: 'tenencia' },
+  const personas = [
+    `${b.totalPersonas} ${b.totalPersonas === 1 ? 'persona' : 'personas'}`,
+    b.menores18 > 0 && `${b.menores18} ${b.menores18 === 1 ? 'menor' : 'menores'} de 18`,
+    b.bebesMenores2 > 0 && `${b.bebesMenores2} ${b.bebesMenores2 === 1 ? 'guagua' : 'guaguas'}`,
+    b.mayores65 > 0 && `${b.mayores65} ${b.mayores65 === 1 ? 'mayor' : 'mayores'} de 65`,
+  ]
+  const animales = [b.mascotas > 0 && `${b.mascotas} ${b.mascotas === 1 ? 'mascota' : 'mascotas'}`, b.tieneAnimales && (b.ganadoTexto.trim() || 'ganado u otros animales')]
+  const bloques: { titulo: string; lineas: (string | false | null | undefined)[]; desde: IdPaso; hasta: IdPaso }[] = [
     {
-      titulo: 'Personas',
-      valor: `${b.totalPersonas} en total · ${b.menores18} menores de 18${b.bebesMenores2 ? ` (${b.bebesMenores2} menores de 2)` : ''} · ${b.mayores65} mayores de 65`,
-      paso: 'personas',
+      titulo: 'Jefe o jefa de hogar',
+      lineas: [b.jefeNombre, `${b.sinRut ? 'Sin RUT' : formatearRut(b.rut)} · ${formatearCelular(normalizarCelular(b.whatsapp) ?? b.whatsapp)}`],
+      desde: 'nombre',
+      hasta: 'whatsapp',
     },
-    { titulo: 'Situaciones especiales', valor: especiales, paso: 'especiales' },
-    { titulo: 'Animales', valor: `${b.mascotas} mascotas${b.tieneAnimales ? ` · ${b.ganadoTexto || 'ganado u otros animales'}` : ''}`, paso: 'mascotas' },
-    { titulo: 'Contacto de emergencia', valor: [b.contactoNombre, b.contactoTelefono].filter((x) => x.trim()).join(' · ') || 'Sin contacto', paso: 'contacto' },
-    { titulo: 'Punto de encuentro', valor: b.puntoEncuentro.trim() || 'El sugerido para tu sector', paso: 'encuentro' },
+    {
+      titulo: 'Dónde viven',
+      lineas: [`${b.direccion}${b.lat !== null ? ' (en el mapa)' : ''}`, `${sector ?? ''} · Casa ${tenencia.toLowerCase()}`],
+      desde: 'sector',
+      hasta: 'tenencia',
+    },
+    {
+      titulo: 'Quiénes viven',
+      lineas: [personas.filter(Boolean).join(' · '), [especiales !== 'Ninguna' && especiales, ...animales].filter(Boolean).join(' · ')],
+      desde: 'personas',
+      hasta: 'animales',
+    },
+    {
+      titulo: 'En una emergencia',
+      lineas: [
+        [b.contactoNombre, b.contactoTelefono].filter((x) => x.trim()).join(' · ') || 'Sin contacto de emergencia',
+        `Punto de encuentro: ${b.puntoEncuentro.trim() || 'el sugerido'}`,
+      ],
+      desde: 'contacto',
+      hasta: 'encuentro',
+    },
   ]
   return (
-    <Pregunta titulo="Tu hogar" ayuda="Revisa que todo esté bien. Puedes cambiar cualquier dato." tituloRef={tituloRef}>
+    <Pregunta titulo="Revisa tu hogar" tituloRef={tituloRef}>
       <dl className={s.resumen}>
-        {filas.map((f) => (
+        {bloques.map((f) => (
           <div key={f.titulo} className={s.resumenFila}>
             <dt>{f.titulo}</dt>
-            <dd>{f.valor}</dd>
-            <button type="button" className={`hds-btn hds-btn--tertiary hds-btn--sm ${s.cambiar}`} onClick={() => onCambiar(f.paso)}>
-              <Icon name="pencil" size={16} />
-              Cambiar<span className={s.srOnly}> {f.titulo.toLowerCase()}</span>
+            {f.lineas.filter(Boolean).map((l) => (
+              <dd key={String(l)}>{l}</dd>
+            ))}
+            <button
+              type="button"
+              className={`hds-btn hds-btn--tertiary hds-btn--sm ${s.cambiar}`}
+              onClick={() => onCambiar(f.desde, f.hasta)}
+              aria-label={`Cambiar ${f.titulo.toLowerCase()}`}
+            >
+              <Icon name="pencil" size={18} />
+              <span className={s.textoCambiar}>Cambiar</span>
             </button>
           </div>
         ))}
