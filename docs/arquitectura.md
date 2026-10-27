@@ -36,7 +36,7 @@ Cada módulo es un workspace npm `@muni/<nombre>` en `modulos/<nombre>/` que:
 4. **Tiene su propio dev server** (`src/dev/main.tsx`, puerto propio) para desarrollar de forma aislada.
 5. **Recibe dependencias externas por props opcionales** (ej. `analyzer` en `CvTab`), así el sitio puede configurar backends.
 
-Rutas internas dentro de un módulo: por ahora no se usan. Si un módulo las necesita, se acordará usar rutas anidadas (`path/*`) en el sitio.
+Rutas internas: el sitio monta cada módulo en `path/*`, así un módulo puede declarar sus propias `<Routes>` relativas (sin `BrowserRouter` propio). Lo usa `registro-emergencia` (`/emergencia/inscripcion`, `/emergencia/listo`…).
 
 ## Crear un módulo
 
