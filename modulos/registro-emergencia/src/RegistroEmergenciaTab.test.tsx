@@ -81,16 +81,16 @@ describe('R2 · Cuestionario', () => {
     await user.click(screen.getByRole('button', { name: 'Agregar uno: Menores de 2 años' }))
     await siguiente(user)
     await siguiente(user) // mayores: 0
-    await siguiente(user, 'Saltar esta pregunta') // situaciones especiales
+    await siguiente(user, 'Saltar') // situaciones especiales
     await user.click(screen.getByRole('button', { name: 'Agregar uno: Mascotas' }))
     await siguiente(user)
     await user.click(screen.getByRole('radio', { name: 'No' }))
     await user.click(await screen.findByRole('button', { name: 'Saltar por ahora' })) // contacto
     await siguiente(user, 'Usar el punto sugerido')
 
-    const resumen = await screen.findByRole('heading', { name: 'Tu hogar', level: 1 })
+    const resumen = await screen.findByRole('heading', { name: 'Revisa tu hogar', level: 1 })
     expect(resumen).toBeInTheDocument()
-    expect(screen.getByText('3 en total · 1 menores de 18 (1 menores de 2) · 0 mayores de 65')).toBeInTheDocument()
+    expect(screen.getByText('3 personas · 1 menor de 18 · 1 guagua')).toBeInTheDocument()
     await siguiente(user, 'Todo está bien')
 
     // Sin consentimiento no se activa.
@@ -150,8 +150,30 @@ describe('R2 · Cuestionario', () => {
 
   it('anuncia en qué pregunta vas y cuánto falta', async () => {
     montar('/emergencia/inscripcion')
-    expect(await screen.findByText(/^Pregunta 1 de \d+$/)).toBeInTheDocument()
+    expect(await screen.findByText(/^Pregunta 1 de \d+/)).toBeInTheDocument()
     expect(screen.getByText(/^Quedan unos/)).toBeInTheDocument()
+  })
+
+  it('desde el resumen se edita un grupo completo y se vuelve al resumen', async () => {
+    const user = userEvent.setup()
+    sessionStorage.setItem(
+      'emergencia:borrador',
+      JSON.stringify({
+        paso: 'resumen',
+        borrador: { jefeNombre: 'Rosa Ficticia', sinRut: true, rut: '', whatsapp: '900009999', sectorId: '00000000-0000-4000-8000-000100000002', direccion: 'Pasaje Uno 12', tenencia: 'propia', tieneAnimales: false },
+      }),
+    )
+    montar('/emergencia/inscripcion')
+    await user.click(await screen.findByRole('button', { name: 'Seguir donde quedé' }))
+    await user.click(await screen.findByRole('button', { name: /Cambiar jefe o jefa de hogar/ }))
+    // Recorre nombre → RUT → WhatsApp y recién ahí vuelve.
+    await siguiente(user)
+    await siguiente(user)
+    await user.clear(screen.getByLabelText('Celular con WhatsApp'))
+    await user.type(screen.getByLabelText('Celular con WhatsApp'), '900001111')
+    await siguiente(user, 'Volver al resumen')
+    expect(await screen.findByRole('heading', { name: 'Revisa tu hogar' })).toBeInTheDocument()
+    expect(screen.getByText(/\+56 9 0000 1111/)).toBeInTheDocument()
   })
 
   it('modo asistido marca el origen y quita animaciones', async () => {

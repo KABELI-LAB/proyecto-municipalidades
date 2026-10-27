@@ -51,3 +51,11 @@
   line-height: 1.2;
   padding-block: var(--space-2);
 }
+
+/* Cuestionario en celular: menos margen para que cada pregunta entre en la pantalla. */
+@media (max-width: 959px) {
+  .root:has([data-pantalla='cuestionario']) {
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-3);
+  }
+}

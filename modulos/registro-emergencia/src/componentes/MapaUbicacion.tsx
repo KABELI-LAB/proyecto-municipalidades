@@ -47,10 +47,14 @@ export default function MapaUbicacion({ lat, lng, onChange, onFuera, enfocar, me
     }).addTo(m)
     m.on('click', (e: L.LeafletMouseEvent) => elegir(e.latlng))
     mapa.current = m
-    // El paso entra con una animación: recalcular el tamaño cuando termina evita mosaicos desalineados.
+    // El paso entra con una animación y en celular el mapa toma el alto libre:
+    // cuando cambia su tamaño, Leaflet recalcula los mosaicos.
     const t = setTimeout(() => m.invalidateSize(), 350)
+    const observador = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(() => m.invalidateSize()) : null
+    observador?.observe(contenedor.current)
     return () => {
       clearTimeout(t)
+      observador?.disconnect()
       m.remove()
       mapa.current = null
       pin.current = null
