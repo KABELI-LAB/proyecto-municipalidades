@@ -30,6 +30,10 @@ export function UploadZone({ onFile, disabled }: Props) {
       }}
       onDragLeave={() => setOver(false)}
       onDrop={onDrop}
+      // Toda la zona es tocable (no solo el botón): es lo que la persona espera.
+      onClick={(e) => {
+        if (!disabled && !(e.target as HTMLElement).closest('button')) inputRef.current?.click()
+      }}
     >
       <span className="hds-tile-icon hds-tile-icon--blue">
         <Icon name="file-up" size={26} />
