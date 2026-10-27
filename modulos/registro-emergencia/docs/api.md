@@ -4,8 +4,8 @@ Tipos en [`shared/contrato.ts`](../shared/contrato.ts). Errores: `{ error, codig
 
 | Método y ruta | Cuerpo | Respuesta | Notas |
 |---|---|---|---|
-| `GET /territorio` | — | `Territorio` | Sectores y juntas para el cuestionario. Cache 5 min |
-| `GET /resumen` | — | `ResumenPublico` | Contador (null bajo el mínimo), campaña, beneficios, barrios con ≥ mínimo de inscritos. Cache 1 min |
+| `GET /territorio` | — | `Territorio` | Sectores para el cuestionario. Cache 5 min |
+| `GET /resumen` | — | `ResumenPublico` | Contador de hogares (null bajo el mínimo). Cache 1 min |
 | `POST /inscripcion` | `InscripcionEntrada` | `201 InscripcionCreada` | `409 rut_existente` si el RUT ya tiene tarjeta. `400 validacion` con `campos`. Máx. 20 intentos por IP y hora |
 | `POST /mi-hogar` | `{ token }` | `MiHogar` | `401 token_invalido`. Token por POST (nunca en la URL) |
 | `POST /eventos` | `{ sesion, paso, evento }` | `204` | Métrica anónima del cuestionario (abandono por paso). La sesión se guarda como hash |

@@ -3,26 +3,18 @@
  * - repoPostgres.ts: Supabase (esquema privado `registro`), con DATABASE_URL.
  * - repoMemoria.ts: en memoria, para tests y para desarrollar sin base.
  */
-import type { Beneficio, BarrioAvance, Territorio } from '../shared/contrato.ts'
+import type { Territorio } from '../shared/contrato.ts'
 import type { Hogar } from '../shared/esquemas.ts'
-
-export interface Campana {
-  nombre: string
-  mensaje: string | null
-  beneficioDestacadoId: string | null
-}
 
 /** Fila de hogar con los nombres de su territorio (sin datos sensibles). */
 export interface HogarFila {
   id: string
   codigoFamiliar: string
   jefeNombre: string
-  nivel: 1 | 2 | 3
-  beneficioEstado: 'activo' | 'pausado'
+  tarjetaEstado: 'activo' | 'pausado'
   vigenteHasta: string
   sector: string
   puntoEncuentroSugerido: string | null
-  junta: string | null
   direccion: string
   totalPersonas: number
   menores18: number
@@ -33,7 +25,6 @@ export interface HogarFila {
   puntoEncuentro: string | null
   contactoEmergenciaNombre: string | null
   contactoEmergenciaTelefono: string | null
-  hitos: { tipo: 'inscrito' | 'mochila_lista' | 'plan_practicado'; completadoAt: string }[]
 }
 
 export interface NuevoHogar {
@@ -76,12 +67,8 @@ export interface Repositorio {
   /** Valores numéricos de registro.configuracion. */
   configuracion(): Promise<Record<string, number>>
   contarHogares(): Promise<number>
-  campanaVigente(hoy: string): Promise<Campana | null>
-  beneficiosActivos(hoy: string): Promise<Beneficio[]>
-  /** Avance de todas las juntas (el filtro de privacidad lo aplica el servicio). */
-  avanceBarrios(): Promise<BarrioAvance[]>
   rutExiste(rut: string): Promise<boolean>
-  /** Crea hogar + consentimiento + hito "inscrito" en una transacción. */
+  /** Crea hogar + consentimiento en una transacción. */
   crearHogar(nuevo: NuevoHogar): Promise<{ id: string }>
   guardarToken(token: NuevoToken): Promise<void>
   /** Hogar dueño de un token vigente (no expirado, no usado). */

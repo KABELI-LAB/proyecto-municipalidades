@@ -4,8 +4,7 @@
 import { generarCodigoFamiliar } from '../shared/codigo.ts'
 import type { InscripcionCreada, MiHogar, ResumenPublico } from '../shared/contrato.ts'
 import type { Inscripcion } from '../shared/esquemas.ts'
-import { diaSantiago } from '../shared/fechas.ts'
-import { generarPlanFamiliar, nombreTarjeta, vigenteHasta } from '../shared/incentivos.ts'
+import { generarPlanFamiliar, nombreTarjeta, vigenteHasta } from '../shared/tarjeta.ts'
 import { CONSENTIMIENTO } from '../shared/textos.ts'
 import type { MessagingProvider } from './mensajeria.ts'
 import { DuplicadoError, type HogarFila, type Repositorio } from './repo.ts'
@@ -28,24 +27,9 @@ export class RutExistenteError extends Error {
 const DIAS_TOKEN_MI_HOGAR = 180
 
 export async function resumenPublico(ctx: Contexto): Promise<ResumenPublico> {
-  const hoy = diaSantiago(ctx.ahora())
-  const [config, total, campana, beneficios, barrios] = await Promise.all([
-    ctx.repo.configuracion(),
-    ctx.repo.contarHogares(),
-    ctx.repo.campanaVigente(hoy),
-    ctx.repo.beneficiosActivos(hoy),
-    ctx.repo.avanceBarrios(),
-  ])
+  const [config, total] = await Promise.all([ctx.repo.configuracion(), ctx.repo.contarHogares()])
   const minimo = config.minimo_contador_landing ?? 50
-  const minimoBarrio = config.minimo_barrio_publico ?? 10
-  const destacado = beneficios.find((b) => b.id === campana?.beneficioDestacadoId) ?? beneficios[0] ?? null
-  return {
-    hogaresPreparados: total >= minimo ? total : null,
-    campana: campana ? { nombre: campana.nombre, mensaje: campana.mensaje } : null,
-    beneficioDestacado: destacado,
-    beneficios,
-    barrios: barrios.filter((b) => b.inscritos >= minimoBarrio).sort((a, b) => b.porcentaje - a.porcentaje),
-  }
+  return { hogaresPreparados: total >= minimo ? total : null }
 }
 
 export async function inscribir(
@@ -123,18 +107,15 @@ export function aMiHogar(f: HogarFila): MiHogar {
   return {
     codigoFamiliar: f.codigoFamiliar,
     nombreTarjeta: nombreTarjeta(f.jefeNombre),
-    nivel: f.nivel,
-    beneficioEstado: f.beneficioEstado,
+    tarjetaEstado: f.tarjetaEstado,
     vigenteHasta: f.vigenteHasta,
     sector: f.sector,
-    junta: f.junta,
     direccion: f.direccion,
     totalPersonas: f.totalPersonas,
     menores18: f.menores18,
     bebesMenores2: f.bebesMenores2,
     mayores65: f.mayores65,
     mascotas: f.mascotas,
-    hitos: f.hitos,
     plan: generarPlanFamiliar({
       totalPersonas: f.totalPersonas,
       menores18: f.menores18,

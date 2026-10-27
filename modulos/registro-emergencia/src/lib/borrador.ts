@@ -91,8 +91,6 @@ export function aInscripcion(b: Borrador, origen: 'autorregistro' | 'asistido'):
       jefeRut: b.sinRut ? null : b.rut,
       whatsapp: b.whatsapp,
       sectorId: b.sectorId ?? '',
-      // La junta de vecinos ya no se pregunta (era para el termómetro de barrios).
-      juntaVecinosId: null,
       direccion: b.direccion.trim(),
       lat: b.lat,
       lng: b.lng,

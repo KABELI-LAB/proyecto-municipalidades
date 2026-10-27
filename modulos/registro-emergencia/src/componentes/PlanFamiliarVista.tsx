@@ -1,6 +1,6 @@
 import { Icon } from '@muni/design-system'
 import { useState } from 'react'
-import type { PlanFamiliar } from '../../shared/incentivos.ts'
+import type { PlanFamiliar } from '../../shared/tarjeta.ts'
 import s from '../styles/paginas.module.css'
 
 /** Plan familiar en pantalla: punto de encuentro, mochila (marcable) y teléfonos. */

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { ALFABETO_CODIGO, generarCodigoFamiliar, normalizarCodigo } from './codigo.ts'
 import { hogarSchema, type HogarEntrada } from './esquemas.ts'
 import { diasHasta, fechaLegible, fechaTabla, sumarMeses } from './fechas.ts'
-import { generarPlanFamiliar, nombreTarjeta, vigenteHasta, type DatosPlan } from './incentivos.ts'
+import { generarPlanFamiliar, nombreTarjeta, vigenteHasta, type DatosPlan } from './tarjeta.ts'
 import { digitoVerificador, esRutValido, formatearRut, normalizarRut } from './rut.ts'
 import { formatearCelular, normalizarCelular } from './telefono.ts'
 
@@ -143,7 +143,6 @@ describe('validación del hogar', () => {
     jefeRut: '12.345.678-5',
     whatsapp: '9 0000 1234',
     sectorId: '00000000-0000-4000-8000-000100000001',
-    juntaVecinosId: null,
     direccion: 'Calle Larga 170',
     lat: null,
     lng: null,

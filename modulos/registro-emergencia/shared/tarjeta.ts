@@ -1,26 +1,8 @@
 /**
- * Reglas de incentivos (brief 6) y plan familiar (R3). Funciones puras: las usan
- * el servidor, la tarjeta y los PDF. Los datos sensibles nunca entran aquí.
+ * Tarjeta Hogar Preparado y plan familiar (R3). Funciones puras: las usan el
+ * servidor, la tarjeta y los PDF. Los datos sensibles nunca entran aquí.
  */
 import { sumarMeses, diaSantiago } from './fechas.ts'
-
-export type Nivel = 1 | 2 | 3
-
-export const NIVELES: Record<Nivel, { nombre: string; comoSeLogra: string }> = {
-  1: { nombre: 'Hogar inscrito', comoSeLogra: 'Completar el cuestionario' },
-  2: { nombre: 'Mochila lista', comoSeLogra: 'Prepara la mochila de emergencia de tu plan familiar' },
-  3: { nombre: 'Plan practicado', comoSeLogra: 'Practica tu plan en casa o asiste a un simulacro' },
-}
-
-export const CATEGORIAS = {
-  comercio: 'Comercio local',
-  actividad: 'Actividades',
-  servicio_municipal: 'Servicios municipales',
-  mascotas: 'Mascotas',
-  capacitacion: 'Capacitación',
-  barrio: 'Barrio',
-} as const
-export type Categoria = keyof typeof CATEGORIAS
 
 /** Fecha de vencimiento de la tarjeta a partir de la última confirmación. */
 export function vigenteHasta(confirmadoEl: Date, meses = 6): string {

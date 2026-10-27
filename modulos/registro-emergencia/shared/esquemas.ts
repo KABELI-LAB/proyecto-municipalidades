@@ -35,7 +35,6 @@ export const hogarSchema = z
     jefeRut: rut.nullable(),
     whatsapp: celular,
     sectorId: z.uuid(),
-    juntaVecinosId: z.uuid().nullable(),
     direccion: z.string().trim().min(3, 'Escribe tu dirección o una referencia para llegar.').max(200),
     lat: z.number().min(-90).max(90).nullable(),
     lng: z.number().min(-180).max(180).nullable(),

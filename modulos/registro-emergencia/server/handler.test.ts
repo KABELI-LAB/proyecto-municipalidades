@@ -33,7 +33,6 @@ const inscripcion = (cambios: Partial<InscripcionEntrada['hogar']> = {}): Inscri
     jefeRut: '12.345.678-5',
     whatsapp: '9 0000 9999',
     sectorId: '00000000-0000-4000-8000-000100000002',
-    juntaVecinosId: '00000000-0000-4000-8000-000200000003',
     direccion: 'Pasaje Uno 12',
     lat: null,
     lng: null,
@@ -58,20 +57,15 @@ const inscripcion = (cambios: Partial<InscripcionEntrada['hogar']> = {}): Inscri
 })
 
 describe('GET /territorio y /resumen', () => {
-  it('entrega sectores y juntas', async () => {
-    const r = await llamar('GET', '/territorio')
-    const t = (await r.json()) as Territorio
+  it('entrega los sectores', async () => {
+    const t = (await (await llamar('GET', '/territorio')).json()) as Territorio
     expect(t.sectores).toHaveLength(3)
-    expect(t.juntas).toHaveLength(6)
   })
 
-  it('oculta el contador bajo el mínimo y los barrios con pocos inscritos', async () => {
+  it('oculta el contador bajo el mínimo', async () => {
     const r = (await (await llamar('GET', '/resumen')).json()) as ResumenPublico
-    // El demo tiene 20 hogares (< 50) y ninguna junta llega a 10.
-    expect(r.hogaresPreparados).toBeNull()
-    expect(r.barrios).toEqual([])
-    expect(r.beneficioDestacado?.titulo).toBeTruthy()
-    expect(r.beneficios.length).toBe(8)
+    // El demo tiene 20 hogares (< 50).
+    expect(r).toEqual({ hogaresPreparados: null })
   })
 })
 
