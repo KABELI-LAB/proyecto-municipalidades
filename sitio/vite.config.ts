@@ -3,13 +3,14 @@ import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { cvApiDevPlugin } from '@muni/cv-empleabilidad/vite-plugin'
+import { emergenciaApiDevPlugin } from '@muni/registro-emergencia/vite-plugin'
 
 // Un único .env en la raíz del monorepo (ver .env.example).
 const envDir = fileURLToPath(new URL('..', import.meta.url))
 
 export default defineConfig({
   // Endpoints de desarrollo que en producción sirven las funciones de Netlify.
-  plugins: [react(), cvApiDevPlugin(envDir)],
+  plugins: [react(), cvApiDevPlugin(envDir), emergenciaApiDevPlugin(envDir)],
   envDir,
   server: { port: 5173 },
   test: {

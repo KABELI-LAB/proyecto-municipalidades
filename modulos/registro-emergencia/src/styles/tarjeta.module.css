@@ -1,0 +1,271 @@
+/* Tarjeta Hogar Preparado. Radio large (20px) para leerse como tarjeta física. */
+
+.envoltorio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  perspective: 1200px;
+  width: 100%;
+}
+
+.tarjeta {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  /* El contenido se mide en cqw: la tarjeta escala como un objeto físico. */
+  container-type: inline-size;
+  aspect-ratio: 1.586; /* proporción de tarjeta física (ID-1) */
+  transform-style: preserve-3d;
+  transition: transform var(--duration-complex) var(--ease-flow);
+}
+
+.volteada {
+  transform: rotateY(180deg);
+}
+
+/* "Menos movimiento": el volteo es instantáneo. */
+.quieta {
+  transition: none;
+}
+
+.cara {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6cqw;
+  padding: 4.4cqw;
+  border-radius: var(--radius-large);
+  background: var(--blue-700);
+  color: var(--color-text-inverse);
+  box-shadow: var(--shadow-medium);
+  overflow: hidden;
+  backface-visibility: hidden;
+  font-family: var(--font-sans);
+}
+
+.reverso {
+  transform: rotateY(180deg);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  gap: 3.3cqw;
+}
+
+.placa {
+  display: inline-flex;
+  padding: 1.1cqw;
+  background: #fff;
+  border-radius: var(--radius-small);
+}
+
+.marca {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.placa img {
+  /* Logo fija el alto en línea; aquí se escala con la tarjeta. */
+  height: 10cqw !important;
+}
+
+.marcaTitulo {
+  font-weight: 800;
+  font-size: 5cqw;
+  letter-spacing: -0.01em;
+}
+
+.marcaSub {
+  font-size: 3.4cqw;
+  font-weight: var(--type-overline-weight);
+  letter-spacing: var(--type-overline-track);
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.nombre {
+  margin: 1cqw 0 0;
+  font-size: 6.4cqw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.datos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6cqw;
+  font-size: 3.9cqw;
+  line-height: 1.35;
+}
+
+.datos li > :first-child {
+  flex: none;
+  width: 4.4cqw;
+  height: 4.4cqw;
+}
+
+.datos svg {
+  flex: none;
+  width: 4.4cqw;
+  height: 4.4cqw;
+}
+
+.datos li {
+  display: flex;
+  align-items: center;
+  gap: 2.2cqw;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.vacio {
+  opacity: 0.55;
+  font-style: italic;
+}
+
+.pie {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2.2cqw;
+  position: relative;
+  z-index: 1;
+}
+
+.codigo {
+  font-family: var(--font-mono);
+  font-size: 5cqw;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* Insignia de nivel: amarillo con texto Blue 950 (nunca texto blanco sobre amarillo). */
+.nivel {
+  padding: 0.5cqw 2.2cqw;
+  border-radius: var(--radius-full);
+  background: var(--yellow-400);
+  color: var(--blue-950);
+  font-size: 3.4cqw;
+  font-weight: 700;
+}
+
+.vigencia {
+  margin: 0;
+  font-size: 3.4cqw;
+  opacity: 0.9;
+  position: relative;
+  z-index: 1;
+}
+
+.cauce {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 26%;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.cauce > * {
+  width: 100%;
+  height: 100%;
+}
+
+.qr {
+  width: 38cqw;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  color: var(--color-text-muted);
+}
+
+.qr span,
+.qr svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.codigoGrande {
+  margin: 1.6cqw 0 0;
+  font-family: var(--font-mono);
+  font-size: 5.6cqw;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.ayudaQr {
+  margin: 0;
+  font-size: 3.4cqw;
+  line-height: 1.3;
+  color: var(--color-text-secondary);
+}
+
+.voltear {
+  min-height: 48px;
+}
+
+/* Miniatura del cuestionario y del héroe: misma tarjeta, más pequeña. */
+.previa {
+  max-width: 300px;
+}
+
+.previa .cara {
+  box-shadow: var(--shadow-small);
+}
+
+/* Entrega (R3): el envoltorio aparece desde abajo; el volteo lo hace .volteada en la tarjeta. */
+.entrega {
+  animation: aparecer var(--duration-complex) var(--ease-flow) both;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Sobre el azul del héroe: inclinada, con borde claro y sombra (va después de .previa). */
+.destacada {
+  transform: rotate(-5deg);
+}
+
+.destacada .cara {
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 18px 40px rgba(13, 21, 51, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tarjeta,
+  .entrega {
+    transition: none;
+    animation: none;
+  }
+}
