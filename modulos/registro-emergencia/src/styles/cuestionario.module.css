@@ -585,6 +585,22 @@
   flex-wrap: wrap;
 }
 
+.avisoGeo {
+  margin: 0;
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-medium);
+  background: var(--color-warning-bg);
+  font-size: var(--type-body-sm-size);
+  line-height: var(--type-body-sm-lh);
+}
+
+.avisoGeo > :first-child {
+  flex: none;
+  margin-top: 2px;
+}
+
 .mapa {
   height: 300px;
   border-radius: var(--radius-large);

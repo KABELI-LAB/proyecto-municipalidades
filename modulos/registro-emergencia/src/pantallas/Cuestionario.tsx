@@ -6,6 +6,7 @@ import type { Tenencia } from '../../shared/esquemas.ts'
 import { formatearRut } from '../../shared/rut.ts'
 import { formatearCelular, normalizarCelular } from '../../shared/telefono.ts'
 import { CONSENTIMIENTO, RECORDATORIOS } from '../../shared/textos.ts'
+import { dentroDeHualane, MENSAJE_FUERA } from '../../shared/ubicacion.ts'
 import { CasaEnVivo } from '../componentes/CasaEnVivo'
 import { Campo, CampoRut, Contador, OpcionMultiple, Opciones } from '../componentes/controles'
 import { InterruptorMovimiento } from '../componentes/InterruptorMovimiento'
@@ -72,6 +73,7 @@ const PASO_DE_CAMPO: Record<string, IdPaso> = {
   whatsapp: 'whatsapp',
   sectorId: 'sector',
   direccion: 'direccion',
+  lat: 'direccion',
   totalPersonas: 'personas',
   menores18: 'menores',
   bebesMenores2: 'bebes',
@@ -699,28 +701,39 @@ function ContenidoPaso(p: ContenidoProps) {
 function PasoDireccion({ b, actualizar, tituloRef, error, menosMovimiento }: ContenidoProps) {
   const [verMapa, setVerMapa] = useState(b.lat !== null)
   const [ubicando, setUbicando] = useState(false)
-  const [errorGeo, setErrorGeo] = useState<string | null>(null)
+  const [avisoGeo, setAvisoGeo] = useState<string | null>(null)
+  // Cambia con cada lectura del GPS para que el mapa se centre en ella.
+  const [enfocar, setEnfocar] = useState(0)
 
   const usarUbicacion = () => {
-    setErrorGeo(null)
+    setAvisoGeo(null)
+    setVerMapa(true)
     if (!('geolocation' in navigator)) {
-      setErrorGeo('Tu teléfono no comparte la ubicación. Toca tu casa en el mapa.')
-      setVerMapa(true)
+      setAvisoGeo('Tu teléfono no comparte la ubicación. Toca tu casa en el mapa.')
       return
     }
     setUbicando(true)
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setUbicando(false)
-        setVerMapa(true)
-        actualizar({ lat: Math.round(pos.coords.latitude * 1e6) / 1e6, lng: Math.round(pos.coords.longitude * 1e6) / 1e6 })
+        const { latitude: lat, longitude: lng, accuracy } = pos.coords
+        if (!dentroDeHualane(lat, lng)) {
+          setAvisoGeo('Tu ubicación actual está fuera de Hualañé. Si no estás en tu casa, tócala en el mapa o deja solo la dirección.')
+          return
+        }
+        actualizar({ lat: Math.round(lat * 1e6) / 1e6, lng: Math.round(lng * 1e6) / 1e6 })
+        setEnfocar((n) => n + 1)
+        if (accuracy > 150) setAvisoGeo('Tu ubicación es aproximada. Arrastra el pin hasta tu casa.')
       },
-      () => {
+      (err) => {
         setUbicando(false)
-        setVerMapa(true)
-        setErrorGeo('No pudimos obtener tu ubicación. Toca tu casa en el mapa.')
+        setAvisoGeo(
+          err.code === err.PERMISSION_DENIED
+            ? 'No diste permiso para usar tu ubicación. Toca tu casa en el mapa.'
+            : 'No pudimos obtener tu ubicación. Toca tu casa en el mapa.',
+        )
       },
-      { enableHighAccuracy: true, timeout: 10_000 },
+      { enableHighAccuracy: true, timeout: 15_000, maximumAge: 0 },
     )
   }
 
@@ -736,17 +749,32 @@ function PasoDireccion({ b, actualizar, tituloRef, error, menosMovimiento }: Con
             Marcar en el mapa
           </Button>
         )}
+        {b.lat !== null && (
+          <Button variant="ghost" iconLeft="x" onClick={() => actualizar({ lat: null, lng: null })}>
+            Quitar ubicación
+          </Button>
+        )}
       </div>
-      {errorGeo && <p className={s.ayuda}>{errorGeo}</p>}
+      {avisoGeo && (
+        <p className={s.avisoGeo} role="status">
+          <Icon name="info" size={20} />
+          {avisoGeo}
+        </p>
+      )}
       {verMapa && (
         <Suspense fallback={<Loader label="Cargando mapa…" />}>
           <MapaUbicacion
             lat={b.lat}
             lng={b.lng}
-            onChange={(lat, lng) => actualizar({ lat, lng })}
+            onChange={(lat, lng) => {
+              setAvisoGeo(null)
+              actualizar({ lat, lng })
+            }}
+            onFuera={() => setAvisoGeo(MENSAJE_FUERA)}
+            enfocar={enfocar}
             menosMovimiento={menosMovimiento}
           />
-          <p className={s.ayuda}>{b.lat !== null ? 'Listo. Arrastra el pin si no quedó justo en tu casa.' : 'Toca tu casa en el mapa. Es opcional.'}</p>
+          <p className={s.ayuda}>{b.lat !== null ? 'Listo. Toca otro punto o arrastra el pin si no quedó justo en tu casa.' : 'Toca tu casa en el mapa. Es opcional.'}</p>
         </Suspense>
       )}
     </Pregunta>

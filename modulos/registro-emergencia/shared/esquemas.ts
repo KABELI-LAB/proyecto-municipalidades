@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { normalizarRut } from './rut.ts'
 import { normalizarCelular } from './telefono.ts'
+import { dentroDeHualane, MENSAJE_FUERA } from './ubicacion.ts'
 
 /**
  * Validación compartida entre el cuestionario (navegador) y el servidor.
@@ -60,6 +61,10 @@ export const hogarSchema = z
       ctx.addIssue({ code: 'custom', path: ['mayores65'], message: 'Hay más personas mayores que personas en la casa.' })
     if (h.menores18 + h.mayores65 > h.totalPersonas)
       ctx.addIssue({ code: 'custom', path: ['mayores65'], message: 'Menores y mayores suman más que el total de personas.' })
+    if ((h.lat === null) !== (h.lng === null))
+      ctx.addIssue({ code: 'custom', path: ['lat'], message: 'La ubicación está incompleta. Márcala de nuevo en el mapa.' })
+    if (h.lat !== null && h.lng !== null && !dentroDeHualane(h.lat, h.lng))
+      ctx.addIssue({ code: 'custom', path: ['lat'], message: MENSAJE_FUERA })
     if (h.bebesMenores2 > h.menores18)
       ctx.addIssue({ code: 'custom', path: ['bebesMenores2'], message: 'Hay más bebés que menores de 18.' })
   })

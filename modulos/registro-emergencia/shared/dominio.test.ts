@@ -177,6 +177,14 @@ describe('validación del hogar', () => {
     expect(hogarSchema.safeParse({ ...valido, menores18: 2, mayores65: 2 }).success).toBe(false)
   })
 
+  it('acepta ubicación en Hualañé y rechaza la de otra ciudad', () => {
+    expect(hogarSchema.safeParse({ ...valido, lat: -34.9766, lng: -71.8044 }).success).toBe(true)
+    const concepcion = hogarSchema.safeParse({ ...valido, lat: -36.827, lng: -73.0503 })
+    expect(concepcion.success).toBe(false)
+    expect(concepcion.error?.issues[0]?.message).toMatch(/fuera de Hualañé/)
+    expect(hogarSchema.safeParse({ ...valido, lat: -34.9766, lng: null }).success).toBe(false)
+  })
+
   it('rechaza un RUT con dígito verificador incorrecto', () => {
     const r = hogarSchema.safeParse({ ...valido, jefeRut: '12.345.678-K' })
     expect(r.success).toBe(false)
