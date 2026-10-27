@@ -16,7 +16,7 @@ Registro de hogares para emergencias de la Municipalidad de Hualañé. Antes de 
 
 ## Arquitectura
 
-- **Datos:** esquema privado `registro` en Supabase (proyecto `hclrzxfpmowqdbjgpvrd`). **No se expone por la Data API**: `anon` y `authenticated` no tienen permisos; RLS activo sin políticas como defensa en profundidad. Solo el servidor conecta con `DATABASE_URL` (pooler, modo transacción).
+- **Datos:** esquema privado `registro` en Supabase (proyecto `hclrzxfpmowqdbjgpvrd`). **No se expone por la Data API**: `anon` y `authenticated` no tienen permisos; RLS activo sin políticas como defensa en profundidad. Solo el servidor conecta, con la variable `SUPABASEKEY` (o `DATABASE_URL`): cadena del pooler en modo transacción. Lectura y escritura verificadas el 27-10-2026.
 - **Servidor** (`server/`): handler `Request → Response` (`handler.ts`), reglas (`servicio.ts`), repositorio Postgres (`repoPostgres.ts`) y en memoria (`repoMemoria.ts`, mismo contrato `repo.ts`). Sin `DATABASE_URL`, el dev server usa el repositorio en memoria con datos demo.
 - **Compartido** (`shared/`): RUT, código familiar, celular, fechas es-CL, validación Zod, reglas de incentivos y plan familiar, contrato HTTP. Lo importan navegador y servidor.
 - **UI** (`src/`): rutas anidadas bajo `/emergencia/*` (el sitio monta los módulos con `path/*`). La pestaña recibe `api` por props (por defecto HTTP).

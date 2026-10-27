@@ -3,7 +3,7 @@ import { handleEmergenciaRequest } from '../../modulos/registro-emergencia/serve
 /**
  * /api/emergencia/* → Registro de emergencia. La lógica vive en el módulo
  * (modulos/registro-emergencia/server). Variables en Netlify:
- * DATABASE_URL (secreta, pooler de Supabase) y EMERGENCIA_URL_BASE.
+ * DATABASE_URL o SUPABASEKEY (secreta, pooler de Supabase) y EMERGENCIA_URL_BASE.
  */
 export default (req: Request) => handleEmergenciaRequest(req, process.env)
 

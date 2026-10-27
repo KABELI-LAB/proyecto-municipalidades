@@ -29,7 +29,7 @@ Si una clave se filtra por error: **rótela de inmediato** en el proveedor (Azur
    | `SMTP_PASS` | Contraseña de aplicación de esa cuenta | **Sí** |
    | `CV_EMAIL_FROM_NAME` | (Opcional) nombre visible del remitente. Por defecto "Municipalidad de Hualañé" | No |
    | `CV_EMAIL_REPLY_TO` | (Opcional) dirección que recibe las respuestas | No |
-   | `DATABASE_URL` | Registro de emergencia: cadena del *Transaction pooler* de Supabase (puerto 6543) | **Sí** |
+   | `SUPABASEKEY` | Registro de emergencia: cadena de conexión del *Transaction pooler* de Supabase (`postgresql://…:6543/postgres`). También se acepta `DATABASE_URL` | **Sí** |
    | `EMERGENCIA_URL_BASE` | URL pública de la pestaña, ej. `https://su-sitio.netlify.app/emergencia` | No |
 
    `VITE_CV_API_URL=/api` ya viene en `netlify.toml` (no es secreto).

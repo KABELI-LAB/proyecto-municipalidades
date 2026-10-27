@@ -20,14 +20,20 @@ type Env = Record<string, string | undefined>
 
 let contextoCompartido: Contexto | null = null
 
+/** Cadena de conexión a Supabase. `SUPABASEKEY` es el nombre usado en Netlify y en el .env local. */
+export function urlBaseDatos(env: Env): string | undefined {
+  return env.DATABASE_URL || env.SUPABASEKEY || undefined
+}
+
 /**
- * Con DATABASE_URL usa Supabase. Sin ella, solo fuera de producción, usa el
+ * Con DATABASE_URL (o SUPABASEKEY) usa Supabase. Sin ella, solo fuera de producción, usa el
  * repositorio en memoria con datos de demostración.
  */
 export function contextoDesdeEnv(env: Env): Contexto | null {
   if (contextoCompartido) return contextoCompartido
   let repo: Repositorio
-  if (env.DATABASE_URL) repo = crearRepoPostgres(conexion(env.DATABASE_URL))
+  const url = urlBaseDatos(env)
+  if (url) repo = crearRepoPostgres(conexion(url))
   else if (env.EMERGENCIA_DEMO === '1') repo = crearRepoMemoria()
   else return null
   contextoCompartido = {
@@ -47,7 +53,7 @@ function proveedorMensajeria(): MessagingProvider {
 export async function handleEmergenciaRequest(req: Request, env: Env, ctx = contextoDesdeEnv(env)): Promise<Response> {
   const ruta = new URL(req.url).pathname.replace(PREFIJO, '').replace(/\/$/, '') || '/'
   if (!ctx) {
-    console.error('[emergencia] falta DATABASE_URL')
+    console.error('[emergencia] falta DATABASE_URL o SUPABASEKEY')
     return error(503, 'El registro no está disponible en este momento. Inténtalo más tarde.', 'no_disponible')
   }
   try {

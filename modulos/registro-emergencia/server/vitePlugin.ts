@@ -1,10 +1,10 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { loadEnv, type Plugin } from 'vite'
-import { handleEmergenciaRequest, PREFIJO } from './handler.ts'
+import { handleEmergenciaRequest, PREFIJO, urlBaseDatos } from './handler.ts'
 
 /**
  * Sirve `/api/emergencia/*` en el dev server de Vite (en producción lo hace
- * netlify/functions/emergencia-api.mts). Lee DATABASE_URL del `.env` de la raíz;
+ * netlify/functions/emergencia-api.mts). Lee DATABASE_URL (o SUPABASEKEY) del `.env` de la raíz;
  * sin ella usa el repositorio en memoria con datos de demostración.
  */
 export function emergenciaApiDevPlugin(envDir: string): Plugin {
@@ -12,8 +12,10 @@ export function emergenciaApiDevPlugin(envDir: string): Plugin {
     name: 'muni-emergencia-api-dev',
     apply: 'serve',
     configureServer(server) {
-      const env = loadEnv(server.config.mode, envDir, ['DATABASE_URL', 'EMERGENCIA_'])
-      if (!env.DATABASE_URL) env.EMERGENCIA_DEMO = '1'
+      const env = loadEnv(server.config.mode, envDir, ['DATABASE_URL', 'SUPABASEKEY', 'EMERGENCIA_'])
+      if (!urlBaseDatos(env)) env.EMERGENCIA_DEMO = '1'
+      // Solo dice qué modo se usa, nunca el valor.
+      console.info(`[emergencia] datos: ${env.EMERGENCIA_DEMO === '1' ? 'demo en memoria' : 'Supabase'}`)
       server.middlewares.use(PREFIJO, (req, res) => {
         void forward(req, res, env)
       })

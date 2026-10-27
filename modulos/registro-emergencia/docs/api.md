@@ -14,5 +14,5 @@ Tipos en [`shared/contrato.ts`](../shared/contrato.ts). Errores: `{ error, codig
 
 | Variable | Dónde | Notas |
 |---|---|---|
-| `DATABASE_URL` | Netlify (secreta) y `.env` local | Cadena del pooler de Supabase en **modo transacción** (puerto 6543). Sin ella en desarrollo se usa el repositorio en memoria |
+| `SUPABASEKEY` (o `DATABASE_URL`) | Netlify (secreta) y `.env` local | Cadena de conexión del pooler de Supabase en **modo transacción** (puerto 6543), no una API key. Sin ella en desarrollo se usa el repositorio en memoria; el dev server dice en consola qué modo usa |
 | `EMERGENCIA_URL_BASE` | Netlify | URL pública de la pestaña, para los links de WhatsApp (ej. `https://…/emergencia`) |
