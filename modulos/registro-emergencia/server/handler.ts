@@ -10,7 +10,7 @@ import { inscripcionSchema } from '../shared/esquemas.ts'
 import { ConsoleProvider, type MessagingProvider } from './mensajeria.ts'
 import type { Repositorio } from './repo.ts'
 import { crearRepoMemoria } from './repoMemoria.ts'
-import { conexion, crearRepoPostgres } from './repoPostgres.ts'
+import { crearRepoPostgres, TiempoAgotadoError } from './repoPostgres.ts'
 import { pareceToken, sha256 } from './seguridad.ts'
 import { inscribir, miHogar, resumenPublico, RutExistenteError, type Contexto } from './servicio.ts'
 
@@ -33,7 +33,7 @@ export function contextoDesdeEnv(env: Env): Contexto | null {
   if (contextoCompartido) return contextoCompartido
   let repo: Repositorio
   const url = urlBaseDatos(env)
-  if (url) repo = crearRepoPostgres(conexion(url))
+  if (url) repo = crearRepoPostgres(url)
   else if (env.EMERGENCIA_DEMO === '1') repo = crearRepoMemoria()
   else return null
   contextoCompartido = {
@@ -73,6 +73,9 @@ export async function handleEmergenciaRequest(req: Request, env: Env, ctx = cont
     }
   } catch (err) {
     console.error(`[emergencia] ${req.method} ${ruta}:`, err instanceof Error ? err.name : 'error')
+    if (err instanceof TiempoAgotadoError) {
+      return error(503, 'No pudimos conectarnos al registro. Inténtalo de nuevo en unos segundos.', 'no_disponible')
+    }
     return error(500, 'Tuvimos un problema. Inténtalo de nuevo en unos minutos.')
   }
 }
@@ -112,7 +115,12 @@ const eventoSchema = z.object({
 async function postEvento(req: Request, ctx: Contexto): Promise<Response> {
   const e = eventoSchema.safeParse(await leerJson(req))
   if (!e.success) return new Response(null, { status: 204 })
-  await ctx.repo.registrarEventoCuestionario(await sha256(e.data.sesion), e.data.paso, e.data.evento)
+  // Métrica anónima: si la base falla, se pierde el evento y la persona no lo nota.
+  try {
+    await ctx.repo.registrarEventoCuestionario(await sha256(e.data.sesion), e.data.paso, e.data.evento)
+  } catch (err) {
+    console.error('[emergencia] evento no registrado:', err instanceof Error ? err.name : 'error')
+  }
   return new Response(null, { status: 204 })
 }
 
