@@ -29,8 +29,6 @@ export function RegistroEmergenciaTab({ api }: RegistroEmergenciaTabProps) {
           <Route path="inscripcion" element={<Cuestionario />} />
           <Route path="listo" element={<Recompensa />} />
           <Route path="beneficios" element={<Beneficios />} />
-          <Route path="mi-hogar" element={<EnConstruccion titulo="Mi hogar" />} />
-          <Route path="barrios" element={<EnConstruccion titulo="Termómetro de barrios" />} />
           <Route path="recuperar" element={<EnConstruccion titulo="Recuperar mi código" />} />
           <Route path="*" element={<EnConstruccion titulo="No encontramos esta página" />} />
         </Routes>
@@ -39,7 +37,7 @@ export function RegistroEmergenciaTab({ api }: RegistroEmergenciaTabProps) {
   )
 }
 
-/** Pantallas de los hitos siguientes (B2, B3, R6). */
+/** Pantallas de los hitos siguientes (ej. R6). */
 function EnConstruccion({ titulo }: { titulo: string }) {
   return (
     <div className={s.intro}>

@@ -6,7 +6,6 @@
 import escudoUrl from '@muni/design-system/assets/logo/escudo.png'
 import type { MiHogar } from '../../shared/contrato.ts'
 import { fechaTabla } from '../../shared/fechas.ts'
-import { NIVELES } from '../../shared/incentivos.ts'
 import { qrPng } from './qr'
 
 export const COLORES = {
@@ -88,19 +87,8 @@ export async function tarjetaPng(h: MiHogar): Promise<Blob> {
   ctx.font = fuente(700, 44, true)
   ctx.fillText(h.codigoFamiliar, 48, 440)
 
-  // Insignia de nivel: amarillo con texto Blue 950
-  const nivel = `Nivel ${h.nivel} · ${NIVELES[h.nivel].nombre}`
-  ctx.font = fuente(700, 24)
-  const nw = ctx.measureText(nivel).width + 36
-  ctx.fillStyle = COLORES.yellow400
-  ctx.beginPath()
-  ctx.roundRect(48, 466, nw, 44, 22)
-  ctx.fill()
-  ctx.fillStyle = COLORES.blue950
-  ctx.fillText(nivel, 66, 497)
-  ctx.fillStyle = '#fff'
   ctx.font = fuente(400, 24)
-  ctx.fillText(`Vigente hasta ${fechaTabla(h.vigenteHasta)}`, 48 + nw + 20, 497)
+  ctx.fillText(`Vigente hasta ${fechaTabla(h.vigenteHasta)}`, 48, 492)
 
   // QR sobre blanco
   const qr = await cargarImagen(await qrPng(h.codigoFamiliar, 300))

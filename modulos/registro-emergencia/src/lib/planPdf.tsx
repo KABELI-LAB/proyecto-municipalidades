@@ -8,7 +8,6 @@
 import { Document, Image, Page, pdf, StyleSheet, Text, View } from '@react-pdf/renderer'
 import type { MiHogar } from '../../shared/contrato.ts'
 import { fechaCorta, fechaTabla } from '../../shared/fechas.ts'
-import { NIVELES } from '../../shared/incentivos.ts'
 import { COLORES } from './descargas'
 
 const st = StyleSheet.create({
@@ -31,17 +30,6 @@ const st = StyleSheet.create({
   tarjetaNombre: { fontSize: 15, fontFamily: 'Helvetica-Bold', marginTop: 10, lineHeight: 1.15 },
   tarjetaDato: { fontSize: 9, marginTop: 3 },
   codigo: { fontSize: 14, fontFamily: 'Courier-Bold', marginTop: 14 },
-  nivel: {
-    alignSelf: 'flex-start',
-    marginTop: 6,
-    paddingVertical: 2,
-    paddingHorizontal: 8,
-    borderRadius: 8,
-    backgroundColor: COLORES.yellow400,
-    color: COLORES.blue950,
-    fontSize: 8,
-    fontFamily: 'Helvetica-Bold',
-  },
   qr: { width: 110, height: 110, backgroundColor: '#fff', padding: 4, borderRadius: 6, alignSelf: 'center' },
   recorte: { fontSize: 8, color: COLORES.neutral600, marginBottom: 18 },
   h2: { fontSize: 14, fontFamily: 'Helvetica-Bold', color: COLORES.blue700, marginTop: 14, marginBottom: 6 },
@@ -76,9 +64,6 @@ function PlanDocumento({ h, qr, escudo }: { h: MiHogar; qr: string; escudo: stri
               {h.totalPersonas} {h.totalPersonas === 1 ? 'persona' : 'personas'}
             </Text>
             <Text style={st.codigo}>{h.codigoFamiliar}</Text>
-            <Text style={st.nivel}>
-              Nivel {h.nivel} · {NIVELES[h.nivel].nombre}
-            </Text>
             <Text style={[st.tarjetaDato, { marginTop: 6 }]}>Vigente hasta {fechaTabla(h.vigenteHasta)}</Text>
           </View>
           <Image src={qr} style={st.qr} />

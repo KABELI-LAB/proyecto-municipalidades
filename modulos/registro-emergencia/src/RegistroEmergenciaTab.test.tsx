@@ -34,12 +34,12 @@ const siguiente = (user: ReturnType<typeof userEvent.setup>, nombre: string | Re
   user.click(screen.getByRole('button', { name: nombre }))
 
 describe('R1 · Landing', () => {
-  it('pone el beneficio como héroe y lleva al cuestionario', async () => {
+  it('pone la tarjeta como héroe, deja los beneficios por definir y lleva al cuestionario', async () => {
     montar('/emergencia')
-    expect(screen.getByRole('heading', { level: 1, name: /Inscribe a tu familia y obtén/ })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: /Inscribe a tu familia y recibe tu Tarjeta Hogar Preparado/ })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Quiero mi Tarjeta Hogar Preparado/ })).toHaveAttribute('href', '/emergencia/inscripcion')
-    // Beneficio destacado de la campaña vigente, cargado desde la API.
-    expect(await screen.findByText(/10 % de descuento en tu compra/i, { selector: 'h1 span' })).toBeInTheDocument()
+    expect(screen.getByText('Beneficios por definir')).toBeInTheDocument()
+    expect(screen.queryByText(/descuento/i)).not.toBeInTheDocument()
     // Con 20 hogares (< 50) no se muestra el contador.
     expect(screen.queryByText(/hogares de Hualañé ya están preparados/)).not.toBeInTheDocument()
   })
@@ -64,11 +64,8 @@ describe('R2 · Cuestionario', () => {
 
     // Opción única: avanza sola al elegir.
     await user.click(screen.getByRole('radio', { name: 'La Huerta' }))
-    expect(await screen.findByRole('heading', { name: '¿Cuál es tu junta de vecinos?' })).toBeInTheDocument()
-    await user.click(screen.getByRole('radio', { name: 'El Molino' }))
-    await siguiente(user)
-
-    await user.type(screen.getByLabelText('Dirección'), 'Pasaje Uno 12')
+    // Ya no se pregunta por la junta de vecinos.
+    await user.type(await screen.findByLabelText('Dirección'), 'Pasaje Uno 12')
     await siguiente(user)
     expect(screen.getByRole('status')).toHaveTextContent('Listo, tu hogar ya tiene ubicación.')
 
@@ -98,8 +95,9 @@ describe('R2 · Cuestionario', () => {
 
     // Sin consentimiento no se activa.
     await user.click(screen.getByRole('button', { name: 'Activar mi tarjeta' }))
-    expect(screen.getByRole('alert')).toHaveTextContent('Necesitamos tu autorización')
-    await user.click(screen.getByRole('checkbox', { name: 'Acepto que guarden los datos de mi hogar' }))
+    expect(screen.getByRole('alert')).toHaveTextContent('Sin tu autorización no podemos crear tu tarjeta')
+    expect(repo.estado.hogares).toHaveLength(20)
+    await user.click(screen.getByRole('checkbox', { name: 'Acepto que guarden los datos de mi hogar (obligatorio)' }))
     await user.click(screen.getByRole('button', { name: 'Activar mi tarjeta' }))
 
     // R3: tarjeta con código, plan familiar con pañales y alimento para la mascota.
@@ -110,6 +108,8 @@ describe('R2 · Cuestionario', () => {
     expect(screen.getByText('Pañales para 3 días')).toBeInTheDocument()
     expect(screen.getByText('Agua y alimento para 3 días')).toBeInTheDocument()
     expect(screen.getByText('Cancha de La Huerta')).toBeInTheDocument()
+    expect(screen.getByText('Beneficios por definir')).toBeInTheDocument()
+    expect(screen.queryByText(/Nivel 1/)).not.toBeInTheDocument()
 
     // Se creó un solo hogar y el borrador ya no está.
     expect(repo.estado.hogares).toHaveLength(21)
@@ -160,14 +160,11 @@ describe('R2 · Cuestionario', () => {
   })
 })
 
-describe('B1 · Catálogo', () => {
-  it('filtra por categoría', async () => {
-    const user = userEvent.setup()
+describe('B1 · Beneficios', () => {
+  it('muestra el espacio por definir', () => {
     montar('/emergencia/beneficios')
-    expect(await screen.findByRole('heading', { name: 'Pan amasado de regalo' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Mascotas' }))
-    expect(screen.queryByRole('heading', { name: 'Pan amasado de regalo' })).not.toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Prioridad en operativo de mascotas' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'Beneficios' })).toBeInTheDocument()
+    expect(screen.getByText('Beneficios por definir')).toBeInTheDocument()
   })
 })
 

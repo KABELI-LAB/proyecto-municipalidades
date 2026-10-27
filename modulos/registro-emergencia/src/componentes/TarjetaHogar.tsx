@@ -1,7 +1,6 @@
 import { Cauce, Icon, Logo } from '@muni/design-system'
 import { useEffect, useState } from 'react'
 import { fechaTabla } from '../../shared/fechas.ts'
-import { NIVELES, type Nivel } from '../../shared/incentivos.ts'
 import { useQr } from '../lib/qr'
 import s from '../styles/tarjeta.module.css'
 
@@ -10,7 +9,6 @@ export interface DatosTarjeta {
   direccion: string | null
   integrantes: number | null
   codigo?: string
-  nivel?: Nivel
   vigenteHasta?: string
   pausada?: boolean
 }
@@ -71,15 +69,10 @@ export function TarjetaHogar({ datos, previa = false, entrega = false, menosMovi
 
           <div className={s.pie}>
             <span className={s.codigo}>{datos.codigo ?? <span className={s.vacio}>Tu código</span>}</span>
-            {datos.nivel && (
-              <span className={s.nivel}>
-                Nivel {datos.nivel} · {NIVELES[datos.nivel].nombre}
-              </span>
-            )}
           </div>
           {datos.vigenteHasta && (
             <p className={s.vigencia}>
-              {datos.pausada ? 'Beneficios en pausa · confirma tus datos' : `Vigente hasta ${fechaTabla(datos.vigenteHasta)}`}
+              {datos.pausada ? 'Tarjeta en pausa · confirma tus datos' : `Vigente hasta ${fechaTabla(datos.vigenteHasta)}`}
             </p>
           )}
           <div className={s.cauce} aria-hidden="true">

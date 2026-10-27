@@ -3,15 +3,13 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { InscripcionCreada, MiHogar } from '../../shared/contrato.ts'
 import { fechaLegible } from '../../shared/fechas.ts'
-import { NIVELES, type Nivel } from '../../shared/incentivos.ts'
-import { BeneficioTarjeta } from '../componentes/BeneficioTarjeta'
 import { PlanFamiliarVista } from '../componentes/PlanFamiliarVista'
+import { PorDefinir } from '../componentes/PorDefinir'
 import { TarjetaHogar } from '../componentes/TarjetaHogar'
 import { CLAVES, leer } from '../lib/almacen'
 import { useEmergencia } from '../lib/contexto'
 import { descargar, planPdf, tarjetaPng } from '../lib/descargas'
 import { ruta } from '../lib/rutas'
-import { useResumen } from '../lib/useResumen'
 import s from '../styles/paginas.module.css'
 
 /** R3 · Momento de recompensa: se siente como recibir algo. */
@@ -64,7 +62,6 @@ export function Recompensa() {
             direccion: h.direccion,
             integrantes: h.totalPersonas,
             codigo: h.codigoFamiliar,
-            nivel: h.nivel,
             vigenteHasta: h.vigenteHasta,
           }}
         />
@@ -78,7 +75,15 @@ export function Recompensa() {
         </p>
       </section>
 
-      <Beneficios nivel={h.nivel} />
+      <section className={s.seccion} aria-labelledby="re-beneficios">
+        <div className={s.seccionCabecera}>
+          <p className={s.rotulo}>Beneficios</p>
+          <h2 id="re-beneficios" className={s.h2}>
+            Lo que ganas con tu tarjeta
+          </h2>
+        </div>
+        <PorDefinir titulo="Beneficios por definir" texto="Te avisaremos por WhatsApp cuando estén disponibles." />
+      </section>
 
       <section className={s.seccion} aria-labelledby="re-plan">
         <div className={s.seccionCabecera}>
@@ -143,51 +148,5 @@ function Acciones({ hogar }: { hogar: MiHogar }) {
         </div>
       )}
     </div>
-  )
-}
-
-function Beneficios({ nivel }: { nivel: Nivel }) {
-  const { resumen } = useResumen()
-  if (resumen.estado !== 'listo') return null
-  const todos = resumen.datos.beneficios
-  const desbloqueados = todos.filter((b) => b.nivelRequerido <= nivel)
-  const siguiente = (nivel < 3 ? nivel + 1 : null) as Nivel | null
-  const porDesbloquear = todos.filter((b) => b.nivelRequerido > nivel)
-  return (
-    <>
-      <section className={s.seccion} aria-labelledby="re-desbloqueados">
-        <div className={s.seccionCabecera}>
-          <p className={s.rotulo}>Beneficios desbloqueados</p>
-          <h2 id="re-desbloqueados" className={s.h2}>
-            Puedes usarlos desde hoy
-          </h2>
-        </div>
-        <ul className={s.grilla}>
-          {desbloqueados.map((b) => (
-            <li key={b.id}>
-              <BeneficioTarjeta beneficio={b} nivelHogar={nivel} />
-            </li>
-          ))}
-        </ul>
-      </section>
-      {siguiente && porDesbloquear.length > 0 && (
-        <section className={s.seccion} aria-labelledby="re-por-desbloquear">
-          <div className={s.seccionCabecera}>
-            <p className={s.rotulo}>Por desbloquear</p>
-            <h2 id="re-por-desbloquear" className={s.h2}>
-              Llega al nivel {siguiente}: {NIVELES[siguiente].nombre.toLowerCase()}
-            </h2>
-          </div>
-          <p>{NIVELES[siguiente].comoSeLogra}. Márcalo en Mi hogar cuando esté listo.</p>
-          <ul className={s.grilla}>
-            {porDesbloquear.map((b) => (
-              <li key={b.id}>
-                <BeneficioTarjeta beneficio={b} nivelHogar={nivel} />
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-    </>
   )
 }

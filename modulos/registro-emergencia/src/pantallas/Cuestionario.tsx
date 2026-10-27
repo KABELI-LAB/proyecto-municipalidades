@@ -30,7 +30,7 @@ const BLOQUES: { id: Bloque; hito: string; celebracion: string }[] = [
 
 type IdPaso =
   | 'nombre' | 'rut' | 'whatsapp'
-  | 'sector' | 'junta' | 'direccion'
+  | 'sector' | 'direccion'
   | 'tenencia' | 'personas' | 'menores' | 'bebes' | 'mayores' | 'especiales' | 'mascotas' | 'animales'
   | 'contacto' | 'encuentro' | 'resumen' | 'activar'
 
@@ -46,7 +46,6 @@ const PASOS: Paso[] = [
   { id: 'rut', bloque: 'datos', error: validar.rut },
   { id: 'whatsapp', bloque: 'datos', error: validar.whatsapp },
   { id: 'sector', bloque: 'ubicacion', error: (b) => (b.sectorId ? null : 'Elige tu sector.') },
-  { id: 'junta', bloque: 'ubicacion', error: (b) => (b.juntaVecinosId || b.sinJunta ? null : 'Elige tu junta de vecinos o "No sé".') },
   { id: 'direccion', bloque: 'ubicacion', error: validar.direccion },
   { id: 'tenencia', bloque: 'hogar', error: (b) => (b.tenencia ? null : 'Elige una opción.') },
   { id: 'personas', bloque: 'hogar' },
@@ -59,7 +58,7 @@ const PASOS: Paso[] = [
   { id: 'contacto', bloque: 'cierre', error: validar.contacto },
   { id: 'encuentro', bloque: 'cierre' },
   { id: 'resumen', bloque: 'cierre' },
-  { id: 'activar', bloque: 'cierre', error: (b) => (b.consentimiento ? null : 'Necesitamos tu autorización para guardar los datos.') },
+  { id: 'activar', bloque: 'cierre', error: (b) => (b.consentimiento ? null : 'Sin tu autorización no podemos crear tu tarjeta. Marca la casilla para continuar.') },
 ]
 
 /** Pasos que avanzan solos al elegir una opción. */
@@ -171,8 +170,7 @@ export function Cuestionario() {
     api.evento(sesion, p.id, 'completado')
     const lista = PASOS.filter((x) => !x.visible || x.visible(borrador))
     const i = lista.findIndex((x) => x.id === p.id)
-    // Cambiar el sector borra la junta: hay que elegirla de nuevo antes de volver.
-    if (desdeResumen && p.id !== 'sector') {
+    if (desdeResumen) {
       setDesdeResumen(false)
       irA('resumen')
       return
@@ -557,15 +555,12 @@ function ContenidoPaso(p: ContenidoProps) {
             nombre="sector"
             etiquetaGrupo="Sector"
             valor={b.sectorId}
-            onElegir={(v, avanzar) => elegir({ sectorId: v, ...(v !== b.sectorId && { juntaVecinosId: null, sinJunta: false }) }, avanzar)}
+            onElegir={(v, avanzar) => elegir({ sectorId: v }, avanzar)}
             opciones={territorio.sectores.map((x) => ({ valor: x.id, etiqueta: x.nombre, icono: 'map-pin' }))}
           />
           <ErrorPaso error={error} />
         </Pregunta>
       )
-
-    case 'junta':
-      return <PasoJunta {...p} />
 
     case 'direccion':
       return <PasoDireccion {...p} />
@@ -692,35 +687,13 @@ function ContenidoPaso(p: ContenidoProps) {
               <p key={linea}>{linea}</p>
             ))}
           </div>
-          <OpcionMultiple etiqueta="Acepto que guarden los datos de mi hogar" marcada={b.consentimiento} onChange={(v) => actualizar({ consentimiento: v })} icono="shield-check" />
+          <p className={s.ayuda}>Para tener tu tarjeta necesitamos tu autorización. Sin ella no podemos crearla.</p>
+          <OpcionMultiple etiqueta="Acepto que guarden los datos de mi hogar (obligatorio)" marcada={b.consentimiento} onChange={(v) => actualizar({ consentimiento: v })} icono="shield-check" />
           <OpcionMultiple etiqueta="Recordatorios por WhatsApp" descripcion={RECORDATORIOS} marcada={b.recordatorios} onChange={(v) => actualizar({ recordatorios: v })} icono="message-circle" />
           <ErrorPaso error={error} />
         </Pregunta>
       )
   }
-}
-
-function PasoJunta({ b, actualizar, territorio, tituloRef, error }: ContenidoProps) {
-  const [filtro, setFiltro] = useState('')
-  const juntas = territorio.juntas
-    .filter((j) => j.sectorId === b.sectorId)
-    .filter((j) => sinTildes(j.nombre).includes(sinTildes(filtro)))
-  return (
-    <Pregunta titulo="¿Cuál es tu junta de vecinos?" ayuda="Así sumas a tu barrio en el termómetro de barrios." tituloRef={tituloRef}>
-      <Campo id="re-junta-buscar" etiqueta="Buscar junta de vecinos" valor={filtro} onChange={setFiltro} autoComplete="off" />
-      <Opciones
-        nombre="junta"
-        etiquetaGrupo="Junta de vecinos"
-        valor={b.sinJunta ? 'ninguna' : b.juntaVecinosId}
-        onElegir={(v) => (v === 'ninguna' ? actualizar({ juntaVecinosId: null, sinJunta: true }) : actualizar({ juntaVecinosId: v, sinJunta: false }))}
-        opciones={[
-          ...juntas.map((j) => ({ valor: j.id, etiqueta: j.nombre.replace(/^Junta de vecinos /, ''), icono: 'users' })),
-          { valor: 'ninguna', etiqueta: 'No sé cuál es o no hay', icono: 'circle' },
-        ]}
-      />
-      <ErrorPaso error={error} />
-    </Pregunta>
-  )
 }
 
 function PasoDireccion({ b, actualizar, tituloRef, error, menosMovimiento }: ContenidoProps) {
@@ -811,7 +784,6 @@ function PasoEspeciales({ b, actualizar, tituloRef }: ContenidoProps) {
 
 function PasoResumen({ b, territorio, tituloRef, onCambiar }: ContenidoProps) {
   const sector = territorio.sectores.find((x) => x.id === b.sectorId)?.nombre
-  const junta = b.sinJunta ? 'No sé / no hay' : territorio.juntas.find((x) => x.id === b.juntaVecinosId)?.nombre
   const tenencia = { propia: 'Propia', arrendada: 'Arrendada', cedida: 'Cedida', allegados: 'Allegados' }[b.tenencia ?? 'propia']
   const e = b.especiales
   const especiales = e.noResponde
@@ -821,7 +793,7 @@ function PasoResumen({ b, territorio, tituloRef, onCambiar }: ContenidoProps) {
     { titulo: 'Jefe o jefa de hogar', valor: b.jefeNombre, paso: 'nombre' },
     { titulo: 'RUT', valor: b.sinRut ? 'Sin RUT (número provisorio)' : formatearRut(b.rut), paso: 'rut' },
     { titulo: 'WhatsApp', valor: formatearCelular(normalizarCelular(b.whatsapp) ?? b.whatsapp), paso: 'whatsapp' },
-    { titulo: 'Sector y junta de vecinos', valor: [sector, junta].filter(Boolean).join(' · '), paso: 'sector' },
+    { titulo: 'Sector', valor: sector ?? '', paso: 'sector' },
     { titulo: 'Dirección', valor: b.direccion + (b.lat !== null ? ' (marcada en el mapa)' : ''), paso: 'direccion' },
     { titulo: 'Casa', valor: tenencia, paso: 'tenencia' },
     {
@@ -850,8 +822,4 @@ function PasoResumen({ b, territorio, tituloRef, onCambiar }: ContenidoProps) {
       </dl>
     </Pregunta>
   )
-}
-
-function sinTildes(t: string): string {
-  return t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
 }

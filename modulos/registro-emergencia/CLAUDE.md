@@ -7,9 +7,11 @@ Registro de hogares para emergencias de la Municipalidad de Hualañé. Antes de 
 ## Estado actual (por hito del brief)
 
 - **Hito 0 · Base: listo.** Módulo, esquema Supabase con RLS, seed ficticio, API `/api/emergencia/*` (función de Netlify + plugin de Vite), tests.
-- **Hito 1 · Cuestionario (R2): listo.** Una pregunta por pantalla, avance automático, contadores, RUT en vivo, mapa Leaflet, condicionales, casa que se arma en vivo, barra de desbloqueo, guardado en sessionStorage, modo asistido (`?modo=asistido`), "Menos movimiento".
-- **Hito 2 · Recompensa (R1, R3, B1): listo.** Landing con tarjeta héroe y contador real, creación de hogar + consentimiento + código + QR, entrega animada, beneficios desbloqueados/por desbloquear, plan familiar, PNG y PDF, catálogo con filtro.
-- **Pendiente:** hito 3 (B2 Mi hogar, niveles, B3 barrios), 4 (R4 recordatorios, R5 edición, R6 recuperar), 5 (R7 funcionario), 6 (admin), 7 (endurecimiento). Sus rutas muestran "Estamos preparando esta sección".
+- **Hito 1 · Cuestionario (R2): listo.** Una pregunta por pantalla, avance automático, contadores, RUT en vivo, mapa Leaflet, condicionales, casa que se arma en vivo, barra de desbloqueo, guardado en sessionStorage, modo asistido (`?modo=asistido`), "Menos movimiento". **No** se pregunta la junta de vecinos (se guarda null).
+- **Hito 2 · Tarjeta (R1, R3): listo.** Landing con tarjeta héroe y contador real, creación de hogar + consentimiento **obligatorio** (sin consentimiento no hay tarjeta; lo exigen la UI y el servidor) + código + QR, entrega animada, plan familiar, PNG y PDF.
+- **Beneficios: por definir con el equipo.** La UI muestra `PorDefinir` en la landing, en R3 y en `/emergencia/beneficios`. Las tablas de incentivos y el seed siguen en la base, sin uso en pantalla.
+- **Descartado por ahora (decisión del equipo):** niveles 2 y 3, Mi hogar (B2) y termómetro de barrios (B3). La tarjeta no muestra nivel.
+- **Pendiente:** hito 4 (R4 recordatorios, R5 edición, R6 recuperar), 5 (R7 funcionario), 6 (admin), 7 (endurecimiento). Sus rutas muestran "Estamos preparando esta sección".
 - WhatsApp usa `ConsoleProvider` (no envía nada): el proveedor real está pendiente de decisión.
 
 ## Arquitectura
@@ -25,8 +27,8 @@ Registro de hogares para emergencias de la Municipalidad de Hualañé. Antes de 
 |---|---|
 | `src/index.ts` | **API pública**: `RegistroEmergenciaTab`, `registroEmergenciaTabMeta`, `crearApiHttp` |
 | `src/RegistroEmergenciaTab.tsx` | Rutas internas del módulo |
-| `src/pantallas/` | `Landing` (R1), `Cuestionario` (R2), `Recompensa` (R3), `Beneficios` (B1) |
-| `src/componentes/` | `TarjetaHogar`, `CasaEnVivo`, controles (contador, opciones, RUT), `MapaUbicacion` (lazy), `BeneficioTarjeta`, `PlanFamiliarVista` |
+| `src/pantallas/` | `Landing` (R1), `Cuestionario` (R2), `Recompensa` (R3), `Beneficios` (por definir) |
+| `src/componentes/` | `TarjetaHogar`, `CasaEnVivo`, controles (contador, opciones, RUT), `MapaUbicacion` (lazy), `PlanFamiliarVista`, `PorDefinir` |
 | `src/lib/borrador.ts` | Estado del cuestionario → cuerpo de la inscripción |
 | `src/lib/descargas.ts`, `planPdf.tsx` | Tarjeta PNG (canvas) y PDF (react-pdf, lazy) |
 | `shared/contrato.ts` | Contrato HTTP. Cambiarlo obliga a actualizar servidor, repo en memoria y `docs/api.md` |

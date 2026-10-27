@@ -12,9 +12,6 @@ export interface Borrador {
   sinRut: boolean
   whatsapp: string
   sectorId: string | null
-  juntaVecinosId: string | null
-  /** Eligió "No sé / no hay junta". */
-  sinJunta: boolean
   direccion: string
   lat: number | null
   lng: number | null
@@ -47,8 +44,6 @@ export const BORRADOR_VACIO: Borrador = {
   sinRut: false,
   whatsapp: '',
   sectorId: null,
-  juntaVecinosId: null,
-  sinJunta: false,
   direccion: '',
   lat: null,
   lng: null,
@@ -96,7 +91,8 @@ export function aInscripcion(b: Borrador, origen: 'autorregistro' | 'asistido'):
       jefeRut: b.sinRut ? null : b.rut,
       whatsapp: b.whatsapp,
       sectorId: b.sectorId ?? '',
-      juntaVecinosId: b.sinJunta ? null : b.juntaVecinosId,
+      // La junta de vecinos ya no se pregunta (era para el termómetro de barrios).
+      juntaVecinosId: null,
       direccion: b.direccion.trim(),
       lat: b.lat,
       lng: b.lng,
