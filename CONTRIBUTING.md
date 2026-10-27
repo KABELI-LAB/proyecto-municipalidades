@@ -5,8 +5,9 @@ Cada integrante del equipo construye **su propia pestaña** dentro de `modulos/`
 ```
 sitio/                ← Inicio + navbar (lo compartimos todos)
 modulos/
-  cv-empleabilidad/   ← "Revisa tu CV" (Benjamín)
-  tu-modulo/          ← tu sección
+  cv-empleabilidad/     ← "Revisa tu CV" (Benjamín)
+  registro-emergencia/  ← "Registro de emergencia" (Benjamín)
+  tu-modulo/            ← tu sección
 design-system/        ← colores, fuentes y estilos de Muni Hualañé
 ```
 

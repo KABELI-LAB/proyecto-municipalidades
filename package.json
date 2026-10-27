@@ -13,6 +13,7 @@
   "scripts": {
     "dev": "npm run dev -w sitio",
     "dev:cv": "npm run dev -w @muni/cv-empleabilidad",
+    "dev:emergencia": "npm run dev -w @muni/registro-emergencia",
     "nuevo-modulo": "node scripts/nuevo-modulo.mjs",
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
