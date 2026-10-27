@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react'
 import { CvTab, cvTabMeta } from '@muni/cv-empleabilidad'
+import { RegistroEmergenciaTab, registroEmergenciaTabMeta } from '@muni/registro-emergencia'
 // <nuevo-modulo:imports> (no borrar: `npm run nuevo-modulo` inserta aquí)
 
 /**
@@ -28,5 +29,6 @@ export interface Modulo {
 
 export const MODULOS: Modulo[] = [
   { meta: cvTabMeta, Component: CvTab },
+  { meta: registroEmergenciaTabMeta, Component: RegistroEmergenciaTab },
   // <nuevo-modulo:registro> (no borrar)
 ]

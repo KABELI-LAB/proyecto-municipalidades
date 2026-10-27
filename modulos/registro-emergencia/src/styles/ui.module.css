@@ -1,0 +1,53 @@
+/* Estilos de la pestaña. Solo tokens del design system Hualañé (--color-*, --space-*, --radius-*, --type-*). */
+
+.root {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6) var(--space-9);
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-lh);
+  color: var(--color-text);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+@media (max-width: 767px) {
+  .root {
+    padding: var(--space-6) var(--space-4) var(--space-8);
+  }
+}
+
+.root h1 {
+  margin: 0;
+  font: var(--type-h1-weight) clamp(32px, 5vw, var(--type-h1-size)) / var(--type-h1-lh) var(--font-sans);
+  letter-spacing: var(--type-h1-track);
+}
+
+.root p {
+  margin: 0;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.lead {
+  max-width: 38em;
+  font-size: var(--type-body-lg-size);
+  line-height: var(--type-body-lg-lh);
+  color: var(--color-text-secondary);
+}
+
+/* Los textos de botón pueden ser largos ("Quiero mi Tarjeta Hogar Preparado"):
+   en 390px se parten en dos líneas en vez de desbordar la pantalla. */
+.root :global(.hds-btn) {
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.2;
+  padding-block: var(--space-2);
+}

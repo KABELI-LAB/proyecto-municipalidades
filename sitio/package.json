@@ -15,6 +15,7 @@
   "dependencies": {
     "@muni/cv-empleabilidad": "*",
     "@muni/design-system": "*",
+    "@muni/registro-emergencia": "*",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-router-dom": "^7.18.4"

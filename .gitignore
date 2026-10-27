@@ -9,6 +9,14 @@ coverage/
 .vite/
 .claude/settings.local.json
 
+# Skills de Supabase instaladas localmente (npx skills add supabase/agent-skills).
+# La conexión MCP a Supabase va en la configuración local de Claude Code, no en el repo.
+.claude/skills/supabase/
+.claude/skills/supabase-postgres-best-practices/
+.agents/
+skills-lock.json
+.mcp.json
+
 # Export original de Claude Design: la versión integrada vive en design-system/
 /Hualañé Design System/
 /Hualañé Design System.zip

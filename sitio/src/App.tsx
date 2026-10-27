@@ -17,7 +17,7 @@ export function App() {
   // Al cambiar de pestaña: título del documento, scroll arriba y foco en el
   // contenido para que lectores de pantalla anuncien la nueva página.
   useEffect(() => {
-    const modulo = MODULOS.find((m) => m.meta.path === pathname)
+    const modulo = MODULOS.find((m) => pathname === m.meta.path || pathname.startsWith(`${m.meta.path}/`))
     document.title = modulo ? `${modulo.meta.label} · ${NOMBRE_SITIO}` : NOMBRE_SITIO
     if (primeraCarga.current) {
       primeraCarga.current = false
@@ -37,7 +37,8 @@ export function App() {
         <Routes>
           <Route path="/" element={<Inicio />} />
           {MODULOS.map(({ meta, Component }) => (
-            <Route key={meta.id} path={meta.path} element={<Component />} />
+            // `/*`: un módulo puede tener rutas internas (rutas anidadas, ver docs/arquitectura.md).
+            <Route key={meta.id} path={`${meta.path}/*`} element={<Component />} />
           ))}
           <Route path="*" element={<NoEncontrada />} />
         </Routes>

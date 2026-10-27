@@ -29,6 +29,8 @@ Si una clave se filtra por error: **rótela de inmediato** en el proveedor (Azur
    | `SMTP_PASS` | Contraseña de aplicación de esa cuenta | **Sí** |
    | `CV_EMAIL_FROM_NAME` | (Opcional) nombre visible del remitente. Por defecto "Municipalidad de Hualañé" | No |
    | `CV_EMAIL_REPLY_TO` | (Opcional) dirección que recibe las respuestas | No |
+   | `SUPABASEKEY` | Registro de emergencia: cadena de conexión del *Transaction pooler* de Supabase (`postgresql://…:6543/postgres`). También se acepta `DATABASE_URL` | **Sí** |
+   | `EMERGENCIA_URL_BASE` | URL pública de la pestaña, ej. `https://su-sitio.netlify.app/emergencia` | No |
 
    `VITE_CV_API_URL=/api` ya viene en `netlify.toml` (no es secreto).
 4. Haga un deploy y pruebe la pestaña "Revisa tu CV": el aviso bajo la zona de carga debe mencionar el servicio de inteligencia artificial y no debe aparecer el banner "Modo demostración".
@@ -56,5 +58,6 @@ Sin `.env` (o sin `VITE_CV_API_URL`), el módulo de CV usa el analizador simulad
 |---|---|---|
 | `POST /api/cv/analyze` | `netlify/functions/cv-analyze.mts` | `modulos/cv-empleabilidad/server/handler.ts` |
 | `POST /api/cv/enviar` | `netlify/functions/cv-enviar.mts` | `modulos/cv-empleabilidad/server/email.ts` |
+| `/api/emergencia/*` | `netlify/functions/emergencia-api.mts` | `modulos/registro-emergencia/server/handler.ts` (ver su `docs/api.md`) |
 
 Para agregar un endpoint de otro módulo: ponga la lógica en `modulos/<nombre>/server/` como un handler `Request → Response`, cree un wrapper delgado en `netlify/functions/` con `config.path = '/api/<nombre>/...'` y documente sus variables en `.env.example` y en esta tabla.
