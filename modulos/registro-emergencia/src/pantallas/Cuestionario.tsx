@@ -399,11 +399,13 @@ export function Cuestionario() {
               ))}
           </div>
 
-          <div className={s.pieFormulario}>
-            <InterruptorMovimiento />
-            {asistido && <span className={s.etiquetaAsistido}>Modo asistido</span>}
-          </div>
         </form>
+
+        {/* Al final en celular (después del panel); bajo la pregunta en escritorio. */}
+        <div className={s.pieFormulario}>
+          <InterruptorMovimiento />
+          {asistido && <span className={s.etiquetaAsistido}>Modo asistido</span>}
+        </div>
       </div>
     </div>
   )
@@ -451,6 +453,9 @@ function BarraDesbloqueo({ bloqueActual }: { bloqueActual: number }) {
           )
         })}
       </ol>
+      <p className={s.hitoActual} aria-hidden="true">
+        {BLOQUES[bloqueActual]?.hito}
+      </p>
     </div>
   )
 }

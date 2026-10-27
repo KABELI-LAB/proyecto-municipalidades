@@ -24,15 +24,31 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
+/* Celular: pregunta → panel "Tu hogar" → "Menos movimiento".
+   Escritorio: pregunta y "Menos movimiento" a la izquierda, panel fijo a la derecha. */
+.panel {
+  order: 2;
+}
+
+.pieFormulario {
+  order: 3;
+}
+
 @media (min-width: 960px) {
   .layout {
     grid-template-columns: minmax(0, 1fr) 340px;
+    /* La segunda fila absorbe el alto extra del panel: "Menos movimiento" queda pegado a la pregunta. */
+    grid-template-rows: auto 1fr;
     align-items: start;
   }
   .panel {
-    order: 2;
+    grid-column: 2;
+    grid-row: 1 / span 2;
     position: sticky;
     top: var(--space-5);
+  }
+  .pieFormulario {
+    grid-column: 1;
   }
 }
 
@@ -68,25 +84,17 @@
   align-self: center;
 }
 
-/* En móvil el panel es una franja compacta: casa y tarjeta lado a lado. */
+/* En celular la casa y la tarjeta van una bajo la otra, a un tamaño que se lee. */
 @media (max-width: 959px) {
   .panelContenido {
-    flex-direction: row;
     align-items: center;
   }
   .casa {
-    width: 42%;
-    max-width: 180px;
+    max-width: 240px;
   }
   .panelTarjeta {
-    flex: 1;
-    min-width: 0;
-  }
-}
-
-@media (max-width: 420px) {
-  .panelTarjeta {
-    font-size: 14px;
+    width: 100%;
+    max-width: 320px;
   }
 }
 
@@ -180,17 +188,26 @@
   gap: 2px;
 }
 
+/* Nombre del paso actual en una línea propia (solo en pantallas angostas). */
+.hitoActual {
+  display: none;
+  margin: 0;
+  font-size: var(--type-caption-size);
+  font-weight: 700;
+}
+
 @media (max-width: 520px) {
-  /* En pantallas angostas solo se lee el hito actual; los demás quedan para lectores de pantalla. */
-  .hito:not([data-estado='actual']) .hitoTexto {
+  /* Bajo cada tramo no cabe el texto: se muestra solo el paso actual, completo.
+     Los nombres de cada tramo siguen disponibles para lectores de pantalla. */
+  .hitoTexto {
     position: absolute;
     width: 1px;
     height: 1px;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
   }
-  .hito[data-estado='actual'] .hitoTexto {
-    white-space: nowrap;
+  .hitoActual {
+    display: block;
   }
 }
 
@@ -561,7 +578,7 @@
   gap: var(--space-2);
   align-self: flex-start;
   padding: var(--space-2) var(--space-4) var(--space-2) var(--space-2);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-large);
   background: var(--color-success-bg);
   color: var(--green-700);
   font-weight: 700;
@@ -667,6 +684,8 @@
   grid-row: 1 / span 2;
   align-self: center;
   min-height: 48px;
+  padding-inline: var(--space-2);
+  background: transparent;
 }
 
 .consentimiento {
