@@ -1,5 +1,6 @@
 /*
  * Design system Hualañé: tokens + capa de componentes (.hds-*).
+ * Incluye los temas de Curepto y Vichuquén (<html data-tema="curepto|vichuquen">).
  * Los módulos pueden importarlo: no aplica estilos a elementos globales.
  * Los estilos base (body, enlaces, foco) están en base.css y los importa solo el sitio.
  */
@@ -9,4 +10,6 @@
 @import './tokens/typography.css';
 @import './tokens/spacing.css';
 @import './tokens/effects.css';
+@import './tokens/temas/curepto.css';
+@import './tokens/temas/vichuquen.css';
 @import './components/hds.css';

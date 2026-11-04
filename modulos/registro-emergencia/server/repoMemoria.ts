@@ -4,6 +4,7 @@
  * importan de la base real (RUT y código únicos, tokens vigentes).
  */
 import type { Territorio } from '../shared/contrato.ts'
+import type { Integrante } from '../shared/esquemas.ts'
 import { datosDemo } from './datosDemo.ts'
 import { DuplicadoError, type EntradaAuditoria, type HogarFila, type NuevoHogar, type NuevoToken, type Repositorio } from './repo.ts'
 
@@ -35,6 +36,7 @@ export interface RepoMemoria extends Repositorio {
     tokens: (NuevoToken & { usadoAt: Date | null })[]
     auditoria: EntradaAuditoria[]
     consentimientos: (NuevoHogar['consentimiento'] & { hogarId: string })[]
+    integrantes: (Integrante & { hogarId: string })[]
     eventos: { paso: string; evento: string }[]
   }
 }
@@ -75,6 +77,7 @@ export function crearRepoMemoria(opciones: { conDemo?: boolean; hoy?: Date } = {
     tokens: [],
     auditoria: [],
     consentimientos: [],
+    integrantes: [],
     eventos: [],
   }
   const limites = new Map<string, number>()
@@ -126,6 +129,7 @@ export function crearRepoMemoria(opciones: { conDemo?: boolean; hoy?: Date } = {
         borrado: false,
       })
       estado.consentimientos.push({ ...n.consentimiento, hogarId: id })
+      estado.integrantes.push(...h.integrantes.map((p) => ({ ...p, hogarId: id })))
       return { id }
     },
 

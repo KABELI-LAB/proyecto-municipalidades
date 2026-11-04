@@ -1,4 +1,4 @@
-import { Icon } from '@muni/design-system'
+import { Icon, useMunicipio } from '@muni/design-system'
 import { Link } from 'react-router-dom'
 import { AVISO_CONFIANZA } from '../../shared/textos.ts'
 import { PorDefinir } from '../componentes/PorDefinir'
@@ -10,17 +10,18 @@ import s from '../styles/paginas.module.css'
 /** R1 · Landing: la Tarjeta Hogar Preparado es el héroe de la página. */
 export function Landing() {
   const { resumen } = useResumen()
+  const { nombre } = useMunicipio()
   const datos = resumen.estado === 'listo' ? resumen.datos : null
 
   return (
     <div className={s.pagina}>
       <section className={s.heroe} aria-labelledby="re-titulo">
         <div className={s.heroeTexto}>
-          <p className={s.overlineInverso}>Registro de emergencia · Hualañé</p>
+          <p className={s.overlineInverso}>Registro de emergencia · {nombre}</p>
           <h1 id="re-titulo" className={s.heroeTitulo}>
             Inscribe a tu familia y recibe tu <span className={s.heroeBeneficio}>Tarjeta Hogar Preparado</span>
           </h1>
-          <p className={s.heroeSub}>2 minutos. Si hay una emergencia en Hualañé, la ayuda llega más rápido.</p>
+          <p className={s.heroeSub}>2 minutos. Si hay una emergencia en {nombre}, la ayuda llega más rápido.</p>
           <Link to={ruta('inscripcion')} className={`hds-btn hds-btn--accent hds-btn--lg ${s.heroeCta}`}>
             Quiero mi Tarjeta Hogar Preparado
             <Icon name="arrow-right" size={20} />
@@ -28,12 +29,12 @@ export function Landing() {
           {/* Dato vivo; bajo el mínimo configurado no se muestra. */}
           {datos?.hogaresPreparados != null && (
             <p className={s.contadorHogares}>
-              <strong>{datos.hogaresPreparados.toLocaleString('es-CL')}</strong> hogares de Hualañé ya están preparados
+              <strong>{datos.hogaresPreparados.toLocaleString('es-CL')}</strong> hogares de {nombre} ya están preparados
             </p>
           )}
         </div>
         <div className={s.heroeTarjeta} aria-hidden="true">
-          <TarjetaHogar previa destacada datos={{ nombre: 'Tu familia', direccion: 'Hualañé', integrantes: null }} />
+          <TarjetaHogar previa destacada datos={{ nombre: 'Tu familia', direccion: nombre, integrantes: null }} />
         </div>
       </section>
 

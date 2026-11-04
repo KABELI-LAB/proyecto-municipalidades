@@ -68,7 +68,7 @@ export interface Repositorio {
   configuracion(): Promise<Record<string, number>>
   contarHogares(): Promise<number>
   rutExiste(rut: string): Promise<boolean>
-  /** Crea hogar + consentimiento en una transacción. */
+  /** Crea hogar + consentimiento + integrantes en una transacción. */
   crearHogar(nuevo: NuevoHogar): Promise<{ id: string }>
   guardarToken(token: NuevoToken): Promise<void>
   /** Hogar dueño de un token vigente (no expirado, no usado). */

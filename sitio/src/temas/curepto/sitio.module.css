@@ -1,0 +1,486 @@
+/* Sitio anfitrión. Solo tokens del design system Curepto (--color-*, --space-*, --radius-*…). */
+
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+  outline: none;
+}
+
+/* El foco llega aquí por programa al cambiar de página (para lectores de pantalla): sin anillo visible. */
+.main:focus-visible {
+  box-shadow: none;
+}
+
+.contenedor {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+}
+
+@media (max-width: 767px) {
+  .contenedor {
+    padding: 0 var(--space-4);
+  }
+}
+
+.skip {
+  position: absolute;
+  left: var(--space-4);
+  top: -100px;
+  z-index: 10;
+  background: var(--color-accent);
+  color: var(--color-text-on-accent);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-medium);
+  font-weight: 700;
+}
+
+.skip:focus {
+  top: var(--space-2);
+}
+
+/* ---------- Header: tres franjas ---------- */
+.header {
+  position: relative;
+  font-family: var(--font-sans);
+}
+
+/* 1. Barra de avisos (azul-municipal) */
+.avisos {
+  background: var(--blue-700);
+  color: var(--white);
+}
+
+.avisosIn {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-6);
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.brand {
+  display: flex;
+  flex: none;
+  border-radius: var(--radius-small);
+}
+
+.aviso {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.avisoTexto {
+  margin: 0;
+  min-width: 0;
+  text-align: center;
+}
+
+.avisoEtiqueta {
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Amarillo solo sobre azul (6.2:1). */
+.avisoTitular {
+  font-size: 22px;
+  line-height: 1.3;
+  color: var(--yellow-400);
+  text-decoration: none;
+}
+
+.avisoTitular:hover {
+  color: var(--yellow-400);
+  text-decoration: underline;
+}
+
+.avisoFlecha {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--target-min);
+  height: var(--target-min);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--white);
+  cursor: pointer;
+}
+
+.avisoFlecha:hover {
+  background: rgb(255 255 255 / 0.12);
+}
+
+/* 2. Barra de utilidades (degradado gris → negro) */
+.utilidades {
+  background: linear-gradient(90deg, var(--gris-barra-inicio), var(--gris-barra-fin));
+  color: var(--white);
+  font-size: 14px;
+}
+
+.utilidadesIn {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+/* 3. Menú principal (azul-noche) */
+.menu {
+  background: var(--blue-900);
+}
+
+.menuIn {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.nav {
+  display: flex;
+  gap: var(--space-6);
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 52px;
+  font: 400 20px/1.2 var(--font-display);
+  color: var(--white);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.navLink:hover,
+.navLink[aria-current='page'] {
+  color: var(--white);
+  text-decoration: underline;
+  text-decoration-color: var(--yellow-500);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 8px;
+}
+
+/* La página actual, además del subrayado, va en negrita (no depende solo del color). */
+.navLink[aria-current='page'] {
+  font-weight: 700;
+}
+
+.menuBtn {
+  display: none;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--target-min);
+  padding: 0 var(--space-4);
+  margin: var(--space-1) 0;
+  border: 1px solid rgb(255 255 255 / 0.5);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--white);
+  font: 700 18px/1 var(--font-display);
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .avisosIn,
+  .utilidadesIn,
+  .menuIn {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+
+  .avisosIn {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    justify-content: center;
+  }
+
+  .aviso {
+    flex-basis: 100%;
+  }
+
+  .avisoTitular {
+    font-size: 18px;
+  }
+
+  .utilidades {
+    display: none;
+  }
+
+  .menuBtn {
+    display: inline-flex;
+  }
+
+  .nav {
+    display: none;
+    flex-basis: 100%;
+    flex-direction: column;
+    gap: 0;
+    padding: 0 0 var(--space-3);
+    overflow: visible;
+  }
+
+  .navAbierto {
+    display: flex;
+  }
+
+  .navLink {
+    min-height: var(--target-comfort);
+    border-top: 1px dotted var(--separador);
+  }
+}
+
+/* ---------- Inicio ---------- */
+.hero {
+  background: var(--blue-700);
+  color: var(--white);
+  padding: var(--space-9) 0 var(--space-10);
+}
+
+.heroOverline {
+  margin: 0;
+  font: 700 16px/1.2 var(--font-sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.heroTitulo {
+  margin: var(--space-4) 0;
+  font: 700 clamp(var(--type-h1-size), 6vw, var(--type-display-l-size)) / 1.05 var(--font-display);
+  color: var(--white);
+}
+
+/* Amarillo sobre azul-municipal (6.2:1). */
+.heroTitulo span {
+  display: block;
+  margin-top: var(--space-2);
+  font-size: clamp(var(--type-h2-size), 4vw, 52px);
+  color: var(--yellow-400);
+}
+
+.lead {
+  margin: 0;
+  max-width: 34em;
+  font-size: var(--type-body-lg-size);
+  line-height: var(--type-body-lg-lh);
+  color: var(--blue-50);
+}
+
+@media (max-width: 767px) {
+  .hero {
+    padding: var(--space-7) 0 var(--space-8);
+  }
+}
+
+.seccionTitulo {
+  margin: var(--space-8) 0 var(--space-5);
+  font: var(--type-h2-weight) var(--type-h2-size) / var(--type-h2-lh) var(--font-display);
+  color: var(--color-text);
+}
+
+@media (max-width: 767px) {
+  .seccionTitulo {
+    font-size: var(--type-h3-size);
+  }
+}
+
+.tarjetas {
+  list-style: none;
+  margin: 0 0 var(--space-9);
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: var(--space-5);
+}
+
+/* Tarjeta con esquinas superiores redondeadas, como las noticias del sitio de Curepto. */
+.tile {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  min-height: 104px;
+  height: 100%;
+  border-radius: var(--radius-large) var(--radius-large) 0 0;
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.tileTexto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+  min-width: 0;
+}
+
+.tileTexto h3 {
+  margin: 0;
+  font: 700 22px/1.25 var(--font-display);
+}
+
+.tileTexto p {
+  margin: 0;
+  font-size: var(--type-body-sm-size);
+  line-height: 1.4;
+  color: var(--color-text-secondary);
+}
+
+.tileFlecha {
+  color: var(--color-text-muted);
+}
+
+.noEncontrada {
+  padding-top: var(--space-9);
+  padding-bottom: var(--space-9);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.noEncontrada h1 {
+  margin: 0;
+  font: 700 clamp(30px, 5vw, 44px) / var(--type-h1-lh) var(--font-display);
+}
+
+.noEncontrada p {
+  margin: 0;
+}
+
+/* ---------- Footer (azul-noche, columnas con líneas punteadas) ---------- */
+.footer {
+  background: var(--blue-900);
+  color: var(--white);
+  font-family: var(--font-display);
+}
+
+.footerIn {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-7) var(--space-6);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5) 0;
+}
+
+.footerMarca,
+.footerCol {
+  padding: 0 var(--space-5);
+  border-right: 1px dotted var(--separador);
+  min-width: 220px;
+}
+
+.footerMarca {
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.footerCol:last-child {
+  border-right: 0;
+}
+
+.footerMarca p {
+  margin: 0;
+  font-size: 18px;
+}
+
+.footerCol h2 {
+  margin: 0 0 var(--space-3);
+  font: 700 20px/1.3 var(--font-display);
+}
+
+.footerCol a {
+  display: block;
+  font-size: 18px;
+  line-height: 34px;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.footerCol a:hover {
+  color: var(--white);
+  text-decoration: underline;
+}
+
+.footerDato {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.footerDato > :first-child {
+  margin-top: 3px;
+}
+
+.footerTelefono {
+  display: block;
+  font-size: 22px;
+}
+
+.footerBase {
+  border-top: 1px dotted var(--separador);
+  background: var(--blue-950);
+  font: 400 var(--type-caption-size) / 1.4 var(--font-sans);
+}
+
+.footerBaseIn {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-6);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-5);
+}
+
+@media (max-width: 767px) {
+  .footerIn {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+    flex-direction: column;
+  }
+
+  .footerMarca,
+  .footerCol {
+    padding: 0 0 var(--space-5);
+    border-right: 0;
+    border-bottom: 1px dotted var(--separador);
+  }
+
+  .footerCol:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .footerBaseIn {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+    flex-direction: column;
+  }
+}

@@ -98,6 +98,53 @@ describe('POST /inscripcion', () => {
     expect(texto).not.toMatch(/electrodependiente|12345678|jefeRut|whatsapp/i)
   })
 
+  describe('integrantes del hogar', () => {
+    const integrantes = [
+      { nombre: 'Pedro Ficticio Prueba', rut: '45.000.001-9' },
+      { nombre: 'Ana Ficticia Prueba', rut: null },
+    ]
+
+    it('son opcionales: sin integrantes, el hogar se crea igual', async () => {
+      expect((await llamar('POST', '/inscripcion', inscripcion())).status).toBe(201)
+      expect(repo.estado.integrantes).toHaveLength(0)
+    })
+
+    it('se guardan con el RUT normalizado y sin devolverlos en la respuesta', async () => {
+      const r = await llamar('POST', '/inscripcion', inscripcion({ integrantes }))
+      expect(r.status).toBe(201)
+      expect(repo.estado.integrantes).toEqual([
+        { nombre: 'Pedro Ficticio Prueba', rut: '45000001-9', hogarId: repo.estado.hogares.at(-1)?.id },
+        { nombre: 'Ana Ficticia Prueba', rut: null, hogarId: repo.estado.hogares.at(-1)?.id },
+      ])
+      expect(await r.text()).not.toMatch(/45000001|Pedro|integrantes/)
+    })
+
+    it('el RUT es opcional en la entrada', async () => {
+      const r = await llamar('POST', '/inscripcion', inscripcion({ integrantes: [{ nombre: 'Luis Ficticio' }] }))
+      expect(r.status).toBe(201)
+      expect(repo.estado.integrantes[0]?.rut).toBeNull()
+    })
+
+    it('rechaza más integrantes que personas en la casa (sin contar al jefe)', async () => {
+      const r = await llamar('POST', '/inscripcion', inscripcion({ totalPersonas: 2, menores18: 0, bebesMenores2: 0, mayores65: 0, integrantes }))
+      expect(r.status).toBe(400)
+      expect(repo.estado.hogares.filter((h) => h.nombre === 'Rosa Ficticia Prueba')).toHaveLength(0)
+    })
+
+    it('rechaza un RUT repetido dentro del hogar, también el del jefe', async () => {
+      const repetido = await llamar('POST', '/inscripcion', inscripcion({ integrantes: [integrantes[0]!, { nombre: 'Otra Persona', rut: '45000001-9' }] }))
+      expect(repetido.status).toBe(400)
+      const comoJefe = await llamar('POST', '/inscripcion', inscripcion({ integrantes: [{ nombre: 'Otra Persona', rut: '12.345.678-5' }] }))
+      expect(comoJefe.status).toBe(400)
+      expect(repo.estado.integrantes).toHaveLength(0)
+    })
+
+    it('rechaza un RUT con dígito verificador inválido', async () => {
+      const r = await llamar('POST', '/inscripcion', inscripcion({ integrantes: [{ nombre: 'Pedro Ficticio', rut: '45.000.001-0' }] }))
+      expect(r.status).toBe(400)
+    })
+  })
+
   it('un RUT repetido no duplica el hogar', async () => {
     await llamar('POST', '/inscripcion', inscripcion())
     const antes = repo.estado.hogares.length

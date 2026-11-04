@@ -1116,3 +1116,23 @@
     display: none;
   }
 }
+
+/* ---------- Temas (data-tema en <html>, lo pone el sitio) ---------- */
+:global([data-tema='curepto']) .hitoBarra::after,
+:global([data-tema='vichuquen']) .hitoBarra::after {
+  background: var(--blue-700);
+}
+
+:global([data-tema='curepto']) .opcion[data-elegida] .opcionCheck,
+:global([data-tema='vichuquen']) .opcion[data-elegida] .opcionCheck {
+  border-color: var(--blue-700);
+  background: var(--blue-700);
+}
+
+:global([data-tema='vichuquen']) .panelTitulo {
+  text-transform: none;
+}
+
+:global([data-tema='vichuquen']) .miniMarca {
+  color: var(--gold-200);
+}

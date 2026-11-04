@@ -3,24 +3,11 @@
  * Se generan en el navegador (nada viaja al servidor). Colores = hex del design
  * system, porque canvas y PDF no leen variables CSS.
  */
-import escudoUrl from '@muni/design-system/assets/logo/escudo.png'
+import type { MunicipioId } from '@muni/design-system'
 import type { MiHogar } from '../../shared/contrato.ts'
 import { fechaTabla } from '../../shared/fechas.ts'
+import { MARCAS } from './marca'
 import { qrPng } from './qr'
-
-export const COLORES = {
-  blue500: '#1270B7',
-  blue700: '#253786',
-  blue950: '#0D1533',
-  green500: '#3AAA35',
-  green700: '#316B2C',
-  yellow400: '#FAC22F',
-  neutral200: '#DCDFE6',
-  neutral600: '#585F70',
-  texto: '#0E121B',
-}
-
-export { escudoUrl }
 
 function cargarImagen(src: string): Promise<HTMLImageElement> {
   return new Promise((ok, mal) => {
@@ -32,7 +19,9 @@ function cargarImagen(src: string): Promise<HTMLImageElement> {
 }
 
 /** Tarjeta a 1012 × 638 px (proporción de tarjeta física), frente y QR en una sola cara. */
-export async function tarjetaPng(h: MiHogar): Promise<Blob> {
+export async function tarjetaPng(h: MiHogar, municipio: MunicipioId): Promise<Blob> {
+  const marca = MARCAS[municipio]
+  const COLORES = marca.colores
   const W = 1012
   const H = 638
   const c = document.createElement('canvas')
@@ -42,7 +31,7 @@ export async function tarjetaPng(h: MiHogar): Promise<Blob> {
   if (!ctx) throw new Error('canvas no disponible')
   await document.fonts?.ready
   const fuente = (peso: number, px: number, mono = false) =>
-    `${peso} ${px}px ${mono ? '"Atkinson Hyperlegible Mono", monospace' : '"Atkinson Hyperlegible Next", system-ui, sans-serif'}`
+    `${peso} ${px}px ${mono ? marca.fuenteMono : marca.fuente}`
 
   // Fondo
   ctx.fillStyle = COLORES.blue700
@@ -50,9 +39,8 @@ export async function tarjetaPng(h: MiHogar): Promise<Blob> {
   ctx.roundRect(0, 0, W, H, 56)
   ctx.fill()
 
-  // Cauce: tres ondas al pie
-  const ondas = [COLORES.blue500, 'rgba(255,255,255,.55)', COLORES.green500]
-  ondas.forEach((color, i) => {
+  // Tres ondas al pie (Cauce u Oleaje, según el municipio)
+  marca.ondas.forEach((color, i) => {
     ctx.strokeStyle = color
     ctx.lineWidth = 14
     ctx.beginPath()
@@ -63,7 +51,7 @@ export async function tarjetaPng(h: MiHogar): Promise<Blob> {
   })
 
   // Escudo original sobre placa blanca
-  const escudo = await cargarImagen(escudoUrl)
+  const escudo = await cargarImagen(marca.escudo)
   const eh = 96
   const ew = (escudo.width / escudo.height) * eh
   ctx.fillStyle = '#fff'
@@ -76,7 +64,7 @@ export async function tarjetaPng(h: MiHogar): Promise<Blob> {
   ctx.font = fuente(800, 40)
   ctx.fillText('Hogar Preparado', 48 + ew + 48, 98)
   ctx.font = fuente(700, 26)
-  ctx.fillText('HUALAÑÉ', 48 + ew + 48, 136)
+  ctx.fillText(marca.nombre.toLocaleUpperCase('es-CL'), 48 + ew + 48, 136)
 
   ctx.font = fuente(800, 54)
   ctx.fillText(recortar(ctx, h.nombreTarjeta, 560), 48, 250)
@@ -91,7 +79,7 @@ export async function tarjetaPng(h: MiHogar): Promise<Blob> {
   ctx.fillText(`Vigente hasta ${fechaTabla(h.vigenteHasta)}`, 48, 492)
 
   // QR sobre blanco
-  const qr = await cargarImagen(await qrPng(h.codigoFamiliar, 300))
+  const qr = await cargarImagen(await qrPng(h.codigoFamiliar, 300, COLORES.blue950))
   ctx.fillStyle = '#fff'
   ctx.beginPath()
   ctx.roundRect(W - 356, 196, 308, 308, 20)
@@ -109,9 +97,10 @@ function recortar(ctx: CanvasRenderingContext2D, texto: string, max: number): st
 }
 
 /** PDF con la tarjeta y el plan familiar (react-pdf se carga bajo demanda). */
-export async function planPdf(h: MiHogar): Promise<Blob> {
-  const [{ generarPdfPlan }, qr] = await Promise.all([import('./planPdf'), qrPng(h.codigoFamiliar, 360)])
-  return generarPdfPlan(h, qr, escudoUrl)
+export async function planPdf(h: MiHogar, municipio: MunicipioId): Promise<Blob> {
+  const marca = MARCAS[municipio]
+  const [{ generarPdfPlan }, qr] = await Promise.all([import('./planPdf'), qrPng(h.codigoFamiliar, 360, marca.colores.blue950)])
+  return generarPdfPlan(h, qr, marca)
 }
 
 export function descargar(blob: Blob, nombre: string): void {

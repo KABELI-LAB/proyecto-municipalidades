@@ -1,5 +1,6 @@
 import type { CvData } from '../services/types'
-import { MIME, nombreBase, type DisenoId } from './comun'
+import type { MunicipioId } from '@muni/design-system'
+import { MIME, nombreBase, usarColoresDe, type DisenoId } from './comun'
 
 export type { DisenoId }
 
@@ -10,11 +11,12 @@ export interface ArchivoCv {
 }
 
 /**
- * Genera el CV en PDF y Word para el diseño elegido. Las librerías (pesadas)
- * se cargan bajo demanda, solo cuando la persona descarga o envía.
+ * Genera el CV en PDF y Word para el diseño elegido, con los colores del municipio.
+ * Las librerías (pesadas) se cargan bajo demanda, solo cuando la persona descarga o envía.
  */
-export async function generarArchivos(cv: CvData, diseno: DisenoId): Promise<ArchivoCv[]> {
+export async function generarArchivos(cv: CvData, diseno: DisenoId, municipio: MunicipioId = 'hualane'): Promise<ArchivoCv[]> {
   const [{ renderPdf }, { renderDocx }] = await Promise.all([import('./pdf'), import('./docx')])
+  usarColoresDe(municipio)
   const [pdf, docx] = await Promise.all([renderPdf(cv, diseno), renderDocx(cv, diseno)])
   const base = nombreBase(cv, diseno)
   return [

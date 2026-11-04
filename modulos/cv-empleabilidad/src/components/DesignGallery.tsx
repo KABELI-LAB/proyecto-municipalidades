@@ -1,4 +1,4 @@
-import { Alert, Icon } from '@muni/design-system'
+import { Alert, Icon, useMunicipio } from '@muni/design-system'
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { descargar, generarArchivos, type ArchivoCv } from '../export'
 import { PAGE_HEIGHT, useFitScale } from '../lib/useFitScale'
@@ -26,17 +26,19 @@ export function DesignGallery({ cv, mailer, original }: Props) {
   const [opciones, setOpciones] = useState(false)
   const cache = useRef(new Map<string, Promise<ArchivoCv[]>>())
   const { ref, scale } = useFitScale()
+  const municipio = useMunicipio().id
   const template = TEMPLATES.find((t) => t.id === activo)!
   const { Component } = template
   const faltanDatos = JSON.stringify(cv).includes('[')
 
   // Un mismo diseño se genera una sola vez, tanto para descargar como para enviar.
   const generar = () => {
-    let p = cache.current.get(activo)
+    const clave = `${municipio}:${activo}`
+    let p = cache.current.get(clave)
     if (!p) {
-      p = generarArchivos(cv, activo)
-      p.catch(() => cache.current.delete(activo))
-      cache.current.set(activo, p)
+      p = generarArchivos(cv, activo, municipio)
+      p.catch(() => cache.current.delete(clave))
+      cache.current.set(clave, p)
     }
     return p
   }

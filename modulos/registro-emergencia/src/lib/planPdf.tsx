@@ -8,56 +8,59 @@
 import { Document, Image, Page, pdf, StyleSheet, Text, View } from '@react-pdf/renderer'
 import type { MiHogar } from '../../shared/contrato.ts'
 import { fechaCorta, fechaTabla } from '../../shared/fechas.ts'
-import { COLORES } from './descargas'
+import type { Marca } from './marca'
 
-const st = StyleSheet.create({
-  pagina: { padding: 40, fontFamily: 'Helvetica', fontSize: 11, color: COLORES.texto, lineHeight: 1.4 },
-  cabecera: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 18 },
-  escudo: { height: 44 },
-  titulo: { fontSize: 20, fontFamily: 'Helvetica-Bold', color: COLORES.blue700, lineHeight: 1.15 },
-  subtitulo: { fontSize: 10, color: COLORES.neutral600 },
-  tarjeta: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: 323,
-    height: 204,
-    padding: 16,
-    borderRadius: 14,
-    backgroundColor: COLORES.blue700,
-    color: '#fff',
-    marginBottom: 6,
-  },
-  tarjetaNombre: { fontSize: 15, fontFamily: 'Helvetica-Bold', marginTop: 10, lineHeight: 1.15 },
-  tarjetaDato: { fontSize: 9, marginTop: 3 },
-  codigo: { fontSize: 14, fontFamily: 'Courier-Bold', marginTop: 14 },
-  qr: { width: 110, height: 110, backgroundColor: '#fff', padding: 4, borderRadius: 6, alignSelf: 'center' },
-  recorte: { fontSize: 8, color: COLORES.neutral600, marginBottom: 18 },
-  h2: { fontSize: 14, fontFamily: 'Helvetica-Bold', color: COLORES.blue700, marginTop: 14, marginBottom: 6 },
-  caja: { borderWidth: 1, borderColor: COLORES.neutral200, borderRadius: 8, padding: 10 },
-  grupo: { marginBottom: 8 },
-  grupoTitulo: { fontFamily: 'Helvetica-Bold', marginBottom: 2 },
-  item: { flexDirection: 'row', gap: 6 },
-  casilla: { width: 9, height: 9, borderWidth: 1, borderColor: COLORES.texto, marginTop: 2 },
-  fila: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 3, borderBottomWidth: 1, borderBottomColor: COLORES.neutral200 },
-  mono: { fontFamily: 'Courier-Bold' },
-  pie: { position: 'absolute', bottom: 28, left: 40, right: 40, fontSize: 8, color: COLORES.neutral600 },
-})
+const crearEstilos = (COLORES: Marca['colores']) =>
+  StyleSheet.create({
+    pagina: { padding: 40, fontFamily: 'Helvetica', fontSize: 11, color: COLORES.texto, lineHeight: 1.4 },
+    cabecera: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 18 },
+    escudo: { height: 44 },
+    titulo: { fontSize: 20, fontFamily: 'Helvetica-Bold', color: COLORES.blue700, lineHeight: 1.15 },
+    subtitulo: { fontSize: 10, color: COLORES.neutral600 },
+    tarjeta: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: 323,
+      height: 204,
+      padding: 16,
+      borderRadius: 14,
+      backgroundColor: COLORES.blue700,
+      color: '#fff',
+      marginBottom: 6,
+    },
+    tarjetaNombre: { fontSize: 15, fontFamily: 'Helvetica-Bold', marginTop: 10, lineHeight: 1.15 },
+    tarjetaDato: { fontSize: 9, marginTop: 3 },
+    codigo: { fontSize: 14, fontFamily: 'Courier-Bold', marginTop: 14 },
+    qr: { width: 110, height: 110, backgroundColor: '#fff', padding: 4, borderRadius: 6, alignSelf: 'center' },
+    recorte: { fontSize: 8, color: COLORES.neutral600, marginBottom: 18 },
+    h2: { fontSize: 14, fontFamily: 'Helvetica-Bold', color: COLORES.blue700, marginTop: 14, marginBottom: 6 },
+    caja: { borderWidth: 1, borderColor: COLORES.neutral200, borderRadius: 8, padding: 10 },
+    grupo: { marginBottom: 8 },
+    grupoTitulo: { fontFamily: 'Helvetica-Bold', marginBottom: 2 },
+    item: { flexDirection: 'row', gap: 6 },
+    casilla: { width: 9, height: 9, borderWidth: 1, borderColor: COLORES.texto, marginTop: 2 },
+    fila: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 3, borderBottomWidth: 1, borderBottomColor: COLORES.neutral200 },
+    mono: { fontFamily: 'Courier-Bold' },
+    pie: { position: 'absolute', bottom: 28, left: 40, right: 40, fontSize: 8, color: COLORES.neutral600 },
+  })
 
-function PlanDocumento({ h, qr, escudo }: { h: MiHogar; qr: string; escudo: string }) {
+function PlanDocumento({ h, qr, marca }: { h: MiHogar; qr: string; marca: Marca }) {
+  const st = crearEstilos(marca.colores)
+  const escudo = marca.escudo
   return (
-    <Document title={`Plan familiar de emergencia · ${h.nombreTarjeta}`} author="Municipalidad de Hualañé" language="es-CL">
+    <Document title={`Plan familiar de emergencia · ${h.nombreTarjeta}`} author={`Municipalidad de ${marca.nombre}`} language="es-CL">
       <Page size="A4" style={st.pagina}>
         <View style={st.cabecera}>
           <Image src={escudo} style={st.escudo} />
           <View>
             <Text style={st.titulo}>Plan familiar de emergencia</Text>
-            <Text style={st.subtitulo}>{h.nombreTarjeta} · Municipalidad de Hualañé</Text>
+            <Text style={st.subtitulo}>{h.nombreTarjeta} · Municipalidad de {marca.nombre}</Text>
           </View>
         </View>
 
         <View style={st.tarjeta}>
           <View style={{ flex: 1 }}>
-            <Text style={{ fontFamily: 'Helvetica-Bold', fontSize: 11 }}>Hogar Preparado · Hualañé</Text>
+            <Text style={{ fontFamily: 'Helvetica-Bold', fontSize: 11 }}>Hogar Preparado · {marca.nombre}</Text>
             <Text style={st.tarjetaNombre}>{h.nombreTarjeta}</Text>
             <Text style={st.tarjetaDato}>{h.direccion}</Text>
             <Text style={st.tarjetaDato}>
@@ -109,6 +112,6 @@ function PlanDocumento({ h, qr, escudo }: { h: MiHogar; qr: string; escudo: stri
   )
 }
 
-export async function generarPdfPlan(h: MiHogar, qr: string, escudo: string): Promise<Blob> {
-  return pdf(<PlanDocumento h={h} qr={qr} escudo={escudo} />).toBlob()
+export async function generarPdfPlan(h: MiHogar, qr: string, marca: Marca): Promise<Blob> {
+  return pdf(<PlanDocumento h={h} qr={qr} marca={marca} />).toBlob()
 }

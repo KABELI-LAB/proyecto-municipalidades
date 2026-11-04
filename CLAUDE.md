@@ -5,11 +5,12 @@ Sitio web para la Ilustre Municipalidad de Hualañé, desarrollado por un equipo
 ## Estructura
 
 ```
-sitio/                App anfitriona: router, header/navbar, inicio, 404. Registro de módulos en sitio/src/modulos.ts
+sitio/                App anfitriona: router, franja de municipio, 404. Header, inicio y footer de cada municipio en sitio/src/temas/<municipio>/. Registro de módulos en sitio/src/modulos.ts
 modulos/
   cv-empleabilidad/     "Revisa tu CV" (responsable: Benjamín Alarcón) → ver su CLAUDE.md
   registro-emergencia/  "Registro de emergencia" (responsable: Benjamín Alarcón) → ver su CLAUDE.md
-design-system/        Design system Hualañé: tokens, componentes React, logos y guías (GUIA.md). Compartido: no editar sin acuerdo del equipo
+design-system/        Design system Hualañé: tokens, componentes React, logos y guías (GUIA.md). Compartido: no editar sin acuerdo del equipo.
+                      Trae también los temas Curepto y Vichuquén (demo: franja "Ver municipio de" del sitio; ver design-system/README.md)
 plantillas/modulo/    Plantilla que usa `npm run nuevo-modulo` (no es un workspace; no se compila)
 scripts/              nuevo-modulo.mjs
 netlify/functions/    Endpoints /api/* (wrappers delgados; la lógica vive en modulos/<nombre>/server/)

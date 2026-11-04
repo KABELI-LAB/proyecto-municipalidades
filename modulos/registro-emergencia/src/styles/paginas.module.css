@@ -448,3 +448,34 @@
 .porDefinirInverso .porDefinirTitulo {
   color: var(--color-text-inverse);
 }
+
+/* ---------- Temas (data-tema en <html>, lo pone el sitio) ----------
+   Curepto y Vichuquén no tienen verde de marca: los acentos verdes pasan a primario. */
+:global([data-tema='curepto']) .rotulo,
+:global([data-tema='vichuquen']) .rotulo {
+  color: var(--blue-700);
+}
+
+:global([data-tema='curepto']) .rotulo::before {
+  background: var(--yellow-500);
+}
+
+:global([data-tema='curepto']) .pasoNumero,
+:global([data-tema='vichuquen']) .pasoNumero {
+  background: var(--blue-700);
+}
+
+/* Kickers de Vichuquén: sentence case, sin marcador. */
+:global([data-tema='vichuquen']) .rotulo,
+:global([data-tema='vichuquen']) .overlineInverso {
+  text-transform: none;
+}
+
+:global([data-tema='vichuquen']) .rotulo::before {
+  content: none;
+}
+
+/* Dorado claro sobre teal (gold-400 no alcanza contraste como texto). */
+:global([data-tema='vichuquen']) .heroeBeneficio {
+  color: var(--gold-200);
+}
