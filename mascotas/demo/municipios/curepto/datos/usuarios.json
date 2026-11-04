@@ -1,0 +1,16 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para curepto.",
+  "datos": [
+    {
+      "id": "cur-usr-01",
+      "nombre": "Cuenta de demostración",
+      "rol": "administrador",
+      "correo": "admin@curepto.cl",
+      "operativos_asignados": [
+        "cur-ope-05"
+      ]
+    }
+  ]
+}

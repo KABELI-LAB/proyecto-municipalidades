@@ -15,7 +15,7 @@ import { alcanzaLimiteHogar, CUPO_OCUPA, CUPO_VIGENTE } from "@/dominio/cupos";
 import { punto } from "@/dominio/geo";
 import { INVITACION_ABIERTA, ordenarElegibles, vencimiento } from "@/dominio/invitaciones";
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
-import { municipioActivo } from "@/lib/municipio";
+import { conMunicipio, municipioActivo } from "@/lib/municipio";
 import { nuevoCodigo } from "@/servidor/codigos";
 import { fechaLarga } from "@/servidor/formato";
 import { notificar } from "@/servidor/notificaciones";
@@ -41,14 +41,14 @@ export async function disponibilidad(tx: Tx, operativoId: string, servicioId: st
  * completar los cupos libres de cada servicio. Devuelve cuántas invitaciones creó.
  */
 /** ¿Están activas las invitaciones prioritarias en este municipio? (config/municipios, parametros). */
-export const invitacionesActivas = () => municipioActivo().parametros.invitacionesPrioritarias === true;
+export const invitacionesActivas = async () => (await municipioActivo()).parametros.invitacionesPrioritarias === true;
 
 export async function invitarSiguientes(tx: Tx, operativoId: string, ahora = new Date()): Promise<number> {
   // Apagadas: no se invita ni se retiene ningún cupo; las solicitudes solo miden la necesidad.
-  if (!invitacionesActivas()) return 0;
+  if (!(await invitacionesActivas())) return 0;
   const o = await tx.operativo.findUniqueOrThrow({ where: { id: operativoId }, include: { capacidades: { include: { servicio: true } }, sector: true, lugar: true } });
   if (!(OPERATIVO_RECIBE as readonly string[]).includes(o.estado) || o.fecha.getTime() + 86_400_000 <= ahora.getTime()) return 0;
-  const limite = municipioActivo().parametros.limitePorHogar;
+  const limite = (await municipioActivo()).parametros.limitePorHogar;
   const lugar = punto(o.lugar.lat, o.lugar.lng);
   const venceEn = vencimiento(ahora, o.fecha);
   let creadas = 0;
@@ -101,7 +101,7 @@ export async function invitarSiguientes(tx: Tx, operativoId: string, ahora = new
 export async function asignarInteresadas(tx: Tx, operativoId: string, ahora = new Date()): Promise<number> {
   const o = await tx.operativo.findUniqueOrThrow({ where: { id: operativoId }, include: { lugar: true } });
   if (!(OPERATIVO_RECIBE as readonly string[]).includes(o.estado)) return 0;
-  const limite = municipioActivo().parametros.limitePorHogar;
+  const limite = (await municipioActivo()).parametros.limitePorHogar;
   const interesadas = await tx.invitacionOperativo.findMany({ where: { operativoId, estado: "INTERESADA" }, include: { persona: true, servicio: true }, orderBy: [{ servicioId: "asc" }, { orden: "asc" }] });
   let asignadas = 0;
   for (const i of interesadas) {
@@ -144,7 +144,7 @@ async function vencerDeOperativo(tx: Tx, operativoId: string, ahora: Date): Prom
   for (const i of vencidas) {
     await tx.invitacionOperativo.update({ where: { id: i.id }, data: { estado: "VENCIDA", cerradaEn: ahora, motivoCierre: "Venció el plazo sin respuesta" } });
     await tx.solicitudServicio.update({ where: { id: i.solicitudId }, data: { estado: "RECIBIDA" } });
-    await notificar(tx, i.persona, "Tu invitación venció", `Tu invitación de ${i.servicio.nombre.toLowerCase()} venció sin respuesta. Tu solicitud sigue registrada y te avisaremos del próximo operativo.`, i.loteDemoId);
+    await notificar(tx, i.persona, "Tu invitación venció", `Tu invitación de ${i.servicio.nombre.toLowerCase()} venció sin respuesta. Tu solicitud sigue registrada. Revisa los próximos operativos en el portal.`, i.loteDemoId);
   }
   return vencidas.length;
 }
@@ -170,13 +170,14 @@ export async function procesarOperativo(tx: Tx, operativoId: string, ahora = new
 export async function vencerInvitaciones(db: PrismaClient, ahora = new Date()) {
   const ops = await db.invitacionOperativo.findMany({
     where: { estado: "ENVIADA", venceEn: { lt: ahora }, operativo: { estado: { in: [...OPERATIVO_RECIBE] } } },
-    select: { operativoId: true },
+    select: { operativoId: true, operativo: { select: { sector: { select: { municipioId: true } } } } },
     distinct: ["operativoId"],
   });
   let vencidas = 0;
   let invitadas = 0;
-  for (const { operativoId } of ops) {
-    const r = await db.$transaction((tx) => procesarOperativo(tx, operativoId, ahora), { timeout: 30_000 });
+  for (const { operativoId, operativo } of ops) {
+    // Cada operativo con los parámetros y la firma de su municipio.
+    const r = await conMunicipio(operativo.sector.municipioId, () => db.$transaction((tx) => procesarOperativo(tx, operativoId, ahora), { timeout: 30_000 }));
     vencidas += r.vencidas;
     invitadas += r.invitadas;
   }
@@ -192,7 +193,7 @@ export async function cerrarInvitacionesAbiertas(tx: Tx, operativoId: string, mo
   for (const i of abiertas) {
     await tx.invitacionOperativo.update({ where: { id: i.id }, data: { estado: "CANCELADA", cerradaEn: ahora, motivoCierre: motivo } });
     await tx.solicitudServicio.update({ where: { id: i.solicitudId }, data: { estado: "RECIBIDA" } });
-    if (avisar) await notificar(tx, i.persona, "Sobre tu invitación", `${avisar} Tu solicitud sigue registrada y te avisaremos del próximo operativo.`, i.loteDemoId);
+    if (avisar) await notificar(tx, i.persona, "Sobre tu invitación", `${avisar} Tu solicitud sigue registrada. Revisa los próximos operativos en el portal.`, i.loteDemoId);
   }
   return abiertas.length;
 }

@@ -16,10 +16,10 @@ export async function notificar(
 ) {
   const destinatario = persona.correo ?? persona.telefono;
   if (!destinatario) return;
-  const { estadoCorreo } = await import("@/servidor/correo");
+  const [{ estadoCorreo }, { municipioActivo }] = await Promise.all([import("@/servidor/correo"), import("@/lib/municipio")]);
   const porCorreo = Boolean(persona.correo) && !loteDemoId && estadoCorreo().configurado;
   await tx.notificacion.create({
-    data: { destinatario, canal: persona.correo ? "CORREO" : "SMS", asunto, contenido, loteDemoId, estado: porCorreo ? "PENDIENTE" : "SIMULADA" },
+    data: { municipioId: (await municipioActivo()).id, destinatario, canal: persona.correo ? "CORREO" : "SMS", asunto, contenido, loteDemoId, estado: porCorreo ? "PENDIENTE" : "SIMULADA" },
   });
   if (porCorreo) programarEnvio();
 }
@@ -28,10 +28,12 @@ export async function notificar(
 function programarEnvio() {
   void (async () => {
     try {
-      const { after } = await import("next/server");
+      const [{ after }, { municipioActivo }] = await Promise.all([import("next/server"), import("@/lib/municipio")]);
+      // El municipio se lee antes de responder: después ya no hay solicitud de la cual leerlo.
+      const { nombreOficial } = await municipioActivo();
       after(async () => {
-        const [{ db }, { enviarPendientes }, { municipioActivo }] = await Promise.all([import("@/servidor/db"), import("@/servidor/correo"), import("@/lib/municipio")]);
-        await enviarPendientes(db, municipioActivo().nombreOficial);
+        const [{ db }, { enviarPendientes }] = await Promise.all([import("@/servidor/db"), import("@/servidor/correo")]);
+        await enviarPendientes(db, nombreOficial);
       });
     } catch {
       // Sin contexto de petición: quedan PENDIENTE y salen con la próxima acción que envíe.

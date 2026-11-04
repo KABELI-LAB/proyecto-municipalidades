@@ -27,8 +27,8 @@ beforeAll(async () => {
   process.env.SESION_SECRETO ??= "secreto-de-prueba";
   ({ db } = await import("@/servidor/db"));
   const { cargarDemo } = await import("@/servidor/demo/cargar");
-  const { municipioActivo } = await import("@/lib/municipio");
-  await cargarDemo(db, { municipio: municipioActivo(), hoy: "2026-10-06", contrasena: "contrasena-de-prueba" });
+  const { municipioPredeterminado } = await import("@/lib/municipio");
+  await cargarDemo(db, { municipio: municipioPredeterminado(), hoy: "2026-10-06", contrasena: "contrasena-de-prueba" });
   respuestas = await import("./respuestas");
 }, 120_000);
 

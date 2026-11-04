@@ -1,0 +1,1879 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para vichuquen.",
+  "datos": [
+    {
+      "id": "vic-rep-001",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": -62,
+        "dy_m": -163,
+        "lat": -34.79808,
+        "lng": -72.0796
+      },
+      "fecha": "2026-09-13",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-002",
+      "tipo": "atropello",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-barca"
+      },
+      "posicion": {
+        "dx_m": 181,
+        "dy_m": 320,
+        "lat": -34.8021,
+        "lng": -72.1245
+      },
+      "fecha": "2026-09-09",
+      "estado": "abierto",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-003",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": 136,
+        "dy_m": -7,
+        "lat": -34.79668,
+        "lng": -72.07743
+      },
+      "fecha": "2026-09-17",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-004",
+      "tipo": "atropello",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": 892,
+        "dy_m": 119,
+        "lat": -34.79555,
+        "lng": -72.06916
+      },
+      "fecha": "2026-09-21",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-005",
+      "tipo": "jauria",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "parque-vichuquen"
+      },
+      "posicion": {
+        "dx_m": -150,
+        "dy_m": 214,
+        "lat": -34.88363,
+        "lng": -71.99286
+      },
+      "fecha": "2026-09-09",
+      "estado": "abierto",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-006",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": -30,
+        "dy_m": -21,
+        "lat": -34.79681,
+        "lng": -72.07925
+      },
+      "fecha": "2026-09-23",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-007",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": 156,
+        "dy_m": -50,
+        "lat": -34.79707,
+        "lng": -72.07721
+      },
+      "fecha": "2026-09-22",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-008",
+      "tipo": "abandono",
+      "sector_id": "torca-boyeruca",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "torca"
+      },
+      "posicion": {
+        "dx_m": -539,
+        "dy_m": 419,
+        "lat": -34.77404,
+        "lng": -72.04969
+      },
+      "fecha": "2026-09-07",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-009",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": -156,
+        "dy_m": 52,
+        "lat": -34.79615,
+        "lng": -72.08063
+      },
+      "fecha": "2026-09-19",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-010",
+      "tipo": "jauria",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "parque-vichuquen"
+      },
+      "posicion": {
+        "dx_m": -172,
+        "dy_m": -294,
+        "lat": -34.88819,
+        "lng": -71.9931
+      },
+      "fecha": "2026-09-14",
+      "estado": "en revision",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-011",
+      "tipo": "jauria",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "parque-vichuquen"
+      },
+      "posicion": {
+        "dx_m": 303,
+        "dy_m": 125,
+        "lat": -34.88443,
+        "lng": -71.9879
+      },
+      "fecha": "2026-09-30",
+      "estado": "abierto",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-012",
+      "tipo": "abandono",
+      "sector_id": "tilicura",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "tilicura"
+      },
+      "posicion": {
+        "dx_m": -335,
+        "dy_m": -176,
+        "lat": -34.82604,
+        "lng": -71.96577
+      },
+      "fecha": "2026-09-13",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-013",
+      "tipo": "atropello",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-barca"
+      },
+      "posicion": {
+        "dx_m": 3,
+        "dy_m": 161,
+        "lat": -34.80353,
+        "lng": -72.12645
+      },
+      "fecha": "2026-09-08",
+      "estado": "en revision",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-014",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": 174,
+        "dy_m": -10,
+        "lat": -34.79671,
+        "lng": -72.07702
+      },
+      "fecha": "2026-09-30",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-015",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": -46,
+        "dy_m": 218,
+        "lat": -34.79466,
+        "lng": -72.07942
+      },
+      "fecha": "2026-09-13",
+      "estado": "abierto",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-016",
+      "tipo": "abandono",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "el-manzano"
+      },
+      "posicion": {
+        "dx_m": 1185,
+        "dy_m": -292,
+        "lat": -34.87768,
+        "lng": -71.98024
+      },
+      "fecha": "2026-09-20",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-017",
+      "tipo": "abandono",
+      "sector_id": "tilicura",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "tilicura"
+      },
+      "posicion": {
+        "dx_m": 129,
+        "dy_m": 122,
+        "lat": -34.82336,
+        "lng": -71.96069
+      },
+      "fecha": "2026-09-19",
+      "estado": "abierto",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-018",
+      "tipo": "atropello",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-barca"
+      },
+      "posicion": {
+        "dx_m": 108,
+        "dy_m": -75,
+        "lat": -34.80565,
+        "lng": -72.1253
+      },
+      "fecha": "2026-09-13",
+      "estado": "abierto",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-019",
+      "tipo": "jauria",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "vichuquen-poniente"
+      },
+      "posicion": {
+        "dx_m": 67,
+        "dy_m": 320,
+        "lat": -34.88344,
+        "lng": -71.99497
+      },
+      "fecha": "2026-09-28",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-020",
+      "tipo": "jauria",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "parque-vichuquen"
+      },
+      "posicion": {
+        "dx_m": -33,
+        "dy_m": -119,
+        "lat": -34.88662,
+        "lng": -71.99158
+      },
+      "fecha": "2026-09-23",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-021",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "plaza-de-vichuquen"
+      },
+      "posicion": {
+        "dx_m": -12,
+        "dy_m": -165,
+        "lat": -34.88532,
+        "lng": -71.99362
+      },
+      "fecha": "2026-09-28",
+      "estado": "en revision",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-022",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": 98,
+        "dy_m": 235,
+        "lat": -34.79451,
+        "lng": -72.07785
+      },
+      "fecha": "2026-10-01",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-023",
+      "tipo": "jauria",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "parque-vichuquen"
+      },
+      "posicion": {
+        "dx_m": -182,
+        "dy_m": 370,
+        "lat": -34.88223,
+        "lng": -71.99321
+      },
+      "fecha": "2026-09-28",
+      "estado": "en revision",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-024",
+      "tipo": "jauria",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "parque-vichuquen"
+      },
+      "posicion": {
+        "dx_m": -242,
+        "dy_m": 2,
+        "lat": -34.88554,
+        "lng": -71.99387
+      },
+      "fecha": "2026-09-17",
+      "estado": "abierto",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-025",
+      "tipo": "atropello",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": -345,
+        "dy_m": 287,
+        "lat": -34.79404,
+        "lng": -72.08269
+      },
+      "fecha": "2026-09-08",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-026",
+      "tipo": "jauria",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "parque-vichuquen"
+      },
+      "posicion": {
+        "dx_m": -289,
+        "dy_m": 143,
+        "lat": -34.88427,
+        "lng": -71.99438
+      },
+      "fecha": "2026-09-21",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-027",
+      "tipo": "jauria",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "parque-vichuquen"
+      },
+      "posicion": {
+        "dx_m": -141,
+        "dy_m": -212,
+        "lat": -34.88746,
+        "lng": -71.99276
+      },
+      "fecha": "2026-09-22",
+      "estado": "abierto",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-028",
+      "tipo": "atropello",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-barca"
+      },
+      "posicion": {
+        "dx_m": 146,
+        "dy_m": 105,
+        "lat": -34.80404,
+        "lng": -72.12488
+      },
+      "fecha": "2026-09-20",
+      "estado": "en revision",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-029",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "plaza-de-vichuquen"
+      },
+      "posicion": {
+        "dx_m": 60,
+        "dy_m": 241,
+        "lat": -34.88168,
+        "lng": -71.99283
+      },
+      "fecha": "2026-10-06",
+      "estado": "en revision",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-030",
+      "tipo": "jauria",
+      "sector_id": "tilicura",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "pajonal"
+      },
+      "posicion": {
+        "dx_m": -1112,
+        "dy_m": -930,
+        "lat": -34.77645,
+        "lng": -72.0048
+      },
+      "fecha": "2026-09-25",
+      "estado": "abierto",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-031",
+      "tipo": "atropello",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-barca"
+      },
+      "posicion": {
+        "dx_m": 114,
+        "dy_m": 8,
+        "lat": -34.80491,
+        "lng": -72.12523
+      },
+      "fecha": "2026-09-16",
+      "estado": "abierto",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-032",
+      "tipo": "abandono",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "vichuquen"
+      },
+      "posicion": {
+        "dx_m": -885,
+        "dy_m": 17,
+        "lat": -34.88386,
+        "lng": -72.00206
+      },
+      "fecha": "2026-10-01",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-033",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "el-rodeo"
+      },
+      "posicion": {
+        "dx_m": -312,
+        "dy_m": 891,
+        "lat": -34.77533,
+        "lng": -72.08675
+      },
+      "fecha": "2026-10-02",
+      "estado": "en revision",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-034",
+      "tipo": "jauria",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": 452,
+        "dy_m": 788,
+        "lat": -34.78954,
+        "lng": -72.07398
+      },
+      "fecha": "2026-10-05",
+      "estado": "abierto",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-035",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": 109,
+        "dy_m": -71,
+        "lat": -34.79726,
+        "lng": -72.07773
+      },
+      "fecha": "2026-06-07",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-036",
+      "tipo": "atropello",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-barca"
+      },
+      "posicion": {
+        "dx_m": 162,
+        "dy_m": 49,
+        "lat": -34.80454,
+        "lng": -72.12471
+      },
+      "fecha": "2026-04-02",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-037",
+      "tipo": "abandono",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "uraco"
+      },
+      "posicion": {
+        "dx_m": -127,
+        "dy_m": -791,
+        "lat": -34.93915,
+        "lng": -72.01128
+      },
+      "fecha": "2026-07-03",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-038",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "plaza-de-vichuquen"
+      },
+      "posicion": {
+        "dx_m": -85,
+        "dy_m": -151,
+        "lat": -34.8852,
+        "lng": -71.99442
+      },
+      "fecha": "2025-10-28",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-039",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": -206,
+        "dy_m": -327,
+        "lat": -34.79956,
+        "lng": -72.08117
+      },
+      "fecha": "2026-08-04",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-040",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": -138,
+        "dy_m": -223,
+        "lat": -34.79862,
+        "lng": -72.08043
+      },
+      "fecha": "2026-01-06",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-041",
+      "tipo": "abandono",
+      "sector_id": "tilicura",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "tilicura"
+      },
+      "posicion": {
+        "dx_m": -17,
+        "dy_m": -125,
+        "lat": -34.82558,
+        "lng": -71.96229
+      },
+      "fecha": "2025-10-19",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-042",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "lago",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "santa-rosa"
+      },
+      "posicion": {
+        "dx_m": -44,
+        "dy_m": -1265,
+        "lat": -34.85222,
+        "lng": -72.05322
+      },
+      "fecha": "2026-02-17",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-043",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": -87,
+        "dy_m": 133,
+        "lat": -34.79542,
+        "lng": -72.07987
+      },
+      "fecha": "2026-02-17",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-044",
+      "tipo": "maltrato",
+      "sector_id": "lago",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "aquelarre"
+      },
+      "posicion": {
+        "dx_m": -1190,
+        "dy_m": 485,
+        "lat": -34.84634,
+        "lng": -72.05091
+      },
+      "fecha": "2026-02-14",
+      "estado": "cerrado",
+      "descripcion": "Reporte de maltrato (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-045",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": 138,
+        "dy_m": 86,
+        "lat": -34.79585,
+        "lng": -72.07741
+      },
+      "fecha": "2026-02-21",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-046",
+      "tipo": "atropello",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-barca"
+      },
+      "posicion": {
+        "dx_m": -214,
+        "dy_m": -154,
+        "lat": -34.80636,
+        "lng": -72.12882
+      },
+      "fecha": "2025-11-17",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-047",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "torca-boyeruca",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "molhuen"
+      },
+      "posicion": {
+        "dx_m": 1872,
+        "dy_m": -83,
+        "lat": -34.7176,
+        "lng": -71.97702
+      },
+      "fecha": "2026-04-21",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-048",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "llico"
+      },
+      "posicion": {
+        "dx_m": 55,
+        "dy_m": 618,
+        "lat": -34.76089,
+        "lng": -72.07403
+      },
+      "fecha": "2025-11-14",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-049",
+      "tipo": "jauria",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "parque-vichuquen"
+      },
+      "posicion": {
+        "dx_m": -28,
+        "dy_m": 31,
+        "lat": -34.88527,
+        "lng": -71.99152
+      },
+      "fecha": "2026-01-09",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-050",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "plaza-de-vichuquen"
+      },
+      "posicion": {
+        "dx_m": -215,
+        "dy_m": -180,
+        "lat": -34.88546,
+        "lng": -71.99584
+      },
+      "fecha": "2026-04-04",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-051",
+      "tipo": "maltrato",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "el-rodeo"
+      },
+      "posicion": {
+        "dx_m": -857,
+        "dy_m": -178,
+        "lat": -34.78493,
+        "lng": -72.09271
+      },
+      "fecha": "2026-05-26",
+      "estado": "cerrado",
+      "descripcion": "Reporte de maltrato (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-052",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "llico"
+      },
+      "posicion": {
+        "dx_m": 310,
+        "dy_m": 349,
+        "lat": -34.76331,
+        "lng": -72.07124
+      },
+      "fecha": "2025-10-24",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-053",
+      "tipo": "atropello",
+      "sector_id": "lago",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "aquelarre"
+      },
+      "posicion": {
+        "dx_m": -390,
+        "dy_m": 391,
+        "lat": -34.84719,
+        "lng": -72.04216
+      },
+      "fecha": "2025-10-22",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-054",
+      "tipo": "animal herido",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "talquita"
+      },
+      "posicion": {
+        "dx_m": -740,
+        "dy_m": 15,
+        "lat": -34.89246,
+        "lng": -72.00276
+      },
+      "fecha": "2026-06-18",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal herido (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-055",
+      "tipo": "animal herido",
+      "sector_id": "lago",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "merhueves"
+      },
+      "posicion": {
+        "dx_m": 538,
+        "dy_m": 125,
+        "lat": -34.84468,
+        "lng": -72.06127
+      },
+      "fecha": "2026-07-06",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal herido (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-056",
+      "tipo": "abandono",
+      "sector_id": "tilicura",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "tilicura"
+      },
+      "posicion": {
+        "dx_m": -150,
+        "dy_m": 107,
+        "lat": -34.8235,
+        "lng": -71.96374
+      },
+      "fecha": "2026-02-10",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-057",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "plaza-de-vichuquen"
+      },
+      "posicion": {
+        "dx_m": 67,
+        "dy_m": -70,
+        "lat": -34.88447,
+        "lng": -71.99276
+      },
+      "fecha": "2025-11-23",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-058",
+      "tipo": "animal herido",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "llico"
+      },
+      "posicion": {
+        "dx_m": 1489,
+        "dy_m": 850,
+        "lat": -34.75881,
+        "lng": -72.05834
+      },
+      "fecha": "2026-04-27",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal herido (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-059",
+      "tipo": "abandono",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "uraco"
+      },
+      "posicion": {
+        "dx_m": 60,
+        "dy_m": 80,
+        "lat": -34.93132,
+        "lng": -72.00923
+      },
+      "fecha": "2025-10-31",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-060",
+      "tipo": "animal herido",
+      "sector_id": "torca-boyeruca",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "las-garzas"
+      },
+      "posicion": {
+        "dx_m": -241,
+        "dy_m": -848,
+        "lat": -34.74455,
+        "lng": -72.01485
+      },
+      "fecha": "2026-03-21",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal herido (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-061",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "llico"
+      },
+      "posicion": {
+        "dx_m": -6,
+        "dy_m": 666,
+        "lat": -34.76046,
+        "lng": -72.07469
+      },
+      "fecha": "2026-03-24",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-062",
+      "tipo": "abandono",
+      "sector_id": "tilicura",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "tilicura"
+      },
+      "posicion": {
+        "dx_m": -207,
+        "dy_m": 105,
+        "lat": -34.82352,
+        "lng": -71.96437
+      },
+      "fecha": "2026-05-07",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-063",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "trilco"
+      },
+      "posicion": {
+        "dx_m": 803,
+        "dy_m": 773,
+        "lat": -34.80808,
+        "lng": -72.12681
+      },
+      "fecha": "2026-02-11",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-064",
+      "tipo": "abandono",
+      "sector_id": "lago",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "alto-del-puerto"
+      },
+      "posicion": {
+        "dx_m": 329,
+        "dy_m": 1191,
+        "lat": -34.84215,
+        "lng": -72.01902
+      },
+      "fecha": "2026-04-20",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-065",
+      "tipo": "maltrato",
+      "sector_id": "torca-boyeruca",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "molhuen"
+      },
+      "posicion": {
+        "dx_m": 14,
+        "dy_m": 379,
+        "lat": -34.71345,
+        "lng": -71.99732
+      },
+      "fecha": "2026-03-27",
+      "estado": "cerrado",
+      "descripcion": "Reporte de maltrato (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-066",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "plaza-de-vichuquen"
+      },
+      "posicion": {
+        "dx_m": 46,
+        "dy_m": -90,
+        "lat": -34.88465,
+        "lng": -71.99299
+      },
+      "fecha": "2025-11-25",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-067",
+      "tipo": "jauria",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "parque-vichuquen"
+      },
+      "posicion": {
+        "dx_m": 45,
+        "dy_m": 11,
+        "lat": -34.88545,
+        "lng": -71.99072
+      },
+      "fecha": "2026-07-29",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-068",
+      "tipo": "atropello",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-barca"
+      },
+      "posicion": {
+        "dx_m": 127,
+        "dy_m": -2,
+        "lat": -34.805,
+        "lng": -72.12509
+      },
+      "fecha": "2026-07-24",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-069",
+      "tipo": "jauria",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": 1053,
+        "dy_m": -415,
+        "lat": -34.80035,
+        "lng": -72.0674
+      },
+      "fecha": "2025-12-07",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-070",
+      "tipo": "abandono",
+      "sector_id": "tilicura",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "tilicura"
+      },
+      "posicion": {
+        "dx_m": -264,
+        "dy_m": -85,
+        "lat": -34.82522,
+        "lng": -71.96499
+      },
+      "fecha": "2025-12-23",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-071",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "plaza-de-vichuquen"
+      },
+      "posicion": {
+        "dx_m": 9,
+        "dy_m": -201,
+        "lat": -34.88565,
+        "lng": -71.99339
+      },
+      "fecha": "2026-03-25",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-072",
+      "tipo": "atropello",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-barca"
+      },
+      "posicion": {
+        "dx_m": -30,
+        "dy_m": -94,
+        "lat": -34.80582,
+        "lng": -72.12681
+      },
+      "fecha": "2026-04-27",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-073",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "llico"
+      },
+      "posicion": {
+        "dx_m": 233,
+        "dy_m": 173,
+        "lat": -34.76489,
+        "lng": -72.07208
+      },
+      "fecha": "2026-08-08",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-074",
+      "tipo": "jauria",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "parque-vichuquen"
+      },
+      "posicion": {
+        "dx_m": 135,
+        "dy_m": 164,
+        "lat": -34.88408,
+        "lng": -71.98974
+      },
+      "fecha": "2025-12-02",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-075",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "plaza-de-vichuquen"
+      },
+      "posicion": {
+        "dx_m": 131,
+        "dy_m": -103,
+        "lat": -34.88477,
+        "lng": -71.99206
+      },
+      "fecha": "2026-02-17",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-076",
+      "tipo": "abandono",
+      "sector_id": "torca-boyeruca",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "torca"
+      },
+      "posicion": {
+        "dx_m": 627,
+        "dy_m": -847,
+        "lat": -34.78541,
+        "lng": -72.03694
+      },
+      "fecha": "2025-11-29",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-077",
+      "tipo": "jauria",
+      "sector_id": "torca-boyeruca",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "los-cardos"
+      },
+      "posicion": {
+        "dx_m": -136,
+        "dy_m": 633,
+        "lat": -34.76757,
+        "lng": -72.02833
+      },
+      "fecha": "2025-12-04",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-078",
+      "tipo": "abandono",
+      "sector_id": "torca-boyeruca",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "las-garzas"
+      },
+      "posicion": {
+        "dx_m": -578,
+        "dy_m": -569,
+        "lat": -34.74204,
+        "lng": -72.01853
+      },
+      "fecha": "2026-08-22",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-079",
+      "tipo": "maltrato",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "llico"
+      },
+      "posicion": {
+        "dx_m": -1132,
+        "dy_m": -258,
+        "lat": -34.76876,
+        "lng": -72.08701
+      },
+      "fecha": "2026-06-29",
+      "estado": "cerrado",
+      "descripcion": "Reporte de maltrato (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-080",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "tilicura",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "tilicura"
+      },
+      "posicion": {
+        "dx_m": 600,
+        "dy_m": -28,
+        "lat": -34.82471,
+        "lng": -71.95554
+      },
+      "fecha": "2026-08-04",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-081",
+      "tipo": "atropello",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-barca"
+      },
+      "posicion": {
+        "dx_m": 10,
+        "dy_m": 7,
+        "lat": -34.80492,
+        "lng": -72.12637
+      },
+      "fecha": "2026-08-21",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-082",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": -192,
+        "dy_m": -57,
+        "lat": -34.79713,
+        "lng": -72.08102
+      },
+      "fecha": "2025-10-18",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-083",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "el-rodeo"
+      },
+      "posicion": {
+        "dx_m": 59,
+        "dy_m": -569,
+        "lat": -34.78844,
+        "lng": -72.08269
+      },
+      "fecha": "2026-07-29",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-084",
+      "tipo": "jauria",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "parque-vichuquen"
+      },
+      "posicion": {
+        "dx_m": -173,
+        "dy_m": 257,
+        "lat": -34.88324,
+        "lng": -71.99311
+      },
+      "fecha": "2026-08-04",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-085",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "trilco"
+      },
+      "posicion": {
+        "dx_m": 641,
+        "dy_m": -1045,
+        "lat": -34.82441,
+        "lng": -72.12858
+      },
+      "fecha": "2026-03-28",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-086",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": -95,
+        "dy_m": -118,
+        "lat": -34.79768,
+        "lng": -72.07996
+      },
+      "fecha": "2026-03-16",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-087",
+      "tipo": "abandono",
+      "sector_id": "tilicura",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "tilicura"
+      },
+      "posicion": {
+        "dx_m": -94,
+        "dy_m": 232,
+        "lat": -34.82238,
+        "lng": -71.96313
+      },
+      "fecha": "2026-02-23",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-088",
+      "tipo": "jauria",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "parque-vichuquen"
+      },
+      "posicion": {
+        "dx_m": -52,
+        "dy_m": 162,
+        "lat": -34.8841,
+        "lng": -71.99179
+      },
+      "fecha": "2026-04-19",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-089",
+      "tipo": "abandono",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "culenmapu"
+      },
+      "posicion": {
+        "dx_m": -109,
+        "dy_m": 98,
+        "lat": -34.79574,
+        "lng": -72.08011
+      },
+      "fecha": "2026-05-26",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-090",
+      "tipo": "abandono",
+      "sector_id": "tilicura",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "tilicura"
+      },
+      "posicion": {
+        "dx_m": 293,
+        "dy_m": 36,
+        "lat": -34.82414,
+        "lng": -71.9589
+      },
+      "fecha": "2025-11-06",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-091",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "llico"
+      },
+      "posicion": {
+        "dx_m": 255,
+        "dy_m": -1083,
+        "lat": -34.77617,
+        "lng": -72.07184
+      },
+      "fecha": "2026-03-20",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-092",
+      "tipo": "atropello",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-barca"
+      },
+      "posicion": {
+        "dx_m": -300,
+        "dy_m": 5,
+        "lat": -34.80493,
+        "lng": -72.12976
+      },
+      "fecha": "2026-09-01",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-093",
+      "tipo": "jauria",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "parque-vichuquen"
+      },
+      "posicion": {
+        "dx_m": 62,
+        "dy_m": -46,
+        "lat": -34.88597,
+        "lng": -71.99054
+      },
+      "fecha": "2025-11-25",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-094",
+      "tipo": "jauria",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "parque-vichuquen"
+      },
+      "posicion": {
+        "dx_m": -83,
+        "dy_m": 180,
+        "lat": -34.88394,
+        "lng": -71.99213
+      },
+      "fecha": "2026-06-02",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-095",
+      "tipo": "animal comunitario sin atencion",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "plaza-de-vichuquen"
+      },
+      "posicion": {
+        "dx_m": 136,
+        "dy_m": 50,
+        "lat": -34.88339,
+        "lng": -71.992
+      },
+      "fecha": "2026-07-27",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal comunitario sin atencion (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-096",
+      "tipo": "abandono",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "el-manzano"
+      },
+      "posicion": {
+        "dx_m": 614,
+        "dy_m": 1741,
+        "lat": -34.85941,
+        "lng": -71.98649
+      },
+      "fecha": "2026-07-24",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-097",
+      "tipo": "jauria",
+      "sector_id": "lago",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "el-villorrio"
+      },
+      "posicion": {
+        "dx_m": -19,
+        "dy_m": -193,
+        "lat": -34.84519,
+        "lng": -72.05177
+      },
+      "fecha": "2025-10-08",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-098",
+      "tipo": "jauria",
+      "sector_id": "vichuquen-pueblo",
+      "referencia": {
+        "tipo": "lugar",
+        "id": "parque-vichuquen"
+      },
+      "posicion": {
+        "dx_m": -49,
+        "dy_m": 89,
+        "lat": -34.88475,
+        "lng": -71.99175
+      },
+      "fecha": "2026-07-20",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-099",
+      "tipo": "abandono",
+      "sector_id": "torca-boyeruca",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "molhuen"
+      },
+      "posicion": {
+        "dx_m": 296,
+        "dy_m": 1283,
+        "lat": -34.70533,
+        "lng": -71.99424
+      },
+      "fecha": "2025-10-24",
+      "estado": "cerrado",
+      "descripcion": "Reporte de abandono (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-100",
+      "tipo": "jauria",
+      "sector_id": "lago",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "tunquelen"
+      },
+      "posicion": {
+        "dx_m": 1003,
+        "dy_m": -810,
+        "lat": -34.85047,
+        "lng": -72.05078
+      },
+      "fecha": "2026-08-10",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-101",
+      "tipo": "atropello",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "llico"
+      },
+      "posicion": {
+        "dx_m": -673,
+        "dy_m": -294,
+        "lat": -34.76908,
+        "lng": -72.08199
+      },
+      "fecha": "2026-06-12",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-102",
+      "tipo": "atropello",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "llico"
+      },
+      "posicion": {
+        "dx_m": 764,
+        "dy_m": -1676,
+        "lat": -34.7815,
+        "lng": -72.06627
+      },
+      "fecha": "2026-02-07",
+      "estado": "cerrado",
+      "descripcion": "Reporte de atropello (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-103",
+      "tipo": "jauria",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "la-barca"
+      },
+      "posicion": {
+        "dx_m": 577,
+        "dy_m": -1941,
+        "lat": -34.82241,
+        "lng": -72.12017
+      },
+      "fecha": "2025-12-10",
+      "estado": "cerrado",
+      "descripcion": "Reporte de jauria (texto de demostración)."
+    },
+    {
+      "id": "vic-rep-104",
+      "tipo": "animal herido",
+      "sector_id": "llico",
+      "referencia": {
+        "tipo": "localidad",
+        "id": "trilco"
+      },
+      "posicion": {
+        "dx_m": 474,
+        "dy_m": 113,
+        "lat": -34.81401,
+        "lng": -72.13041
+      },
+      "fecha": "2025-10-29",
+      "estado": "cerrado",
+      "descripcion": "Reporte de animal herido (texto de demostración)."
+    }
+  ]
+}

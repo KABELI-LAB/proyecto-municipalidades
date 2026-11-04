@@ -51,7 +51,7 @@ export async function concretarAdopcion(p: Postulacion, municipioId: string): Pr
       });
       creados.push(`${s.nombre.toLowerCase()} (${codigo})`);
     }
-    const compromiso = creados.length ? ` Registramos tu compromiso de ${creados.join(" y ")}; te avisaremos cuando haya un operativo.` : "";
+    const compromiso = creados.length ? ` Registramos tu compromiso de ${creados.join(" y ")}; revisa los operativos en el portal para inscribirte.` : "";
     await notificar(tx, p.persona, "Adopción registrada", `Registramos la adopción de ${nombre}. Gracias por darle un hogar.${compromiso}`, p.loteDemoId);
     // Quien propuso la adopción sabe que el animal encontró hogar.
     const proponente = p.ficha.proponenteId ? await tx.persona.findUnique({ where: { id: p.ficha.proponenteId } }) : null;

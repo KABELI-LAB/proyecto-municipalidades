@@ -21,6 +21,11 @@ const destinoPublico = join(raiz, "public", "ds");
 // alto contraste, aún no usados).
 const ARCHIVOS = ["colors.css", "typography.css", "spacing.css", "effects.css"];
 const partes = ARCHIVOS.map((a) => `/* ── ${a} ── */\n${readFileSync(join(origen, "tokens", a), "utf8").trim()}`);
+// Temas de demostración de otros municipios (design-system/temas/<id>/tema.css):
+// solo actúan con <html data-tema="<id>">.
+const origenTemas = join(origen, "temas");
+const temas = readdirSync(origenTemas, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name);
+for (const t of temas) partes.push(`/* ── temas/${t}/tema.css ── */\n${readFileSync(join(origenTemas, t, "tema.css"), "utf8").trim()}`);
 
 const css = `/* Generado por scripts/sincronizar-diseno.mjs desde design-system/tokens/. No editar. */
 
@@ -41,6 +46,19 @@ for (const archivo of readdirSync(logosOrigen)) {
   if (archivo.endsWith(".png")) await sharp(de).resize({ height: 240, withoutEnlargement: true }).png({ compressionLevel: 9, palette: true }).toFile(a);
   else cpSync(de, a);
 }
+
+for (const t of temas) {
+  const a = join(destinoPublico, "temas", t);
+  mkdirSync(a, { recursive: true });
+  for (const archivo of readdirSync(join(origenTemas, t)).filter((f) => /\.(png|svg|webp)$/.test(f))) cpSync(join(origenTemas, t, archivo), join(a, archivo));
+}
+
+// Municipios configurados, para src/proxy.ts (que no lee archivos al responder).
+const municipios = readdirSync(join(raiz, "config", "municipios")).filter((f) => f.endsWith(".json")).map((f) => f.slice(0, -5));
+const predeterminado = process.env.MUNICIPIO ?? readFileSync(join(raiz, ".env"), "utf8").match(/^MUNICIPIO=["']?([a-z0-9-]+)/m)?.[1];
+if (!predeterminado || !municipios.includes(predeterminado)) throw new Error("Falta la variable MUNICIPIO o no tiene configuración en config/municipios/.");
+mkdirSync(join(raiz, "src", "generated"), { recursive: true });
+writeFileSync(join(raiz, "src", "generated", "municipios.json"), JSON.stringify({ ids: municipios, predeterminado }, null, 2));
 
 const fotosOrigen = join(raiz, "demo", "fotos");
 const fotosDestino = join(raiz, "public", "fotos");

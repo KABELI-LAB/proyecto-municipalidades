@@ -184,6 +184,19 @@ export function especieConSexo(especie: string, sexo: string | null): string {
   return ESPECIE[especie] ?? "Animal";
 }
 
+/**
+ * Color que concuerda con el sexo: «negro» → «negra» en una hembra. Solo
+ * cambia la primera palabra («negra con blanco»); café, gris y tricolor no
+ * cambian. Sin sexo conocido queda como se escribió.
+ */
+export function colorConSexo(color: string, sexo: string | null): string {
+  if (sexo !== "HEMBRA") return color;
+  return color.replace(/^(\S*?)o(?=\s|$)/u, "$1a");
+}
+
+/** Especie y color con concordancia de género («Perra negra», «Gato atigrado»). */
+export const especieYColor = (especie: string, sexo: string | null, color: string) => `${especieConSexo(especie, sexo)} ${colorConSexo(color, sexo)}`;
+
 /** Nombre de la mascota con mayúscula inicial («pelusa» → «Pelusa»). */
 export const nombreMascota = (nombre: string) => nombre.trim().charAt(0).toUpperCase() + nombre.trim().slice(1);
 
@@ -192,7 +205,7 @@ export const nombreMascota = (nombre: string) => nombre.trim().charAt(0).toUpper
  * no, la especie y el color («Perra café»).
  */
 export function tituloAviso(p: { nombreAnimal: string | null; especie: string; sexo: string | null; colorPrincipal: string }): string {
-  return p.nombreAnimal?.trim() ? nombreMascota(p.nombreAnimal) : `${especieConSexo(p.especie, p.sexo)} ${p.colorPrincipal}`;
+  return p.nombreAnimal?.trim() ? nombreMascota(p.nombreAnimal) : especieYColor(p.especie, p.sexo, p.colorPrincipal);
 }
 
 export const RESULTADO_ATENCION: Record<string, string> = {

@@ -9,7 +9,7 @@ vi.mock("next/cache", () => ({ revalidatePath: () => {} }));
 const vecino = vi.hoisted(() => ({ correo: null as string | null }));
 vi.mock("@/servidor/portal/sesionVecino", async (original) => {
   const m = await original<typeof import("@/servidor/portal/sesionVecino")>();
-  const { municipioActivo } = await import("@/lib/municipio");
+  const { municipioPredeterminado } = await import("@/lib/municipio");
   return {
     ...m,
     abrirSesionVecino: async (c: string) => {
@@ -19,7 +19,7 @@ vi.mock("@/servidor/portal/sesionVecino", async (original) => {
       vecino.correo = null;
     },
     correoDeSesion: async () => vecino.correo,
-    filtroVecino: async () => (vecino.correo ? { municipioId: municipioActivo().id, correo: vecino.correo } : null),
+    filtroVecino: async () => (vecino.correo ? { municipioId: municipioPredeterminado().id, correo: vecino.correo } : null),
   };
 });
 
@@ -38,8 +38,8 @@ beforeAll(async () => {
   process.env.APP_URL = "https://pawni.ejemplo.cl";
   ({ db } = await import("@/servidor/db"));
   const { cargarDemo } = await import("@/servidor/demo/cargar");
-  const { municipioActivo } = await import("@/lib/municipio");
-  await cargarDemo(db, { municipio: municipioActivo(), hoy: "2026-10-06", contrasena: "contrasena-de-prueba" });
+  const { municipioPredeterminado } = await import("@/lib/municipio");
+  await cargarDemo(db, { municipio: municipioPredeterminado(), hoy: "2026-10-06", contrasena: "contrasena-de-prueba" });
   acciones = await import("./acciones");
   conv = await import("./conversaciones");
 }, 120_000);
@@ -50,7 +50,7 @@ afterAll(async () => {
 });
 
 async function avisoAprobado(tipo: "PERDIDA" | "ENCONTRADA") {
-  const huerta = await db.localidad.findUniqueOrThrow({ where: { clave: "la-huerta" } });
+  const huerta = await db.localidad.findFirstOrThrow({ where: { clave: "la-huerta" } });
   const { hoyISO } = await import("@/servidor/formato");
   const r = await acciones.publicarMascota({
     tipo,

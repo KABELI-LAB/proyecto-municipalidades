@@ -47,12 +47,19 @@ model Municipio {
   /// Usar inteligencia artificial (OpenAI) para el resumen del panel y para entender comentarios y mensajes.
   iaActiva           Boolean @default(false)
 
-  sectores     Sector[]
-  servicios    Servicio[]
-  usuarios     UsuarioMunicipal[]
-  personas     Persona[]
-  tiposReporte TipoReporte[]
-  colores      ColorCatalogo[]
+  sectores       Sector[]
+  servicios      Servicio[]
+  usuarios       UsuarioMunicipal[]
+  personas       Persona[]
+  tiposReporte   TipoReporte[]
+  colores        ColorCatalogo[]
+  localidades    Localidad[]
+  lugares        Lugar[]
+  animales       Animal[]
+  fichas         FichaAdopcion[]
+  avisos         Aviso[]
+  notificaciones Notificacion[]
+  lotesDemo      LoteDemo[]
 }
 
 model Sector {
@@ -89,14 +96,16 @@ model Sector {
 /// Localidad de un sector: ubica solicitudes, publicaciones y reportes.
 model Localidad {
   id                String  @id @default(cuid())
+  municipioId       String
   sectorId          String
-  clave             String  @unique
+  clave             String
   nombre            String
   lat               Float?
   lng               Float?
   estadoCoordenadas String?
   orden             Int     @default(0)
 
+  municipio     Municipio            @relation(fields: [municipioId], references: [id])
   sector        Sector               @relation(fields: [sectorId], references: [id])
   lugares       Lugar[]
   personas      Persona[]
@@ -105,26 +114,32 @@ model Localidad {
   publicaciones PublicacionMascota[] @relation("ubicacion")
   resguardos    PublicacionMascota[] @relation("resguardo")
   fichas        FichaAdopcion[]
+
+  @@unique([municipioId, clave])
 }
 
 /// Lugar público de referencia (plaza, escuela, recinto): nunca un domicilio.
 model Lugar {
   id                String  @id @default(cuid())
+  municipioId       String
   sectorId          String
   localidadId       String
-  clave             String  @unique
+  clave             String
   nombre            String
   tipo              String
   lat               Float?
   lng               Float?
   estadoCoordenadas String?
 
+  municipio    Municipio          @relation(fields: [municipioId], references: [id])
   sector       Sector             @relation(fields: [sectorId], references: [id])
   localidad    Localidad          @relation(fields: [localidadId], references: [id])
   operativos   Operativo[]
   reportes     ReporteCiudadano[]
   atenciones   Atencion[]
   comunitarios PerroComunitario[]
+
+  @@unique([municipioId, clave])
 }
 
 model Servicio {
@@ -209,12 +224,14 @@ model UsuarioMunicipal {
 /// registros que apuntan a un lote y luego los lotes.
 model LoteDemo {
   id          String    @id @default(cuid())
+  municipioId String
   descripcion String
   /// Fecha de corte de los datos de origen (resumen.json) y días que se trasladaron.
   fechaCorte  DateTime?
   desfaseDias Int       @default(0)
   creadoEn    DateTime  @default(now())
 
+  municipio      Municipio             @relation(fields: [municipioId], references: [id])
   usuarios       UsuarioMunicipal[]
   personas       Persona[]
   animales       Animal[]
@@ -231,6 +248,8 @@ model LoteDemo {
   notificaciones Notificacion[]
   comunitarios   PerroComunitario[]
   redes          PublicacionRed[]
+
+  @@index([municipioId])
 }
 
 // ───────────────────────── Ciudadanía ─────────────────────────
@@ -271,6 +290,7 @@ model Persona {
 
 model Animal {
   id             String   @id @default(cuid())
+  municipioId    String
   especie        Especie
   nombre         String?
   sexo           Sexo     @default(DESCONOCIDO)
@@ -286,6 +306,7 @@ model Animal {
   creadoEn       DateTime @default(now())
   loteDemoId     String?
 
+  municipio     Municipio             @relation(fields: [municipioId], references: [id])
   persona       Persona?              @relation(fields: [personaId], references: [id])
   loteDemo      LoteDemo?             @relation(fields: [loteDemoId], references: [id])
   solicitudes   SolicitudServicio[]
@@ -297,6 +318,7 @@ model Animal {
   invitaciones  InvitacionOperativo[]
 
   @@index([loteDemoId])
+  @@index([municipioId])
 }
 
 /// Demanda: existe aunque no haya operativo (sección 9).
@@ -486,6 +508,7 @@ model MensajeConversacion {
 /// Las publica el municipio, propias o propuestas por vecinos tras revisarlas (sección 7).
 model FichaAdopcion {
   id                 String           @id @default(cuid())
+  municipioId        String
   animalId           String           @unique
   caracter           String?
   conviveConNinos    Boolean?
@@ -501,6 +524,7 @@ model FichaAdopcion {
   revision           RevisionAdopcion @default(APROBADA)
   creadaEn           DateTime         @default(now())
 
+  municipio        Municipio       @relation(fields: [municipioId], references: [id])
   // ── Propuesta de un vecino («Dar en adopción», sección 7, paso 0) ──
   codigo           String?         @unique // TR-NNNN
   proponenteId     String?
@@ -533,6 +557,7 @@ model FichaAdopcion {
 
   @@index([loteDemoId])
   @@index([revision])
+  @@index([municipioId])
 }
 
 model PostulacionAdopcion {
@@ -822,6 +847,7 @@ model AsignacionTerreno {
 
 model Aviso {
   id           String      @id @default(cuid())
+  municipioId  String
   tipo         TipoAviso
   titulo       String
   texto        String
@@ -836,6 +862,7 @@ model Aviso {
   creadoEn     DateTime    @default(now())
   loteDemoId   String?
 
+  municipio Municipio         @relation(fields: [municipioId], references: [id])
   operativo Operativo?        @relation(fields: [operativoId], references: [id])
   autor     UsuarioMunicipal? @relation(fields: [autorId], references: [id])
   loteDemo  LoteDemo?         @relation(fields: [loteDemoId], references: [id])
@@ -843,6 +870,7 @@ model Aviso {
 
   @@index([estado, vigenteHasta])
   @@index([loteDemoId])
+  @@index([municipioId])
 }
 
 model AvisoSector {
@@ -953,6 +981,7 @@ model CodigoAcceso {
 
 model Notificacion {
   id           String             @id @default(cuid())
+  municipioId  String
   destinatario String
   canal        CanalNotificacion
   asunto       String
@@ -964,9 +993,11 @@ model Notificacion {
   error        String?
   loteDemoId   String?
 
-  loteDemo LoteDemo? @relation(fields: [loteDemoId], references: [id])
+  municipio Municipio @relation(fields: [municipioId], references: [id])
+  loteDemo  LoteDemo? @relation(fields: [loteDemoId], references: [id])
 
   @@index([loteDemoId])
+  @@index([municipioId])
 }
 
 // ───────────────────────── Enumeraciones ─────────────────────────

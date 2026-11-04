@@ -6,12 +6,12 @@ import type { UsuarioSesion } from "@/servidor/auth";
 import { db } from "@/servidor/db";
 import { conOcupacion } from "@/servidor/panel/indicadores";
 
-const municipioId = () => municipioActivo().id;
+const municipioId = async () => (await municipioActivo()).id;
 const incluir = { sector: true, lugar: true, capacidades: { include: { servicio: true } } } as const;
 
 export async function listaOperativos() {
   const todos = await db.operativo.findMany({
-    where: { sector: { municipioId: municipioId() } },
+    where: { sector: { municipioId: (await municipioId()) } },
     include: { ...incluir, resultado: true },
     orderBy: { fecha: "desc" },
   });
@@ -25,7 +25,7 @@ export async function listaOperativos() {
 
 export async function detalleOperativo(id: string, conInscritos: boolean) {
   const o = await db.operativo.findFirst({
-    where: { id, sector: { municipioId: municipioId() } },
+    where: { id, sector: { municipioId: (await municipioId()) } },
     include: {
       ...incluir,
       resultado: true,
@@ -63,7 +63,7 @@ export async function detalleOperativo(id: string, conInscritos: boolean) {
 export async function demandaPorSector() {
   const grupos = await db.solicitudServicio.groupBy({
     by: ["sectorId", "servicioId"],
-    where: { estado: { in: [...SOLICITUD_PENDIENTE] }, sector: { municipioId: municipioId() } },
+    where: { estado: { in: [...SOLICITUD_PENDIENTE] }, sector: { municipioId: (await municipioId()) } },
     _count: { _all: true },
   });
   const demanda: Record<string, Record<string, number>> = {};
@@ -72,8 +72,8 @@ export async function demandaPorSector() {
 }
 
 /** Lugares de referencia por sector, para elegir dónde se hace un operativo. */
-export function lugares() {
-  return db.lugar.findMany({ where: { sector: { municipioId: municipioId() } }, orderBy: { nombre: "asc" }, select: { id: true, nombre: true, sectorId: true } });
+export async function lugares() {
+  return db.lugar.findMany({ where: { sector: { municipioId: (await municipioId()) } }, orderBy: { nombre: "asc" }, select: { id: true, nombre: true, sectorId: true } });
 }
 
 /** Terreno solo opera su operativo asignado; coordinación y administración, cualquiera. */

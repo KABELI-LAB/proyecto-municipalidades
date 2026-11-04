@@ -26,8 +26,8 @@ beforeAll(async () => {
   for (const k of ENTORNO) delete process.env[k];
   ({ db } = await import("@/servidor/db"));
   const { cargarDemo } = await import("@/servidor/demo/cargar");
-  const { municipioActivo } = await import("@/lib/municipio");
-  await cargarDemo(db, { municipio: municipioActivo(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
+  const { municipioPredeterminado } = await import("@/lib/municipio");
+  await cargarDemo(db, { municipio: municipioPredeterminado(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
   operativos = await import("./acciones-operativos");
 }, 120_000);
 
@@ -41,7 +41,7 @@ const enUnMes = () => new Date(Date.now() + 30 * 86_400_000).toISOString().slice
 
 describe("crear y publicar un operativo en un paso", () => {
   it("con lugar, fecha y cupos queda publicado en el sector del lugar", async () => {
-    const u = await db.usuarioMunicipal.findFirstOrThrow({ where: { rol: "COORDINADOR" } });
+    const u = await db.usuarioMunicipal.findFirstOrThrow();
     sesion = { id: u.id, nombre: u.nombre, rol: "COORDINADOR", municipioId: "hualane", loteDemoId: null };
     const lugar = await db.lugar.findFirstOrThrow();
     const servicio = await db.servicio.findFirstOrThrow({ where: { activo: true } });

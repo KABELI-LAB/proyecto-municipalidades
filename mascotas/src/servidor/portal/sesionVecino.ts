@@ -60,7 +60,7 @@ export async function correoDeSesion(): Promise<string | null> {
  */
 export async function filtroVecino(): Promise<{ municipioId: string; correo: string } | null> {
   const correo = await correoDeSesion();
-  return correo ? { municipioId: municipioActivo().id, correo } : null;
+  return correo ? { municipioId: (await municipioActivo()).id, correo } : null;
 }
 
 export const SESION_VENCIDA = "Tu sesión venció. Entra de nuevo a Mis solicitudes con tu correo.";

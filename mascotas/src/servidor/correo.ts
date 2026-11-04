@@ -6,6 +6,7 @@
 // nada sale: las notificaciones quedan registradas como simuladas.
 import "server-only";
 import type { PrismaClient } from "@/generated/prisma/client";
+import { municipioPorId } from "@/lib/municipio";
 
 export type EstadoCorreo = { configurado: boolean; proveedor: "smtp" | "brevo" | null; faltantes: string[] };
 
@@ -79,12 +80,20 @@ export async function enviarCorreo(c: Correo, firma: string): Promise<ResultadoE
  * acción que las creó terminó de guardar. Las marca ENVIADA o FALLIDA.
  */
 export async function enviarPendientes(db: PrismaClient, firma: string, limite = 20) {
+  // Cada correo va firmado por su municipio; si su configuración no está, con la firma recibida.
+  const firmaDe = (municipioId: string) => {
+    try {
+      return municipioPorId(municipioId).nombreOficial;
+    } catch {
+      return firma;
+    }
+  };
   const pendientes = await db.notificacion.findMany({ where: { estado: "PENDIENTE", canal: "CORREO" }, orderBy: { creadaEn: "asc" }, take: limite });
   for (const n of pendientes) {
     // Se toma antes de enviar: si dos procesos coinciden, solo uno la envía.
     const tomada = await db.notificacion.updateMany({ where: { id: n.id, estado: "PENDIENTE" }, data: { estado: "FALLIDA", error: "Enviando…" } });
     if (!tomada.count) continue;
-    const r = await enviarCorreo({ para: n.destinatario, asunto: n.asunto, texto: n.contenido }, firma);
+    const r = await enviarCorreo({ para: n.destinatario, asunto: n.asunto, texto: n.contenido }, firmaDe(n.municipioId));
     await db.notificacion.update({ where: { id: n.id }, data: r.ok ? { estado: "ENVIADA", enviadaEn: new Date(), error: null } : { estado: "FALLIDA", error: r.error } });
   }
   return pendientes.length;

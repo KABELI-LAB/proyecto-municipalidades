@@ -8,8 +8,9 @@
 //   - Ninguno ve el correo ni el teléfono del otro, salvo que el otro pulse
 //     «Compartir mi contacto».
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { municipioActivo } from "@/lib/municipio";
 import { z } from "zod";
-import { ESPECIE, especieConSexo, tipoAviso } from "@/dominio/etiquetas";
+import { ESPECIE, especieYColor, tipoAviso } from "@/dominio/etiquetas";
 import { esquemaMensaje, validarCampos, type Errores } from "@/lib/esquemas";
 import { db } from "@/servidor/db";
 import { fechaCorta, hora } from "@/servidor/formato";
@@ -68,7 +69,7 @@ function tema(c: ConversacionCompleta) {
   if (c.publicacion) {
     const p = c.publicacion;
     // «perro café perdido», «perra café perdida», «gato gris avistado».
-    return { sobre: `Aviso de ${especieConSexo(p.especie, p.sexo).toLowerCase()} ${p.colorPrincipal} ${tipoAviso(p.tipo, p.sexo).toLowerCase()} en ${p.sector.nombre}`, enlace: `/mascotas/${p.id}`, dueno: p.persona, lote: p.loteDemoId };
+    return { sobre: `Aviso de ${especieYColor(p.especie, p.sexo, p.colorPrincipal).toLowerCase()} ${tipoAviso(p.tipo, p.sexo).toLowerCase()} en ${p.sector.nombre}`, enlace: `/mascotas/${p.id}`, dueno: p.persona, lote: p.loteDemoId };
   }
   const f = c.ficha!;
   const nombre = f.animal.nombre ?? ESPECIE[f.animal.especie].toLowerCase();
@@ -129,8 +130,8 @@ export async function escribirAQuienPublico(valores: unknown): Promise<Respuesta
   const correo = d.correo.trim().toLowerCase();
   try {
     const destino = d.fichaId
-      ? await db.fichaAdopcion.findFirst({ where: { id: d.fichaId, revision: "APROBADA", estado: { not: "ADOPTADO" }, proponenteId: { not: null } }, select: { id: true } })
-      : await db.publicacionMascota.findFirst({ where: { id: d.publicacionId, estado: "ABIERTA", moderacion: "APROBADA" }, select: { id: true } });
+      ? await db.fichaAdopcion.findFirst({ where: { id: d.fichaId, revision: "APROBADA", estado: { not: "ADOPTADO" }, proponenteId: { not: null }, municipioId: (await municipioActivo()).id }, select: { id: true } })
+      : await db.publicacionMascota.findFirst({ where: { id: d.publicacionId, estado: "ABIERTA", moderacion: "APROBADA", sector: { municipioId: (await municipioActivo()).id } }, select: { id: true } });
     if (!destino) return { ok: false, mensaje: "Esta publicación ya no está disponible." };
     const clave = d.fichaId ? { fichaId_interesadoCorreo: { fichaId: destino.id, interesadoCorreo: correo } } : { publicacionId_interesadoCorreo: { publicacionId: destino.id, interesadoCorreo: correo } };
     const conv = await db.conversacion.upsert({

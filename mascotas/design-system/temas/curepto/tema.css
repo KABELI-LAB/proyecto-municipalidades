@@ -1,0 +1,123 @@
+/*
+  Tema «Curepto» para la demostración: cambia colores, tipografía y logos
+  cuando <html data-tema="curepto">. Fuente: sistema de diseño
+  «Municipalidad de Curepto» (medido de curepto.cl el 3-11-2026), ver README.md.
+  Los colores base son los del sitio; los tonos intermedios se mezclan desde
+  ellos (color-mix), sin colores nuevos. Verde y neutros no cambian: el sitio
+  de Curepto no define un verde propio y el portal lo usa para éxito y comunidad.
+*/
+html[data-tema="curepto"] {
+  /* azul-municipal #00468C (acción e institución), azul-noche #122536, negro-azulado #09121B */
+  --blue-50: color-mix(in srgb, #00468C 7%, #FFFFFF);
+  --blue-100: color-mix(in srgb, #00468C 15%, #FFFFFF);
+  --blue-200: color-mix(in srgb, #00468C 30%, #FFFFFF);
+  --blue-300: color-mix(in srgb, #00468C 50%, #FFFFFF);
+  --blue-400: color-mix(in srgb, #00468C 70%, #FFFFFF);
+  --blue-500: color-mix(in srgb, #00468C 85%, #FFFFFF);
+  --blue-600: color-mix(in srgb, #00468C 92%, #FFFFFF);
+  --blue-700: #00468C;
+  --blue-800: color-mix(in srgb, #00468C 50%, #122536);
+  --blue-900: #122536;
+  --blue-950: #09121B;
+
+  /* amarillo-aviso #FFCC00 y amarillo-menu #F5BB00: solo sobre azul o con texto azul noche */
+  --yellow-50: color-mix(in srgb, #FFCC00 8%, #FFFFFF);
+  --yellow-100: color-mix(in srgb, #FFCC00 20%, #FFFFFF);
+  --yellow-200: color-mix(in srgb, #FFCC00 40%, #FFFFFF);
+  --yellow-300: color-mix(in srgb, #FFCC00 70%, #FFFFFF);
+  --yellow-400: #FFCC00;
+  --yellow-500: #F5BB00;
+  --yellow-600: color-mix(in srgb, #F5BB00 85%, #09121B);
+  --yellow-700: color-mix(in srgb, #F5BB00 65%, #09121B);
+  --yellow-800: color-mix(in srgb, #F5BB00 50%, #09121B);
+  --yellow-900: color-mix(in srgb, #F5BB00 35%, #09121B);
+  --yellow-950: color-mix(in srgb, #F5BB00 20%, #09121B);
+
+  /* rojo-concejo #8C0000 */
+  --red-50: color-mix(in srgb, #8C0000 8%, #FFFFFF);
+  --red-100: color-mix(in srgb, #8C0000 18%, #FFFFFF);
+  --red-500: color-mix(in srgb, #8C0000 75%, #FFFFFF);
+  --red-600: color-mix(in srgb, #8C0000 90%, #FFFFFF);
+  --red-700: #8C0000;
+
+  /* Roboto en el texto y Roboto Condensed en títulos, como el sitio (las sirve next/font). */
+  --font-sans: var(--fuente-roboto), Roboto, Arial, sans-serif;
+  --font-display: var(--fuente-roboto-condensada), "Roboto Condensed", "Arial Narrow", sans-serif;
+}
+html[data-tema="curepto"] h1,
+html[data-tema="curepto"] h2,
+html[data-tema="curepto"] h3,
+html[data-tema="curepto"] h4 {
+  font-family: var(--font-display);
+}
+
+/* Tarjetas con el radio del sitio (radius-tarjeta 16 px). */
+html[data-tema="curepto"] {
+  --radius-large: 16px;
+}
+
+/*
+  Botones en píldora y rellenos, como los del sitio (medidos de capturas de
+  curepto.cl el 3-11-2026):
+  - acción principal en magenta, como «Leer más» e «Ir a Blog de Noticias»
+    (#8C0172; texto blanco 8,9:1);
+  - acción secundaria y «ver más» en dorado, como «Ver más Novedades»
+    (#8D5900; texto blanco 5,7:1).
+*/
+html[data-tema="curepto"] [data-boton],
+html[data-tema="curepto"] [data-zona="ver-todo"],
+html[data-tema="curepto"] [data-zona="solicitudes"] {
+  border-radius: var(--radius-full);
+}
+html[data-tema="curepto"] [data-boton="primario"],
+html[data-tema="curepto"] [data-zona="solicitudes"] {
+  border-color: #8C0172;
+  background: #8C0172;
+  color: #FFFFFF;
+}
+html[data-tema="curepto"] [data-boton="primario"]:hover:not(:disabled),
+html[data-tema="curepto"] [data-zona="solicitudes"]:hover {
+  border-color: color-mix(in srgb, #8C0172 80%, #09121B);
+  background: color-mix(in srgb, #8C0172 80%, #09121B);
+  color: #FFFFFF;
+}
+html[data-tema="curepto"] [data-boton="secundario"],
+html[data-tema="curepto"] [data-zona="ver-todo"] {
+  border-color: #8D5900;
+  background: #8D5900;
+  color: #FFFFFF;
+}
+html[data-tema="curepto"] [data-boton="secundario"]:hover:not(:disabled),
+html[data-tema="curepto"] [data-zona="ver-todo"]:hover {
+  border-color: color-mix(in srgb, #8D5900 80%, #09121B);
+  background: color-mix(in srgb, #8D5900 80%, #09121B);
+  color: #FFFFFF;
+}
+/* «Ver más» como píldora pequeña, sin subrayado. */
+html[data-tema="curepto"] [data-zona="ver-todo"] {
+  padding: var(--space-1) var(--space-4);
+  text-decoration: none;
+}
+/* Llamado al pie de cada tarjeta («Ver operativos →»): en magenta. */
+html[data-tema="curepto"] [data-zona="ir"] {
+  color: #8C0172;
+}
+
+/* Encabezado del portal en azul-municipal con el logotipo blanco, como la barra superior del sitio. */
+html[data-tema="curepto"] [data-zona="encabezado-portal"] {
+  background: #00468C;
+  border-bottom-color: #122536;
+}
+html[data-tema="curepto"] [data-zona="programa"] {
+  border-left-color: color-mix(in srgb, #FFFFFF 40%, transparent);
+  color: #FFFFFF;
+}
+
+/* El Cauce es la forma propia de Hualañé: Curepto no la usa. */
+html[data-tema="curepto"] [data-cauce] {
+  display: none;
+}
+html[data-tema="curepto"] [data-zona="pie"] {
+  padding-top: var(--space-8);
+}
+

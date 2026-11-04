@@ -2,14 +2,13 @@
 import { EtiquetaEstado } from "@/componentes/EtiquetaEstado";
 import { FotoAnimal } from "@/componentes/portal/FotoAnimal";
 import { fotoDeAviso } from "@/componentes/portal/fotoAviso";
-import { ESPECIE, especieConSexo, MODERACION, SEXO, TAMANO, textoResguardo, tipoAviso, tituloAviso } from "@/dominio/etiquetas";
+import { ESPECIE, especieYColor, MODERACION, SEXO, TAMANO, textoResguardo, tipoAviso, tituloAviso } from "@/dominio/etiquetas";
 import { fechaCorta } from "@/servidor/formato";
 import estilos from "@/estilos/paginas.module.css";
 
 export type PublicacionBandeja = {
   id: string;
   fotoUrl?: string | null;
-  codigo: string | null;
   tipo: string;
   especie: string;
   sexo: string;
@@ -29,7 +28,6 @@ export type PublicacionBandeja = {
   sector: { nombre: string };
   localidad: { nombre: string } | null;
   animal: { foto: string | null } | null;
-  _count: { conversaciones: number };
 };
 
 /** `plegado`: una línea de resumen y los datos bajo «Más detalles» (tarjetas compactas de «Por aprobar»). */
@@ -45,7 +43,7 @@ export function ResumenPublicacion({ p, conModeracion = true, Titulo = "h2", ple
       {plegado ? (
         <>
           <p>
-            {especieConSexo(p.especie, p.sexo)} {p.colorPrincipal} · {p.localidad ? `${p.localidad.nombre}, ${p.sector.nombre}` : p.sector.nombre} · {perdida ? "se perdió" : "se vio"} el {fechaCorta(p.fechaEvento)}
+            {especieYColor(p.especie, p.sexo, p.colorPrincipal)} · {p.localidad ? `${p.localidad.nombre}, ${p.sector.nombre}` : p.sector.nombre} · {perdida ? "se perdió" : "se vio"} el {fechaCorta(p.fechaEvento)}
           </p>
           <details className={estilos.masDetalles}>
             <summary>Más detalles</summary>
@@ -78,17 +76,14 @@ export function ResumenPublicacion({ p, conModeracion = true, Titulo = "h2", ple
                 <dd>{textoResguardo(p)}</dd>
               </>
             )}
-            <dt>Conversaciones</dt>
-            <dd>{p._count.conversaciones}</dd>
           </dl>
-          {p.codigo && <p className="nota">Código {p.codigo}</p>}
           </details>
         </>
       ) : (
         <>
         {p.nombreAnimal?.trim() && (
           <p>
-            {especieConSexo(p.especie, p.sexo)} {p.colorPrincipal}
+            {especieYColor(p.especie, p.sexo, p.colorPrincipal)}
           </p>
         )}
         <p>
@@ -123,10 +118,7 @@ export function ResumenPublicacion({ p, conModeracion = true, Titulo = "h2", ple
               <dd>{textoResguardo(p)}</dd>
             </>
           )}
-          <dt>Conversaciones</dt>
-          <dd>{p._count.conversaciones}</dd>
         </dl>
-        {p.codigo && <p className="nota">Código {p.codigo}</p>}
         </>
       )}
     </>

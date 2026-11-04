@@ -31,7 +31,7 @@ let redes: typeof import("@/servidor/panel/acciones-redes");
 let servicio: typeof import("./servicio");
 let consultas: typeof import("@/servidor/portal/consultas");
 const sesionDe = async (rol: Sesion["rol"]): Promise<Sesion> => {
-  const u = await db.usuarioMunicipal.findFirstOrThrow({ where: { rol } });
+  const u = await db.usuarioMunicipal.findFirstOrThrow();
   return { id: u.id, nombre: u.nombre, rol, municipioId: "hualane", loteDemoId: null };
 };
 
@@ -47,8 +47,8 @@ beforeAll(async () => {
   for (const k of ENTORNO) delete process.env[k];
   ({ db } = await import("@/servidor/db"));
   const { cargarDemo } = await import("@/servidor/demo/cargar");
-  const { municipioActivo } = await import("@/lib/municipio");
-  await cargarDemo(db, { municipio: municipioActivo(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
+  const { municipioPredeterminado } = await import("@/lib/municipio");
+  await cargarDemo(db, { municipio: municipioPredeterminado(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
   bandejas = await import("@/servidor/panel/acciones-bandejas");
   redes = await import("@/servidor/panel/acciones-redes");
   servicio = await import("./servicio");
@@ -99,7 +99,7 @@ const foto = () => sharp({ create: { width: 1200, height: 900, channels: 3, back
 
 /** Un vecino envía un aviso con foto desde el portal (contenido real, no de demostración). */
 async function avisoDeVecino(tipo: "PERDIDA" | "ENCONTRADA") {
-  const huerta = await db.localidad.findUniqueOrThrow({ where: { clave: "la-huerta" } });
+  const huerta = await db.localidad.findFirstOrThrow({ where: { clave: "la-huerta" } });
   const { publicarMascota } = await import("@/servidor/portal/acciones");
   const datos = new FormData();
   datos.set(
@@ -118,7 +118,7 @@ async function avisoDeVecino(tipo: "PERDIDA" | "ENCONTRADA") {
 }
 
 const fotoPublica = async (id: string) => {
-  const { GET } = await import("@/app/(portal)/mascotas/[id]/foto/route");
+  const { GET } = await import("@/app/[municipio]/(portal)/mascotas/[id]/foto/route");
   return (await GET(new Request("http://localhost/"), { params: Promise.resolve({ id }) })).status;
 };
 
@@ -186,7 +186,7 @@ describe("aviso de un vecino: aceptar y publicar", () => {
     const aviso = await avisoDeVecino("PERDIDA");
     await bandejas.aprobarPublicacion(aviso.id);
     const llamadas = apiSimulada();
-    expect((await bandejas.ocultarPublicacion(aviso.id)).ok).toBe(true);
+    expect((await bandejas.ocultarPublicacion(aviso.id, "La foto no corresponde al animal descrito.")).ok).toBe(true);
     expect((await bandejas.aprobarPublicacion(aviso.id)).mensaje).toMatch(/Ya estaba publicado en Instagram/);
     expect(llamadas).toHaveLength(0);
   });
@@ -256,7 +256,7 @@ describe("operativos, adopciones y demostración", () => {
 
   it("borrar la demo borra sus publicaciones para Instagram", async () => {
     const { borrarDatosDemo } = await import("@/servidor/demo/borrar");
-    await borrarDatosDemo(db);
+    await borrarDatosDemo(db, (await import("@/lib/municipio")).municipioPredeterminado().id);
     expect(await db.publicacionRed.count({ where: { loteDemoId: { not: null } } })).toBe(0);
   });
 });

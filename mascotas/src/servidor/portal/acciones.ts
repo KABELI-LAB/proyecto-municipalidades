@@ -6,7 +6,7 @@
 // (operativo, ficha o publicación de la demo) hereda su lote, para que borrar
 // la demo no deje registros reales apuntando a datos que ya no existen.
 import { createHash, randomInt, timingSafeEqual } from "node:crypto";
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from "@/servidor/revalidar";
 import { z } from "zod";
 import { FORMATO_CODIGO } from "@/dominio/codigo";
 import { limiteParaResponder, nuevaVigencia } from "@/dominio/vigencia";
@@ -75,7 +75,7 @@ export async function solicitarServicio(valores: unknown): Promise<ResultadoServ
   const r = esquemaServicio.safeParse(valores);
   if (!r.success) return fallo(REVISE, validarCampos(esquemaServicio, valores));
   const d = r.data;
-  const municipio = municipioActivo();
+  const municipio = (await municipioActivo());
 
   try {
     const servicio = await db.servicio.findFirst({ where: { id: d.servicioId, municipioId: municipio.id, activo: true } });
@@ -87,7 +87,7 @@ export async function solicitarServicio(valores: unknown): Promise<ResultadoServ
     const codigo = await nuevoCodigo(db);
     await db.$transaction(async (tx) => {
       const persona = await obtenerPersona(tx, municipio.id, d, u.ids);
-      const animal = await tx.animal.create({ data: { ...datosAnimal(d), personaId: persona.id } });
+      const animal = await tx.animal.create({ data: { municipioId: (await municipioActivo()).id, ...datosAnimal(d), personaId: persona.id } });
       await tx.solicitudServicio.create({
         data: { codigo, personaId: persona.id, animalId: animal.id, servicioId: servicio.id, ...u.ids },
       });
@@ -117,7 +117,7 @@ export async function solicitarCupo(valores: unknown): Promise<ResultadoCupo> {
   const r = esquemaCupo.safeParse(valores);
   if (!r.success) return fallo(REVISE, validarCampos(esquemaCupo, valores));
   const d = r.data;
-  const municipio = municipioActivo();
+  const municipio = (await municipioActivo());
 
   try {
     const operativo = await db.operativo.findFirst({
@@ -143,7 +143,7 @@ export async function solicitarCupo(valores: unknown): Promise<ResultadoCupo> {
       const enEspera = await tx.cupo.count({ where: { operativoId: operativo.id, servicioId: d.servicioId, estado: "EN_LISTA_ESPERA" } });
       const dec = decidirCupo(capacidad.cupos, ocupados, enEspera);
 
-      const animal = await tx.animal.create({ data: { ...datosAnimal(d), personaId: persona.id, loteDemoId: operativo.loteDemoId } });
+      const animal = await tx.animal.create({ data: { municipioId: (await municipioActivo()).id, ...datosAnimal(d), personaId: persona.id, loteDemoId: operativo.loteDemoId } });
       await tx.cupo.create({
         data: {
           codigo,
@@ -164,7 +164,7 @@ export async function solicitarCupo(valores: unknown): Promise<ResultadoCupo> {
     if (!decision) {
       return fallo(`Cada hogar puede inscribir hasta ${municipio.parametros.limitePorHogar} animales por operativo, y ya alcanzaste ese límite con tu RUT.`);
     }
-    revalidatePath(`/operativos/${operativo.id}`);
+    await revalidatePath(`/operativos/${operativo.id}`);
     return {
       ok: true,
       codigo,
@@ -205,7 +205,7 @@ export async function reportarSituacion(entrada: unknown): Promise<ResultadoRepo
   const r = esquemaReporte.safeParse(valores);
   if (!r.success) return fallo(REVISE, validarCampos(esquemaReporte, valores));
   const d = r.data;
-  const municipio = municipioActivo();
+  const municipio = (await municipioActivo());
 
   let fotoArchivo: string | null = null;
   try {
@@ -259,7 +259,7 @@ export async function informarNovedad(valores: unknown): Promise<ResultadoNoveda
   const r = esquemaNovedad.safeParse(valores);
   if (!r.success) return fallo(REVISE, validarCampos(esquemaNovedad, valores));
   const d = r.data;
-  const municipio = municipioActivo();
+  const municipio = (await municipioActivo());
   try {
     const perro = await db.perroComunitario.findFirst({
       where: { id: d.perroId, oculto: false, sector: { municipioId: municipio.id } },
@@ -321,7 +321,7 @@ export async function publicarMascota(entrada: unknown): Promise<ResultadoPublic
   const r = esquemaPublicacion.safeParse(valores);
   if (!r.success) return fallo(REVISE, validarCampos(esquemaPublicacion, valores));
   const d = r.data;
-  const municipio = municipioActivo();
+  const municipio = (await municipioActivo());
 
   const fechaEvento = new Date(medianocheEn(d.fechaEvento).getTime() + 12 * 3_600_000);
   const hoy = inicioDeHoy();
@@ -413,7 +413,7 @@ export async function publicarMascota(entrada: unknown): Promise<ResultadoPublic
       if (duena) await notificar(db, duena.persona, "Alguien informó que vio una mascota", "Una persona informó que vio una mascota que podría ser la de tu aviso. Verás el avistamiento en tu aviso cuando el municipio lo revise; no podemos asegurar que sea el mismo animal.", duena.loteDemoId);
     }
 
-    revalidatePath("/mascotas");
+    await revalidatePath("/mascotas");
     return {
       ok: true,
       codigo,
@@ -458,9 +458,9 @@ export async function postularAdopcion(valores: unknown): Promise<ResultadoPostu
   const r = esquemaPostulacion.safeParse(valores);
   if (!r.success) return fallo(REVISE, validarCampos(esquemaPostulacion, valores));
   const d = r.data;
-  const municipio = municipioActivo();
+  const municipio = (await municipioActivo());
   try {
-    const ficha = await db.fichaAdopcion.findFirst({ where: { id: d.fichaId, ...FICHA_PUBLICA }, include: { animal: { select: { nombre: true } }, proponente: true } });
+    const ficha = await db.fichaAdopcion.findFirst({ where: { id: d.fichaId, ...FICHA_PUBLICA, municipioId: municipio.id }, include: { animal: { select: { nombre: true } }, proponente: true } });
     if (!ficha) return fallo("Este animal ya no está disponible para adopción.");
     // Por ahora el municipio no da animales en adopción: solo se postula a los que publica un vecino.
     if (!ficha.proponenteId) return fallo("Este animal no recibe postulaciones por ahora.");
@@ -538,7 +538,7 @@ export async function proponerAdopcion(entrada: unknown): Promise<ResultadoPropu
   const r = esquemaPropuesta.safeParse(valores);
   if (!r.success) return fallo(REVISE, validarCampos(esquemaPropuesta, valores));
   const d = r.data;
-  const municipio = municipioActivo();
+  const municipio = (await municipioActivo());
   const rut = normalizarRut(d.rut)!;
   if (fotos.length > MAXIMO_FOTOS) return fallo(REVISE, { fotos: `Puedes enviar hasta ${MAXIMO_FOTOS} fotos.` });
 
@@ -565,7 +565,7 @@ export async function proponerAdopcion(entrada: unknown): Promise<ResultadoPropu
     }
 
     // Duplicados: solo cuentan las propuestas y fichas abiertas.
-    const abiertas = { revision: { in: [...REVISION_ABIERTA] }, estado: { not: "ADOPTADO" as const }, ...(anterior ? { id: { not: anterior.id } } : {}) };
+    const abiertas = { revision: { in: [...REVISION_ABIERTA] }, estado: { not: "ADOPTADO" as const }, municipioId: (await municipioActivo()).id, ...(anterior ? { id: { not: anterior.id } } : {}) };
     if (guardadas.length && (await db.fichaAdopcion.count({ where: { ...abiertas, OR: guardadas.map((g) => ({ huellasFotos: { contains: g.huella } })) } }))) {
       await descartar();
       return fallo(REVISE, { fotos: "Una de estas fotos ya está en otra propuesta de adopción. Si es el mismo animal, revisa esa propuesta en Mis solicitudes." });
@@ -614,8 +614,8 @@ export async function proponerAdopcion(entrada: unknown): Promise<ResultadoPropu
         await tx.animal.update({ where: { id: anterior.animalId }, data: datosAnimal });
         await tx.fichaAdopcion.update({ where: { id: anterior.id }, data: datosFicha });
       } else {
-        const animal = await tx.animal.create({ data: datosAnimal });
-        await tx.fichaAdopcion.create({ data: { ...datosFicha, animalId: animal.id, codigo, proponenteId: persona.id } });
+        const animal = await tx.animal.create({ data: { ...datosAnimal, municipioId: (await municipioActivo()).id } });
+        await tx.fichaAdopcion.create({ data: { municipioId: (await municipioActivo()).id, ...datosFicha, animalId: animal.id, codigo, proponenteId: persona.id } });
       }
       await notificar(
         tx,
@@ -702,8 +702,8 @@ export async function gestionarPropuesta(valores: unknown): Promise<{ ok: boolea
       data: { revision: "RETIRADA", cierre: r.data.accion === "encontro_hogar" ? "ENCONTRO_HOGAR" : "YA_NO_APLICA" },
     });
     if (!cambio.count) return { ok: false, mensaje: "Esta propuesta ya no está abierta." };
-    revalidatePath("/adoptar");
-    revalidatePath("/", "layout");
+    await revalidatePath("/adoptar");
+    await revalidatePath("/", "layout");
     return { ok: true, mensaje: r.data.accion === "encontro_hogar" ? "¡Qué buena noticia! Retiramos la ficha del catálogo." : "Retiramos tu propuesta." };
   } catch (e) {
     console.error(e);
@@ -811,9 +811,9 @@ export async function decidirPostulacion(valores: unknown): Promise<{ ok: boolea
     if (p.estado !== "APROBADA") return yaCambio;
     if (d.accion === "adoptado") {
       const persona = await db.persona.findUniqueOrThrow({ where: { id: p.personaId } });
-      const compromisos = await concretarAdopcion({ ...p, persona, ficha: f }, municipioActivo().id);
-      revalidatePath("/adoptar");
-      revalidatePath("/", "layout");
+      const compromisos = await concretarAdopcion({ ...p, persona, ficha: f }, (await municipioActivo()).id);
+      await revalidatePath("/adoptar");
+      await revalidatePath("/", "layout");
       return { ok: true, mensaje: `¡Qué buena noticia! Registramos la adopción de ${nombre}.${compromisos.length ? ` Quedó registrado el compromiso de ${compromisos.join(" y ")}.` : ""}` };
     }
     // No se concretó: la persona queda no seleccionada y la ficha vuelve a recibir postulaciones.
@@ -900,8 +900,8 @@ export async function cancelarMiCupo(valores: unknown): Promise<{ ok: boolean; m
       },
       { timeout: 30_000 },
     );
-    revalidatePath(`/operativos/${c.operativoId}`);
-    revalidatePath("/operativos");
+    await revalidatePath(`/operativos/${c.operativoId}`);
+    await revalidatePath("/operativos");
     return { ok: true, mensaje: enEspera ? "Saliste de la lista de espera." : "Cancelamos tu cupo. Gracias por avisar: quedó libre para otra persona." };
   } catch (e) {
     console.error(e);
@@ -956,7 +956,7 @@ async function tramitesDe(personas: { id: string; correo: string | null; telefon
     }),
     // Notificaciones internas: las que se registraron a su contacto.
     db.notificacion.findMany({
-      where: { destinatario: { in: [...new Set(personas.flatMap((p) => [p.correo, p.telefono]).filter((x): x is string => Boolean(x)))] } },
+      where: { municipioId: (await municipioActivo()).id, destinatario: { in: [...new Set(personas.flatMap((p) => [p.correo, p.telefono]).filter((x): x is string => Boolean(x)))] } },
       orderBy: { creadaEn: "desc" },
       take: 8,
     }),
@@ -1196,7 +1196,7 @@ export async function responderInvitacion(valores: unknown): Promise<{ ok: boole
         : "Registramos tu interés. Aún no hay un cupo disponible para asignarte: te avisaremos apenas lo haya.";
     }, { timeout: 30_000 });
     if (!mensaje) return { ok: false, mensaje: "Esta invitación ya no se puede responder. Consulta nuevamente para ver su estado." };
-    revalidatePath(`/operativos/${i.operativoId}`);
+    await revalidatePath(`/operativos/${i.operativoId}`);
     return { ok: true, mensaje };
   } catch (e) {
     console.error(e);
@@ -1242,7 +1242,7 @@ export async function gestionarAviso(valores: unknown): Promise<{ ok: boolean; m
 
     if (d.accion === "confirmar") {
       await db.publicacionMascota.update({ where: { id: p.id }, data: { vigenteHasta: nuevaVigencia(ahora), vigenciaPedidaEn: null } });
-      revalidatePath("/mascotas");
+      await revalidatePath("/mascotas");
       return { ok: true, mensaje: `Tu aviso sigue publicado hasta el ${fechaLarga(nuevaVigencia(ahora))}.` };
     }
     if (d.accion === "reencontrada" && !d.porCoincidencia) return { ok: false, mensaje: "Indica si te ayudó una posible coincidencia de la plataforma." };
@@ -1271,12 +1271,12 @@ export async function gestionarAviso(valores: unknown): Promise<{ ok: boolean; m
           tx,
           otra.persona,
           "La mascota volvió a casa",
-          "La otra persona confirmó el reencuentro, así que retiramos también tu aviso. Gracias por ayudar. Si no corresponde, escríbenos.",
+          "La otra persona confirmó el reencuentro, así que retiramos también tu aviso. Gracias por ayudar. Si no corresponde, publica el aviso de nuevo.",
           otra.loteDemoId,
         );
       });
-      revalidatePath("/mascotas");
-      revalidatePath("/", "layout");
+      await revalidatePath("/mascotas");
+      await revalidatePath("/", "layout");
       return { ok: true, mensaje: "¡Qué buena noticia! Retiramos tu aviso y el de la otra persona, a quien le avisamos." };
     }
 
@@ -1287,8 +1287,8 @@ export async function gestionarAviso(valores: unknown): Promise<{ ok: boolean; m
           ? { estado: "REENCONTRADA", resueltaEn: ahora, reencuentroPorCoincidencia: d.porCoincidencia === "SI" }
           : { estado: "YA_NO_APLICA", resueltaEn: ahora },
     });
-    revalidatePath("/mascotas");
-    revalidatePath("/", "layout");
+    await revalidatePath("/mascotas");
+    await revalidatePath("/", "layout");
     return { ok: true, mensaje: d.accion === "reencontrada" ? "¡Qué buena noticia! Retiramos tu aviso del portal." : "Retiramos tu aviso del portal." };
   } catch (e) {
     console.error(e);
@@ -1310,7 +1310,7 @@ const MENSAJE_ENVIADO = "Si ese correo está en alguno de tus trámites, te envi
 const esquemaCorreoAcceso = z.object({ correo: z.string().trim().refine(correoValido, "Revisa el correo; por ejemplo, nombre@correo.cl.") });
 
 /** La primera persona registrada con ese correo: a ella se asocia el código. */
-const personaDelCorreo = (correo: string) => db.persona.findFirst({ where: { municipioId: municipioActivo().id, correo: normalizarCorreo(correo) }, orderBy: { creadaEn: "asc" } });
+const personaDelCorreo = async (correo: string) => db.persona.findFirst({ where: { municipioId: (await municipioActivo()).id, correo: normalizarCorreo(correo) }, orderBy: { creadaEn: "asc" } });
 
 export type ResultadoPedirCodigo = { ok: true; mensaje: string; codigoPrueba?: string } | { ok: false; mensaje: string; errores?: Errores };
 
@@ -1327,7 +1327,7 @@ export async function pedirCodigoAcceso(valores: unknown): Promise<ResultadoPedi
   const prueba = !correoListo && process.env.NODE_ENV !== "production";
   if (!correoListo && !prueba) return { ok: false, mensaje: "Por ahora no podemos enviar códigos por correo. Intenta más tarde." };
   try {
-    const municipio = municipioActivo();
+    const municipio = (await municipioActivo());
     const persona = await personaDelCorreo(r.data.correo);
     // Misma respuesta exista o no el correo, para no revelar quién tiene trámites.
     if (!persona?.correo) return { ok: true, mensaje: MENSAJE_ENVIADO };
@@ -1375,7 +1375,7 @@ export async function entrarConCodigoAcceso(valores: unknown): Promise<Resultado
     const usado = await db.codigoAcceso.updateMany({ where: { id: vigente.id, usadoEn: null }, data: { usadoEn: new Date() } });
     if (!usado.count) return fallo(invalido);
     await abrirSesionVecino(r.data.correo);
-    return tramitesDe(await db.persona.findMany({ where: { municipioId: municipioActivo().id, correo: normalizarCorreo(r.data.correo) }, select: { id: true, correo: true, telefono: true } }));
+    return tramitesDe(await db.persona.findMany({ where: { municipioId: (await municipioActivo()).id, correo: normalizarCorreo(r.data.correo) }, select: { id: true, correo: true, telefono: true } }));
   } catch (e) {
     console.error(e);
     return fallo(ERROR_GENERAL);

@@ -17,8 +17,8 @@ beforeAll(async () => {
   process.env.MUNICIPIO ??= "hualane";
   ({ db } = await import("@/servidor/db"));
   const { cargarDemo } = await import("@/servidor/demo/cargar");
-  const { municipioActivo } = await import("@/lib/municipio");
-  await cargarDemo(db, { municipio: municipioActivo(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
+  const { municipioPredeterminado } = await import("@/lib/municipio");
+  await cargarDemo(db, { municipio: municipioPredeterminado(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
   mapa = await import("./mapaCiudadano");
 }, 120_000);
 
@@ -28,7 +28,7 @@ afterAll(async () => {
 });
 
 const puntos = (marcas: { centro: { lat: number; lng: number } }[]) => marcas.map((m) => `${m.centro.lat.toFixed(4)},${m.centro.lng.toFixed(4)}`);
-const capas = ["mascotas", "adopcion", "operativos", "comunitarios", "resultados"] as const;
+const capas = ["mascotas", "adopcion", "operativos"] as const;
 
 describe("mapa ciudadano", () => {
   it("ninguna capa dibuja dos marcas en el mismo punto, ni expone datos privados", async () => {
@@ -71,28 +71,5 @@ describe("mapa ciudadano", () => {
     expect(c.marcas.flatMap((m) => m.items).map((i) => i.clave).sort()).toEqual(abiertos.map((o) => o.id).sort());
     if (abiertos.length === 0) expect(c.vacio.enlace?.href).toBe("/servicio");
     for (const i of c.marcas.flatMap((m) => m.items)) expect(i.lineas.join(" ")).toMatch(/cupo|lista de espera/);
-  });
-
-  it("perros comunitarios: en su lugar, con la última revisión registrada y el camino a su ficha", async () => {
-    const c = await mapa.mapaCiudadano("comunitarios");
-    const items = c.marcas.flatMap((m) => m.items);
-    expect(items.map((i) => i.clave).sort()).toEqual(["com-01", "com-02", "com-04", "com-05"]);
-    expect(items.every((i) => i.lineas.some((l) => l.startsWith("Última revisión registrada") || l === "Sin revisión registrada"))).toBe(true);
-    // Un perro solo: la marca lleva a su ficha (ahí se informa una novedad o se hace cargo); varios: cada ficha lo indica.
-    for (const m of c.marcas) {
-      if (m.items.length === 1) expect(m.enlaces?.find((e) => e.principal)?.href).toBe(`/comunitarios/${m.items[0].clave}`);
-      expect(m.items.every((i) => i.lineas.includes("Para informar una novedad o hacerte cargo, abre su ficha"))).toBe(true);
-    }
-  });
-
-  it("resultados: las cifras por sector suman lo mismo que el retrato de la comuna", async () => {
-    const c = await mapa.mapaCiudadano("resultados");
-    const { impactoDelPrograma } = await import("@/servidor/inteligencia");
-    const { hoyISO } = await import("@/servidor/formato");
-    const i = await impactoDelPrograma(hoyISO());
-    const suma = (texto: string) => c.marcas.reduce((n, m) => n + (m.cifras?.find((x) => x.texto === texto)?.valor ?? 0), 0);
-    expect([suma("atenciones"), suma("operativos"), suma("volvieron a casa")]).toEqual([i.atenciones, i.operativos, i.reencuentros]);
-    // Adopciones: por el sector de quien adopta (todas las de la demo lo tienen).
-    expect(suma("adopciones")).toBe(i.adopciones);
   });
 });

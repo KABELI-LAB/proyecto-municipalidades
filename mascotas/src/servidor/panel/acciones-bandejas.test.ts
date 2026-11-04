@@ -19,10 +19,10 @@ beforeAll(async () => {
   process.env.MUNICIPIO ??= "hualane";
   ({ db } = await import("@/servidor/db"));
   const { cargarDemo } = await import("@/servidor/demo/cargar");
-  const { municipioActivo } = await import("@/lib/municipio");
-  await cargarDemo(db, { municipio: municipioActivo(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
+  const { municipioPredeterminado } = await import("@/lib/municipio");
+  await cargarDemo(db, { municipio: municipioPredeterminado(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
   // El historial de reportes guarda quién hizo cada cambio: una cuenta real de la demo.
-  usuario.id = (await db.usuarioMunicipal.findFirstOrThrow({ where: { rol: "COORDINADOR" } })).id;
+  usuario.id = (await db.usuarioMunicipal.findFirstOrThrow()).id;
   a = await import("./acciones-bandejas");
 }, 120_000);
 
@@ -67,6 +67,18 @@ describe("publicaciones", () => {
     const cerrada = await db.publicacionMascota.findUniqueOrThrow({ where: { id: p.id } });
     expect([cerrada.estado, cerrada.reencuentroPorCoincidencia, cerrada.resueltaEn !== null]).toEqual(["REENCONTRADA", null, true]);
     expect((await a.marcarReencontrada(p.id)).ok).toBe(false);
+  });
+
+  it("no publicar un aviso pide el motivo y le dice a quien lo envió qué aviso es y por qué", async () => {
+    const p = await db.publicacionMascota.findFirstOrThrow({ where: { estado: "ABIERTA", moderacion: "APROBADA", id: { notIn: ["pub-047", "pub-048"] } }, include: { persona: true } });
+    await db.publicacionMascota.update({ where: { id: p.id }, data: { moderacion: "PENDIENTE" } });
+    expect((await a.ocultarPublicacion(p.id, "corto")).ok).toBe(false);
+    expect((await a.ocultarPublicacion(p.id, "La foto no corresponde al animal descrito.")).ok).toBe(true);
+    expect((await db.publicacionMascota.findUniqueOrThrow({ where: { id: p.id } })).moderacion).toBe("OCULTA");
+    const n = await db.notificacion.findFirstOrThrow({ where: { destinatario: p.persona.correo ?? p.persona.telefono ?? "" }, orderBy: { creadaEn: "desc" } });
+    expect(n.asunto).toBe("No publicamos tu aviso");
+    expect(n.contenido).toContain("La foto no corresponde al animal descrito.");
+    expect(n.contenido).not.toMatch(/escríbenos|condiciones de uso/);
   });
 });
 

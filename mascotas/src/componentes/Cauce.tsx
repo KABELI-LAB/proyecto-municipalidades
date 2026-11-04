@@ -23,7 +23,7 @@ type Props = {
 export function Cauce({ colores = "suave", forma = "sube", grosor = 16, separacion = 56, className }: Props) {
   const inicio = forma === "sube" ? 120 : 160;
   return (
-    <svg className={className} viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <svg className={className} viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true" focusable="false" data-cauce="">
       {COLORES[colores].map((color, i) => (
         <path key={i} d={TRAZO[forma](inicio + i * separacion)} fill="none" stroke={color} strokeWidth={grosor} vectorEffect="non-scaling-stroke" />
       ))}

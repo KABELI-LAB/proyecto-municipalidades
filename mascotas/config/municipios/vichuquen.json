@@ -1,0 +1,25 @@
+{
+  "id": "vichuquen",
+  "nombre": "Vichuquén",
+  "nombreOficial": "Ilustre Municipalidad de Vichuquén",
+  "plataforma": "Pawni",
+  "firma": [
+    "Ilustre Municipalidad",
+    "de Vichuquén"
+  ],
+  "sitioWeb": "www.munivichuquen.cl",
+  "region": "Región del Maule",
+  "zonaHoraria": "America/Santiago",
+  "identidad": {
+    "escudo": "/ds/temas/vichuquen/logo-horizontal-color.png",
+    "logoCiudadano": "/ds/temas/vichuquen/logo-horizontal-color.png",
+    "logoBlanco": "/ds/temas/vichuquen/logo-vertical-white.png",
+    "marcaDigital": "/ds/temas/vichuquen/logo-horizontal-color.png",
+    "logoInstitucional": "/ds/temas/vichuquen/logo-horizontal-color.png"
+  },
+  "parametros": {
+    "limitePorHogar": 2,
+    "invitacionesPrioritarias": false
+  },
+  "_nota": "Municipio de demostración: identidad visual en design-system/temas/<id>/, territorio y datos en demo/municipios/<id>/ (npm run demo:cargar -- --municipio=<id>)."
+}

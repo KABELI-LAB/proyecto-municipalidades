@@ -4,7 +4,7 @@
 // iniciar, cerrar con retorno a la demanda pendiente, o cancelar.
 //
 // Lo que crea una cuenta de demostración hereda su lote (usuario.loteDemoId).
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from "@/servidor/revalidar";
 import { z } from "zod";
 import type { Prisma } from "@/generated/prisma/client";
 import { CUPO_VIGENTE } from "@/dominio/cupos";
@@ -29,11 +29,11 @@ async function gestor() {
   return autorizar("gestionarOperativos");
 }
 
-const refrescar = (id?: string) => {
-  revalidatePath("/panel", "layout");
-  if (id) revalidatePath(`/operativos/${id}`);
-  revalidatePath("/operativos");
-  revalidatePath("/", "layout");
+const refrescar = async (id?: string) => {
+  await revalidatePath("/panel", "layout");
+  if (id) await revalidatePath(`/operativos/${id}`);
+  await revalidatePath("/operativos");
+  await revalidatePath("/", "layout");
 };
 
 // ───────────── Crear y editar (borrador) ─────────────
@@ -66,7 +66,7 @@ export async function guardarOperativo(valores: unknown): Promise<Respuesta> {
   if (d.horaFin <= d.horaInicio) errores.horaFin = "La hora de término debe ser posterior a la de inicio.";
   const capacidades = Object.entries(d.capacidades).filter(([, n]) => n > 0);
   if (capacidades.length === 0) errores.capacidades = "Indica cupos para al menos un servicio.";
-  const municipio = municipioActivo();
+  const municipio = (await municipioActivo());
   if (!(await db.sector.findFirst({ where: { id: d.sectorId, municipioId: municipio.id } }))) errores.sectorId = "Elige un sector de la lista.";
   else if (!(await db.lugar.findFirst({ where: { id: d.lugarId, sectorId: d.sectorId } }))) errores.lugarId = "Elige un lugar del sector.";
   // Servicios activos; al editar, también los que el operativo ya ofrecía aunque luego se desactivaran.
@@ -94,7 +94,7 @@ export async function guardarOperativo(valores: unknown): Promise<Respuesta> {
         db.capacidadServicio.deleteMany({ where: { operativoId: d.id } }),
         db.capacidadServicio.createMany({ data: capacidades.map(([servicioId, cupos]) => ({ operativoId: d.id!, servicioId, cupos })) }),
       ]);
-      refrescar(d.id);
+      await refrescar(d.id);
       return { ok: true, mensaje: "Guardamos los cambios del borrador.", id: d.id };
     }
 
@@ -118,7 +118,7 @@ export async function guardarOperativo(valores: unknown): Promise<Respuesta> {
       }
       return o;
     });
-    refrescar(creado.id);
+    await refrescar(creado.id);
     return { ok: true, mensaje: "Creamos el operativo en borrador.", id: creado.id };
   } catch (e) {
     console.error(e);
@@ -133,7 +133,7 @@ export async function guardarOperativo(valores: unknown): Promise<Respuesta> {
  */
 export async function crearYPublicarOperativo(valores: unknown): Promise<Respuesta> {
   const lugarId = z.object({ lugarId: z.string().min(1) }).safeParse(valores);
-  const lugar = lugarId.success ? await db.lugar.findFirst({ where: { id: lugarId.data.lugarId, sector: { municipioId: municipioActivo().id } } }) : null;
+  const lugar = lugarId.success ? await db.lugar.findFirst({ where: { id: lugarId.data.lugarId, sector: { municipioId: (await municipioActivo()).id } } }) : null;
   if (!lugar) return { ok: false, mensaje: "Revisa los datos marcados.", errores: { lugarId: "Elige el lugar de la lista." } };
   const creado = await guardarOperativo({ ...(valores as object), id: undefined, sectorId: lugar.sectorId, origen: "DESDE_CERO" });
   if (!creado.ok || !creado.id) return creado;
@@ -163,7 +163,7 @@ async function transitar(id: string, t: Transicion, efecto?: (tx: Tx, o: Operati
   if (!u) return SIN_PERMISO;
   try {
     const mensaje = await db.$transaction(async (tx) => {
-      const o = await tx.operativo.findFirst({ where: { id, sector: { municipioId: municipioActivo().id } }, include: { sector: true, lugar: true } });
+      const o = await tx.operativo.findFirst({ where: { id, sector: { municipioId: (await municipioActivo()).id } }, include: { sector: true, lugar: true } });
       if (!o) throw new ErrorDeUso("No encontramos el operativo.");
       if (!puedeTransitar(o.estado as EstadoOperativo, t)) throw new ErrorDeUso("El operativo ya no está en un estado que permita esta acción. Actualiza la página.");
       const extra = efecto ? await efecto(tx, o) : undefined;
@@ -177,7 +177,7 @@ async function transitar(id: string, t: Transicion, efecto?: (tx: Tx, o: Operati
       });
       return extra;
     }, { timeout: 30_000 });
-    refrescar(id);
+    await refrescar(id);
     return { ok: true, mensaje: mensaje ?? "Listo." };
   } catch (e) {
     if (e instanceof ErrorDeUso) return { ok: false, mensaje: e.message };
@@ -203,7 +203,7 @@ export async function publicar(id: string) {
     const existente = await tx.aviso.findFirst({ where: { operativoId: id, tipo: "OPERATIVO" } });
     if (!existente) {
       await tx.aviso.create({
-        data: {
+        data: { municipioId: (await municipioActivo()).id, 
           tipo: "OPERATIVO",
           titulo: `Operativo en ${o.sector.nombre}`,
           texto: `El ${fechaLarga(o.fecha)}, de ${o.horaInicio} a ${o.horaFin} horas, realizaremos un operativo en ${o.lugar.nombre}. Inscríbete en la sección Operativos; los cupos son limitados.`,
@@ -216,7 +216,7 @@ export async function publicar(id: string) {
         },
       });
     }
-    if (!invitacionesActivas()) return "Publicamos el operativo: las inscripciones quedaron abiertas en el portal. Dejamos un aviso en borrador para comunicaciones.";
+    if (!(await invitacionesActivas())) return "Publicamos el operativo: las inscripciones quedaron abiertas en el portal. Dejamos un aviso en borrador para comunicaciones.";
     return `Publicamos el operativo. Enviamos ${invitadas === 1 ? "1 invitación prioritaria" : `${invitadas} invitaciones prioritarias`} a solicitudes pendientes (mismo servicio, del sector o cercanas); sus cupos quedan retenidos hasta que respondan. Dejamos un aviso en borrador para comunicaciones.`;
   });
   if (!r.ok) return r;
@@ -265,7 +265,7 @@ export async function cerrar(id: string) {
             data: { codigo: await nuevoCodigo(tx), personaId: c.personaId, animalId: c.animalId, servicioId: c.servicioId, sectorId: c.persona.sectorId, origen: "MUNICIPIO", loteDemoId: o.loteDemoId },
           });
         }
-        await notificar(tx, c.persona, "Tu solicitud sigue registrada", `No alcanzamos a atender tu solicitud de ${c.servicio.nombre.toLowerCase()} en este operativo. La mantenemos registrada y te avisaremos del próximo.`, o.loteDemoId);
+        await notificar(tx, c.persona, "Tu solicitud sigue registrada", `No alcanzamos a atender tu solicitud de ${c.servicio.nombre.toLowerCase()} en este operativo. La mantenemos registrada. Revisa los próximos operativos en el portal.`, o.loteDemoId);
       }
     }
     const atenciones = await tx.atencion.findMany({ where: { operativoId: id }, include: { servicio: true } });
@@ -289,15 +289,15 @@ export async function cancelar(id: string) {
     for (const c of vigentes) {
       await tx.cupo.update({ where: { id: c.id }, data: { estado: "CANCELADO_MUNICIPIO" } });
       if (c.solicitudId) await tx.solicitudServicio.update({ where: { id: c.solicitudId }, data: { estado: "RECIBIDA" } });
-      await notificar(tx, c.persona, "Operativo cancelado", `Informamos que el operativo del ${fechaLarga(o.fecha)} en ${o.sector.nombre} fue cancelado. Tu solicitud sigue registrada y te avisaremos del próximo operativo.`, o.loteDemoId);
+      await notificar(tx, c.persona, "Operativo cancelado", `Informamos que el operativo del ${fechaLarga(o.fecha)} en ${o.sector.nombre} fue cancelado. Tu solicitud sigue registrada. Revisa los próximos operativos en el portal.`, o.loteDemoId);
     }
     // El aviso del operativo deja de mostrarse y se prepara uno de cancelación para comunicaciones.
     await tx.aviso.updateMany({ where: { operativoId: id, tipo: "OPERATIVO" }, data: { vigenteHasta: new Date() } });
     await tx.aviso.create({
-      data: {
+      data: { municipioId: (await municipioActivo()).id, 
         tipo: "CAMBIO",
         titulo: `Operativo en ${o.sector.nombre} cancelado`,
-        texto: `Informamos que el operativo del ${fechaLarga(o.fecha)} en ${o.sector.nombre} fue cancelado. Las solicitudes registradas se mantienen y avisaremos la nueva fecha.`,
+        texto: `Informamos que el operativo del ${fechaLarga(o.fecha)} en ${o.sector.nombre} fue cancelado. Las solicitudes registradas se mantienen. Revisa los próximos operativos en el portal.`,
         vigenteDesde: new Date(),
         vigenteHasta: new Date(o.fecha.getTime() + 86_400_000),
         estado: "BORRADOR",
@@ -322,7 +322,7 @@ async function operarCupo(cupoId: string, fn: (tx: Tx, c: Prisma.CupoGetPayload<
       if (!["PUBLICADO", "INSCRIPCIONES_CERRADAS"].includes(c.operativo.estado)) throw new ErrorDeUso("Los cupos se gestionan antes de que el operativo comience.");
       return { mensaje: await fn(tx, c), operativoId: c.operativoId };
     });
-    refrescar(operativoId);
+    await refrescar(operativoId);
     return { ok: true, mensaje };
   } catch (e) {
     if (e instanceof ErrorDeUso) return { ok: false, mensaje: e.message };
@@ -371,7 +371,7 @@ export async function liberarNoConfirmados(operativoId: string): Promise<Respues
       await procesarOperativo(tx, operativoId);
       return invitados.length;
     });
-    refrescar(operativoId);
+    await refrescar(operativoId);
     return { ok: true, mensaje: n === 0 ? "No había invitaciones sin confirmar." : `Liberamos ${n === 1 ? "1 invitación" : `${n} invitaciones`} sin confirmar; sus solicitudes siguen como demanda pendiente.` };
   } catch (e) {
     if (e instanceof ErrorDeUso) return { ok: false, mensaje: e.message };
@@ -394,7 +394,7 @@ export async function invitarNuevamente(operativoId: string): Promise<Respuesta>
       if (!["PUBLICADO", "INSCRIPCIONES_CERRADAS"].includes(o.estado)) throw new ErrorDeUso("Solo antes de que el operativo comience.");
       return procesarOperativo(tx, operativoId);
     }, { timeout: 30_000 });
-    refrescar(operativoId);
+    await refrescar(operativoId);
     const partes = [
       r.vencidas && `${r.vencidas === 1 ? "1 invitación venció" : `${r.vencidas} invitaciones vencieron`}`,
       r.asignadas && `${r.asignadas === 1 ? "asignamos 1 cupo" : `asignamos ${r.asignadas} cupos`} a quienes confirmaron interés`,

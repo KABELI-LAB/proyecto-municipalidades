@@ -5,25 +5,26 @@ import "server-only";
 import { CUPO_OCUPA } from "@/dominio/cupos";
 import { SOLICITUD_PENDIENTE } from "@/dominio/solicitudes";
 import { municipioActivo } from "@/lib/municipio";
-import { COMUNITARIO_PUBLICO, FICHA_PUBLICA, PUBLICACION_CON_FOTO } from "@/servidor/conFoto";
+import { COMUNITARIO_PUBLICO, FICHA_CON_FOTO, FICHA_PUBLICA, PUBLICACION_CON_FOTO } from "@/servidor/conFoto";
 import { leerResumen } from "@/dominio/resumen";
 import { db } from "@/servidor/db";
 
 const DIA = 86_400_000;
 
 export async function loQuePidenLosVecinos() {
-  const municipioId = municipioActivo().id;
+  const municipioId = (await municipioActivo()).id;
   const enMunicipio = { sector: { municipioId } };
   const hace30 = new Date(Date.now() - 30 * DIA);
-  const [servicios, sectores, solicitudes, avisos, reportes, tiposReporte, postulaciones, fichas, inscritos, comunitarios] = await Promise.all([
+  const [servicios, sectores, solicitudes, avisos, reportes, tiposReporte, propuestas, fichas, inscritos, comunitarios] = await Promise.all([
     db.servicio.findMany({ where: { municipioId }, select: { id: true, nombre: true } }),
     db.sector.findMany({ where: { municipioId }, select: { id: true, nombre: true }, orderBy: { orden: "asc" } }),
     db.solicitudServicio.groupBy({ by: ["servicioId", "sectorId"], where: { estado: { in: [...SOLICITUD_PENDIENTE] }, ...enMunicipio }, _count: { _all: true } }),
     db.publicacionMascota.groupBy({ by: ["tipo", "sectorId"], where: { estado: "ABIERTA", moderacion: "APROBADA", ...PUBLICACION_CON_FOTO, ...enMunicipio }, _count: { _all: true } }),
     db.reporteCiudadano.groupBy({ by: ["tipoId", "sectorId"], where: { creadoEn: { gte: hace30 }, ...enMunicipio }, _count: { _all: true } }),
     db.tipoReporte.findMany({ where: { municipioId }, select: { id: true, nombre: true } }),
-    db.postulacionAdopcion.count({ where: { estado: { in: ["RECIBIDA", "EN_EVALUACION"] } } }),
-    db.fichaAdopcion.count({ where: FICHA_PUBLICA }),
+    // Adopción: lo que revisa el municipio (las postulaciones son entre vecinos y no pasan por aquí).
+    db.fichaAdopcion.count({ where: { revision: "PENDIENTE", municipioId, proponenteId: { not: null }, ...FICHA_CON_FOTO } }),
+    db.fichaAdopcion.count({ where: { ...FICHA_PUBLICA, municipioId } }),
     db.cupo.count({ where: { estado: { in: [...CUPO_OCUPA] }, operativo: { estado: { in: ["PUBLICADO", "INSCRIPCIONES_CERRADAS"] }, ...enMunicipio } } }),
     db.perroComunitario.count({ where: { ...COMUNITARIO_PUBLICO, ...enMunicipio } }),
   ]);
@@ -56,7 +57,7 @@ export async function loQuePidenLosVecinos() {
       perdidas: suma(avisos.filter((x) => x.tipo === "PERDIDA")),
       avistadas: suma(avisos.filter((x) => x.tipo === "ENCONTRADA")),
       reportes: suma(reportes),
-      postulaciones,
+      propuestas,
       fichas,
       inscritos,
       comunitarios,
@@ -69,6 +70,6 @@ export async function loQuePidenLosVecinos() {
 
 /** El último resumen escrito por la IA, si lo hay (estructurado, o el texto de uno antiguo). */
 export async function ultimoResumen() {
-  const r = await db.resumenIA.findFirst({ where: { municipioId: municipioActivo().id }, orderBy: { creadoEn: "desc" }, select: { texto: true, creadoEn: true } });
+  const r = await db.resumenIA.findFirst({ where: { municipioId: (await municipioActivo()).id }, orderBy: { creadoEn: "desc" }, select: { texto: true, creadoEn: true } });
   return r ? { contenido: leerResumen(r.texto), creadoEn: r.creadoEn } : null;
 }

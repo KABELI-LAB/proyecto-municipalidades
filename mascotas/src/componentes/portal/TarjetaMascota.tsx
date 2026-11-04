@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Icono } from "@/componentes/Icono";
-import { ESPECIE, especieConSexo, TAMANO, tipoAviso, tituloAviso } from "@/dominio/etiquetas";
+import { ESPECIE, especieConSexo, especieYColor, TAMANO, tipoAviso, tituloAviso } from "@/dominio/etiquetas";
 import { fechaCorta } from "@/servidor/formato";
 import { FotoAnimal } from "./FotoAnimal";
 import { fotoDeAviso } from "./fotoAviso";
@@ -50,7 +50,7 @@ export function TarjetaMascota({ publicacion: p, coincidencia = false }: Props) 
         </Link>
       </h3>
       <p>
-        {p.nombreAnimal?.trim() ? `${especieConSexo(p.especie, p.sexo)} ${p.colorPrincipal}` : especieConSexo(p.especie, p.sexo)}
+        {p.nombreAnimal?.trim() ? especieYColor(p.especie, p.sexo, p.colorPrincipal) : especieConSexo(p.especie, p.sexo)}
         {p.tamano ? `, ${TAMANO[p.tamano].toLowerCase()}` : ""}.
       </p>
       {p.collar === "SI" && <p>Con collar{p.colorCollar ? ` ${p.colorCollar}` : ""}.</p>}

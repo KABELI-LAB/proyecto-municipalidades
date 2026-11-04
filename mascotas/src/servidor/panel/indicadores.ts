@@ -16,7 +16,7 @@ import { FICHA_CON_FOTO, PUBLICACION_CON_FOTO } from "@/servidor/conFoto";
 import { db } from "@/servidor/db";
 import { diaISO, hoyISO, inicioDeHoy, ventana } from "@/servidor/formato";
 
-const municipioId = () => municipioActivo().id;
+const municipioId = async () => (await municipioActivo()).id;
 
 export type Periodo = 30 | 90 | 365;
 /** Factor R de la prioridad: reportes de los últimos 90 días (incluye el día 90). */
@@ -27,22 +27,22 @@ export type Especie = "PERRO" | "GATO" | "OTRA";
 // ───────────── Prioridad por sector ─────────────
 
 export async function factoresPorSector(hoy = hoyISO()): Promise<FactoresSector[]> {
-  const sectores = await db.sector.findMany({ where: { municipioId: municipioId() }, orderBy: { orden: "asc" } });
-  const servicios = await db.servicio.findMany({ where: { municipioId: municipioId() }, orderBy: { nombre: "asc" } });
+  const sectores = await db.sector.findMany({ where: { municipioId: (await municipioId()) }, orderBy: { orden: "asc" } });
+  const servicios = await db.servicio.findMany({ where: { municipioId: (await municipioId()) }, orderBy: { nombre: "asc" } });
   const v90 = ventana(DIAS_REPORTES_PRIORIDAD, hoy);
 
   const pendientes = await db.solicitudServicio.groupBy({
     by: ["sectorId", "servicioId"],
-    where: { estado: { in: [...SOLICITUD_PENDIENTE] }, sector: { municipioId: municipioId() } },
+    where: { estado: { in: [...SOLICITUD_PENDIENTE] }, sector: { municipioId: (await municipioId()) } },
     _count: { _all: true },
   });
   const reportes = await db.reporteCiudadano.groupBy({
     by: ["sectorId"],
-    where: { creadoEn: { gte: v90.desde, lt: v90.hasta }, sector: { municipioId: municipioId() } },
+    where: { creadoEn: { gte: v90.desde, lt: v90.hasta }, sector: { municipioId: (await municipioId()) } },
     _count: { _all: true },
   });
   const cerrados = await db.operativo.findMany({
-    where: { estado: "CERRADO", sector: { municipioId: municipioId() } },
+    where: { estado: "CERRADO", sector: { municipioId: (await municipioId()) } },
     orderBy: { fecha: "desc" },
     include: { resultado: true },
   });
@@ -65,12 +65,12 @@ export async function factoresPorSector(hoy = hoyISO()): Promise<FactoresSector[
 }
 
 export async function pesosPrioridad() {
-  const m = await db.municipio.findUniqueOrThrow({ where: { id: municipioId() } });
+  const m = await db.municipio.findUniqueOrThrow({ where: { id: (await municipioId()) } });
   return { demanda: m.pesoDemanda, reportes: m.pesoReportes, tiempo: m.pesoTiempo, noCubierta: m.pesoNoCubierta };
 }
 
 export async function prioridades(hoy = hoyISO()): Promise<(Prioridad & { clave: string })[]> {
-  const claves = new Map((await db.sector.findMany({ where: { municipioId: municipioId() } })).map((s) => [s.id, s.clave]));
+  const claves = new Map((await db.sector.findMany({ where: { municipioId: (await municipioId()) } })).map((s) => [s.id, s.clave]));
   return calcularPrioridad(await factoresPorSector(hoy), await pesosPrioridad()).map((p) => ({ ...p, clave: claves.get(p.sectorId)! }));
 }
 
@@ -79,15 +79,15 @@ export async function prioridades(hoy = hoyISO()): Promise<(Prioridad & { clave:
 /** Bandeja de pendientes de revisión. */
 export async function pendientesDeRevision() {
   const [reportes, publicaciones, coincidencias, postulaciones, propuestas] = await Promise.all([
-    db.reporteCiudadano.count({ where: { estado: "ABIERTO", sector: { municipioId: municipioId() } } }),
+    db.reporteCiudadano.count({ where: { estado: "ABIERTO", sector: { municipioId: (await municipioId()) } } }),
     // Las bandejas muestran solo animales con foto y cuentan lo mismo que muestran.
-    db.publicacionMascota.count({ where: { moderacion: "PENDIENTE", estado: "ABIERTA", ...PUBLICACION_CON_FOTO } }),
-    db.coincidencia.count({ where: { estado: "SUGERIDA", perdida: { estado: "ABIERTA", ...PUBLICACION_CON_FOTO }, encontrada: { estado: "ABIERTA", ...PUBLICACION_CON_FOTO } } }),
+    db.publicacionMascota.count({ where: { moderacion: "PENDIENTE", estado: "ABIERTA", sector: { municipioId: (await municipioId()) }, ...PUBLICACION_CON_FOTO } }),
+    db.coincidencia.count({ where: { estado: "SUGERIDA", perdida: { estado: "ABIERTA", sector: { municipioId: (await municipioId()) }, ...PUBLICACION_CON_FOTO }, encontrada: { estado: "ABIERTA", ...PUBLICACION_CON_FOTO } } }),
     // Postulaciones que esperan respuesta: recibidas y en evaluación.
     // Solo fichas del municipio: las de vecinos las responde quien las propuso.
-    db.postulacionAdopcion.count({ where: { estado: { in: ["RECIBIDA", "EN_EVALUACION"] }, ficha: { ...FICHA_CON_FOTO, proponenteId: null } } }),
+    db.postulacionAdopcion.count({ where: { estado: { in: ["RECIBIDA", "EN_EVALUACION"] }, ficha: { ...FICHA_CON_FOTO, proponenteId: null, municipioId: (await municipioId()) } } }),
     // Propuestas de «Dar en adopción» que esperan revisión.
-    db.fichaAdopcion.count({ where: { revision: "PENDIENTE", proponente: { municipioId: municipioId() }, ...FICHA_CON_FOTO } }),
+    db.fichaAdopcion.count({ where: { revision: "PENDIENTE", municipioId: (await municipioId()), proponenteId: { not: null }, ...FICHA_CON_FOTO } }),
   ]);
   return { reportes, publicaciones, coincidencias, postulaciones, propuestas };
 }
@@ -98,7 +98,7 @@ export async function proximosOperativos(filtro: { sectorId?: string } = {}) {
     where: {
       estado: { in: ["BORRADOR", "PUBLICADO", "INSCRIPCIONES_CERRADAS", "EN_CURSO"] },
       fecha: { gte: inicioDeHoy() },
-      sector: { municipioId: municipioId() },
+      sector: { municipioId: (await municipioId()) },
       ...(filtro.sectorId ? { sectorId: filtro.sectorId } : {}),
     },
     include: { sector: true, lugar: true, capacidades: { include: { servicio: true } } },
@@ -139,13 +139,13 @@ export async function conOcupacion<T extends { id: string; capacidades: { servic
 
 /** Solicitudes recibidas y atenciones realizadas por mes, últimos 12 meses. */
 export async function tendencia(especie?: Especie, hoy = hoyISO()) {
-  const zona = municipioActivo().zonaHoraria;
+  const zona = (await municipioActivo()).zonaHoraria;
   const meses = ultimos12Meses(hoy);
   const v = ventana(diasEntre(`${meses[0]}-01`, hoy) + 1, hoy);
   const animal = especie ? { animal: { especie } } : {};
   const [solicitudes, atenciones] = await Promise.all([
-    db.solicitudServicio.findMany({ where: { creadaEn: { gte: v.desde, lt: v.hasta }, sector: { municipioId: municipioId() }, ...animal }, select: { creadaEn: true } }),
-    db.atencion.findMany({ where: { resultado: "REALIZADA", realizadaEn: { gte: v.desde, lt: v.hasta }, sector: { municipioId: municipioId() }, ...(especie ? { especie } : {}) }, select: { realizadaEn: true } }),
+    db.solicitudServicio.findMany({ where: { creadaEn: { gte: v.desde, lt: v.hasta }, sector: { municipioId: (await municipioId()) }, ...animal }, select: { creadaEn: true } }),
+    db.atencion.findMany({ where: { resultado: "REALIZADA", realizadaEn: { gte: v.desde, lt: v.hasta }, sector: { municipioId: (await municipioId()) }, ...(especie ? { especie } : {}) }, select: { realizadaEn: true } }),
   ]);
   // Se cuenta en una sola pasada: el mes de cada registro se calcula una vez.
   const contar = (fechas: Date[]) => {

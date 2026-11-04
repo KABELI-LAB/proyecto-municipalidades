@@ -15,7 +15,7 @@ export async function ingresar(_: EstadoIngreso, datos: FormData): Promise<Estad
   const clave = String(datos.get("contrasena") ?? "");
   if (!correo || !clave) return { error: "Escribe tu correo y tu contraseña.", correo };
 
-  const usuario = await db.usuarioMunicipal.findFirst({ where: { correo, activo: true, municipioId: municipioActivo().id } });
+  const usuario = await db.usuarioMunicipal.findFirst({ where: { correo, activo: true, municipioId: (await municipioActivo()).id } });
   if (!usuario || !(await verificarContrasena(clave, usuario.hashContrasena))) return { error: INCORRECTO, correo };
 
   await abrirSesion(usuario.id);

@@ -10,10 +10,10 @@ const clases = (variante: Variante, className?: string) =>
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & { variante?: Variante };
 
 export function Boton({ variante = "primario", className, type = "button", ...resto }: Props) {
-  return <button type={type} className={clases(variante, className)} {...resto} />;
+  return <button type={type} className={clases(variante, className)} data-boton={variante} {...resto} />;
 }
 
 /** Enlace con apariencia de botón, para acciones que llevan a otra página. */
 export function EnlaceBoton({ variante = "primario", className, ...resto }: ComponentProps<typeof Link> & { variante?: Variante }) {
-  return <Link className={clases(variante, className)} {...resto} />;
+  return <Link className={clases(variante, className)} data-boton={variante} {...resto} />;
 }

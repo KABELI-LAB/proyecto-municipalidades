@@ -7,7 +7,7 @@
 // - Fechas: los datos están fechados respecto de resumen.json → fecha_corte.
 //   Al cargar se trasladan para que el corte sea `hoy` (por defecto, hoy).
 // - Nada se inventa: si falta una referencia, la carga se detiene y lo dice.
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { PrismaClient } from "@/generated/prisma/client";
 import { buscarCoincidencias, type PublicacionComparable } from "@/dominio/coincidencias";
@@ -21,6 +21,15 @@ import { aplicarCambiosDeFotos, fotosFaltantes, type EntradaFotoAnimal } from "@
 // ───────────── Lectura ─────────────
 
 type Archivo<T> = { _demo: boolean; datos: T };
+
+/**
+ * Carpeta de datos de demostración del municipio: demo/municipios/<id>/datos/
+ * si existe; si no, demo/datos/ (la del municipio original del prototipo).
+ */
+export function carpetaDemo(municipioId: string): string {
+  const propia = join(process.cwd(), "demo", "municipios", municipioId, "datos");
+  return existsSync(propia) ? propia : join(process.cwd(), "demo", "datos");
+}
 
 export function leerDemo<T>(nombre: string, carpeta = join(process.cwd(), "demo", "datos")): T {
   const contenido = JSON.parse(readFileSync(join(carpeta, `${nombre}.json`), "utf8")) as Archivo<T>;
@@ -104,13 +113,13 @@ export type OpcionesCarga = {
 export type ResultadoCarga = { loteId: string; fechaCorte: string; hoy: string; desfaseDias: number; registros: Record<string, number>; fotosAplicadas: boolean };
 
 export async function cargarDemo(db: PrismaClient, op: OpcionesCarga): Promise<ResultadoCarga> {
-  const carpeta = op.carpeta ?? join(process.cwd(), "demo", "datos");
+  const carpeta = op.carpeta ?? carpetaDemo(op.municipio.id);
   const L = <T>(n: string) => leerDemo<T>(n, carpeta);
   const m = op.municipio;
   const zona = m.zonaHoraria;
 
   const dMunicipio = L<DMunicipio>("municipio");
-  if (dMunicipio.id !== m.id) throw new Error(`demo/datos es del municipio «${dMunicipio.id}», pero el activo es «${m.id}».`);
+  if (dMunicipio.id !== m.id) throw new Error(`${carpeta} es del municipio «${dMunicipio.id}», pero se pidió cargar «${m.id}».`);
   if (!op.contrasena || op.contrasena.length < 8) throw new Error("Falta DEMO_CONTRASENA en .env (al menos 8 caracteres) para las cuentas de demostración.");
 
   const resumen = L<DResumen>("resumen");
@@ -142,7 +151,7 @@ export async function cargarDemo(db: PrismaClient, op: OpcionesCarga): Promise<R
   const localidades = L<DLocalidad[]>("localidades");
   for (const [orden, l] of localidades.entries()) {
     const datos = { sectorId: idSector(l.sector_id, `localidad ${l.id}`), nombre: l.nombre, lat: l.lat, lng: l.lng, estadoCoordenadas: l.coordenadas_estado, orden };
-    const r = await db.localidad.upsert({ where: { clave: l.id }, create: { clave: l.id, ...datos }, update: datos });
+    const r = await db.localidad.upsert({ where: { municipioId_clave: { municipioId: m.id, clave: l.id } }, create: { municipioId: m.id, clave: l.id, ...datos }, update: datos });
     localidadId.set(l.id, r.id);
   }
   const idLocalidad = (clave: string, donde: string) => localidadId.get(clave) ?? falta(`localidad «${clave}»`, donde);
@@ -150,7 +159,7 @@ export async function cargarDemo(db: PrismaClient, op: OpcionesCarga): Promise<R
   const lugarId = new Map<string, string>();
   for (const l of L<DLugar[]>("lugares")) {
     const datos = { sectorId: idSector(l.sector_id, `lugar ${l.id}`), localidadId: idLocalidad(l.localidad_id, `lugar ${l.id}`), nombre: l.nombre, tipo: l.tipo, lat: l.lat, lng: l.lng, estadoCoordenadas: l.coordenadas_estado };
-    const r = await db.lugar.upsert({ where: { clave: l.id }, create: { clave: l.id, ...datos }, update: datos });
+    const r = await db.lugar.upsert({ where: { municipioId_clave: { municipioId: m.id, clave: l.id } }, create: { municipioId: m.id, clave: l.id, ...datos }, update: datos });
     lugarId.set(l.id, r.id);
   }
   const idLugar = (clave: string, donde: string) => lugarId.get(clave) ?? falta(`lugar «${clave}»`, donde);
@@ -178,12 +187,13 @@ export async function cargarDemo(db: PrismaClient, op: OpcionesCarga): Promise<R
   });
 
   // ── Datos de demostración ──
-  await borrarDatosDemo(db);
+  await borrarDatosDemo(db, m.id);
   const hash = await cifrarContrasena(op.contrasena);
 
   // Fotos aprobadas: sus ajustes de color o tamaño se aplican antes de usar los animales en cualquier parte.
   const carpetaFotos = op.carpetaFotos ?? join(process.cwd(), "demo", "fotos");
-  const asignacion = leerAsignacion(carpetaFotos);
+  // La asignación de fotos de un municipio con carpeta propia va junto a sus datos (las fotos son las mismas de demo/fotos/).
+  const asignacion = leerAsignacion(existsSync(join(carpeta, "..", "asignacion.json")) ? join(carpeta, "..") : carpetaFotos);
   if (asignacion) {
     const faltan = fotosFaltantes(carpetaFotos, [...asignacion.animales, ...asignacion.comunitarios, ...asignacion.operativos].map((x) => x.foto));
     if (faltan.length) throw new Error(`Faltan fotos de asignacion.json en demo/fotos/: ${faltan.join(", ")}`);
@@ -231,7 +241,7 @@ export async function cargarDemo(db: PrismaClient, op: OpcionesCarga): Promise<R
     async (tx) => {
       // El lote se crea dentro de la transacción: si la carga falla, no queda un lote vacío.
       const lote = await tx.loteDemo.create({
-        data: { descripcion: `Datos de demo/datos/ (corte ${resumen.fecha_corte}, trasladados ${desfaseDias} días)`, fechaCorte: fecha(resumen.fecha_corte), desfaseDias },
+        data: { municipioId: m.id, descripcion: `Datos de demo/datos/ (corte ${resumen.fecha_corte}, trasladados ${desfaseDias} días)`, fechaCorte: fecha(resumen.fecha_corte), desfaseDias },
       });
       loteDemoId = lote.id;
       await tx.usuarioMunicipal.createMany({
@@ -255,6 +265,7 @@ export async function cargarDemo(db: PrismaClient, op: OpcionesCarga): Promise<R
       await tx.animal.createMany({
         data: animales.map((a) => ({
           id: a.id,
+          municipioId: m.id,
           especie: traducir(ESPECIE, a.especie, `especie de ${a.id}`),
           nombre: a.nombre,
           sexo: traducir(SEXO, a.sexo, `sexo de ${a.id}`),
@@ -382,6 +393,7 @@ export async function cargarDemo(db: PrismaClient, op: OpcionesCarga): Promise<R
         data: [
           ...adopcion.map((f) => ({
             id: f.id,
+            municipioId: m.id,
             animalId: existe(animalIds, f.animal_id, "animal", `adopción ${f.id}`),
             caracter: f.caracter,
             conviveConNinos: f.convive_con_ninos,
@@ -394,6 +406,7 @@ export async function cargarDemo(db: PrismaClient, op: OpcionesCarga): Promise<R
           })),
           ...adoptadas.map((f) => ({
             id: f.id,
+            municipioId: m.id,
             animalId: existe(animalIds, f.animal_id, "animal", `adopción ${f.id}`),
             estado: "ADOPTADO" as const,
             publicadaEn: fecha(f.publicado),
@@ -513,6 +526,7 @@ export async function cargarDemo(db: PrismaClient, op: OpcionesCarga): Promise<R
         await tx.aviso.create({
           data: {
             id: a.id,
+            municipioId: m.id,
             tipo: traducir(TIPO_AVISO, a.tipo, `tipo de ${a.id}`),
             titulo: a.titulo,
             texto: a.texto,

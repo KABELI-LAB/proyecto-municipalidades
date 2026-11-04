@@ -13,7 +13,7 @@ localidades y lugares (ver `sectores.md`). Cada archivo de `datos/` lleva
 | `animales.json` | 152 animales ficticios con sus características |
 | `personas.json` | 164 personas ficticias («Vecino/a demo N», RUT de la serie 11.111.xxx, correos `@demo.invalid`) |
 | `postulaciones.json` | Postulaciones a adopción con su persona |
-| `usuarios.json` | 5 cuentas municipales de demostración, una por rol |
+| `usuarios.json` | Una cuenta de demostración (administración, admin@<comuna>.cl); el ingreso del panel la trae escrita, con DEMO_CONTRASENA |
 | `propuestas_adopcion.json` | Quién propuso cada ficha de adopción (un vecino ficticio), con su código TR y su relación con el animal |
 | `catalogos.json` | Tipos de reporte, servicios, colores y tamaños |
 | `perros_comunitarios.json` | 8 perros comunitarios asociados a lugares públicos |
@@ -54,6 +54,24 @@ las fichas según especie, color y tamaño. Nunca generar ni descargar otras.
 
 `python3 generar.py` (o `python generar.py`) vuelve a crear `datos/` con los mismos resultados
 (semilla fija). Para cambiar el escenario, edite el script.
+
+## Otros municipios (Curepto, Vichuquén)
+
+Cada municipio de `config/municipios/` puede tener sus propios datos en
+`demo/municipios/<id>/`:
+
+- `territorio.json`: sectores (propuestos sobre los distritos censales del INE),
+  localidades y lugares de referencia reales, con coordenadas de OpenStreetMap
+  y la fuente de cada una. Indica también cómo se reparte el escenario
+  (`mapa_sectores`, `mapa_lugares`).
+- `datos/` y `asignacion.json`: generados con `python demo/municipios/derivar.py`.
+  Es el mismo escenario ficticio de `datos/`, trasladado a ese territorio, con
+  ids, correos (`@<municipio>.demo.invalid`), RUT y códigos TR propios, y las
+  mismas fotos de `fotos/`. La prioridad por sector se recalcula.
+
+Cargar o borrar la demo de un municipio no toca la de los demás:
+`npm run demo:cargar -- --municipio=curepto`, `npm run demo:borrar -- --municipio=curepto`
+o `--todos`.
 
 ## Personas ficticias
 

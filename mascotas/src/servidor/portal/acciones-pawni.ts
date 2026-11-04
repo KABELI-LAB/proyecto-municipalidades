@@ -31,5 +31,5 @@ export async function preguntarAPawni(pregunta: string): Promise<RespuestaPawni>
   let tema: TemaPawni | null = null;
   if (!SUGERENCIAS.includes(texto) && texto.length > 2 && (await iaActiva())) tema = await temaPawniConIA(texto);
   tema ??= temaDe(texto);
-  return responderPawni(tema, tema === "OPERATIVO" ? await operativoParaPawni() : null, municipioActivo().plataforma);
+  return responderPawni(tema, tema === "OPERATIVO" ? await operativoParaPawni() : null, (await municipioActivo()).plataforma);
 }

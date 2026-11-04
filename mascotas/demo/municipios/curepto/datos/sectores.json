@@ -1,0 +1,85 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para curepto.",
+  "datos": [
+    {
+      "id": "curepto-urbano",
+      "nombre": "Curepto urbano",
+      "tipo": "urbano-rural",
+      "poblacion": null,
+      "viviendas": null,
+      "centro": {
+        "lat": -35.0953,
+        "lng": -72.0028
+      },
+      "coordenadas_estado": "promedio de sus localidades",
+      "fuente": "Agrupación de distritos censales INE Censo 2017 (oficial); la agrupación en sector es propuesta por geografía"
+    },
+    {
+      "id": "calpun",
+      "nombre": "Calpún y ribera del Mataquito",
+      "tipo": "rural",
+      "poblacion": null,
+      "viviendas": null,
+      "centro": {
+        "lat": -35.0483,
+        "lng": -72.0099
+      },
+      "coordenadas_estado": "promedio de sus localidades",
+      "fuente": "Agrupación de distritos censales INE Censo 2017 (oficial); la agrupación en sector es propuesta por geografía"
+    },
+    {
+      "id": "costa",
+      "nombre": "Costa y Huenchullamí",
+      "tipo": "rural",
+      "poblacion": null,
+      "viviendas": null,
+      "centro": {
+        "lat": -35.1058,
+        "lng": -72.1301
+      },
+      "coordenadas_estado": "promedio de sus localidades",
+      "fuente": "Agrupación de distritos censales INE Censo 2017 (oficial); la agrupación en sector es propuesta por geografía"
+    },
+    {
+      "id": "gualleco",
+      "nombre": "Gualleco y valle sur",
+      "tipo": "rural",
+      "poblacion": null,
+      "viviendas": null,
+      "centro": {
+        "lat": -35.1774,
+        "lng": -71.9722
+      },
+      "coordenadas_estado": "promedio de sus localidades",
+      "fuente": "Agrupación de distritos censales INE Censo 2017 (oficial); la agrupación en sector es propuesta por geografía"
+    },
+    {
+      "id": "rapilermo",
+      "nombre": "Rapilermo y Hornillos interior",
+      "tipo": "rural",
+      "poblacion": null,
+      "viviendas": null,
+      "centro": {
+        "lat": -35.1066,
+        "lng": -71.8924
+      },
+      "coordenadas_estado": "promedio de sus localidades",
+      "fuente": "Agrupación de distritos censales INE Censo 2017 (oficial); la agrupación en sector es propuesta por geografía"
+    },
+    {
+      "id": "huaquen",
+      "nombre": "Huaquén, Limávida y Constantué",
+      "tipo": "rural",
+      "poblacion": null,
+      "viviendas": null,
+      "centro": {
+        "lat": -35.0375,
+        "lng": -71.8032
+      },
+      "coordenadas_estado": "promedio de sus localidades",
+      "fuente": "Agrupación de distritos censales INE Censo 2017 (oficial); la agrupación en sector es propuesta por geografía"
+    }
+  ]
+}

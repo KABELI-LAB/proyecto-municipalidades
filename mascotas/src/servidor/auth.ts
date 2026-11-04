@@ -6,6 +6,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { inicioDe, puede, type Permiso, type Rol } from "@/dominio/permisos";
+import { municipioActivo } from "@/lib/municipio";
 import { db } from "@/servidor/db";
 
 const COOKIE = "sesion_panel";
@@ -61,7 +62,8 @@ export type UsuarioSesion = { id: string; nombre: string; rol: Rol; municipioId:
 export async function usuarioActual(): Promise<UsuarioSesion | null> {
   const id = leerCookie((await cookies()).get(COOKIE)?.value);
   if (!id) return null;
-  const u = await db.usuarioMunicipal.findFirst({ where: { id, activo: true }, select: { id: true, nombre: true, rol: true, municipioId: true, loteDemoId: true } });
+  // La cuenta sirve solo en su municipio: en otro, es como no haber ingresado.
+  const u = await db.usuarioMunicipal.findFirst({ where: { id, activo: true, municipioId: (await municipioActivo()).id }, select: { id: true, nombre: true, rol: true, municipioId: true, loteDemoId: true } });
   return u ? { ...u, rol: u.rol as Rol } : null;
 }
 

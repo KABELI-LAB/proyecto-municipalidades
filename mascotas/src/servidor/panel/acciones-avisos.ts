@@ -1,7 +1,7 @@
 "use server";
 // Avisos a los vecinos: crear (se publica de una vez), editar, retirar y
 // eliminar. Los operativos dejan un borrador al publicarse.
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from "@/servidor/revalidar";
 import { z } from "zod";
 import { municipioActivo } from "@/lib/municipio";
 import { autorizar } from "@/servidor/auth";
@@ -14,10 +14,10 @@ const SIN_PERMISO = { ok: false, mensaje: "Tu cuenta no tiene permiso para esta 
 const ERROR = "No pudimos guardar el cambio. Intenta nuevamente.";
 const fin = (dia: string) => new Date(medianocheEn(dia).getTime() + 86_400_000 - 1);
 
-function refrescar() {
-  revalidatePath("/panel/avisos");
-  revalidatePath("/avisos");
-  revalidatePath("/", "layout");
+async function refrescar() {
+  await revalidatePath("/panel/avisos");
+  await revalidatePath("/avisos");
+  await revalidatePath("/", "layout");
 }
 
 const dia = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Indica la fecha.");
@@ -31,10 +31,7 @@ const esquemaAviso = z
   .refine((d) => d.hasta >= d.desde, { path: ["hasta"], message: "La fecha de término debe ser igual o posterior a la de inicio." });
 
 async function avisoDelMunicipio(id: string) {
-  // Avisos de toda la comuna (sin sectores) o de sectores de este municipio.
-  return db.aviso.findFirst({
-    where: { id, OR: [{ sectores: { none: {} } }, { sectores: { some: { sector: { municipioId: municipioActivo().id } } } }] },
-  });
+  return db.aviso.findFirst({ where: { id, municipioId: (await municipioActivo()).id } });
 }
 
 export async function guardarAviso(id: string, valores: unknown): Promise<Respuesta> {
@@ -47,7 +44,7 @@ export async function guardarAviso(id: string, valores: unknown): Promise<Respue
   }
   if (!(await avisoDelMunicipio(id))) return { ok: false, mensaje: "No encontramos el aviso." };
   await db.aviso.update({ where: { id }, data: { titulo: r.data.titulo, texto: r.data.texto, vigenteDesde: medianocheEn(r.data.desde), vigenteHasta: fin(r.data.hasta) } });
-  refrescar();
+  await refrescar();
   return { ok: true, mensaje: "Guardamos los cambios." };
 }
 
@@ -57,7 +54,7 @@ export async function publicarAviso(id: string): Promise<Respuesta> {
   if (!a) return { ok: false, mensaje: "No encontramos el aviso." };
   if (a.vigenteHasta < new Date()) return { ok: false, mensaje: "La vigencia de este aviso ya terminó. Cambia las fechas antes de publicarlo." };
   await db.aviso.update({ where: { id }, data: { estado: "PUBLICADO" } });
-  refrescar();
+  await refrescar();
   return { ok: true, mensaje: a.vigenteDesde > new Date() ? "Publicado: se mostrará en el portal desde su fecha de inicio." : "Publicado: ya se muestra en el portal." };
 }
 
@@ -66,7 +63,7 @@ export async function retirarAviso(id: string): Promise<Respuesta> {
   if (!(await autorizar("gestionarAvisos"))) return SIN_PERMISO;
   if (!(await avisoDelMunicipio(id))) return { ok: false, mensaje: "No encontramos el aviso." };
   await db.aviso.update({ where: { id }, data: { vigenteHasta: new Date() } });
-  refrescar();
+  await refrescar();
   return { ok: true, mensaje: "Retiramos el aviso del portal." };
 }
 
@@ -90,9 +87,9 @@ export async function crearAviso(valores: unknown): Promise<Respuesta> {
   if (r.data.hasta < hoyISO()) return { ok: false, mensaje: "Revisa los datos marcados.", errores: { hasta: "La fecha no puede ser anterior a hoy." } };
   try {
     const a = await db.aviso.create({
-      data: { tipo: r.data.tipo, titulo: r.data.titulo, texto: r.data.texto, vigenteDesde: medianocheEn(hoyISO()), vigenteHasta: fin(r.data.hasta), estado: "PUBLICADO", autorId: u.id, loteDemoId: u.loteDemoId },
+      data: { municipioId: (await municipioActivo()).id, tipo: r.data.tipo, titulo: r.data.titulo, texto: r.data.texto, vigenteDesde: medianocheEn(hoyISO()), vigenteHasta: fin(r.data.hasta), estado: "PUBLICADO", autorId: u.id, loteDemoId: u.loteDemoId },
     });
-    refrescar();
+    await refrescar();
     return { ok: true, mensaje: "Publicamos el aviso: ya se ve en el portal.", id: a.id };
   } catch (e) {
     console.error(e);
@@ -105,6 +102,6 @@ export async function eliminarAviso(id: string): Promise<Respuesta> {
   if (!(await autorizar("gestionarAvisos"))) return SIN_PERMISO;
   if (!(await avisoDelMunicipio(id))) return { ok: false, mensaje: "No encontramos el aviso." };
   await db.aviso.delete({ where: { id } });
-  refrescar();
+  await refrescar();
   return { ok: true, mensaje: "Eliminamos el aviso." };
 }

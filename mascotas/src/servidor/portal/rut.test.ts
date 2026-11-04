@@ -16,8 +16,8 @@ beforeAll(async () => {
   process.env.SESION_SECRETO ??= "secreto-de-prueba";
   ({ db } = await import("@/servidor/db"));
   const { cargarDemo } = await import("@/servidor/demo/cargar");
-  const { municipioActivo } = await import("@/lib/municipio");
-  await cargarDemo(db, { municipio: municipioActivo(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
+  const { municipioPredeterminado } = await import("@/lib/municipio");
+  await cargarDemo(db, { municipio: municipioPredeterminado(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
   acciones = await import("@/servidor/portal/acciones");
 }, 120_000);
 
@@ -28,7 +28,7 @@ afterAll(async () => {
 
 describe("RUT opcional al solicitar un servicio", () => {
   it("dos solicitudes sin RUT quedan con su contacto y sin RUT", async () => {
-    const huerta = await db.localidad.findUniqueOrThrow({ where: { clave: "la-huerta" } });
+    const huerta = await db.localidad.findFirstOrThrow({ where: { clave: "la-huerta" } });
     const servicio = await db.servicio.findFirstOrThrow();
     const datos = { servicioId: servicio.id, especie: "GATO", nombreAnimal: "", sexo: "HEMBRA", tamano: "", edad: "36", localidadId: huerta.id, rut: "", telefono: "" };
     const a = await acciones.solicitarServicio({ ...datos, nombre: "Vecina sin RUT", correo: "a@ejemplo.cl" });

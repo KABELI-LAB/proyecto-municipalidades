@@ -4,18 +4,73 @@
   top: 0;
   z-index: 10;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
+  gap: var(--space-2) var(--space-5);
+  padding: var(--space-1) var(--space-4);
   background: var(--color-accent);
   color: var(--blue-950);
   font-size: var(--type-body-sm-size);
   line-height: var(--type-body-sm-lh);
+}
+.texto {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) 0;
 }
 .franja svg {
   flex: none;
 }
 .franja b {
   font-weight: var(--weight-bold);
+}
+
+/* Selector de diseño de la demostración: opción elegida en Blue 950 (color + estado aria-pressed). */
+.selector {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+}
+.selector > span {
+  margin-right: var(--space-1);
+}
+/* En celular el rótulo va en su propia línea y las opciones debajo. */
+@media (max-width: 640px) {
+  .selector > span {
+    width: 100%;
+    margin-right: 0;
+    text-align: center;
+  }
+  .opcion {
+    padding: 0 var(--space-3);
+  }
+}
+.opcion {
+  min-height: var(--target-min);
+  padding: 0 var(--space-4);
+  border: var(--border-width) solid var(--blue-950);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--blue-950);
+  font: inherit;
+  font-weight: var(--weight-bold);
+  cursor: pointer;
+  transition: background var(--duration-micro) var(--ease-flow), color var(--duration-micro) var(--ease-flow);
+}
+.opcion[aria-pressed="true"] {
+  background: var(--blue-950);
+  color: var(--color-text-inverse);
+}
+.opcion:focus-visible {
+  outline: 3px solid var(--blue-950);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .opcion {
+    transition: none;
+  }
 }

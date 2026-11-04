@@ -4,18 +4,16 @@
 // contactos, cuidadores ni reportes ciudadanos (CLAUDE.md, mapa).
 import "server-only";
 import { fotoDeAviso } from "@/componentes/portal/fotoAviso";
-import { fotoDeComunitario } from "@/componentes/portal/fotoComunitario";
 import { fotosDeFicha } from "@/componentes/portal/fotoFicha";
 import { radioPara, type CapaCiudadana, type CapaMapaCiudadano, type ItemMapa, type MarcaCiudadana } from "@/componentes/portal/marcasMapa";
-import { REPORTE_COMUNITARIO } from "@/componentes/portal/TarjetaComunitario";
 import { ESPECIE, SEXO, textoEdad, tipoAviso, tituloAviso } from "@/dominio/etiquetas";
 import { punto, type Punto } from "@/dominio/geo";
 import { nivelIntensidad } from "@/dominio/mapa";
 import { municipioActivo } from "@/lib/municipio";
 import { FICHA_PUBLICA } from "@/servidor/conFoto";
 import { db } from "@/servidor/db";
-import { fechaCorta, fechaLarga, hoyISO, numero, ventana } from "@/servidor/formato";
-import { idsConCoincidencia, operativosAbiertos, perrosComunitarios, publicaciones } from "@/servidor/portal/consultas";
+import { fechaCorta, fechaLarga, numero } from "@/servidor/formato";
+import { idsConCoincidencia, operativosAbiertos, publicaciones } from "@/servidor/portal/consultas";
 
 /** Fichas que se listan en el panel de una marca; el resto, en la lista completa. */
 const MAXIMO_ITEMS = 8;
@@ -36,7 +34,7 @@ function aMarcas(grupos: Grupo[], cantidad: (g: Grupo) => number, detalle: (n: n
 /** Sectores del municipio con su centro aproximado, y las localidades para encuadrar el mapa. */
 export async function territorioMapa() {
   const sectores = await db.sector.findMany({
-    where: { municipioId: municipioActivo().id },
+    where: { municipioId: (await municipioActivo()).id },
     orderBy: { orden: "asc" },
     select: { id: true, clave: true, nombre: true, centroLat: true, centroLng: true, localidades: { select: { lat: true, lng: true } } },
   });
@@ -103,7 +101,7 @@ async function capaMascotas(sectores: Sector[]): Promise<CapaCiudadana> {
 
 async function capaAdopcion(sectores: Sector[]): Promise<CapaCiudadana> {
   const fichas = await db.fichaAdopcion.findMany({
-    where: FICHA_PUBLICA,
+    where: { ...FICHA_PUBLICA, municipioId: (await municipioActivo()).id },
     select: { id: true, estado: true, fotos: true, sectorId: true, animal: { select: { nombre: true, especie: true, sexo: true, edadAproxMeses: true, foto: true } } },
     orderBy: { publicadaEn: "asc" },
   });
@@ -154,83 +152,8 @@ async function capaOperativos(sectores: Sector[]): Promise<CapaCiudadana> {
   );
   return {
     marcas: aMarcas(grupos, (g) => g.items.length, (n) => plural(n, "operativo", "operativos")),
-    vacio: { texto: "Por ahora no hay operativos publicados. Registra tu interés y te avisaremos cuando haya uno cerca.", enlace: { href: "/servicio", texto: "Solicitar un servicio" } },
+    vacio: { texto: "Por ahora no hay operativos publicados. Si necesitas un servicio, regístralo: así el municipio conoce la necesidad de tu sector.", enlace: { href: "/servicio", texto: "Solicitar un servicio" } },
     nota: "Cada operativo, en su lugar de referencia (sede, escuela, posta). Cupos disponibles al momento de abrir el mapa.",
-  };
-}
-
-async function capaComunitarios(): Promise<CapaCiudadana> {
-  const [perros, ubicaciones] = await Promise.all([
-    perrosComunitarios(),
-    db.perroComunitario.findMany({
-      where: { sector: { municipioId: municipioActivo().id } },
-      select: { id: true, ultimoControl: true, lugar: { select: { lat: true, lng: true } } },
-    }),
-  ]);
-  const datos = new Map(ubicaciones.map((u) => [u.id, { centro: punto(u.lugar.lat, u.lugar.lng), revision: u.ultimoControl }]));
-  const grupos = porPunto(
-    perros,
-    (c) => datos.get(c.id)?.centro ?? null,
-    (cs) => cs[0].lugar.localidad.nombre,
-    (c) => {
-      const revision = datos.get(c.id)?.revision;
-      const foto = fotoDeComunitario(c);
-      return {
-        clave: c.id,
-        titulo: c.animal.nombre ?? c.apodo,
-        // Fecha de la última revisión registrada: no se afirma cómo está hoy el perro.
-        lineas: [c.lugar.nombre, revision ? `Última revisión registrada: ${fechaCorta(revision)}` : "Sin revisión registrada", "Para informar una novedad o hacerte cargo, abre su ficha"],
-        href: `/comunitarios/${c.id}`,
-        foto: foto ?? undefined,
-      };
-    },
-    (cs) => ({
-      enlaces: [
-        // Con un solo perro en el lugar, su ficha; con varios, se elige el perro en la lista.
-        cs.length === 1 ? { href: `/comunitarios/${cs[0].id}`, texto: "Ver su ficha", principal: true } : { href: REPORTE_COMUNITARIO, texto: "¿Es urgente? SOS Mascotas" },
-        { href: `/comunitarios?sector=${cs[0].sector.clave}`, texto: `Perros comunitarios de ${cs[0].sector.nombre}` },
-      ],
-    }),
-  );
-  return {
-    marcas: aMarcas(grupos, (g) => g.items.length, (n) => plural(n, "perro", "perros")),
-    vacio: { texto: "No hay perros comunitarios registrados." },
-    nota: "Cada perro, en su lugar de referencia público. No mostramos quién lo cuida.",
-  };
-}
-
-async function capaResultados(sectores: Sector[]): Promise<CapaCiudadana> {
-  const v12 = ventana(365, hoyISO());
-  const enAnio = { gte: v12.desde, lt: v12.hasta };
-  const enMunicipio = { sector: { municipioId: municipioActivo().id } };
-  const [atenciones, operativos, reencuentros, adopciones] = await Promise.all([
-    db.atencion.groupBy({ by: ["sectorId"], where: { resultado: "REALIZADA", realizadaEn: enAnio, ...enMunicipio }, _count: { _all: true } }),
-    db.operativo.groupBy({ by: ["sectorId"], where: { estado: "CERRADO", fecha: enAnio, ...enMunicipio }, _count: { _all: true } }),
-    db.publicacionMascota.groupBy({ by: ["sectorId"], where: { tipo: "PERDIDA", estado: "REENCONTRADA", resueltaEn: enAnio, ...enMunicipio }, _count: { _all: true } }),
-    db.fichaAdopcion.groupBy({ by: ["sectorAdoptanteId"], where: { estado: "ADOPTADO", adoptadaEn: enAnio, sectorAdoptante: { municipioId: municipioActivo().id } }, _count: { _all: true } }),
-  ]);
-  // Cantidad por sector de cada conteo agrupado.
-  const mapa = (filas: { id: string | null; n: number }[]) => new Map(filas.map((x) => [x.id, x.n]));
-  const porAtencion = mapa(atenciones.map((x) => ({ id: x.sectorId, n: x._count._all })));
-  const porOperativo = mapa(operativos.map((x) => ({ id: x.sectorId, n: x._count._all })));
-  const porAdopcion = mapa(adopciones.map((x) => ({ id: x.sectorAdoptanteId, n: x._count._all })));
-  const porReencuentro = mapa(reencuentros.map((x) => ({ id: x.sectorId, n: x._count._all })));
-  const grupos: Grupo[] = sectores.flatMap((s) => {
-    if (!s.centro) return [];
-    const cifras = [
-      { valor: porAtencion.get(s.id) ?? 0, texto: "atenciones" },
-      { valor: porOperativo.get(s.id) ?? 0, texto: "operativos" },
-      { valor: porAdopcion.get(s.id) ?? 0, texto: "adopciones" },
-      { valor: porReencuentro.get(s.id) ?? 0, texto: "volvieron a casa" },
-    ];
-    return [{ clave: s.clave, centro: s.centro, titulo: s.nombre, items: [], extra: { cifras } }];
-  });
-  const total = (g: Grupo) => g.extra?.cifras?.[0].valor ?? 0;
-  const conDatos = grupos.some((g) => g.extra?.cifras?.some((c) => c.valor > 0));
-  return {
-    marcas: conDatos ? aMarcas(grupos, total, (x) => plural(x, "atención", "atenciones")) : [],
-    vacio: { texto: "Aún no hay resultados registrados en los últimos 12 meses." },
-    nota: "Últimos 12 meses. El tamaño muestra las atenciones; las adopciones se cuentan en el sector de quien adopta.",
   };
 }
 
@@ -242,10 +165,6 @@ export async function mapaCiudadano(capa: CapaMapaCiudadano) {
       ? await capaMascotas(t.sectores)
       : capa === "adopcion"
         ? await capaAdopcion(t.sectores)
-        : capa === "operativos"
-          ? await capaOperativos(t.sectores)
-          : capa === "comunitarios"
-            ? await capaComunitarios()
-            : await capaResultados(t.sectores);
+        : await capaOperativos(t.sectores);
   return { ...datos, localidades: t.localidades };
 }

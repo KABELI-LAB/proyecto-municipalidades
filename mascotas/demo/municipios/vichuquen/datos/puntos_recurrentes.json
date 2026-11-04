@@ -1,0 +1,42 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para vichuquen.",
+  "datos": [
+    {
+      "ref": "culenmapu",
+      "tipo": "abandono",
+      "sector": "llico",
+      "peso": 5,
+      "nota": "Camino rural: abandono recurrente (ficticio)"
+    },
+    {
+      "ref": "parque-vichuquen",
+      "tipo": "jauria",
+      "sector": "vichuquen-pueblo",
+      "peso": 4,
+      "nota": "Jauría en horario nocturno (ficticio)"
+    },
+    {
+      "ref": "la-barca",
+      "tipo": "atropello",
+      "sector": "llico",
+      "peso": 3,
+      "nota": "Tramo de ruta con atropellos (ficticio)"
+    },
+    {
+      "ref": "plaza-de-vichuquen",
+      "tipo": "animal comunitario sin atencion",
+      "sector": "vichuquen-pueblo",
+      "peso": 3,
+      "nota": "Perros comunitarios sin control (ficticio)"
+    },
+    {
+      "ref": "tilicura",
+      "tipo": "abandono",
+      "sector": "tilicura",
+      "peso": 2,
+      "nota": "Abandono de camadas (ficticio)"
+    }
+  ]
+}

@@ -12,7 +12,7 @@ import path from "node:path";
 import { ArrowRight, CalendarDays, Clock, Eye, Heart, MapPin, PawPrint, Search, Stethoscope, type LucideIcon } from "lucide-react";
 import sharp, { type OverlayOptions } from "sharp";
 import type { TipoRed } from "@/dominio/redes";
-import { municipioActivo } from "@/lib/municipio";
+import { municipioActivo, type Municipio } from "@/lib/municipio";
 
 export const ANCHO = 1080;
 export const ALTO = 1350;
@@ -22,8 +22,14 @@ const ARRIBA = 72;
 const ALTO_CAUCE = 150;
 const ALTO_BARRA = 80;
 
-// Colores de design-system/tokens/colors.css.
-const C = {
+/**
+ * Paleta de la pieza. Por defecto, la de design-system/tokens/colors.css; un
+ * municipio con tema propio la reemplaza en design-system/temas/<id>/pieza.json
+ * (colores de su sistema de diseño). «forma»: el Cauce es la forma propia del
+ * sistema base; otro municipio usa tres franjas planas, sin redibujar sus formas.
+ */
+type Paleta = { azul: string; azulNoche: string; verde: string; verdeHoja: string; amarillo: string; rojo: string; texto: string; blanco: string; barra?: string; tintaAmarillo?: string; cauce?: [string, string, string]; forma?: "cauce" | "franjas" };
+const SISTEMA: Paleta = {
   azul: "#253786", // blue-700
   azulNoche: "#0D1533", // blue-950
   verde: "#316B2C", // green-700
@@ -32,7 +38,17 @@ const C = {
   rojo: "#C42B2B", // red-600
   texto: "#0E121B", // neutral-950
   blanco: "#FFFFFF",
-} as const;
+};
+
+/** La paleta del municipio. */
+async function paleta(id: string): Promise<Paleta> {
+  try {
+    const propia = JSON.parse(await readFile(path.join(process.cwd(), "design-system", "temas", id, "pieza.json"), "utf8")) as Partial<Paleta>;
+    return { ...SISTEMA, ...propia };
+  } catch {
+    return SISTEMA;
+  }
+}
 
 /**
  * Categorías de la plantilla aplicadas a cada tipo de publicación:
@@ -40,12 +56,15 @@ const C = {
  * como «Actividad» (amarillo).
  */
 type Estilo = { etiqueta: string; icono: LucideIcon; fondo: string; tinta: string; pildora: string; tintaPildora: string; cauce: [string, string, string]; logo: "color" | "placa" };
-const ESTILO: Record<TipoRed, Estilo> = {
-  PERDIDA: { etiqueta: "Se busca", icono: Search, fondo: C.blanco, tinta: C.texto, pildora: C.rojo, tintaPildora: C.blanco, cauce: [C.azul, C.verdeHoja, C.amarillo], logo: "color" },
-  AVISTADA: { etiqueta: "Mascota avistada", icono: Eye, fondo: C.blanco, tinta: C.texto, pildora: C.azul, tintaPildora: C.blanco, cauce: [C.azul, C.verdeHoja, C.amarillo], logo: "color" },
-  ADOPCION: { etiqueta: "En adopción", icono: Heart, fondo: C.blanco, tinta: C.texto, pildora: C.verde, tintaPildora: C.blanco, cauce: [C.azul, C.verdeHoja, C.amarillo], logo: "color" },
-  OPERATIVO: { etiqueta: "Operativo", icono: CalendarDays, fondo: C.amarillo, tinta: C.azulNoche, pildora: C.azul, tintaPildora: C.blanco, cauce: [C.azul, C.blanco, C.verdeHoja], logo: "placa" },
-};
+function estilos(C: Paleta): Record<TipoRed, Estilo> {
+  const cauce = C.cauce ?? [C.azul, C.verdeHoja, C.amarillo];
+  return {
+    PERDIDA: { etiqueta: "Se busca", icono: Search, fondo: C.blanco, tinta: C.texto, pildora: C.rojo, tintaPildora: C.blanco, cauce, logo: "color" },
+    AVISTADA: { etiqueta: "Mascota avistada", icono: Eye, fondo: C.blanco, tinta: C.texto, pildora: C.azul, tintaPildora: C.blanco, cauce, logo: "color" },
+    ADOPCION: { etiqueta: "En adopción", icono: Heart, fondo: C.blanco, tinta: C.texto, pildora: C.verde, tintaPildora: C.blanco, cauce, logo: "color" },
+    OPERATIVO: { etiqueta: "Operativo", icono: CalendarDays, fondo: C.amarillo, tinta: C.tintaAmarillo ?? C.azulNoche, pildora: C.azul, tintaPildora: C.blanco, cauce: C.cauce ? C.cauce.map((c) => (c === C.amarillo ? C.blanco : c)) as [string, string, string] : [C.azul, C.blanco, C.verdeHoja], logo: "placa" },
+  };
+}
 
 /** Íconos de los datos (set Lucide del sistema). */
 const ICONOS = { fecha: CalendarDays, hora: Clock, lugar: MapPin, servicio: Stethoscope, animal: PawPrint, llamado: ArrowRight } satisfies Record<string, LucideIcon>;
@@ -165,15 +184,24 @@ function cauce(ancho: number, alto: number, colores: readonly string[], grosor =
   return Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${ancho}" height="${alto}">${trazos}</svg>`);
 }
 
+/** Tres franjas planas al pie, para municipios con otra forma propia (que no se redibuja). */
+function franjas(ancho: number, alto: number, colores: readonly string[], grosor = 22) {
+  const rects = colores.map((c, i) => `<rect x="0" y="${alto - (colores.length - i) * grosor}" width="${ancho}" height="${grosor}" fill="${c}"/>`).join("");
+  return Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${ancho}" height="${alto}">${rects}</svg>`);
+}
+
 /** Ruta de un archivo de identidad según la configuración («/ds/…» apunta a design-system/assets/). */
 function rutaIdentidad(ruta: string) {
+  // Logos de los temas de otros municipios: design-system/temas/<id>/ (se publican en /ds/temas/).
+  if (ruta.startsWith("/ds/temas/")) return path.join(process.cwd(), "design-system", "temas", ruta.slice(10));
   return ruta.startsWith("/ds/") ? path.join(process.cwd(), "design-system", "assets", ruta.slice(4)) : path.join(process.cwd(), "public", ruta);
 }
 
 /** Logotipo ciudadano a color; sobre amarillo va en una placa blanca, como en la plantilla. */
-async function logotipo(estilo: Estilo) {
+async function logotipo(estilo: Estilo, C: Paleta, identidad: Municipio["identidad"]) {
   const alto = estilo.logo === "placa" ? 72 : 88;
-  const logo = await sharp(await readFile(rutaIdentidad(municipioActivo().identidad.logoCiudadano)))
+  // A color sobre blanco: el institucional si el municipio lo tiene (su logo ciudadano puede ser blanco).
+  const logo = await sharp(await readFile(rutaIdentidad(identidad.logoInstitucional ?? identidad.logoCiudadano)))
     .resize({ height: alto })
     .png()
     .toBuffer({ resolveWithObject: true });
@@ -187,7 +215,10 @@ async function logotipo(estilo: Estilo) {
 }
 
 export async function generarPieza(d: DatosPieza): Promise<Buffer> {
-  const e = ESTILO[d.tipo];
+  // El municipio se lee antes de dibujar: después de las llamadas a sharp ya no se sabe cuál es.
+  const municipio = await municipioActivo();
+  const C = await paleta(municipio.id);
+  const e = estilos(C)[d.tipo];
   const capas: OverlayOptions[] = [];
   const poner = (input: Buffer, left: number, top: number) => capas.push({ input, left: Math.round(left), top: Math.round(top) });
 
@@ -198,7 +229,7 @@ export async function generarPieza(d: DatosPieza): Promise<Buffer> {
   poner(rect(anchoPildora, altoPildora, e.pildora, altoPildora / 2), MARGEN, ARRIBA);
   poner(icono(e.icono, 36, e.tintaPildora), MARGEN + 28, ARRIBA + (altoPildora - 36) / 2);
   poner(etiqueta.imagen, MARGEN + 28 + 36 + 16, ARRIBA + (altoPildora - etiqueta.alto) / 2);
-  const logo = await logotipo(e);
+  const logo = await logotipo(e, C, municipio.identidad);
   poner(logo.imagen, ANCHO - MARGEN - logo.ancho, ARRIBA + (altoPildora - logo.alto) / 2);
   const finCabecera = ARRIBA + Math.max(altoPildora, logo.alto);
 
@@ -247,12 +278,12 @@ export async function generarPieza(d: DatosPieza): Promise<Buffer> {
   }
 
   // 4. Cauce de tres colores y barra inferior con la dirección del portal.
-  poner(cauce(ANCHO, ALTO_CAUCE, e.cauce), 0, ALTO - ALTO_BARRA - ALTO_CAUCE);
+  poner((C.forma === "franjas" ? franjas : cauce)(ANCHO, ALTO_CAUCE, e.cauce), 0, ALTO - ALTO_BARRA - ALTO_CAUCE);
   // Barra en azul: el texto blanco nunca va sobre amarillo.
-  poner(rect(ANCHO, ALTO_BARRA, C.azul), 0, ALTO - ALTO_BARRA);
-  const izquierda = await bloque({ texto: d.portal ?? municipioActivo().sitioWeb, tamano: 28, color: C.blanco, ancho: 560 });
+  poner(rect(ANCHO, ALTO_BARRA, C.barra ?? C.azul), 0, ALTO - ALTO_BARRA);
+  const izquierda = await bloque({ texto: d.portal ?? municipio.sitioWeb, tamano: 28, color: C.blanco, ancho: 560 });
   poner(izquierda.imagen, MARGEN, ALTO - ALTO_BARRA + (ALTO_BARRA - izquierda.alto) / 2);
-  const derecha = await bloque({ texto: d.demo ? "Datos de demostración" : municipioActivo().nombreOficial, tamano: 28, color: C.blanco, ancho: 520 });
+  const derecha = await bloque({ texto: d.demo ? "Datos de demostración" : municipio.nombreOficial, tamano: 28, color: C.blanco, ancho: 520 });
   poner(derecha.imagen, ANCHO - MARGEN - derecha.ancho, ALTO - ALTO_BARRA + (ALTO_BARRA - derecha.alto) / 2);
 
   return sharp({ create: { width: ANCHO, height: ALTO, channels: 3, background: e.fondo } })

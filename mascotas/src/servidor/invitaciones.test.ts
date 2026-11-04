@@ -15,7 +15,7 @@ vi.mock("next/cache", () => ({ revalidatePath: () => {} }));
 let invitacionesEncendidas = true;
 vi.mock("@/lib/municipio", async (original) => {
   const m = await original<typeof import("@/lib/municipio")>();
-  return { ...m, municipioActivo: () => ({ ...m.municipioActivo(), parametros: { ...m.municipioActivo().parametros, invitacionesPrioritarias: invitacionesEncendidas } }) };
+  return { ...m, municipioActivo: async () => ({ ...m.municipioPredeterminado(), parametros: { ...m.municipioPredeterminado().parametros, invitacionesPrioritarias: invitacionesEncendidas } }) };
 });
 type Sesion = { id: string; nombre: string; rol: "COORDINADOR" | "COMUNICACIONES"; municipioId: string; loteDemoId: null };
 let sesion: Sesion | null = null;
@@ -23,13 +23,13 @@ let sesion: Sesion | null = null;
 const vecino = vi.hoisted(() => ({ correo: null as string | null }));
 vi.mock("@/servidor/portal/sesionVecino", async (original) => {
   const m = await original<typeof import("@/servidor/portal/sesionVecino")>();
-  const { municipioActivo } = await import("@/lib/municipio");
+  const { municipioPredeterminado } = await import("@/lib/municipio");
   return {
     ...m,
     abrirSesionVecino: async (c: string) => { vecino.correo = m.normalizarCorreo(c); },
     cerrarSesionVecino: async () => { vecino.correo = null; },
     correoDeSesion: async () => vecino.correo,
-    filtroVecino: async () => (vecino.correo ? { municipioId: municipioActivo().id, correo: vecino.correo } : null),
+    filtroVecino: async () => (vecino.correo ? { municipioId: municipioPredeterminado().id, correo: vecino.correo } : null),
   };
 });
 vi.mock("@/servidor/auth", async () => {
@@ -57,18 +57,25 @@ async function entrarComo(persona: { id: string; correo: string | null }) {
   vecino.correo = correo;
 }
 
+// Los operativos de la demo se fechan desde el corte: «hoy» es el día del corte,
+// para que las pruebas no dependan de la fecha real.
+beforeAll(() => {
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new Date(`${CORTE}T12:00:00-03:00`));
+});
+
 beforeAll(async () => {
   base = await crearBaseTemporal();
   process.env.DATABASE_URL = base.url;
   process.env.MUNICIPIO ??= "hualane";
   ({ db } = await import("@/servidor/db"));
   const { cargarDemo } = await import("@/servidor/demo/cargar");
-  const { municipioActivo } = await import("@/lib/municipio");
-  await cargarDemo(db, { municipio: municipioActivo(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
+  const { municipioPredeterminado } = await import("@/lib/municipio");
+  await cargarDemo(db, { municipio: municipioPredeterminado(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
   operativos = await import("@/servidor/panel/acciones-operativos");
   portal = await import("@/servidor/portal/acciones");
   inv = await import("./invitaciones");
-  const u = await db.usuarioMunicipal.findFirstOrThrow({ where: { rol: "COORDINADOR" } });
+  const u = await db.usuarioMunicipal.findFirstOrThrow();
   coordinacion = { id: u.id, nombre: u.nombre, rol: "COORDINADOR", municipioId: "hualane", loteDemoId: null };
   servicio = Object.fromEntries((await db.servicio.findMany()).map((s) => [s.clave, s.id]));
 
@@ -76,11 +83,11 @@ beforeAll(async () => {
   await db.capacidadServicio.update({ where: { operativoId_servicioId: { operativoId: OP, servicioId: servicio.esterilizacion } }, data: { cupos: 2 } });
   await db.capacidadServicio.delete({ where: { operativoId_servicioId: { operativoId: OP, servicioId: servicio.microchip } } });
   const { nuevoCodigo } = await import("@/servidor/codigos");
-  const huerta = await db.localidad.findUniqueOrThrow({ where: { clave: "la-huerta" } });
+  const huerta = await db.localidad.findFirstOrThrow({ where: { clave: "la-huerta" } });
   const persona = await db.persona.create({ data: { municipioId: "hualane", rut: "33333333-3", nombre: VECINA.nombre, telefono: VECINA.telefono, correo: VECINA.correo, sectorId: huerta.sectorId, localidadId: huerta.id } });
   // Las más antiguas de la comuna: quedan primeras en la prioridad de su sector.
   for (let i = 0; i < 3; i++) {
-    const animal = await db.animal.create({ data: { especie: "PERRO", nombre: `Perro ${i + 1}`, personaId: persona.id } });
+    const animal = await db.animal.create({ data: { municipioId: persona.municipioId, especie: "PERRO", nombre: `Perro ${i + 1}`, personaId: persona.id } });
     await db.solicitudServicio.create({
       data: { codigo: await nuevoCodigo(db), personaId: persona.id, animalId: animal.id, servicioId: servicio.esterilizacion, sectorId: huerta.sectorId, localidadId: huerta.id, creadaEn: new Date(2025, 0, i + 1) },
     });
@@ -88,6 +95,7 @@ beforeAll(async () => {
 }, 120_000);
 
 afterAll(async () => {
+  vi.useRealTimers();
   await db?.$disconnect();
   base?.borrar();
 });
@@ -198,7 +206,7 @@ describe("invitaciones prioritarias", () => {
   });
 
   it("la inscripción pública queda en lista de espera si los cupos están ocupados o retenidos", async () => {
-    const huerta = await db.localidad.findUniqueOrThrow({ where: { clave: "la-huerta" } });
+    const huerta = await db.localidad.findFirstOrThrow({ where: { clave: "la-huerta" } });
     const r = await portal.solicitarCupo({ operativoId: OP, servicioId: servicio.esterilizacion, especie: "PERRO", nombreAnimal: "Toby", sexo: "MACHO", tamano: "MEDIANO", edad: "36", nombre: "Persona del público", rut: "44.444.444-4", telefono: "966667777", correo: "persona.publico@correo.cl", localidadId: huerta.id });
     expect(r).toMatchObject({ ok: true, estado: "EN_LISTA_ESPERA" });
   });

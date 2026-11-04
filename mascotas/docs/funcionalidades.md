@@ -253,7 +253,7 @@ Siempre a cargo de vecinos; el municipio no interviene. El fin es que sean públ
 
 ### Mapa de la comuna (`/mapa`)
 
-Mapa ciudadano con cinco capas, una a la vez, elegidas con un selector simple
+Mapa ciudadano con tres capas, una a la vez, elegidas con un selector simple
 (en celular se desliza en una fila). La capa queda en la dirección
 (`/mapa?capa=adopcion`) para compartirla.
 
@@ -262,8 +262,6 @@ Mapa ciudadano con cinco capas, una a la vez, elegidas con un selector simple
 | Perdidas y avistadas | Avisos vigentes por sector, cuántos perdidos y avistados; marca «Posible coincidencia: revise el aviso» | Cada aviso y la lista del sector |
 | Adopción | Animales publicados, por el sector donde están | Cada ficha de adopción |
 | Operativos | Operativos publicados en su lugar de referencia: fecha, horario, servicios y cupos | Cada operativo; si no hay, «Solicitar un servicio» |
-| Perros comunitarios | Perros en su lugar de referencia, con la fecha de su última revisión registrada | Cada ficha e «Informar una novedad» (SOS Mascotas) |
-| Resultados | Por sector, últimos 12 meses: atenciones, operativos, adopciones y mascotas que volvieron a casa | — |
 
 - **Sin marcas superpuestas:** una marca por sector o lugar de referencia (lo
   que comparte ubicación aproximada va junto); tamaño e intensidad según la

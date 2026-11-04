@@ -37,7 +37,11 @@
   color: var(--color-text);
   font-weight: var(--weight-bold);
 }
-.salir {
+.salir,
+.portal {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   min-height: var(--target-min);
   padding: var(--space-2) var(--space-4);
   border: 0;
@@ -50,8 +54,28 @@
   cursor: pointer;
   transition: background var(--duration-micro) var(--ease-flow);
 }
-.salir:hover {
+.salir:hover,
+.portal:hover {
   background: var(--blue-100);
+}
+/* Enlace al portal de vecinos: mismo aspecto que «Cerrar sesión». */
+.portal {
+  text-decoration: none;
+}
+
+/* «Volver al portal» en la pantalla de ingreso. */
+.volverPortal {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  align-self: flex-start;
+  min-height: var(--target-min);
+  color: var(--color-primary);
+  font-weight: var(--weight-bold);
+  text-decoration: none;
+}
+.volverPortal:hover {
+  text-decoration: underline;
 }
 
 .principal {

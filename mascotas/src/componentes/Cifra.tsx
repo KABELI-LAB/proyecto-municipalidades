@@ -1,7 +1,7 @@
 "use client";
 // Cifra grande que cuenta una sola vez al entrar en pantalla (CLAUDE.md,
 // principios de interfaz). Sin JavaScript o con movimiento reducido se ve el
-// valor final de inmediato.
+// valor final de inmediato. El texto es siempre uno solo.
 import { useEffect, useRef, useState } from "react";
 
 const DURACION_MS = 600;
@@ -37,15 +37,11 @@ export function Cifra({ valor, sufijo = "" }: { valor: number; sufijo?: string }
   }, [valor]);
 
   return (
+    // Un solo número: al copiar el texto o leerlo sin estilos no se repite. El
+    // conteo dura 600 ms, así que un lector de pantalla lee el valor final.
     <span ref={ref}>
-      <span aria-hidden="true">
-        {formato.format(mostrado)}
-        {sufijo}
-      </span>
-      <span className="visualmente-oculto">
-        {formato.format(valor)}
-        {sufijo}
-      </span>
+      {formato.format(mostrado)}
+      {sufijo}
     </span>
   );
 }

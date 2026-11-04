@@ -48,8 +48,6 @@ export const CAPAS_CIUDADANAS = {
   mascotas: { nombre: "Perdidas y avistadas", explica: "Avisos vigentes de mascotas perdidas y avistadas, por sector." },
   adopcion: { nombre: "Adopción", explica: "Animales que buscan hogar, según el sector donde están." },
   operativos: { nombre: "Operativos", explica: "Operativos publicados: fecha, lugar de referencia, servicios y cupos." },
-  comunitarios: { nombre: "Perros comunitarios", explica: "Perros comunitarios en su lugar de referencia y su última revisión." },
-  resultados: { nombre: "Resultados", explica: "Lo que hizo el programa en cada sector durante los últimos 12 meses." },
 } as const;
 export type CapaMapaCiudadano = keyof typeof CAPAS_CIUDADANAS;
 export const CLAVES_CAPA_CIUDADANA = Object.keys(CAPAS_CIUDADANAS) as CapaMapaCiudadano[];

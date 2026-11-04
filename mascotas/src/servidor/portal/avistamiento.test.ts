@@ -26,8 +26,8 @@ beforeAll(async () => {
   process.env.MUNICIPIO ??= "hualane";
   ({ db } = await import("@/servidor/db"));
   const { cargarDemo } = await import("@/servidor/demo/cargar");
-  const { municipioActivo } = await import("@/lib/municipio");
-  await cargarDemo(db, { municipio: municipioActivo(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
+  const { municipioPredeterminado } = await import("@/lib/municipio");
+  await cargarDemo(db, { municipio: municipioPredeterminado(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
   acciones = await import("./acciones");
   consultas = await import("./consultas");
 }, 120_000);
@@ -40,7 +40,7 @@ afterAll(async () => {
 const foto = () => sharp({ create: { width: 1200, height: 900, channels: 3, background: { r: 140, g: 100, b: 60 } } }).png().toBuffer();
 
 async function avistamiento(extra: Record<string, string> = {}, conFoto = false) {
-  const huerta = await db.localidad.findUniqueOrThrow({ where: { clave: "la-huerta" } });
+  const huerta = await db.localidad.findFirstOrThrow({ where: { clave: "la-huerta" } });
   const datos = new FormData();
   datos.set(
     "datos",
@@ -60,7 +60,7 @@ async function avistamiento(extra: Record<string, string> = {}, conFoto = false)
 const aceptar = (id: string) => db.publicacionMascota.update({ where: { id }, data: { moderacion: "APROBADA" } });
 
 const pedirFoto = async (id: string) => {
-  const { GET } = await import("@/app/(portal)/mascotas/[id]/foto/route");
+  const { GET } = await import("@/app/[municipio]/(portal)/mascotas/[id]/foto/route");
   return (await GET(new Request("http://localhost/"), { params: Promise.resolve({ id }) })).status;
 };
 
@@ -110,7 +110,7 @@ describe("aviso de mascota avistada", () => {
 
 describe("dónde está el animal avistado", () => {
   const intentar = async (extra: Record<string, string>) => {
-    const huerta = await db.localidad.findUniqueOrThrow({ where: { clave: "la-huerta" } });
+    const huerta = await db.localidad.findFirstOrThrow({ where: { clave: "la-huerta" } });
     return acciones.publicarMascota({
       tipo: "ENCONTRADA", especie: "PERRO", colorPrincipal: "café", tamano: "MEDIANO", sexo: "DESCONOCIDO", nombreAnimal: "", collar: "NO", colorCollar: "",
       microchip: "", senas: "", fechaEvento: (await import("@/servidor/formato")).hoyISO(), resguardada: "no", localidadId: huerta.id, vinculo: "", ...VECINO, ...extra,
@@ -118,7 +118,7 @@ describe("dónde está el animal avistado", () => {
   };
 
   it("retenido en otro lugar guarda la localidad, su sector y qué lugar es, y se muestra sin dirección", async () => {
-    const quilico = await db.localidad.findUniqueOrThrow({ where: { clave: "quilico" }, include: { sector: true } });
+    const quilico = await db.localidad.findFirstOrThrow({ where: { clave: "quilico" }, include: { sector: true } });
     const p = await avistamiento({ resguardada: "lugar", resguardoLocalidadId: quilico.id, resguardoDetalle: "En una veterinaria del centro" }, true);
     expect([p.resguardada, p.resguardo, p.resguardoLocalidadId, p.resguardoDetalle]).toEqual([true, "OTRO_LUGAR", quilico.id, "En una veterinaria del centro"]);
     const { textoResguardo } = await import("@/dominio/etiquetas");
@@ -128,7 +128,7 @@ describe("dónde está el animal avistado", () => {
   });
 
   it("con quien informa queda como tal; solo vista no guarda lugar", async () => {
-    const huerta = await db.localidad.findUniqueOrThrow({ where: { clave: "la-huerta" } });
+    const huerta = await db.localidad.findFirstOrThrow({ where: { clave: "la-huerta" } });
     const conmigo = await avistamiento({ resguardada: "si", resguardoLocalidadId: huerta.id });
     expect([conmigo.resguardada, conmigo.resguardo, conmigo.resguardoDetalle]).toEqual([true, "CON_QUIEN_INFORMA", null]);
     const vista = await avistamiento({ resguardada: "no", resguardoLocalidadId: huerta.id, resguardoDetalle: "x" });
@@ -136,7 +136,7 @@ describe("dónde está el animal avistado", () => {
   });
 
   it("pide la localidad y qué lugar es, y rechaza teléfonos o localidades fuera de la lista", async () => {
-    const huerta = await db.localidad.findUniqueOrThrow({ where: { clave: "la-huerta" } });
+    const huerta = await db.localidad.findFirstOrThrow({ where: { clave: "la-huerta" } });
     expect(await intentar({ resguardada: "lugar" })).toMatchObject({ ok: false, errores: { resguardoLocalidadId: expect.any(String), resguardoDetalle: expect.any(String) } });
     expect(await intentar({ resguardada: "lugar", resguardoLocalidadId: huerta.id, resguardoDetalle: "Llamar al 9 1234 5678" })).toMatchObject({ ok: false, errores: { resguardoDetalle: expect.stringContaining("teléfonos") } });
     expect(await intentar({ resguardada: "si", resguardoLocalidadId: "no-existe" })).toMatchObject({ ok: false, errores: { resguardoLocalidadId: expect.any(String) } });

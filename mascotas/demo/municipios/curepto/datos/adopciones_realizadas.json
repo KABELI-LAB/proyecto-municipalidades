@@ -1,0 +1,127 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para curepto.",
+  "datos": [
+    {
+      "id": "cur-adr-01",
+      "animal_id": "cur-ani-023",
+      "publicado": "2026-02-23",
+      "adoptado": "2026-03-30",
+      "sector_adoptante_id": "curepto-urbano",
+      "adoptante_id": "cur-per-019",
+      "dias_en_espera": 35,
+      "genero_solicitud_esterilizacion": true
+    },
+    {
+      "id": "cur-adr-02",
+      "animal_id": "cur-ani-024",
+      "publicado": "2026-04-08",
+      "adoptado": "2026-06-06",
+      "sector_adoptante_id": "gualleco",
+      "adoptante_id": "cur-per-020",
+      "dias_en_espera": 59,
+      "genero_solicitud_esterilizacion": false
+    },
+    {
+      "id": "cur-adr-03",
+      "animal_id": "cur-ani-025",
+      "publicado": "2026-02-22",
+      "adoptado": "2026-03-19",
+      "sector_adoptante_id": "rapilermo",
+      "adoptante_id": "cur-per-021",
+      "dias_en_espera": 25,
+      "genero_solicitud_esterilizacion": true
+    },
+    {
+      "id": "cur-adr-04",
+      "animal_id": "cur-ani-026",
+      "publicado": "2026-05-08",
+      "adoptado": "2026-06-27",
+      "sector_adoptante_id": "calpun",
+      "adoptante_id": "cur-per-022",
+      "dias_en_espera": 50,
+      "genero_solicitud_esterilizacion": true
+    },
+    {
+      "id": "cur-adr-05",
+      "animal_id": "cur-ani-027",
+      "publicado": "2026-08-20",
+      "adoptado": "2026-10-06",
+      "sector_adoptante_id": "gualleco",
+      "adoptante_id": "cur-per-023",
+      "dias_en_espera": 47,
+      "genero_solicitud_esterilizacion": false
+    },
+    {
+      "id": "cur-adr-06",
+      "animal_id": "cur-ani-028",
+      "publicado": "2026-08-25",
+      "adoptado": "2026-10-06",
+      "sector_adoptante_id": "calpun",
+      "adoptante_id": "cur-per-024",
+      "dias_en_espera": 42,
+      "genero_solicitud_esterilizacion": false
+    },
+    {
+      "id": "cur-adr-07",
+      "animal_id": "cur-ani-029",
+      "publicado": "2026-07-28",
+      "adoptado": "2026-09-26",
+      "sector_adoptante_id": "costa",
+      "adoptante_id": "cur-per-025",
+      "dias_en_espera": 60,
+      "genero_solicitud_esterilizacion": false
+    },
+    {
+      "id": "cur-adr-08",
+      "animal_id": "cur-ani-030",
+      "publicado": "2026-04-03",
+      "adoptado": "2026-05-23",
+      "sector_adoptante_id": "calpun",
+      "adoptante_id": "cur-per-026",
+      "dias_en_espera": 50,
+      "genero_solicitud_esterilizacion": true
+    },
+    {
+      "id": "cur-adr-09",
+      "animal_id": "cur-ani-031",
+      "publicado": "2026-01-20",
+      "adoptado": "2026-03-15",
+      "sector_adoptante_id": "curepto-urbano",
+      "adoptante_id": "cur-per-027",
+      "dias_en_espera": 54,
+      "genero_solicitud_esterilizacion": false
+    },
+    {
+      "id": "cur-adr-10",
+      "animal_id": "cur-ani-032",
+      "publicado": "2026-03-26",
+      "adoptado": "2026-06-03",
+      "sector_adoptante_id": "calpun",
+      "adoptante_id": "cur-per-028",
+      "dias_en_espera": 69,
+      "genero_solicitud_esterilizacion": true
+    },
+    {
+      "id": "cur-adr-11",
+      "animal_id": "cur-ani-033",
+      "publicado": "2026-02-11",
+      "adoptado": "2026-03-16",
+      "sector_adoptante_id": "rapilermo",
+      "adoptante_id": "cur-per-029",
+      "dias_en_espera": 33,
+      "genero_solicitud_esterilizacion": false
+    },
+    {
+      "id": "cur-adr-12",
+      "animal_id": "cur-ani-034",
+      "publicado": "2026-01-15",
+      "adoptado": "2026-02-10",
+      "sector_adoptante_id": "huaquen",
+      "adoptante_id": "cur-per-030",
+      "dias_en_espera": 26,
+      "genero_solicitud_esterilizacion": true
+    }
+  ]
+}

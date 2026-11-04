@@ -7,7 +7,7 @@ import { createClient } from "@libsql/client";
 import { PrismaLibSql } from "@prisma/adapter-libsql";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { PrismaClient } from "@/generated/prisma/client";
-import { municipioActivo } from "@/lib/municipio";
+import { municipioPredeterminado } from "@/lib/municipio";
 import { cargarDemo, rasgosAPublicacion } from "./cargar";
 import { verificarDemo } from "./verificar";
 
@@ -27,7 +27,7 @@ beforeAll(async () => {
   }
   cliente.close();
   db = new PrismaClient({ adapter: new PrismaLibSql({ url }) });
-  await cargarDemo(db, { municipio: municipioActivo(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
+  await cargarDemo(db, { municipio: municipioPredeterminado(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
 }, 120_000);
 
 afterAll(async () => {
@@ -40,7 +40,7 @@ afterAll(async () => {
 
 describe("carga de demo/datos/", () => {
   it("reproduce resumen.json y los factores de prioridad.json con la fecha de corte", async () => {
-    const { filas, ok } = await verificarDemo(db, municipioActivo(), CORTE);
+    const { filas, ok } = await verificarDemo(db, municipioPredeterminado(), CORTE);
     const distintas = filas.filter((f) => f.esperado !== f.obtenido);
     expect(distintas).toEqual([]);
     expect(ok).toBe(true);
@@ -64,7 +64,7 @@ describe("carga de demo/datos/", () => {
     expect(op.estado).toBe("BORRADOR");
     expect(op.avisos.map((a) => [a.id, a.estado])).toEqual([["avi-02", "BORRADOR"]]);
     expect(Object.fromEntries(op.capacidades.map((c) => [c.servicio.clave, c.cupos]))).toEqual({ esterilizacion: 20, vacunacion: 40, microchip: 40 });
-    expect(op.asignaciones.map((a) => a.usuarioId)).toEqual(["usr-02"]);
+    expect(op.asignaciones.map((a) => a.usuarioId)).toEqual(["usr-01"]);
   });
 
   it("cada ficha de adopción la propuso un vecino, con su código; sus postulaciones aceptan compartir el contacto", async () => {
@@ -88,7 +88,7 @@ describe("carga de demo/datos/", () => {
 
   it("borrar la demo no toca la configuración", async () => {
     const { borrarDatosDemo } = await import("./borrar");
-    await borrarDatosDemo(db);
+    await borrarDatosDemo(db, municipioPredeterminado().id);
     expect(await db.persona.count()).toBe(0);
     expect(await db.operativo.count()).toBe(0);
     expect(await db.loteDemo.count()).toBe(0);

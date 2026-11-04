@@ -1,0 +1,127 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para vichuquen.",
+  "datos": [
+    {
+      "id": "vic-adr-01",
+      "animal_id": "vic-ani-023",
+      "publicado": "2026-02-23",
+      "adoptado": "2026-03-30",
+      "sector_adoptante_id": "vichuquen-pueblo",
+      "adoptante_id": "vic-per-019",
+      "dias_en_espera": 35,
+      "genero_solicitud_esterilizacion": true
+    },
+    {
+      "id": "vic-adr-02",
+      "animal_id": "vic-ani-024",
+      "publicado": "2026-04-08",
+      "adoptado": "2026-06-06",
+      "sector_adoptante_id": "llico",
+      "adoptante_id": "vic-per-020",
+      "dias_en_espera": 59,
+      "genero_solicitud_esterilizacion": false
+    },
+    {
+      "id": "vic-adr-03",
+      "animal_id": "vic-ani-025",
+      "publicado": "2026-02-22",
+      "adoptado": "2026-03-19",
+      "sector_adoptante_id": "lago",
+      "adoptante_id": "vic-per-021",
+      "dias_en_espera": 25,
+      "genero_solicitud_esterilizacion": true
+    },
+    {
+      "id": "vic-adr-04",
+      "animal_id": "vic-ani-026",
+      "publicado": "2026-05-08",
+      "adoptado": "2026-06-27",
+      "sector_adoptante_id": "vichuquen-pueblo",
+      "adoptante_id": "vic-per-022",
+      "dias_en_espera": 50,
+      "genero_solicitud_esterilizacion": true
+    },
+    {
+      "id": "vic-adr-05",
+      "animal_id": "vic-ani-027",
+      "publicado": "2026-08-20",
+      "adoptado": "2026-10-06",
+      "sector_adoptante_id": "llico",
+      "adoptante_id": "vic-per-023",
+      "dias_en_espera": 47,
+      "genero_solicitud_esterilizacion": false
+    },
+    {
+      "id": "vic-adr-06",
+      "animal_id": "vic-ani-028",
+      "publicado": "2026-08-25",
+      "adoptado": "2026-10-06",
+      "sector_adoptante_id": "vichuquen-pueblo",
+      "adoptante_id": "vic-per-024",
+      "dias_en_espera": 42,
+      "genero_solicitud_esterilizacion": false
+    },
+    {
+      "id": "vic-adr-07",
+      "animal_id": "vic-ani-029",
+      "publicado": "2026-07-28",
+      "adoptado": "2026-09-26",
+      "sector_adoptante_id": "torca-boyeruca",
+      "adoptante_id": "vic-per-025",
+      "dias_en_espera": 60,
+      "genero_solicitud_esterilizacion": false
+    },
+    {
+      "id": "vic-adr-08",
+      "animal_id": "vic-ani-030",
+      "publicado": "2026-04-03",
+      "adoptado": "2026-05-23",
+      "sector_adoptante_id": "vichuquen-pueblo",
+      "adoptante_id": "vic-per-026",
+      "dias_en_espera": 50,
+      "genero_solicitud_esterilizacion": true
+    },
+    {
+      "id": "vic-adr-09",
+      "animal_id": "vic-ani-031",
+      "publicado": "2026-01-20",
+      "adoptado": "2026-03-15",
+      "sector_adoptante_id": "vichuquen-pueblo",
+      "adoptante_id": "vic-per-027",
+      "dias_en_espera": 54,
+      "genero_solicitud_esterilizacion": false
+    },
+    {
+      "id": "vic-adr-10",
+      "animal_id": "vic-ani-032",
+      "publicado": "2026-03-26",
+      "adoptado": "2026-06-03",
+      "sector_adoptante_id": "vichuquen-pueblo",
+      "adoptante_id": "vic-per-028",
+      "dias_en_espera": 69,
+      "genero_solicitud_esterilizacion": true
+    },
+    {
+      "id": "vic-adr-11",
+      "animal_id": "vic-ani-033",
+      "publicado": "2026-02-11",
+      "adoptado": "2026-03-16",
+      "sector_adoptante_id": "lago",
+      "adoptante_id": "vic-per-029",
+      "dias_en_espera": 33,
+      "genero_solicitud_esterilizacion": false
+    },
+    {
+      "id": "vic-adr-12",
+      "animal_id": "vic-ani-034",
+      "publicado": "2026-01-15",
+      "adoptado": "2026-02-10",
+      "sector_adoptante_id": "lago",
+      "adoptante_id": "vic-per-030",
+      "dias_en_espera": 26,
+      "genero_solicitud_esterilizacion": true
+    }
+  ]
+}

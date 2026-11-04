@@ -1,7 +1,7 @@
 "use server";
 // Inteligencia artificial desde el panel: administración la enciende o apaga,
 // y quien ve los indicadores pide el resumen para el equipo.
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from "@/servidor/revalidar";
 import { municipioActivo } from "@/lib/municipio";
 import { autorizar } from "@/servidor/auth";
 import { db } from "@/servidor/db";
@@ -17,9 +17,9 @@ const SIN_PERMISO: Respuesta = { ok: false, mensaje: "Tu cuenta no tiene permiso
 export async function guardarIaActiva(encendida: boolean): Promise<Respuesta> {
   if (!(await autorizar("configurarRedes"))) return SIN_PERMISO;
   if (encendida && !iaConfigurada()) return { ok: false, mensaje: "Falta configurar OPENAI_API_KEY en el servidor. Pídela a quien administra la plataforma." };
-  await db.municipio.update({ where: { id: municipioActivo().id }, data: { iaActiva: encendida } });
-  revalidatePath("/panel/configuracion");
-  revalidatePath("/panel/vecinos");
+  await db.municipio.update({ where: { id: (await municipioActivo()).id }, data: { iaActiva: encendida } });
+  await revalidatePath("/panel/configuracion");
+  await revalidatePath("/panel/vecinos");
   return {
     ok: true,
     mensaje: encendida
@@ -36,7 +36,7 @@ export async function generarResumen(): Promise<Respuesta> {
   const resumen = await resumenConIA(datos);
   if (!resumen) return { ok: false, mensaje: "No pudimos escribir el resumen ahora. Inténtalo en unos minutos." };
   // Se guarda la estructura (titular, destacados y recomendaciones) en JSON.
-  await db.resumenIA.create({ data: { municipioId: municipioActivo().id, texto: JSON.stringify(resumen), cifras: JSON.stringify(datos.cifras), modelo: modeloIA() } });
-  revalidatePath("/panel/vecinos");
+  await db.resumenIA.create({ data: { municipioId: (await municipioActivo()).id, texto: JSON.stringify(resumen), cifras: JSON.stringify(datos.cifras), modelo: modeloIA() } });
+  await revalidatePath("/panel/vecinos");
   return { ok: true, mensaje: "Listo: resumen actualizado." };
 }

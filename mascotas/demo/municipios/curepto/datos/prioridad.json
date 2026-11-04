@@ -1,0 +1,85 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para curepto.",
+  "datos": [
+    {
+      "sector_id": "gualleco",
+      "indice": 1.0,
+      "nivel": "alta",
+      "factores": {
+        "demanda_pendiente": 22,
+        "reportes_90_dias": 23,
+        "dias_sin_intervencion": 214,
+        "demanda_no_cubierta": 9
+      },
+      "explicacion": "18 solicitudes de esterilización pendientes, 23 reportes en 90 días y 214 días desde el último operativo.",
+      "recomendacion": "Se recomienda evaluar un operativo territorial con énfasis en esterilización."
+    },
+    {
+      "sector_id": "calpun",
+      "indice": 0.32,
+      "nivel": "baja",
+      "factores": {
+        "demanda_pendiente": 7,
+        "reportes_90_dias": 3,
+        "dias_sin_intervencion": "sin operativos",
+        "demanda_no_cubierta": 0
+      },
+      "explicacion": "4 solicitudes de esterilización pendientes, 3 reportes en 90 días y sin operativos registrados.",
+      "recomendacion": "Sin acción recomendada por ahora."
+    },
+    {
+      "sector_id": "costa",
+      "indice": 0.29,
+      "nivel": "baja",
+      "factores": {
+        "demanda_pendiente": 5,
+        "reportes_90_dias": 6,
+        "dias_sin_intervencion": 150,
+        "demanda_no_cubierta": 3
+      },
+      "explicacion": "3 solicitudes de esterilización pendientes, 6 reportes en 90 días y 150 días desde el último operativo.",
+      "recomendacion": "Sin acción recomendada por ahora."
+    },
+    {
+      "sector_id": "curepto-urbano",
+      "indice": 0.26,
+      "nivel": "baja",
+      "factores": {
+        "demanda_pendiente": 5,
+        "reportes_90_dias": 15,
+        "dias_sin_intervencion": 21,
+        "demanda_no_cubierta": 3
+      },
+      "explicacion": "2 solicitudes de esterilización pendientes, 15 reportes en 90 días y 21 días desde el último operativo.",
+      "recomendacion": "Sin acción recomendada por ahora."
+    },
+    {
+      "sector_id": "huaquen",
+      "indice": 0.21,
+      "nivel": "baja",
+      "factores": {
+        "demanda_pendiente": 3,
+        "reportes_90_dias": 1,
+        "dias_sin_intervencion": "sin operativos",
+        "demanda_no_cubierta": 0
+      },
+      "explicacion": "2 solicitudes de esterilización pendientes, 1 reportes en 90 días y sin operativos registrados.",
+      "recomendacion": "Sin acción recomendada por ahora."
+    },
+    {
+      "sector_id": "rapilermo",
+      "indice": 0.15,
+      "nivel": "baja",
+      "factores": {
+        "demanda_pendiente": 4,
+        "reportes_90_dias": 0,
+        "dias_sin_intervencion": 95,
+        "demanda_no_cubierta": 3
+      },
+      "explicacion": "2 solicitudes de esterilización pendientes, 0 reportes en 90 días y 95 días desde el último operativo.",
+      "recomendacion": "Sin acción recomendada por ahora."
+    }
+  ]
+}

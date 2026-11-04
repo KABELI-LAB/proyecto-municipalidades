@@ -1,0 +1,133 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para vichuquen.",
+  "datos": [
+    {
+      "id": "vic-adp-01",
+      "animal_id": "vic-ani-009",
+      "caracter": "tranquilo",
+      "convive_con_ninos": true,
+      "convive_con_animales": true,
+      "publicado": "2026-05-12",
+      "estado": "disponible"
+    },
+    {
+      "id": "vic-adp-02",
+      "animal_id": "vic-ani-010",
+      "caracter": "independiente",
+      "convive_con_ninos": true,
+      "convive_con_animales": false,
+      "publicado": "2026-10-03",
+      "estado": "disponible"
+    },
+    {
+      "id": "vic-adp-03",
+      "animal_id": "vic-ani-011",
+      "caracter": "se lleva bien con otros perros",
+      "convive_con_ninos": false,
+      "convive_con_animales": true,
+      "publicado": "2026-08-22",
+      "estado": "disponible"
+    },
+    {
+      "id": "vic-adp-04",
+      "animal_id": "vic-ani-012",
+      "caracter": "cariñoso con niños",
+      "convive_con_ninos": true,
+      "convive_con_animales": false,
+      "publicado": "2026-07-31",
+      "estado": "disponible"
+    },
+    {
+      "id": "vic-adp-05",
+      "animal_id": "vic-ani-013",
+      "caracter": "dormilón",
+      "convive_con_ninos": true,
+      "convive_con_animales": true,
+      "publicado": "2026-05-26",
+      "estado": "disponible"
+    },
+    {
+      "id": "vic-adp-06",
+      "animal_id": "vic-ani-014",
+      "caracter": "juguetón",
+      "convive_con_ninos": true,
+      "convive_con_animales": false,
+      "publicado": "2026-09-18",
+      "estado": "disponible"
+    },
+    {
+      "id": "vic-adp-07",
+      "animal_id": "vic-ani-015",
+      "caracter": "ideal para patio",
+      "convive_con_ninos": true,
+      "convive_con_animales": true,
+      "publicado": "2026-06-23",
+      "estado": "disponible"
+    },
+    {
+      "id": "vic-adp-08",
+      "animal_id": "vic-ani-016",
+      "caracter": "dormilón",
+      "convive_con_ninos": false,
+      "convive_con_animales": false,
+      "publicado": "2026-08-21",
+      "estado": "disponible"
+    },
+    {
+      "id": "vic-adp-09",
+      "animal_id": "vic-ani-017",
+      "caracter": "guardián pero amistoso",
+      "convive_con_ninos": false,
+      "convive_con_animales": true,
+      "publicado": "2026-09-28",
+      "estado": "disponible"
+    },
+    {
+      "id": "vic-adp-10",
+      "animal_id": "vic-ani-018",
+      "caracter": "dormilón",
+      "convive_con_ninos": true,
+      "convive_con_animales": true,
+      "publicado": "2026-06-05",
+      "estado": "disponible"
+    },
+    {
+      "id": "vic-adp-11",
+      "animal_id": "vic-ani-019",
+      "caracter": "muy sociable",
+      "convive_con_ninos": true,
+      "convive_con_animales": true,
+      "publicado": "2026-05-12",
+      "estado": "disponible"
+    },
+    {
+      "id": "vic-adp-12",
+      "animal_id": "vic-ani-020",
+      "caracter": "guardián pero amistoso",
+      "convive_con_ninos": true,
+      "convive_con_animales": false,
+      "publicado": "2026-07-03",
+      "estado": "disponible"
+    },
+    {
+      "id": "vic-adp-13",
+      "animal_id": "vic-ani-021",
+      "caracter": "cariñoso con niños",
+      "convive_con_ninos": true,
+      "convive_con_animales": true,
+      "publicado": "2026-05-15",
+      "estado": "disponible"
+    },
+    {
+      "id": "vic-adp-14",
+      "animal_id": "vic-ani-022",
+      "caracter": "muy sociable",
+      "convive_con_ninos": false,
+      "convive_con_animales": true,
+      "publicado": "2026-09-29",
+      "estado": "disponible"
+    }
+  ]
+}

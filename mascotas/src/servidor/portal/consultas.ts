@@ -13,16 +13,16 @@ import { COMUNITARIO_PUBLICO, FICHA_PUBLICA, PUBLICACION_CON_FOTO } from "@/serv
 import { db } from "@/servidor/db";
 import { inicioDeHoy } from "@/servidor/formato";
 
-const municipioId = () => municipioActivo().id;
+const municipioId = async () => (await municipioActivo()).id;
 
-export function sectores() {
-  return db.sector.findMany({ where: { municipioId: municipioId() }, orderBy: { orden: "asc" }, select: { id: true, clave: true, nombre: true } });
+export async function sectores() {
+  return db.sector.findMany({ where: { municipioId: (await municipioId()) }, orderBy: { orden: "asc" }, select: { id: true, clave: true, nombre: true } });
 }
 
 /** Sectores con sus localidades, para elegir la localidad de una lista cerrada. */
-export function territorio() {
+export async function territorio() {
   return db.sector.findMany({
-    where: { municipioId: municipioId() },
+    where: { municipioId: (await municipioId()) },
     orderBy: { orden: "asc" },
     select: { id: true, nombre: true, localidades: { orderBy: { orden: "asc" }, select: { id: true, nombre: true } } },
   });
@@ -30,7 +30,7 @@ export function territorio() {
 
 /** Colores del catálogo por especie (perros y gatos). */
 export async function coloresPorEspecie() {
-  const colores = await db.colorCatalogo.findMany({ where: { municipioId: municipioId() }, orderBy: { orden: "asc" } });
+  const colores = await db.colorCatalogo.findMany({ where: { municipioId: (await municipioId()) }, orderBy: { orden: "asc" } });
   return {
     PERRO: colores.filter((c) => c.especie === "PERRO").map((c) => c.nombre),
     GATO: colores.filter((c) => c.especie === "GATO").map((c) => c.nombre),
@@ -39,12 +39,12 @@ export async function coloresPorEspecie() {
 
 /** Tipos de reporte del catálogo, en su orden. */
 /** Categorías vigentes de SOS Mascotas, en el orden del catálogo. */
-export function tiposReporte() {
-  return db.tipoReporte.findMany({ where: { municipioId: municipioId(), activo: true }, orderBy: { orden: "asc" }, select: { clave: true, nombre: true } });
+export async function tiposReporte() {
+  return db.tipoReporte.findMany({ where: { municipioId: (await municipioId()), activo: true }, orderBy: { orden: "asc" }, select: { clave: true, nombre: true } });
 }
 
-export function servicios() {
-  return db.servicio.findMany({ where: { municipioId: municipioId(), activo: true }, orderBy: { nombre: "asc" }, select: { id: true, clave: true, nombre: true } });
+export async function servicios() {
+  return db.servicio.findMany({ where: { municipioId: (await municipioId()), activo: true }, orderBy: { nombre: "asc" }, select: { id: true, clave: true, nombre: true } });
 }
 
 // ───────────── Operativos ─────────────
@@ -87,7 +87,7 @@ const incluirOperativo = {
 /** Operativos publicados desde hoy en adelante, con cupos disponibles por servicio. */
 export async function operativosAbiertos(filtro: { sectorId?: string } = {}) {
   const operativos = await db.operativo.findMany({
-    where: { estado: "PUBLICADO", fecha: { gte: inicioDeHoy() }, sector: { municipioId: municipioId() }, ...(filtro.sectorId ? { sectorId: filtro.sectorId } : {}) },
+    where: { estado: "PUBLICADO", fecha: { gte: inicioDeHoy() }, sector: { municipioId: (await municipioId()) }, ...(filtro.sectorId ? { sectorId: filtro.sectorId } : {}) },
     include: incluirOperativo,
     orderBy: { fecha: "asc" },
   });
@@ -101,7 +101,7 @@ export async function operativosAbiertos(filtro: { sectorId?: string } = {}) {
  */
 export async function operativosProximos(filtro: { sectorId?: string } = {}) {
   const operativos = await db.operativo.findMany({
-    where: { estado: { in: ["PUBLICADO", "INSCRIPCIONES_CERRADAS"] }, fecha: { gte: inicioDeHoy() }, sector: { municipioId: municipioId() }, ...(filtro.sectorId ? { sectorId: filtro.sectorId } : {}) },
+    where: { estado: { in: ["PUBLICADO", "INSCRIPCIONES_CERRADAS"] }, fecha: { gte: inicioDeHoy() }, sector: { municipioId: (await municipioId()) }, ...(filtro.sectorId ? { sectorId: filtro.sectorId } : {}) },
     include: { ...incluirOperativo, lugar: { select: { nombre: true, localidad: { select: { nombre: true } } } } },
     orderBy: [{ fecha: "asc" }, { horaInicio: "asc" }],
   });
@@ -115,7 +115,7 @@ export async function operativosProximos(filtro: { sectorId?: string } = {}) {
  */
 export async function proximoOperativo() {
   const o = await db.operativo.findFirst({
-    where: { estado: { in: ["PUBLICADO", "INSCRIPCIONES_CERRADAS"] }, fecha: { gte: inicioDeHoy() }, sector: { municipioId: municipioId() } },
+    where: { estado: { in: ["PUBLICADO", "INSCRIPCIONES_CERRADAS"] }, fecha: { gte: inicioDeHoy() }, sector: { municipioId: (await municipioId()) } },
     include: { ...incluirOperativo, lugar: { select: { nombre: true, localidad: { select: { nombre: true } } } } },
     orderBy: [{ fecha: "asc" }, { horaInicio: "asc" }],
   });
@@ -126,7 +126,7 @@ export async function proximoOperativo() {
 
 export async function operativo(id: string) {
   const o = await db.operativo.findFirst({
-    where: { id, estado: { in: [...ESTADOS_PUBLICOS] }, sector: { municipioId: municipioId() } },
+    where: { id, estado: { in: [...ESTADOS_PUBLICOS] }, sector: { municipioId: (await municipioId()) } },
     include: { ...incluirOperativo, lugar: { select: { nombre: true, localidad: { select: { nombre: true } } } } },
   });
   if (!o) return null;
@@ -142,7 +142,7 @@ export async function operativoCercano(sectorId: string, servicioId: string, loc
   const abiertos = (await operativosAbiertos()).filter((o) => o.capacidades.some((c) => c.servicioId === servicioId));
   const enSector = abiertos.find((o) => o.sectorId === sectorId);
   if (enSector || !localidadId) return enSector ?? null;
-  const localidad = await db.localidad.findUnique({ where: { id: localidadId } });
+  const localidad = await db.localidad.findFirst({ where: { id: localidadId, municipioId: await municipioId() } });
   const origen = localidad ? punto(localidad.lat, localidad.lng) : null;
   if (!origen) return null;
   const lugares = new Map((await db.lugar.findMany({ where: { id: { in: abiertos.map((o) => o.lugarId) } } })).map((l) => [l.id, punto(l.lat, l.lng)]));
@@ -156,10 +156,11 @@ export async function operativoCercano(sectorId: string, servicioId: string, loc
 // ───────────── Avisos ─────────────
 
 /** Avisos publicados y vigentes hoy. Con sector: los de toda la comuna y los de ese sector. */
-export function avisosVigentes(filtro: { sectorId?: string; limite?: number } = {}) {
+export async function avisosVigentes(filtro: { sectorId?: string; limite?: number } = {}) {
   const ahora = new Date();
   return db.aviso.findMany({
     where: {
+      municipioId: await municipioId(),
       estado: "PUBLICADO",
       vigenteDesde: { lte: ahora },
       vigenteHasta: { gte: ahora },
@@ -202,21 +203,21 @@ const camposPublicos = {
   animal: { select: { foto: true } },
 } as const;
 
-export function publicaciones(filtro: { tipo?: "PERDIDA" | "ENCONTRADA"; especie?: "PERRO" | "GATO" | "OTRA"; sectorId?: string }) {
+export async function publicaciones(filtro: { tipo?: "PERDIDA" | "ENCONTRADA"; especie?: "PERRO" | "GATO" | "OTRA"; sectorId?: string }) {
   return db.publicacionMascota.findMany({
-    where: { ...visible, ...filtro },
+    where: { ...visible, ...filtro, sector: { municipioId: await municipioId() } },
     select: camposPublicos,
     orderBy: { fechaEvento: "desc" },
   });
 }
 
-export function publicacion(id: string) {
-  return db.publicacionMascota.findFirst({ where: { id, ...visible }, select: camposPublicos });
+export async function publicacion(id: string) {
+  return db.publicacionMascota.findFirst({ where: { id, ...visible, sector: { municipioId: await municipioId() } }, select: camposPublicos });
 }
 
 /** El aviso recién creado, aunque aún no se muestre (sin foto): para buscar sus coincidencias. */
-export function publicacionPropia(id: string) {
-  return db.publicacionMascota.findUnique({ where: { id }, select: camposPublicos });
+export async function publicacionPropia(id: string) {
+  return db.publicacionMascota.findFirst({ where: { id, sector: { municipioId: await municipioId() } }, select: camposPublicos });
 }
 
 
@@ -230,6 +231,7 @@ export async function coincidenciasDe(p: Publica) {
   const candidatos = await db.publicacionMascota.findMany({
     where: {
       ...visible,
+      sector: { municipioId: await municipioId() },
       tipo: p.tipo === "PERDIDA" ? "ENCONTRADA" : "PERDIDA",
       especie: p.especie as "PERRO" | "GATO" | "OTRA",
       fechaEvento: { gte: new Date(p.fechaEvento.getTime() - ventanaMs), lte: new Date(p.fechaEvento.getTime() + ventanaMs) },
@@ -253,16 +255,16 @@ const incluirFicha = {
   animal: { select: { nombre: true, especie: true, sexo: true, edadAproxMeses: true, tamano: true, colorPrincipal: true, esterilizado: true, vacunasAlDia: true, microchip: true, foto: true } },
 } as const;
 
-export function fichasAdopcion() {
+export async function fichasAdopcion() {
   return db.fichaAdopcion.findMany({
-    where: FICHA_PUBLICA,
+    where: { ...FICHA_PUBLICA, municipioId: await municipioId() },
     include: incluirFicha,
     orderBy: { publicadaEn: "asc" },
   });
 }
 
-export function fichaAdopcion(id: string) {
-  return db.fichaAdopcion.findFirst({ where: { id, ...FICHA_PUBLICA }, include: incluirFicha });
+export async function fichaAdopcion(id: string) {
+  return db.fichaAdopcion.findFirst({ where: { id, ...FICHA_PUBLICA, municipioId: await municipioId() }, include: incluirFicha });
 }
 
 // ───────────── Perros comunitarios ─────────────
@@ -278,25 +280,25 @@ const camposComunitario = {
   animal: { select: { nombre: true, sexo: true, tamano: true, colorPrincipal: true, edadAproxMeses: true, rasgos: true, esterilizado: true, vacunasAlDia: true, microchip: true, foto: true } },
 } as const;
 
-export function perrosComunitarios(filtro: { sectorId?: string } = {}) {
+export async function perrosComunitarios(filtro: { sectorId?: string } = {}) {
   return db.perroComunitario.findMany({
-    where: { sector: { municipioId: municipioId() }, ...COMUNITARIO_PUBLICO, ...(filtro.sectorId ? { sectorId: filtro.sectorId } : {}) },
+    where: { sector: { municipioId: (await municipioId()) }, ...COMUNITARIO_PUBLICO, ...(filtro.sectorId ? { sectorId: filtro.sectorId } : {}) },
     select: camposComunitario,
     orderBy: [{ sector: { orden: "asc" } }, { apodo: "asc" }],
   });
 }
 
 /** Lugares públicos de referencia (plazas, escuelas, recintos) donde puede estar un perro comunitario. */
-export function lugaresPublicos() {
+export async function lugaresPublicos() {
   return db.lugar.findMany({
-    where: { sector: { municipioId: municipioId() } },
+    where: { sector: { municipioId: (await municipioId()) } },
     select: { id: true, nombre: true, sector: { select: { nombre: true } } },
     orderBy: [{ sector: { orden: "asc" } }, { nombre: "asc" }],
   });
 }
 
-export function perroComunitario(id: string) {
-  return db.perroComunitario.findFirst({ where: { id, sector: { municipioId: municipioId() }, ...COMUNITARIO_PUBLICO }, select: camposComunitario });
+export async function perroComunitario(id: string) {
+  return db.perroComunitario.findFirst({ where: { id, sector: { municipioId: (await municipioId()) }, ...COMUNITARIO_PUBLICO }, select: camposComunitario });
 }
 
 /**
@@ -307,7 +309,7 @@ export function perroComunitario(id: string) {
  */
 export async function seguimientoComunitario(id: string) {
   const c = await db.perroComunitario.findFirst({
-    where: { id, sector: { municipioId: municipioId() } },
+    where: { id, sector: { municipioId: (await municipioId()) } },
     select: {
       animalId: true,
       ultimoControl: true,
@@ -341,13 +343,13 @@ export async function seguimientoComunitario(id: string) {
 export async function mapaPublico() {
   const [lista, conteo, comunitarios] = await Promise.all([
     db.sector.findMany({
-      where: { municipioId: municipioId() },
+      where: { municipioId: (await municipioId()) },
       orderBy: { orden: "asc" },
       select: { id: true, clave: true, nombre: true, centroLat: true, centroLng: true, localidades: { select: { nombre: true, lat: true, lng: true } } },
     }),
-    db.publicacionMascota.groupBy({ by: ["sectorId", "tipo"], where: { ...visible, sector: { municipioId: municipioId() } }, _count: { _all: true } }),
+    db.publicacionMascota.groupBy({ by: ["sectorId", "tipo"], where: { ...visible, sector: { municipioId: (await municipioId()) } }, _count: { _all: true } }),
     db.perroComunitario.findMany({
-      where: { sector: { municipioId: municipioId() }, ...COMUNITARIO_PUBLICO },
+      where: { sector: { municipioId: (await municipioId()) }, ...COMUNITARIO_PUBLICO },
       select: { id: true, apodo: true, animal: { select: { nombre: true } }, lugar: { select: { id: true, nombre: true, lat: true, lng: true, localidad: { select: { nombre: true } } } }, sector: { select: { clave: true, nombre: true } } },
       orderBy: { apodo: "asc" },
     }),
@@ -406,7 +408,7 @@ export async function mosaicoInicio(cantidad = 8): Promise<Mosaico[]> {
     publicaciones({}),
     perrosComunitarios(),
     db.publicacionMascota.findMany({
-      where: { tipo: "PERDIDA", estado: "REENCONTRADA", resueltaEn: { gte: v12 }, moderacion: { not: "OCULTA" }, sector: { municipioId: municipioId() }, animal: { foto: { not: null } } },
+      where: { tipo: "PERDIDA", estado: "REENCONTRADA", resueltaEn: { gte: v12 }, moderacion: { not: "OCULTA" }, sector: { municipioId: (await municipioId()) }, animal: { foto: { not: null } } },
       select: { id: true, especie: true, animal: { select: { foto: true } } },
     }),
   ]);
@@ -460,7 +462,7 @@ export async function avistamientosVinculados(perdidaId: string) {
 
 export async function idsConCoincidencia(): Promise<Set<string>> {
   const c = await db.coincidencia.findMany({
-    where: { estado: { in: ["SUGERIDA", "VALIDADA"] }, perdida: visible, encontrada: visible },
+    where: { estado: { in: ["SUGERIDA", "VALIDADA"] }, perdida: { ...visible, sector: { municipioId: await municipioId() } }, encontrada: visible },
     select: { perdidaId: true, encontradaId: true },
   });
   return new Set(c.flatMap((x) => [x.perdidaId, x.encontradaId]));
@@ -469,7 +471,7 @@ export async function idsConCoincidencia(): Promise<Set<string>> {
 /** Pares de avisos que podrían ser el mismo animal, para que cualquier vecino ayude a reconocerlo. */
 export async function posiblesReencuentros(limite = 3) {
   const pares = await db.coincidencia.findMany({
-    where: { estado: { in: ["SUGERIDA", "VALIDADA"] }, perdida: { ...visible, sector: { municipioId: municipioId() } }, encontrada: visible },
+    where: { estado: { in: ["SUGERIDA", "VALIDADA"] }, perdida: { ...visible, sector: { municipioId: (await municipioId()) } }, encontrada: visible },
     include: { perdida: { select: camposPublicos }, encontrada: { select: camposPublicos } },
     orderBy: [{ puntaje: "desc" }, { creadaEn: "desc" }],
     take: limite,

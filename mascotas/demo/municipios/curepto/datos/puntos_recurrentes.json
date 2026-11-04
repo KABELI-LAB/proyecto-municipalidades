@@ -1,0 +1,42 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para curepto.",
+  "datos": [
+    {
+      "ref": "gualleco-alto",
+      "tipo": "abandono",
+      "sector": "gualleco",
+      "peso": 5,
+      "nota": "Camino rural: abandono recurrente (ficticio)"
+    },
+    {
+      "ref": "estadio-municipal-de-curepto",
+      "tipo": "jauria",
+      "sector": "curepto-urbano",
+      "peso": 4,
+      "nota": "Jauría en horario nocturno (ficticio)"
+    },
+    {
+      "ref": "deuca",
+      "tipo": "atropello",
+      "sector": "gualleco",
+      "peso": 3,
+      "nota": "Tramo de ruta con atropellos (ficticio)"
+    },
+    {
+      "ref": "plaza-de-armas-de-curepto",
+      "tipo": "animal comunitario sin atencion",
+      "sector": "curepto-urbano",
+      "peso": 3,
+      "nota": "Perros comunitarios sin control (ficticio)"
+    },
+    {
+      "ref": "huelon-alto",
+      "tipo": "abandono",
+      "sector": "costa",
+      "peso": 2,
+      "nota": "Abandono de camadas (ficticio)"
+    }
+  ]
+}

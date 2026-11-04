@@ -1,0 +1,385 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para curepto.",
+  "datos": [
+    {
+      "id": "curepto",
+      "nombre": "Curepto",
+      "sector_id": "curepto-urbano",
+      "lat": -35.09372,
+      "lng": -72.01808,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 214199010 (place=town), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710301 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "los-olivos",
+      "nombre": "Los Olivos",
+      "sector_id": "curepto-urbano",
+      "lat": -35.09755,
+      "lng": -72.00949,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 5923189325 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710301 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "las-vinas",
+      "nombre": "Las Viñas",
+      "sector_id": "curepto-urbano",
+      "lat": -35.1031,
+      "lng": -72.01103,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 10138217453 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710301 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "lien",
+      "nombre": "Lien",
+      "sector_id": "curepto-urbano",
+      "lat": -35.09862,
+      "lng": -71.96908,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 5923189326 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710301 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "pacilla-de-lien",
+      "nombre": "Pacilla de Lien",
+      "sector_id": "curepto-urbano",
+      "lat": -35.09517,
+      "lng": -71.95671,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 5923189327 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710301 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "huelon",
+      "nombre": "Huelón",
+      "sector_id": "curepto-urbano",
+      "lat": -35.08393,
+      "lng": -72.05246,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 214225351 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710301 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "calpun",
+      "nombre": "Calpún",
+      "sector_id": "calpun",
+      "lat": -35.02204,
+      "lng": -72.04046,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 6209650784 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710302 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "rincon-de-calpun",
+      "nombre": "Rincón de Calpún",
+      "sector_id": "calpun",
+      "lat": -35.03199,
+      "lng": -72.04123,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 6209650783 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710302 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "paraguay",
+      "nombre": "Paraguay",
+      "sector_id": "calpun",
+      "lat": -34.99207,
+      "lng": -72.00429,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 6209652186 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710302 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "el-rodeo",
+      "nombre": "El Rodeo",
+      "sector_id": "calpun",
+      "lat": -35.07258,
+      "lng": -72.02216,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 214207529 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710302 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "hornillos",
+      "nombre": "Hornillos",
+      "sector_id": "calpun",
+      "lat": -35.09095,
+      "lng": -71.97259,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 1243681017 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710302 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "monte-grande",
+      "nombre": "Monte Grande",
+      "sector_id": "calpun",
+      "lat": -35.06495,
+      "lng": -72.03867,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 5923189324 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710302 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "el-queni",
+      "nombre": "El Queñi",
+      "sector_id": "calpun",
+      "lat": -35.06366,
+      "lng": -71.95022,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 6209650782 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710302 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "la-orilla",
+      "nombre": "La Orilla",
+      "sector_id": "costa",
+      "lat": -35.0499,
+      "lng": -72.06798,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 5923189323 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710304 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "huelon-alto",
+      "nombre": "Huelón Alto",
+      "sector_id": "costa",
+      "lat": -35.09655,
+      "lng": -72.06247,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 5923189322 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710304 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "pununquen",
+      "nombre": "Pununquén",
+      "sector_id": "costa",
+      "lat": -35.0512,
+      "lng": -72.11982,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 214221663 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710304 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "depun",
+      "nombre": "Depún",
+      "sector_id": "costa",
+      "lat": -35.06493,
+      "lng": -72.14121,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 10136631842 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710304 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "las-lomas",
+      "nombre": "Las Lomas",
+      "sector_id": "costa",
+      "lat": -35.11509,
+      "lng": -72.17542,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 214180065 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710304 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "los-rabanos",
+      "nombre": "Los Rábanos",
+      "sector_id": "costa",
+      "lat": -35.11186,
+      "lng": -72.18645,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 214212397 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710304 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "la-trinchera",
+      "nombre": "La Trinchera",
+      "sector_id": "costa",
+      "lat": -35.11012,
+      "lng": -72.2011,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 6257020585 (tourism=camp_site \"Camping Municipal La Trinchera\"; no hay nodo place); distrito INE 710304"
+    },
+    {
+      "id": "coipue",
+      "nombre": "Coipué",
+      "sector_id": "costa",
+      "lat": -35.24679,
+      "lng": -72.08667,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 214183986 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710305 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "gualleco",
+      "nombre": "Gualleco",
+      "sector_id": "gualleco",
+      "lat": -35.24578,
+      "lng": -71.98172,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 5601134912 (place=village), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710306 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "gualleco-alto",
+      "nombre": "Gualleco Alto",
+      "sector_id": "gualleco",
+      "lat": -35.25559,
+      "lng": -71.97808,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 5640926744 (place=neighbourhood), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710306 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "tabunco",
+      "nombre": "Tabunco",
+      "sector_id": "gualleco",
+      "lat": -35.19486,
+      "lng": -71.9887,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 214218550 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710307 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "deuca",
+      "nombre": "Deuca",
+      "sector_id": "gualleco",
+      "lat": -35.12843,
+      "lng": -71.95509,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 1243681032 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710308 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "el-manzano",
+      "nombre": "El Manzano",
+      "sector_id": "gualleco",
+      "lat": -35.14437,
+      "lng": -71.96332,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 5923189331 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710308 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "llongocura",
+      "nombre": "Llongocura",
+      "sector_id": "gualleco",
+      "lat": -35.16737,
+      "lng": -71.98758,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 5923189320 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710308 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "quebrada-de-reyes",
+      "nombre": "Quebrada de Reyes",
+      "sector_id": "gualleco",
+      "lat": -35.1057,
+      "lng": -71.95088,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 5923189328 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710308 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "rapilermo",
+      "nombre": "Rapilermo",
+      "sector_id": "rapilermo",
+      "lat": -35.18039,
+      "lng": -71.84516,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 214191742 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710309 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "rapilermo-bajo",
+      "nombre": "Rapilermo Bajo",
+      "sector_id": "rapilermo",
+      "lat": -35.15412,
+      "lng": -71.87392,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 5923197654 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710309 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "estancilla",
+      "nombre": "Estancilla",
+      "sector_id": "rapilermo",
+      "lat": -35.1078,
+      "lng": -71.87891,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 6209652190 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710309 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "poblacion",
+      "nombre": "Población",
+      "sector_id": "rapilermo",
+      "lat": -35.11531,
+      "lng": -71.81645,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 6209652191 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710309 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "domulgo",
+      "nombre": "Domulgo",
+      "sector_id": "rapilermo",
+      "lat": -35.0491,
+      "lng": -71.90588,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 6209650777 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710311 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "el-membrillo",
+      "nombre": "El Membrillo",
+      "sector_id": "rapilermo",
+      "lat": -35.08462,
+      "lng": -71.94838,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 6209650781 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710311 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "las-garzas",
+      "nombre": "Las Garzas",
+      "sector_id": "rapilermo",
+      "lat": -35.08845,
+      "lng": -71.93811,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 6209650780 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710311 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "el-guindo",
+      "nombre": "El Guindo",
+      "sector_id": "rapilermo",
+      "lat": -35.07278,
+      "lng": -71.93233,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 6209650778 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710311 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "huaquen",
+      "nombre": "Huaquén",
+      "sector_id": "huaquen",
+      "lat": -35.11644,
+      "lng": -71.69478,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 1982203259 (place=village), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710310 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "limavida",
+      "nombre": "Limávida",
+      "sector_id": "huaquen",
+      "lat": -35.05309,
+      "lng": -71.78627,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 6209652193 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710310 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "colin-de-limavida",
+      "nombre": "Colín de Limávida",
+      "sector_id": "huaquen",
+      "lat": -35.0453,
+      "lng": -71.75158,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 6209652194 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710310 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "constantue",
+      "nombre": "Constantué",
+      "sector_id": "huaquen",
+      "lat": -35.00996,
+      "lng": -71.79558,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 6209652189 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710303 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "docamavida",
+      "nombre": "Docamávida",
+      "sector_id": "huaquen",
+      "lat": -35.01101,
+      "lng": -71.94882,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 214218218 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710303 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    },
+    {
+      "id": "paula",
+      "nombre": "Paula",
+      "sector_id": "huaquen",
+      "lat": -34.9892,
+      "lng": -71.84231,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OpenStreetMap node 6209652187 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710303 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+    }
+  ]
+}

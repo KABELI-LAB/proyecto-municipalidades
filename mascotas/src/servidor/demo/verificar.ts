@@ -5,7 +5,7 @@ import type { PrismaClient } from "@/generated/prisma/client";
 import { diaISO, medianocheEn } from "@/dominio/formato";
 import { SOLICITUD_PENDIENTE } from "@/dominio/solicitudes";
 import type { Municipio } from "@/lib/municipio";
-import { leerDemo } from "@/servidor/demo/cargar";
+import { carpetaDemo, leerDemo } from "@/servidor/demo/cargar";
 
 type Resumen = {
   situacion_actual: { solicitudes_pendientes: number; reportes_recientes_30_dias: number; atenciones_realizadas_12_meses: number; adopciones_12_meses: number };
@@ -20,13 +20,13 @@ const DIA = 86_400_000;
 
 export async function verificarDemo(db: PrismaClient, municipio: Municipio, hoy: string, carpeta?: string) {
   const zona = municipio.zonaHoraria;
-  const lote = await db.loteDemo.findFirst({ orderBy: { creadoEn: "desc" } });
+  const lote = await db.loteDemo.findFirst({ where: { municipioId: municipio.id }, orderBy: { creadoEn: "desc" } });
   if (!lote) throw new Error("No hay datos de demostración cargados.");
   const loteDemoId = lote.id;
   const inicio = (diasAtras: number) => new Date(medianocheEn(hoy, zona).getTime() - diasAtras * DIA);
   const finDeHoy = new Date(medianocheEn(hoy, zona).getTime() + DIA);
-  const resumen = leerDemo<Resumen>("resumen", carpeta);
-  const prioridad = leerDemo<Prioridad[]>("prioridad", carpeta);
+  const resumen = leerDemo<Resumen>("resumen", carpeta ?? carpetaDemo(municipio.id));
+  const prioridad = leerDemo<Prioridad[]>("prioridad", carpeta ?? carpetaDemo(municipio.id));
 
   const filas: Fila[] = [];
   const comparar = (cifra: string, esperado: number | string, obtenido: number | string) => filas.push({ cifra, esperado, obtenido });

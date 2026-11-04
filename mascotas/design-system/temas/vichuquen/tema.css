@@ -1,0 +1,98 @@
+/*
+  Tema «Vichuquén» para la demostración: cambia colores, tipografía y logos
+  cuando <html data-tema="vichuquen">. Fuente: sistema de diseño
+  «Vichuquén — Municipal Design System» (tokens.json), ver README.md.
+  Las escalas teal, dorado y neutros son las del sistema, sin colores nuevos.
+  Verde no cambia salvo el de éxito: el sistema no define una escala verde.
+*/
+html[data-tema="vichuquen"] {
+  /* Teal Vichuquén: institución y acción (teal-700 #00626B, 7,1:1 sobre blanco) */
+  --blue-50: #E6F2F3;
+  --blue-100: #C9E4E6;
+  --blue-200: #97CBD0;
+  --blue-300: #5FAAB1;
+  --blue-400: #2B8B94;
+  --blue-500: #007E84;
+  --blue-600: #007078;
+  --blue-700: #00626B;
+  --blue-800: #004E55;
+  --blue-900: #003B40;
+  --blue-950: #00282C;
+
+  /* Dorado: atención, plazos y eventos; nunca texto sobre blanco */
+  --yellow-50: #FCF5EC;
+  --yellow-100: #F7E6CF;
+  --yellow-200: #EFCFA3;
+  --yellow-300: #E2AE6D;
+  --yellow-400: #CA893E;
+  --yellow-500: #B07330;
+  --yellow-600: #935E25;
+  --yellow-700: #7A4C1C;
+  --yellow-800: #5C3915;
+  --yellow-900: #40280F;
+  --yellow-950: #40280F;
+
+  /* Neutros levemente teñidos de teal */
+  --neutral-50: #F3F7F7;
+  --neutral-100: #E7EEEE;
+  --neutral-200: #D3DCDD;
+  --neutral-300: #B4C1C2;
+  --neutral-400: #8C9A9B;
+  --neutral-500: #647172;
+  --neutral-600: #4A5758;
+  --neutral-700: #354243;
+  --neutral-800: #233031;
+  --neutral-900: #172324;
+  --neutral-950: #0B1415;
+
+  /* Semánticos del sistema: éxito y peligro */
+  --success-600: #1D7639;
+  --success-50: #E6F4EA;
+  --red-50: #FDECEA;
+  --red-100: color-mix(in srgb, #B42318 18%, #FFFFFF);
+  --red-500: color-mix(in srgb, #B42318 80%, #FFFFFF);
+  --red-600: #B42318;
+  --red-700: color-mix(in srgb, #B42318 80%, #0B1415);
+
+  /* Texto sobre dorado: on-accent #2B1A06 */
+  --color-text-on-accent: #2B1A06;
+
+  /* Lexend para todo e IBM Plex Mono para cifras, RUT, folios y horas (las sirve next/font). */
+  --font-sans: var(--fuente-lexend), Lexend, "Segoe UI", system-ui, sans-serif;
+  --font-display: var(--font-sans);
+  --font-mono: var(--fuente-plex-mono), "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+
+/* Sobretítulo («kicker») en sentence case y en el color principal, como pide el sistema. */
+html[data-tema="vichuquen"] .sobretitulo {
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--color-primary);
+}
+
+/* El Cauce es la forma propia de Hualañé: Vichuquén tiene la suya (Oleaje), que no se redibuja aquí. */
+html[data-tema="vichuquen"] [data-cauce] {
+  display: none;
+}
+/*
+  Pie como el del sitio munivichuquen.cl: gris carbón #353535 con el logo
+  vertical blanco y el nombre en naranjo #D58D28, en mayúsculas (medidos de
+  una captura del sitio, 3-11-2026; 4,6:1 sobre el gris). Estos dos colores
+  no están en el sistema de diseño: son los del sitio actual.
+*/
+html[data-tema="vichuquen"] [data-zona="pie"] {
+  padding-top: var(--space-8);
+  background: #353535;
+}
+html[data-tema="vichuquen"] [data-zona="pie"] p {
+  color: #FFFFFF;
+}
+html[data-tema="vichuquen"] [data-zona="pie"] b {
+  color: #D58D28;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+html[data-tema="vichuquen"] [data-zona="pie"] img {
+  height: 128px;
+}
+

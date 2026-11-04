@@ -22,7 +22,7 @@ export type Respuesta = { ok: boolean; mensaje: string; id?: string };
 
 /** Si al aprobar o publicar un contenido también sale en Instagram (configuración del panel). */
 export async function publicacionAutomatica() {
-  const m = await db.municipio.findUnique({ where: { id: municipioActivo().id }, select: { redesPublicarAuto: true } });
+  const m = await db.municipio.findUnique({ where: { id: (await municipioActivo()).id }, select: { redesPublicarAuto: true } });
   return m?.redesPublicarAuto ?? true;
 }
 
@@ -50,7 +50,7 @@ type Origen = { pieza: Omit<DatosPieza, "portal" | "demo">; texto: string; alter
  * difusión; si no, null. Es la misma condición al preparar y al publicar.
  */
 export async function cargarOrigen(tipo: TipoRed, id: string): Promise<Origen | null> {
-  const municipio = municipioActivo();
+  const municipio = (await municipioActivo());
   const url = urlPublica();
   if (tipo === "OPERATIVO") {
     const o = await db.operativo.findFirst({
@@ -88,7 +88,7 @@ export async function cargarOrigen(tipo: TipoRed, id: string): Promise<Origen | 
   if (tipo === "ADOPCION") {
     // Ficha pública (aprobada, disponible, con foto). Si la propuso un vecino, debe haber autorizado su publicación.
     const f = await db.fichaAdopcion.findFirst({
-      where: { id, AND: [FICHA_PUBLICA, { OR: [{ proponenteId: null }, { autorizaPublicar: true }] }] },
+      where: { id, municipioId: (await municipioActivo()).id, AND: [FICHA_PUBLICA, { OR: [{ proponenteId: null }, { autorizaPublicar: true }] }] },
       include: { animal: true, localidad: true, sector: true },
     });
     if (!f) return null;
@@ -187,7 +187,7 @@ export async function difundirEnInstagram(tipo: TipoRed, origenId: string, usuar
     if (automatico && !(await publicacionAutomatica())) return { estado: "manual", mensaje: "La publicación automática en Instagram está apagada." };
     const integracion = estadoIntegracion();
     if (!integracion.configurada) return { estado: "sin-integracion", mensaje: "Instagram no está configurado: se publicó solo en la web." };
-    const municipio = municipioActivo();
+    const municipio = (await municipioActivo());
     const anterior = await db.publicacionRed.findFirst({ where: { tipo, origenId, municipioId: municipio.id, estado: { not: "CANCELADO" } }, orderBy: { version: "desc" } });
     if (anterior?.estado === "PUBLICADO") return { estado: "ya-publicado", mensaje: "Ya estaba publicado en Instagram.", permalink: anterior.igPermalink };
     if (anterior?.estado === "PUBLICANDO") return { estado: "error", mensaje: "Se está publicando en Instagram en este momento." };
@@ -246,7 +246,7 @@ export type EstadoInstagram = { estado: string; permalink: string | null; error:
 export async function estadosInstagram(tipo: TipoRed, origenIds: string[]): Promise<Record<string, EstadoInstagram>> {
   if (!origenIds.length) return {};
   const filas = await db.publicacionRed.findMany({
-    where: { tipo, origenId: { in: origenIds }, municipioId: municipioActivo().id, estado: { not: "CANCELADO" } },
+    where: { tipo, origenId: { in: origenIds }, municipioId: (await municipioActivo()).id, estado: { not: "CANCELADO" } },
     orderBy: { version: "asc" },
     select: { origenId: true, estado: true, igPermalink: true, error: true },
   });
@@ -263,7 +263,7 @@ export function firmaImagen(id: string, imagen: string) {
  * No marca nada como publicado sin la confirmación de la API.
  */
 export async function publicarRed(id: string, usuarioId: string | null): Promise<Respuesta> {
-  const p = await db.publicacionRed.findFirst({ where: { id, municipioId: municipioActivo().id } });
+  const p = await db.publicacionRed.findFirst({ where: { id, municipioId: (await municipioActivo()).id } });
   if (!p || !puedeRed("publicar", p.estado)) return { ok: false, mensaje: "Solo se publica una publicación aprobada o con un error anterior." };
   const integracion = estadoIntegracion();
   if (!integracion.configurada) return { ok: false, mensaje: `La publicación en Instagram está deshabilitada. Falta configurar: ${integracion.faltantes.map((f) => f.split(":")[0]).join(", ")}.` };

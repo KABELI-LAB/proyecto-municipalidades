@@ -66,8 +66,8 @@ export type CifrasResumen = {
 export async function resumenConIA(datos: CifrasResumen): Promise<ResumenEquipo | null> {
   const r = await pedirJSON({
     sistema: [
-      `Eres analista del programa de tenencia responsable de mascotas de la ${municipioActivo().nombreOficial}, en Chile.`,
-      "Recibes cifras agrupadas de lo que vecinas y vecinos hacen en el portal: solicitudes de servicio pendientes (por servicio y sector), avisos de mascotas perdidas y avistadas, reportes SOS de los últimos 30 días (por tipo y sector), postulaciones a adopción y perros comunitarios.",
+      `Eres analista del programa de tenencia responsable de mascotas de la ${(await municipioActivo()).nombreOficial}, en Chile.`,
+      "Recibes cifras agrupadas de lo que vecinas y vecinos hacen en el portal: solicitudes de servicio pendientes (por servicio y sector), avisos de mascotas perdidas y avistadas, reportes SOS de los últimos 30 días (por tipo y sector), animales publicados en adopción con las propuestas que el municipio aún debe revisar, y perros comunitarios. Las postulaciones a adopción son entre vecinos y no las gestiona el municipio.",
       "Escribe un resumen para el equipo municipal en español de Chile, tuteando. Responde solo este JSON:",
       '{"titular": "una frase de 12 palabras o menos con lo más importante",',
       ' "destacados": [2 o 3 objetos {"titulo": "2 a 4 palabras", "cifra": la cifra principal tal como viene en los datos o null, "detalle": "una frase de 20 palabras o menos, con el sector si aplica", "tono": "atencion" si pide mirarse con prioridad (por ejemplo reportes SOS concentrados) o "normal"}],',

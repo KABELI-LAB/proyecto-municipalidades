@@ -3,7 +3,7 @@
 // al perro, o se hace cargo de uno sin cuidador, y queda como su cuidador; lo
 // gestiona desde Mis solicitudes, entrando con su correo. El municipio no
 // interviene: la ficha se publica de inmediato.
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from "@/servidor/revalidar";
 import { z } from "zod";
 import { PREFIJO_SUBIDA } from "@/componentes/portal/fotoComunitario";
 import { FORMATO_CODIGO } from "@/dominio/codigo";
@@ -24,8 +24,8 @@ const REVISE = "Revisa los datos marcados.";
 const ERROR = "No pudimos guardar el cambio. Intenta nuevamente en unos minutos.";
 const NO_CUIDADOR = "No apareces como cuidador de este perro. Entra a Mis solicitudes con el correo que dejaste al registrarlo.";
 
-function revalidar() {
-  revalidatePath("/", "layout");
+async function revalidar() {
+  await revalidatePath("/", "layout");
 }
 
 /** Lee «datos» (JSON) y la foto opcional «foto» de un FormData. */
@@ -49,7 +49,7 @@ const datosAnimal = (d: z.infer<typeof esquemaDatosComunitario>) => ({
   microchip: siNoNoSe(d.microchip),
 });
 
-const lugarDelMunicipio = (id: string) => db.lugar.findFirst({ where: { id, sector: { municipioId: municipioActivo().id } } });
+const lugarDelMunicipio = async (id: string) => db.lugar.findFirst({ where: { id, sector: { municipioId: (await municipioActivo()).id } } });
 
 // ───────────── Registrar ─────────────
 
@@ -70,10 +70,10 @@ export async function registrarComunitario(entrada: FormData): Promise<Respuesta
   const g = await guardarFoto(e.foto, "comunitarios");
   if (!g.ok) return { ok: false, mensaje: REVISE, errores: { foto: g.mensaje } };
   try {
-    const municipio = municipioActivo();
+    const municipio = (await municipioActivo());
     const { id, codigo } = await db.$transaction(async (tx) => {
       const persona = await obtenerPersona(tx, municipio.id, d, { sectorId: lugar.sectorId, localidadId: lugar.localidadId });
-      const animal = await tx.animal.create({ data: { ...datosAnimal(d), especie: "PERRO" } });
+      const animal = await tx.animal.create({ data: { ...datosAnimal(d), especie: "PERRO", municipioId: municipio.id } });
       const perro = await tx.perroComunitario.create({
         data: {
           animalId: animal.id,
@@ -99,7 +99,7 @@ export async function registrarComunitario(entrada: FormData): Promise<Respuesta
       );
       return { id: perro.id, codigo };
     });
-    revalidar();
+    await revalidar();
     return { ok: true, mensaje: `Publicamos a ${d.apodo}.`, codigo, id };
   } catch (err) {
     console.error(err);
@@ -116,7 +116,7 @@ export async function hacermeCargo(valores: unknown): Promise<Respuesta> {
   const r = esquemaCuidarComunitario.safeParse(valores);
   if (!r.success) return { ok: false, mensaje: REVISE, errores: validarCampos(esquemaCuidarComunitario, valores) };
   const d = r.data;
-  const municipio = municipioActivo();
+  const municipio = (await municipioActivo());
   const perro = await db.perroComunitario.findFirst({
     where: { id: d.perroId, oculto: false, sector: { municipioId: municipio.id } },
     include: { lugar: true, _count: { select: { cuidadoresAutorizados: { where: { activo: true } } } } },
@@ -140,7 +140,7 @@ export async function hacermeCargo(valores: unknown): Promise<Respuesta> {
       );
       return c.codigo;
     });
-    revalidar();
+    await revalidar();
     return { ok: true, mensaje: `Quedó a cargo de ${perro.apodo}.`, codigo, id: perro.id };
   } catch (err) {
     console.error(err);
@@ -196,7 +196,7 @@ export async function registrarVistoHoy(valores: unknown): Promise<Respuesta> {
     db.perroComunitario.update({ where: { id: c.perroId }, data: { ultimoControl: new Date(), necesitaAtencion: false } }),
     db.historialComunitario.create({ data: { perroId: c.perroId, accion: "Revisado por su cuidador", publico: true, detalle: c.codigo } }),
   ]);
-  revalidar();
+  await revalidar();
   return { ok: true, mensaje: `Anotamos que viste a ${c.perro.apodo} hoy.` };
 }
 
@@ -208,7 +208,7 @@ export async function fichaParaEditar(valores: unknown): Promise<({ ok: true } &
   if (!c) return { ok: false, mensaje: NO_CUIDADOR };
   const a = c.perro.animal;
   const lugares = await db.lugar.findMany({
-    where: { sector: { municipioId: municipioActivo().id } },
+    where: { sector: { municipioId: (await municipioActivo()).id } },
     select: { id: true, nombre: true, sector: { select: { nombre: true } } },
     orderBy: [{ sector: { orden: "asc" } }, { nombre: "asc" }],
   });
@@ -271,7 +271,7 @@ export async function actualizarFichaComunitario(entrada: FormData): Promise<Res
   // La foto reemplazada ya no se usa.
   const vieja = c.perro.fotos.split(",").find((x) => x.startsWith(PREFIJO_SUBIDA));
   if (nueva && vieja) await borrarFoto("comunitarios", vieja.slice(PREFIJO_SUBIDA.length));
-  revalidar();
+  await revalidar();
   return { ok: true, mensaje: "Guardamos los cambios de la ficha." };
 }
 
@@ -283,7 +283,7 @@ export async function darDeBajaComunitario(valores: unknown): Promise<Respuesta>
     db.perroComunitario.update({ where: { id: c.perroId }, data: { oculto: true } }),
     db.historialComunitario.create({ data: { perroId: c.perroId, accion: "Dado de baja por su cuidador", detalle: c.codigo } }),
   ]);
-  revalidar();
+  await revalidar();
   return { ok: true, mensaje: `${c.perro.apodo} ya no se muestra en el portal.` };
 }
 
@@ -300,6 +300,6 @@ export async function marcarNovedadVista(valores: unknown): Promise<Respuesta> {
     await tx.historialComunitario.create({ data: { perroId: c.perroId, accion: "Novedad vista por su cuidador", detalle: `${n.codigo} · ${TIPO_NOVEDAD[n.tipo]}` } });
     await notificar(tx, n.persona, "Tu novedad llegó", `Quien cuida a ${c.perro.apodo} vio tu novedad. Gracias por avisar.`, n.loteDemoId);
   });
-  revalidar();
+  await revalidar();
   return { ok: true, mensaje: "Marcamos la novedad como vista y avisamos a quien la envió." };
 }

@@ -12,13 +12,13 @@ vi.mock("next/cache", () => ({ revalidatePath: () => {} }));
 const vecino = vi.hoisted(() => ({ correo: null as string | null }));
 vi.mock("@/servidor/portal/sesionVecino", async (original) => {
   const m = await original<typeof import("@/servidor/portal/sesionVecino")>();
-  const { municipioActivo } = await import("@/lib/municipio");
+  const { municipioPredeterminado } = await import("@/lib/municipio");
   return {
     ...m,
     abrirSesionVecino: async (c: string) => { vecino.correo = m.normalizarCorreo(c); },
     cerrarSesionVecino: async () => { vecino.correo = null; },
     correoDeSesion: async () => vecino.correo,
-    filtroVecino: async () => (vecino.correo ? { municipioId: municipioActivo().id, correo: vecino.correo } : null),
+    filtroVecino: async () => (vecino.correo ? { municipioId: municipioPredeterminado().id, correo: vecino.correo } : null),
   };
 });
 const PERSONA = { nombre: "Persona de prueba", rut: "17.654.321-3", telefono: "912345678", correo: "persona.prueba@correo.cl" };
@@ -28,7 +28,14 @@ let db: typeof import("@/servidor/db").db;
 let acciones: typeof import("./acciones");
 let consultas: typeof import("./consultas");
 
-const localidad = (clave: string) => db.localidad.findUniqueOrThrow({ where: { clave }, include: { sector: true } });
+const localidad = (clave: string) => db.localidad.findFirstOrThrow({ where: { clave }, include: { sector: true } });
+
+// Los operativos de la demo se fechan desde el corte: «hoy» es el día del corte,
+// para que las pruebas no dependan de la fecha real.
+beforeAll(() => {
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new Date(`${CORTE}T12:00:00-03:00`));
+});
 
 beforeAll(async () => {
   base = await crearBaseTemporal();
@@ -36,13 +43,14 @@ beforeAll(async () => {
   process.env.MUNICIPIO ??= "hualane";
   ({ db } = await import("@/servidor/db"));
   const { cargarDemo } = await import("@/servidor/demo/cargar");
-  const { municipioActivo } = await import("@/lib/municipio");
-  await cargarDemo(db, { municipio: municipioActivo(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
+  const { municipioPredeterminado } = await import("@/lib/municipio");
+  await cargarDemo(db, { municipio: municipioPredeterminado(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
   acciones = await import("./acciones");
   consultas = await import("./consultas");
 }, 120_000);
 
 afterAll(async () => {
+  vi.useRealTimers();
   await db?.$disconnect();
   base?.borrar();
 });

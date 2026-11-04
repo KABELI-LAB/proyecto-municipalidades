@@ -4,9 +4,9 @@ import { municipioActivo } from "@/lib/municipio";
 import { FICHA_CON_FOTO, PUBLICACION_CON_FOTO } from "@/servidor/conFoto";
 import { db } from "@/servidor/db";
 
-const enMunicipio = () => ({ sector: { municipioId: municipioActivo().id } });
+const enMunicipio = async () => ({ sector: { municipioId: (await municipioActivo()).id } });
 /** Avisos del municipio con foto: lo que muestran y cuentan las bandejas. */
-const avisoVisible = () => ({ ...enMunicipio(), ...PUBLICACION_CON_FOTO });
+const avisoVisible = async () => ({ ...(await enMunicipio()), ...PUBLICACION_CON_FOTO });
 
 // ───────────── Reportes ─────────────
 // Contenido, sector y lugar. La identidad de quien reporta no se lee aquí (sección 14).
@@ -15,7 +15,7 @@ export type GrupoReportes = "ABIERTO" | "EN_REVISION" | "CERRADO";
 
 export async function reportesBandeja(estado: GrupoReportes, sectorId?: string) {
   const reportes = await db.reporteCiudadano.findMany({
-    where: { estado, ...enMunicipio(), ...(sectorId ? { sectorId } : {}) },
+    where: { estado, ...(await enMunicipio()), ...(sectorId ? { sectorId } : {}) },
     select: {
       id: true,
       codigo: true,
@@ -43,7 +43,7 @@ export async function reportesBandeja(estado: GrupoReportes, sectorId?: string) 
 }
 
 export async function contarReportes() {
-  const g = await db.reporteCiudadano.groupBy({ by: ["estado"], where: enMunicipio(), _count: { _all: true } });
+  const g = await db.reporteCiudadano.groupBy({ by: ["estado"], where: (await enMunicipio()), _count: { _all: true } });
   const n = (e: GrupoReportes) => g.find((x) => x.estado === e)?._count._all ?? 0;
   return { ABIERTO: n("ABIERTO"), EN_REVISION: n("EN_REVISION"), CERRADO: n("CERRADO") };
 }
@@ -54,7 +54,6 @@ export type GrupoPublicaciones = "pendientes" | "vigentes" | "ocultas";
 
 const camposPublicacion = {
   id: true,
-  codigo: true,
   tipo: true,
   especie: true,
   sexo: true,
@@ -77,24 +76,23 @@ const camposPublicacion = {
   localidad: { select: { nombre: true } },
   fotoUrl: true,
   animal: { select: { foto: true } },
-  _count: { select: { conversaciones: true } },
 } as const;
 
-export function publicacionesBandeja(grupo: GrupoPublicaciones) {
+export async function publicacionesBandeja(grupo: GrupoPublicaciones) {
   const where =
     grupo === "pendientes"
       ? { estado: "ABIERTA" as const, moderacion: "PENDIENTE" as const }
       : grupo === "vigentes"
         ? { estado: "ABIERTA" as const, moderacion: "APROBADA" as const }
         : { moderacion: "OCULTA" as const };
-  return db.publicacionMascota.findMany({ where: { ...where, ...avisoVisible() }, select: camposPublicacion, orderBy: { creadaEn: "asc" } });
+  return db.publicacionMascota.findMany({ where: { ...where, ...(await avisoVisible()) }, select: camposPublicacion, orderBy: { creadaEn: "asc" } });
 }
 
 export async function contarPublicaciones() {
   const [pendientes, vigentes, ocultas] = await Promise.all([
-    db.publicacionMascota.count({ where: { estado: "ABIERTA", moderacion: "PENDIENTE", ...avisoVisible() } }),
-    db.publicacionMascota.count({ where: { estado: "ABIERTA", moderacion: "APROBADA", ...avisoVisible() } }),
-    db.publicacionMascota.count({ where: { moderacion: "OCULTA", ...avisoVisible() } }),
+    db.publicacionMascota.count({ where: { estado: "ABIERTA", moderacion: "PENDIENTE", ...(await avisoVisible()) } }),
+    db.publicacionMascota.count({ where: { estado: "ABIERTA", moderacion: "APROBADA", ...(await avisoVisible()) } }),
+    db.publicacionMascota.count({ where: { moderacion: "OCULTA", ...(await avisoVisible()) } }),
   ]);
   return { pendientes, vigentes, ocultas };
 }
@@ -103,11 +101,11 @@ export async function contarPublicaciones() {
 
 export type GrupoCoincidencias = "SUGERIDA" | "VALIDADA" | "cerradas";
 
-export function coincidenciasBandeja(grupo: GrupoCoincidencias) {
-  const abiertas = { perdida: { estado: "ABIERTA" as const, ...avisoVisible() }, encontrada: { estado: "ABIERTA" as const, ...PUBLICACION_CON_FOTO } };
+export async function coincidenciasBandeja(grupo: GrupoCoincidencias) {
+  const abiertas = { perdida: { estado: "ABIERTA" as const, ...(await avisoVisible()) }, encontrada: { estado: "ABIERTA" as const, ...PUBLICACION_CON_FOTO } };
   const where =
     grupo === "cerradas"
-      ? { OR: [{ estado: "DESCARTADA" as const }, { perdida: { estado: "REENCONTRADA" as const } }], perdida: avisoVisible(), encontrada: PUBLICACION_CON_FOTO }
+      ? { OR: [{ estado: "DESCARTADA" as const }, { perdida: { estado: "REENCONTRADA" as const } }], perdida: await avisoVisible(), encontrada: PUBLICACION_CON_FOTO }
       : { estado: grupo, ...abiertas };
   return db.coincidencia.findMany({
     where,
@@ -117,7 +115,7 @@ export function coincidenciasBandeja(grupo: GrupoCoincidencias) {
 }
 
 export async function contarCoincidencias() {
-  const abiertas = { perdida: { estado: "ABIERTA" as const, ...avisoVisible() }, encontrada: { estado: "ABIERTA" as const, ...PUBLICACION_CON_FOTO } };
+  const abiertas = { perdida: { estado: "ABIERTA" as const, ...(await avisoVisible()) }, encontrada: { estado: "ABIERTA" as const, ...PUBLICACION_CON_FOTO } };
   const [SUGERIDA, VALIDADA] = await Promise.all([
     db.coincidencia.count({ where: { estado: "SUGERIDA", ...abiertas } }),
     db.coincidencia.count({ where: { estado: "VALIDADA", ...abiertas } }),
@@ -138,15 +136,15 @@ const REVISIONES: Record<GrupoPropuestas, ("PENDIENTE" | "CORRECCIONES" | "APROB
 };
 
 /** Propuestas de vecinos del municipio; «publicadas» incluye también las fichas del municipio, para poder ocultarlas. */
-const deVecinosOPublicadas = (grupo: GrupoPropuestas) =>
+const deVecinosOPublicadas = async (grupo: GrupoPropuestas) =>
   grupo === "publicadas"
-    ? { OR: [{ proponente: { municipioId: municipioActivo().id } }, { proponenteId: null }], estado: { not: "ADOPTADO" as const } }
-    : { proponente: { municipioId: municipioActivo().id } };
+    ? { municipioId: (await municipioActivo()).id, estado: { not: "ADOPTADO" as const } }
+    : { municipioId: (await municipioActivo()).id, proponenteId: { not: null } };
 
-export function propuestasBandeja(grupo: GrupoPropuestas) {
+export async function propuestasBandeja(grupo: GrupoPropuestas) {
   return db.fichaAdopcion.findMany({
     // Ambas condiciones usan OR: se combinan con AND para que una no reemplace a la otra.
-    where: { revision: { in: REVISIONES[grupo] }, AND: [deVecinosOPublicadas(grupo), FICHA_CON_FOTO] },
+    where: { revision: { in: REVISIONES[grupo] }, AND: [(await deVecinosOPublicadas(grupo)), FICHA_CON_FOTO] },
     select: {
       id: true,
       codigo: true,
@@ -178,7 +176,7 @@ export function propuestasBandeja(grupo: GrupoPropuestas) {
 }
 
 export async function contarPropuestas() {
-  const contar = (g: GrupoPropuestas) => db.fichaAdopcion.count({ where: { revision: { in: REVISIONES[g] }, AND: [deVecinosOPublicadas(g), FICHA_CON_FOTO] } });
+  const contar = async (g: GrupoPropuestas) => db.fichaAdopcion.count({ where: { revision: { in: REVISIONES[g] }, AND: [(await deVecinosOPublicadas(g)), FICHA_CON_FOTO] } });
   const [pendientes, correcciones, publicadas, cerradas] = await Promise.all([contar("pendientes"), contar("correcciones"), contar("publicadas"), contar("cerradas")]);
   return { pendientes, correcciones, publicadas, cerradas };
 }

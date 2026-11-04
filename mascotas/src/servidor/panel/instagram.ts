@@ -16,7 +16,7 @@ export type PendienteInstagram = { tipo: TipoRed; id: string; titulo: string; de
 const LIMITE = 12;
 
 export async function configuracionInstagram() {
-  const municipio = municipioActivo();
+  const municipio = (await municipioActivo());
   const m = await db.municipio.findUnique({ where: { id: municipio.id }, select: { redesPublicarAuto: true, redesResponderAuto: true } });
   return {
     automatica: m?.redesPublicarAuto ?? true,
@@ -33,7 +33,7 @@ export async function configuracionInstagram() {
  */
 export async function pendientesInstagram(tipos: TipoRed[]): Promise<PendienteInstagram[]> {
   if (!tipos.length) return [];
-  const municipio = municipioActivo();
+  const municipio = (await municipioActivo());
   // En esta demostración, el contenido de demostración también se publica (con su marca).
   const demo = {};
   const hoy = new Date(new Date().toDateString());
@@ -45,7 +45,7 @@ export async function pendientesInstagram(tipos: TipoRed[]): Promise<PendienteIn
       orderBy: { creadaEn: "desc" },
       take: LIMITE,
     }),
-    !quiere("ADOPCION") ? [] : db.fichaAdopcion.findMany({ where: { ...FICHA_PUBLICA, ...demo }, include: { animal: true }, orderBy: { creadaEn: "desc" }, take: LIMITE }),
+    !quiere("ADOPCION") ? [] : db.fichaAdopcion.findMany({ where: { ...FICHA_PUBLICA, municipioId: municipio.id, ...demo }, include: { animal: true }, orderBy: { creadaEn: "desc" }, take: LIMITE }),
     !quiere("OPERATIVO") ? [] : db.operativo.findMany({ where: { estado: "PUBLICADO", fecha: { gte: hoy }, sector: { municipioId: municipio.id }, ...demo }, include: { sector: true }, orderBy: { fecha: "asc" }, take: LIMITE }),
   ]);
   const candidatos: PendienteInstagram[] = [

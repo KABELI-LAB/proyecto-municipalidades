@@ -1,0 +1,163 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para curepto.",
+  "datos": [
+    {
+      "adopcion_id": "cur-adp-01",
+      "persona_id": "cur-per-031",
+      "codigo": "TR-2101",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "cur-adp-02",
+      "persona_id": "cur-per-042",
+      "codigo": "TR-2102",
+      "relacion": "RESCATADO"
+    },
+    {
+      "adopcion_id": "cur-adp-03",
+      "persona_id": "cur-per-053",
+      "codigo": "TR-2103",
+      "relacion": "HOGAR_TEMPORAL"
+    },
+    {
+      "adopcion_id": "cur-adp-04",
+      "persona_id": "cur-per-064",
+      "codigo": "TR-2104",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "cur-adp-05",
+      "persona_id": "cur-per-075",
+      "codigo": "TR-2105",
+      "relacion": "COMUNITARIO"
+    },
+    {
+      "adopcion_id": "cur-adp-06",
+      "persona_id": "cur-per-086",
+      "codigo": "TR-2106",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "cur-adp-07",
+      "persona_id": "cur-per-097",
+      "codigo": "TR-2107",
+      "relacion": "RESCATADO"
+    },
+    {
+      "adopcion_id": "cur-adp-08",
+      "persona_id": "cur-per-108",
+      "codigo": "TR-2108",
+      "relacion": "HOGAR_TEMPORAL"
+    },
+    {
+      "adopcion_id": "cur-adp-09",
+      "persona_id": "cur-per-119",
+      "codigo": "TR-2109",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "cur-adp-10",
+      "persona_id": "cur-per-130",
+      "codigo": "TR-2110",
+      "relacion": "COMUNITARIO"
+    },
+    {
+      "adopcion_id": "cur-adp-11",
+      "persona_id": "cur-per-141",
+      "codigo": "TR-2111",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "cur-adp-12",
+      "persona_id": "cur-per-152",
+      "codigo": "TR-2112",
+      "relacion": "RESCATADO"
+    },
+    {
+      "adopcion_id": "cur-adp-13",
+      "persona_id": "cur-per-163",
+      "codigo": "TR-2113",
+      "relacion": "HOGAR_TEMPORAL"
+    },
+    {
+      "adopcion_id": "cur-adp-14",
+      "persona_id": "cur-per-040",
+      "codigo": "TR-2114",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "cur-adr-01",
+      "persona_id": "cur-per-051",
+      "codigo": "TR-2115",
+      "relacion": "COMUNITARIO"
+    },
+    {
+      "adopcion_id": "cur-adr-02",
+      "persona_id": "cur-per-062",
+      "codigo": "TR-2116",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "cur-adr-03",
+      "persona_id": "cur-per-073",
+      "codigo": "TR-2117",
+      "relacion": "RESCATADO"
+    },
+    {
+      "adopcion_id": "cur-adr-04",
+      "persona_id": "cur-per-084",
+      "codigo": "TR-2118",
+      "relacion": "HOGAR_TEMPORAL"
+    },
+    {
+      "adopcion_id": "cur-adr-05",
+      "persona_id": "cur-per-095",
+      "codigo": "TR-2119",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "cur-adr-06",
+      "persona_id": "cur-per-106",
+      "codigo": "TR-2120",
+      "relacion": "COMUNITARIO"
+    },
+    {
+      "adopcion_id": "cur-adr-07",
+      "persona_id": "cur-per-117",
+      "codigo": "TR-2121",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "cur-adr-08",
+      "persona_id": "cur-per-128",
+      "codigo": "TR-2122",
+      "relacion": "RESCATADO"
+    },
+    {
+      "adopcion_id": "cur-adr-09",
+      "persona_id": "cur-per-139",
+      "codigo": "TR-2123",
+      "relacion": "HOGAR_TEMPORAL"
+    },
+    {
+      "adopcion_id": "cur-adr-10",
+      "persona_id": "cur-per-150",
+      "codigo": "TR-2124",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "cur-adr-11",
+      "persona_id": "cur-per-161",
+      "codigo": "TR-2125",
+      "relacion": "COMUNITARIO"
+    },
+    {
+      "adopcion_id": "cur-adr-12",
+      "persona_id": "cur-per-038",
+      "codigo": "TR-2126",
+      "relacion": "PROPIO"
+    }
+  ]
+}

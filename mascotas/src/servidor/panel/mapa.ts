@@ -35,7 +35,7 @@ export type DatosMapa = {
 };
 
 export async function datosMapa(hoy = hoyISO()): Promise<DatosMapa> {
-  const m = municipioActivo();
+  const m = (await municipioActivo());
   const meses = ultimos12Meses(hoy);
   const v = ventana(diasEntre(`${meses[0]}-01`, hoy) + 1, hoy);
   const rango = { gte: v.desde, lt: v.hasta };

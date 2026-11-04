@@ -16,6 +16,8 @@ type Props = {
 export function Logo({ municipio, variante }: Props) {
   const { identidad, nombre, nombreOficial } = municipio;
   if (variante === "institucional") {
+    // Un logotipo que ya trae el nombre se usa tal cual; si no, escudo + nombre.
+    if (identidad.logoInstitucional) return <img className={estilos.ciudadano} src={identidad.logoInstitucional} alt={nombreOficial} />;
     const antes = nombreOficial.replace(nombre, "").trim();
     return (
       <span className={estilos.institucional}>

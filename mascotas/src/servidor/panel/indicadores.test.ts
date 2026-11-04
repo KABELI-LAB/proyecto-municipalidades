@@ -26,8 +26,8 @@ beforeAll(async () => {
   process.env.MUNICIPIO ??= "hualane";
   const { db } = await import("@/servidor/db");
   const { cargarDemo } = await import("@/servidor/demo/cargar");
-  const { municipioActivo } = await import("@/lib/municipio");
-  await cargarDemo(db, { municipio: municipioActivo(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
+  const { municipioPredeterminado } = await import("@/lib/municipio");
+  await cargarDemo(db, { municipio: municipioPredeterminado(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
   ind = await import("./indicadores");
   intel = await import("@/servidor/inteligencia");
 }, 120_000);
@@ -60,21 +60,6 @@ describe("resumen del panel con la fecha de corte", () => {
 });
 
 describe("inteligencia con la fecha de corte", () => {
-  it("retrato de la comuna", async () => {
-    const r = await intel.retratoComuna(CORTE);
-    const e = resumen.retrato_comuna;
-    expect(r).toEqual({
-      animales: e.animales_en_plataforma,
-      perros: e.perros,
-      gatos: e.gatos,
-      esterilizados: e.esterilizados,
-      conMicrochip: e.con_microchip,
-      reencuentros: e.reencuentros_12_meses,
-      // Los perros comunitarios se cuentan como se muestran: con foto (com-01, com-02, com-04, com-05).
-      comunitarios: 4,
-    });
-  });
-
   it("impacto del programa en 12 meses: operativos, atenciones por servicio, adopciones y reencuentros", async () => {
     const i = await intel.impactoDelPrograma(CORTE);
     const r = resumen.situacion_actual;

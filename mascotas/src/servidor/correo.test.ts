@@ -9,13 +9,13 @@ vi.mock("next/cache", () => ({ revalidatePath: () => {} }));
 const vecino = vi.hoisted(() => ({ correo: null as string | null }));
 vi.mock("@/servidor/portal/sesionVecino", async (original) => {
   const m = await original<typeof import("@/servidor/portal/sesionVecino")>();
-  const { municipioActivo } = await import("@/lib/municipio");
+  const { municipioPredeterminado } = await import("@/lib/municipio");
   return {
     ...m,
     abrirSesionVecino: async (c: string) => { vecino.correo = m.normalizarCorreo(c); },
     cerrarSesionVecino: async () => { vecino.correo = null; },
     correoDeSesion: async () => vecino.correo,
-    filtroVecino: async () => (vecino.correo ? { municipioId: municipioActivo().id, correo: vecino.correo } : null),
+    filtroVecino: async () => (vecino.correo ? { municipioId: municipioPredeterminado().id, correo: vecino.correo } : null),
   };
 });
 
@@ -36,12 +36,12 @@ beforeAll(async () => {
   for (const k of ENTORNO) delete process.env[k];
   ({ db } = await import("@/servidor/db"));
   const { cargarDemo } = await import("@/servidor/demo/cargar");
-  const { municipioActivo } = await import("@/lib/municipio");
-  await cargarDemo(db, { municipio: municipioActivo(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
+  const { municipioPredeterminado } = await import("@/lib/municipio");
+  await cargarDemo(db, { municipio: municipioPredeterminado(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
   acciones = await import("@/servidor/portal/acciones");
   correo = await import("./correo");
   // Una vecina real (no de demostración) con un trámite y su correo.
-  const huerta = await db.localidad.findUniqueOrThrow({ where: { clave: "la-huerta" } });
+  const huerta = await db.localidad.findFirstOrThrow({ where: { clave: "la-huerta" } });
   const servicio = await db.servicio.findFirstOrThrow();
   const r = await acciones.solicitarServicio({ servicioId: servicio.id, especie: "GATO", nombreAnimal: "", sexo: "HEMBRA", tamano: "", edad: "36", localidadId: huerta.id, ...VECINA });
   if (!r.ok) throw new Error(JSON.stringify(r));

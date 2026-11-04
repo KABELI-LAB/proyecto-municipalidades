@@ -23,13 +23,13 @@ vi.mock("@/servidor/auth", async () => {
 const vecino = vi.hoisted(() => ({ correo: null as string | null }));
 vi.mock("@/servidor/portal/sesionVecino", async (original) => {
   const m = await original<typeof import("@/servidor/portal/sesionVecino")>();
-  const { municipioActivo } = await import("@/lib/municipio");
+  const { municipioPredeterminado } = await import("@/lib/municipio");
   return {
     ...m,
     abrirSesionVecino: async (c: string) => { vecino.correo = m.normalizarCorreo(c); },
     cerrarSesionVecino: async () => { vecino.correo = null; },
     correoDeSesion: async () => vecino.correo,
-    filtroVecino: async () => (vecino.correo ? { municipioId: municipioActivo().id, correo: vecino.correo } : null),
+    filtroVecino: async () => (vecino.correo ? { municipioId: municipioPredeterminado().id, correo: vecino.correo } : null),
   };
 });
 
@@ -51,12 +51,12 @@ beforeAll(async () => {
   process.env.MUNICIPIO ??= "hualane";
   ({ db } = await import("@/servidor/db"));
   const { cargarDemo } = await import("@/servidor/demo/cargar");
-  const { municipioActivo } = await import("@/lib/municipio");
-  await cargarDemo(db, { municipio: municipioActivo(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
+  const { municipioPredeterminado } = await import("@/lib/municipio");
+  await cargarDemo(db, { municipio: municipioPredeterminado(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
   portal = await import("./acciones");
   panel = await import("@/servidor/panel/acciones-bandejas");
   consultas = await import("./consultas");
-  const u = await db.usuarioMunicipal.findFirstOrThrow({ where: { rol: "COORDINADOR" } });
+  const u = await db.usuarioMunicipal.findFirstOrThrow();
   coordinacion = { id: u.id, nombre: u.nombre, rol: "COORDINADOR", municipioId: "hualane", loteDemoId: null };
 }, 120_000);
 
@@ -69,7 +69,7 @@ afterAll(async () => {
 const foto = (r: number, g: number, b: number) => sharp({ create: { width: 1200, height: 900, channels: 3, background: { r, g, b } } }).png().toBuffer();
 
 async function campos(extra: Record<string, string> = {}) {
-  const huerta = await db.localidad.findUniqueOrThrow({ where: { clave: "la-huerta" } });
+  const huerta = await db.localidad.findFirstOrThrow({ where: { clave: "la-huerta" } });
   return {
     corregir: "",
     nombreAnimal: "Canela",
@@ -104,7 +104,7 @@ async function proponer(datos: Record<string, string>, fotos: Buffer[]) {
 
 const enCatalogo = async (id: string) => (await consultas.fichasAdopcion()).some((f) => f.id === id);
 async function pedirFoto(id: string) {
-  const { GET } = await import("@/app/(portal)/adoptar/[id]/foto/[n]/route");
+  const { GET } = await import("@/app/[municipio]/(portal)/adoptar/[id]/foto/[n]/route");
   return (await GET(new Request("http://localhost/"), { params: Promise.resolve({ id, n: "0" }) })).status;
 }
 
@@ -194,7 +194,7 @@ describe("Dar en adopción", () => {
     sesion = null;
     expect(await pedirFoto(f.id)).toBe(200);
 
-    const huerta = await db.localidad.findUniqueOrThrow({ where: { clave: "la-huerta" } });
+    const huerta = await db.localidad.findFirstOrThrow({ where: { clave: "la-huerta" } });
     const antes = await db.notificacion.count();
     const postulacion = { fichaId: f.id, ...OTRA, localidadId: huerta.id, tipoVivienda: "casa con patio", experiencia: "SI", tieneOtros: "NO", otrosAnimales: "" };
     // Animal de un vecino: hay que aceptar que se compartan los contactos si le eligen.
@@ -252,7 +252,7 @@ describe("las postulaciones a un animal de un vecino las decide esa persona, no 
     sesion = coordinacion;
     expect((await panel.aprobarPropuesta(f.id)).ok).toBe(true);
     sesion = null;
-    const huerta = await db.localidad.findUniqueOrThrow({ where: { clave: "la-huerta" } });
+    const huerta = await db.localidad.findFirstOrThrow({ where: { clave: "la-huerta" } });
     for (const quien of [OTRA, TERCERA]) {
       const r = await portal.postularAdopcion({ fichaId: f.id, ...quien, localidadId: huerta.id, tipoVivienda: "casa con patio", experiencia: "SI", tieneOtros: "NO", otrosAnimales: "", compartir: "SI" });
       expect(r.ok).toBe(true);

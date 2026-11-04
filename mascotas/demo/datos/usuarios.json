@@ -4,36 +4,12 @@
   "datos": [
     {
       "id": "usr-01",
-      "nombre": "Coordinación demo",
-      "rol": "coordinador",
-      "correo": "coordinacion@demo.invalid"
-    },
-    {
-      "id": "usr-02",
-      "nombre": "Terreno demo",
-      "rol": "terreno",
-      "correo": "terreno@demo.invalid",
+      "nombre": "Cuenta de demostración",
+      "rol": "administrador",
+      "correo": "admin@hualane.cl",
       "operativos_asignados": [
         "ope-05"
       ]
-    },
-    {
-      "id": "usr-03",
-      "nombre": "Comunicaciones demo",
-      "rol": "comunicaciones",
-      "correo": "comunicaciones@demo.invalid"
-    },
-    {
-      "id": "usr-04",
-      "nombre": "Dirección demo",
-      "rol": "directivo",
-      "correo": "direccion@demo.invalid"
-    },
-    {
-      "id": "usr-05",
-      "nombre": "Administración demo",
-      "rol": "administrador",
-      "correo": "admin@demo.invalid"
     }
   ]
 }

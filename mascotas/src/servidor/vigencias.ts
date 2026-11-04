@@ -7,8 +7,9 @@ import { fechaCorta } from "@/dominio/formato";
 import { notificar } from "@/servidor/notificaciones";
 
 export async function revisarVigencias(db: PrismaClient, zona: string, ahora = new Date()) {
+  const { municipioActivo } = await import("@/lib/municipio");
   const abiertas = await db.publicacionMascota.findMany({
-    where: { estado: "ABIERTA" },
+    where: { estado: "ABIERTA", sector: { municipioId: (await municipioActivo()).id } },
     include: { persona: { select: { telefono: true, correo: true } } },
   });
   let pedidas = 0;

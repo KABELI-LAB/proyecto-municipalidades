@@ -1,8 +1,10 @@
 // Formato ligado a la zona horaria del municipio activo.
 import * as f from "@/dominio/formato";
-import { municipioActivo } from "@/lib/municipio";
+import { municipioPredeterminado } from "@/lib/municipio";
 
-const zona = () => municipioActivo().zonaHoraria;
+// Todos los municipios configurados comparten zona horaria (Chile continental):
+// se usa la del predeterminado, que se puede leer sin la solicitud en curso.
+const zona = () => municipioPredeterminado().zonaHoraria;
 
 export const fechaLarga = (d: Date) => f.fechaLarga(d, zona());
 export const fechaCorta = (d: Date) => f.fechaCorta(d, zona());

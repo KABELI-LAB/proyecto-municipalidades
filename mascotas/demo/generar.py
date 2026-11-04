@@ -356,12 +356,9 @@ resumen={"fecha_corte":d(HOY),
  "pesos_prioridad":PES,
  "sector_prioritario":prioridad[0]["sector_id"]}
 
+# Una sola cuenta de demostración, con todos los permisos; el ingreso del panel la trae escrita.
 usuarios=[
- {"id":"usr-01","nombre":"Coordinación demo","rol":"coordinador","correo":"coordinacion@demo.invalid"},
- {"id":"usr-02","nombre":"Terreno demo","rol":"terreno","correo":"terreno@demo.invalid","operativos_asignados":["ope-05"]},
- {"id":"usr-03","nombre":"Comunicaciones demo","rol":"comunicaciones","correo":"comunicaciones@demo.invalid"},
- {"id":"usr-04","nombre":"Dirección demo","rol":"directivo","correo":"direccion@demo.invalid"},
- {"id":"usr-05","nombre":"Administración demo","rol":"administrador","correo":"admin@demo.invalid"}]
+ {"id":"usr-01","nombre":"Cuenta de demostración","rol":"administrador","correo":"admin@hualane.cl","operativos_asignados":["ope-05"]}]
 # Categorías de SOS Mascotas; los tipos anteriores quedan inactivos: clasifican los reportes de la demo.
 TIPOS_REPORTE=[{"id":"animal herido","nombre":"Animal herido o enfermo","publico":False},
  {"id":"maltrato o abandono","nombre":"Posible maltrato o abandono","publico":False},

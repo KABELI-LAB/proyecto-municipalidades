@@ -2,13 +2,14 @@
 // Acciones de las bandejas de revisión. Cada una comprueba el permiso y que el
 // registro siga en un estado que permite el cambio (otra persona pudo
 // adelantarse). Los registros nuevos heredan el lote de demostración del padre.
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from "@/servidor/revalidar";
 import type { Prisma } from "@/generated/prisma/client";
 import { TRANSICION_COINCIDENCIA, TRANSICION_REPORTE } from "@/dominio/bandejas";
 import { TRANSICION_REVISION } from "@/dominio/propuestas";
 import type { Permiso } from "@/dominio/permisos";
 import { municipioActivo } from "@/lib/municipio";
 import { autorizar, type UsuarioSesion } from "@/servidor/auth";
+import { especieYColor, tipoAviso } from "@/dominio/etiquetas";
 import { db } from "@/servidor/db";
 import { notificar } from "@/servidor/notificaciones";
 import { difundirEnInstagram, notaInstagram } from "@/servidor/redes/servicio";
@@ -18,7 +19,7 @@ type Respuesta = { ok: boolean; mensaje: string };
 const SIN_PERMISO: Respuesta = { ok: false, mensaje: "Tu cuenta no tiene permiso para esta acción." };
 const YA_CAMBIO: Respuesta = { ok: false, mensaje: "Este registro ya cambió de estado. Actualiza la página para ver su estado actual." };
 const ERROR: Respuesta = { ok: false, mensaje: "No pudimos guardar el cambio. Intenta nuevamente." };
-const enMunicipio = () => ({ sector: { municipioId: municipioActivo().id } });
+const enMunicipio = async () => ({ sector: { municipioId: (await municipioActivo()).id } });
 
 async function con(permiso: Permiso, rutas: string[], accion: (usuario: UsuarioSesion) => Promise<Respuesta>): Promise<Respuesta> {
   const usuario = await autorizar(permiso);
@@ -26,8 +27,8 @@ async function con(permiso: Permiso, rutas: string[], accion: (usuario: UsuarioS
   try {
     const r = await accion(usuario);
     if (r.ok) {
-      for (const ruta of [...rutas, "/panel"]) revalidatePath(ruta);
-      revalidatePath("/", "layout");
+      for (const ruta of [...rutas, "/panel"]) await revalidatePath(ruta);
+      await revalidatePath("/", "layout");
     }
     return r;
   } catch (e) {
@@ -45,7 +46,7 @@ const anotar = (tx: Prisma.TransactionClient, reporteId: string, estado: "EN_REV
 export async function revisarReporte(id: string) {
   return con("gestionarReportes", ["/panel/reportes"], (u) =>
     db.$transaction(async (tx) => {
-      const r = await tx.reporteCiudadano.updateMany({ where: { id, estado: { in: [...TRANSICION_REPORTE.revisar] }, ...enMunicipio() }, data: { estado: "EN_REVISION" } });
+      const r = await tx.reporteCiudadano.updateMany({ where: { id, estado: { in: [...TRANSICION_REPORTE.revisar] }, ...(await enMunicipio()) }, data: { estado: "EN_REVISION" } });
       if (!r.count) return YA_CAMBIO;
       await anotar(tx, id, "EN_REVISION", u);
       return { ok: true, mensaje: "El reporte quedó en revisión." };
@@ -55,7 +56,7 @@ export async function revisarReporte(id: string) {
 
 export async function cerrarReporte(id: string) {
   return con("gestionarReportes", ["/panel/reportes"], async (u) => {
-    const reporte = await db.reporteCiudadano.findFirst({ where: { id, estado: { in: [...TRANSICION_REPORTE.cerrar] }, ...enMunicipio() }, include: { persona: true } });
+    const reporte = await db.reporteCiudadano.findFirst({ where: { id, estado: { in: [...TRANSICION_REPORTE.cerrar] }, ...(await enMunicipio()) }, include: { persona: true } });
     if (!reporte) return YA_CAMBIO;
     await db.$transaction(async (tx) => {
       await tx.reporteCiudadano.update({ where: { id }, data: { estado: "CERRADO", cerradoEn: new Date() } });
@@ -71,7 +72,7 @@ export async function cerrarReporte(id: string) {
 export async function reabrirReporte(id: string) {
   return con("gestionarReportes", ["/panel/reportes"], (u) =>
     db.$transaction(async (tx) => {
-      const r = await tx.reporteCiudadano.updateMany({ where: { id, estado: { in: [...TRANSICION_REPORTE.reabrir] }, ...enMunicipio() }, data: { estado: "EN_REVISION", cerradoEn: null } });
+      const r = await tx.reporteCiudadano.updateMany({ where: { id, estado: { in: [...TRANSICION_REPORTE.reabrir] }, ...(await enMunicipio()) }, data: { estado: "EN_REVISION", cerradoEn: null } });
       if (!r.count) return YA_CAMBIO;
       await anotar(tx, id, "EN_REVISION", u);
       return { ok: true, mensaje: "El reporte volvió a revisión." };
@@ -88,7 +89,7 @@ export async function reabrirReporte(id: string) {
  */
 export async function aprobarPublicacion(id: string) {
   return con("moderarPublicaciones", ["/panel/publicaciones", "/mascotas", "/"], async (u) => {
-    const p = await db.publicacionMascota.findFirst({ where: { id, estado: "ABIERTA", moderacion: { in: ["PENDIENTE", "OCULTA"] }, ...enMunicipio() }, include: { persona: true } });
+    const p = await db.publicacionMascota.findFirst({ where: { id, estado: "ABIERTA", moderacion: { in: ["PENDIENTE", "OCULTA"] }, ...(await enMunicipio()) }, include: { persona: true } });
     if (!p) return YA_CAMBIO;
     const r = await db.publicacionMascota.updateMany({ where: { id, moderacion: p.moderacion }, data: { moderacion: "APROBADA" } });
     if (!r.count) return YA_CAMBIO;
@@ -100,15 +101,31 @@ export async function aprobarPublicacion(id: string) {
   });
 }
 
-export async function ocultarPublicacion(id: string) {
+/**
+ * No publicar un aviso pendiente u ocultar uno publicado, con el motivo, que
+ * se le muestra tal cual a quien lo envió junto con qué aviso es.
+ */
+export async function ocultarPublicacion(id: string, motivo: string) {
+  if (motivo.trim().length < 10) return { ok: false, mensaje: "Escribe el motivo en al menos 10 caracteres: se lo mostraremos a quien publicó el aviso." };
   return con("moderarPublicaciones", ["/panel/publicaciones", "/mascotas"], async () => {
-    const p = await db.publicacionMascota.findFirst({ where: { id, moderacion: { not: "OCULTA" }, ...enMunicipio() }, include: { persona: true } });
+    const p = await db.publicacionMascota.findFirst({ where: { id, moderacion: { not: "OCULTA" }, ...(await enMunicipio()) }, include: { persona: true, animal: { select: { sexo: true } }, sector: { select: { nombre: true } } } });
     if (!p) return YA_CAMBIO;
+    const sexo = p.animal?.sexo ?? null;
+    const cual = `${especieYColor(p.especie, sexo, p.colorPrincipal).toLowerCase()} ${tipoAviso(p.tipo, sexo).toLowerCase()} en ${p.sector.nombre}`;
+    const pendiente = p.moderacion === "PENDIENTE";
     await db.$transaction(async (tx) => {
       await tx.publicacionMascota.update({ where: { id }, data: { moderacion: "OCULTA" } });
-      await notificar(tx, p.persona, "Tu publicación no está visible", `Ocultamos tu publicación porque no cumple las condiciones de uso del portal. Si crees que es un error, escríbenos.`, p.loteDemoId);
+      await notificar(
+        tx,
+        p.persona,
+        pendiente ? "No publicamos tu aviso" : "Ocultamos tu aviso",
+        pendiente
+          ? `Revisamos tu aviso de ${cual} y no lo publicamos: ${motivo.trim()} Si quieres, publica uno nuevo con los cambios.`
+          : `Ocultamos del portal tu aviso de ${cual}: ${motivo.trim()}`,
+        p.loteDemoId,
+      );
     });
-    return { ok: true, mensaje: "Ocultamos la publicación y avisamos a quien la publicó." };
+    return { ok: true, mensaje: pendiente ? "No publicamos el aviso y le contamos el motivo a quien lo envió." : "Ocultamos el aviso y le contamos el motivo a quien lo publicó." };
   });
 }
 
@@ -119,11 +136,11 @@ export async function ocultarPublicacion(id: string) {
  */
 export async function marcarReencontrada(id: string) {
   return con("moderarPublicaciones", ["/panel/publicaciones", "/panel/coincidencias", "/mascotas", "/"], async () => {
-    const p = await db.publicacionMascota.findFirst({ where: { id, estado: "ABIERTA", ...enMunicipio() }, include: { persona: true } });
+    const p = await db.publicacionMascota.findFirst({ where: { id, estado: "ABIERTA", ...(await enMunicipio()) }, include: { persona: true } });
     if (!p) return YA_CAMBIO;
     await db.$transaction(async (tx) => {
       await tx.publicacionMascota.update({ where: { id }, data: { estado: "REENCONTRADA", resueltaEn: new Date(), reencuentroPorCoincidencia: null } });
-      await notificar(tx, p.persona, "Retiramos tu aviso", `Registramos que la mascota de tu aviso ya volvió a casa, así que dejó de mostrarse en el portal. Si no corresponde, escríbenos.`, p.loteDemoId);
+      await notificar(tx, p.persona, "Retiramos tu aviso", `Registramos que la mascota de tu aviso ya volvió a casa, así que dejó de mostrarse en el portal. Si no corresponde, publica el aviso de nuevo.`, p.loteDemoId);
     });
     return { ok: true, mensaje: "Registramos el reencuentro. El aviso dejó de mostrarse en el portal." };
   });
@@ -131,9 +148,9 @@ export async function marcarReencontrada(id: string) {
 
 // ───────────── Coincidencias ─────────────
 
-const coincidenciaAbierta = (id: string, estados: readonly string[]) =>
+const coincidenciaAbierta = async (id: string, estados: readonly string[]) =>
   db.coincidencia.findFirst({
-    where: { id, estado: { in: [...estados] as ("SUGERIDA" | "VALIDADA" | "DESCARTADA")[] }, perdida: { estado: "ABIERTA", ...enMunicipio() }, encontrada: { estado: "ABIERTA" } },
+    where: { id, estado: { in: [...estados] as ("SUGERIDA" | "VALIDADA" | "DESCARTADA")[] }, perdida: { estado: "ABIERTA", ...(await enMunicipio()) }, encontrada: { estado: "ABIERTA" } },
     include: { perdida: { include: { persona: true } }, encontrada: { include: { persona: true } } },
   });
 
@@ -194,7 +211,7 @@ async function revisarPropuesta(
   aviso: (nombre: string, codigo: string) => [string, string] | null,
 ): Promise<Respuesta | null> {
   const f = await db.fichaAdopcion.findFirst({
-    where: { id, revision: { in: [...desde] as ("PENDIENTE" | "CORRECCIONES" | "APROBADA" | "OCULTA")[] }, OR: [{ proponente: { municipioId: municipioActivo().id } }, { proponenteId: null }] },
+    where: { id, revision: { in: [...desde] as ("PENDIENTE" | "CORRECCIONES" | "APROBADA" | "OCULTA")[] }, municipioId: (await municipioActivo()).id },
     include: { proponente: true, animal: { select: { nombre: true } } },
   });
   if (!f) return null;
@@ -246,7 +263,7 @@ export async function rechazarPropuesta(id: string, motivo: string) {
     if (motivo.trim().length < 10) return MOTIVO_CORTO;
     const r = await revisarPropuesta(id, TRANSICION_REVISION.rechazar, u, { revision: "RECHAZADA", motivo: motivo.trim() }, (n, c) => [
       "Sobre tu propuesta de adopción",
-      `Revisamos la propuesta de ${n} (${c}) y no podemos publicarla: ${motivo.trim()} Si tienes dudas, escríbenos.`,
+      `Revisamos la propuesta de ${n} (${c}) y no podemos publicarla: ${motivo.trim()} Si quieres, puedes proponerla de nuevo con los cambios.`,
     ]);
     return r ? { ok: true, mensaje: "La propuesta quedó como no publicada y avisamos a quien la propuso." } : YA_CAMBIO;
   });
@@ -256,10 +273,10 @@ export async function ocultarFichaAdopcion(id: string, motivo: string) {
   return con("gestionarAdopciones", RUTAS_PROPUESTAS, async (u) => {
     if (motivo.trim().length < 10) return MOTIVO_CORTO;
     // Con una adopción en curso no se oculta: primero se resuelven las postulaciones aprobadas.
-    if (await db.fichaAdopcion.count({ where: { id, estado: "EN_PROCESO" } })) return { ok: false, mensaje: "Hay una adopción en curso. Resuelve primero la postulación aprobada." };
+    if (await db.fichaAdopcion.count({ where: { id, estado: "EN_PROCESO", municipioId: (await municipioActivo()).id } })) return { ok: false, mensaje: "Hay una adopción en curso. Resuelve primero la postulación aprobada." };
     const r = await revisarPropuesta(id, TRANSICION_REVISION.ocultar, u, { revision: "OCULTA", motivo: motivo.trim() }, (n, c) => [
       "Retiramos una ficha de adopción",
-      `Retiramos del catálogo la ficha de ${n} (${c}): ${motivo.trim()} Si tienes dudas, escríbenos.`,
+      `Retiramos del catálogo la ficha de ${n} (${c}): ${motivo.trim()}`,
     ]);
     return r ? { ok: true, mensaje: "La ficha dejó de mostrarse en el catálogo." } : YA_CAMBIO;
   });

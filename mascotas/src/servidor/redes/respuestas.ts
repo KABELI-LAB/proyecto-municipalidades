@@ -46,7 +46,7 @@ export function faltantesRespuestas(): string[] {
 }
 
 export async function respuestasActivas() {
-  const m = await db.municipio.findUnique({ where: { id: municipioActivo().id }, select: { redesResponderAuto: true } });
+  const m = await db.municipio.findUnique({ where: { id: (await municipioActivo()).id }, select: { redesResponderAuto: true } });
   return m?.redesResponderAuto ?? false;
 }
 
@@ -62,7 +62,7 @@ const SIN_CONTEXTO = { contexto: null, tipo: null, origenId: null };
  */
 async function contextoDe(mediaId: string | undefined, base: string): Promise<{ contexto: Contexto; tipo: string | null; origenId: string | null }> {
   if (!mediaId) return SIN_CONTEXTO;
-  const p = await db.publicacionRed.findFirst({ where: { igMediaId: mediaId, municipioId: municipioActivo().id }, select: { tipo: true, origenId: true } });
+  const p = await db.publicacionRed.findFirst({ where: { igMediaId: mediaId, municipioId: (await municipioActivo()).id }, select: { tipo: true, origenId: true } });
   if (p) {
     const tipo = p.tipo as TipoRed;
     return { contexto: { tipo, url: `${base}${RUTA[tipo]}/${p.origenId}` }, tipo, origenId: p.origenId };
@@ -133,7 +133,7 @@ async function entender(id: string, texto: string, intencion: Intencion): Promis
 /** Registra la interacción una sola vez; devuelve false si ya se había recibido. */
 async function registrar(datos: { canal: string; igId: string; autorIgId: string; mediaId?: string; origenTipo: string | null; origenId: string | null; texto: string; intencion: string }) {
   try {
-    const fila = await db.interaccionRed.create({ data: { ...datos, municipioId: municipioActivo().id, estado: "RECIBIDA" } });
+    const fila = await db.interaccionRed.create({ data: { ...datos, municipioId: (await municipioActivo()).id, estado: "RECIBIDA" } });
     return fila.id;
   } catch {
     return null; // id repetido: Instagram reenvió el mismo aviso
@@ -187,6 +187,6 @@ async function atenderMensaje(autor: string, mid: string, textoOriginal: string)
 }
 
 /** Últimas interacciones, para el panel. */
-export function ultimasInteracciones(limite = 20) {
-  return db.interaccionRed.findMany({ where: { municipioId: municipioActivo().id }, orderBy: { creadaEn: "desc" }, take: limite });
+export async function ultimasInteracciones(limite = 20) {
+  return db.interaccionRed.findMany({ where: { municipioId: (await municipioActivo()).id }, orderBy: { creadaEn: "desc" }, take: limite });
 }

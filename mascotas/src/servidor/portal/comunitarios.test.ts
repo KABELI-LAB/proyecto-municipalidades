@@ -16,13 +16,13 @@ vi.mock("next/cache", () => ({ revalidatePath: () => {} }));
 const vecino = vi.hoisted(() => ({ correo: null as string | null }));
 vi.mock("@/servidor/portal/sesionVecino", async (original) => {
   const m = await original<typeof import("@/servidor/portal/sesionVecino")>();
-  const { municipioActivo } = await import("@/lib/municipio");
+  const { municipioPredeterminado } = await import("@/lib/municipio");
   return {
     ...m,
     abrirSesionVecino: async (c: string) => { vecino.correo = m.normalizarCorreo(c); },
     cerrarSesionVecino: async () => { vecino.correo = null; },
     correoDeSesion: async () => vecino.correo,
-    filtroVecino: async () => (vecino.correo ? { municipioId: municipioActivo().id, correo: vecino.correo } : null),
+    filtroVecino: async () => (vecino.correo ? { municipioId: municipioPredeterminado().id, correo: vecino.correo } : null),
   };
 });
 
@@ -46,8 +46,8 @@ beforeAll(async () => {
   process.env.MUNICIPIO ??= "hualane";
   ({ db } = await import("@/servidor/db"));
   const { cargarDemo } = await import("@/servidor/demo/cargar");
-  const { municipioActivo } = await import("@/lib/municipio");
-  await cargarDemo(db, { municipio: municipioActivo(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
+  const { municipioPredeterminado } = await import("@/lib/municipio");
+  await cargarDemo(db, { municipio: municipioPredeterminado(), hoy: CORTE, contrasena: "contrasena-de-prueba" });
   portal = await import("@/servidor/portal/acciones");
   comunidad = await import("./acciones-comunitarios");
   consultas = await import("@/servidor/portal/consultas");
@@ -69,7 +69,7 @@ const formulario = (valores: Record<string, string>, foto?: Buffer, extra: Recor
 const DATOS = { apodo: "el del puente", lugarId: "", sexo: "MACHO", tamano: "GRANDE", colorPrincipal: "negro", rasgos: "", esterilizado: "NO_SE", vacunas: "NO", microchip: "NO" };
 
 async function novedad(perroId: string, extra: Record<string, string> = {}) {
-  const quilico = await db.localidad.findUniqueOrThrow({ where: { clave: "quilico" } });
+  const quilico = await db.localidad.findFirstOrThrow({ where: { clave: "quilico" } });
   return portal.informarNovedad({ perroId, tipo: "SALUD", texto: "Cojea de la pata trasera desde ayer.", localidadId: quilico.id, ...VECINA, ...extra });
 }
 
@@ -91,7 +91,7 @@ describe("un vecino registra y cuida a un perro comunitario", () => {
     const s = await consultas.seguimientoComunitario(perro);
     expect(s?.conCuidador).toBe(true);
     expect(JSON.stringify([s, publica])).not.toMatch(/Cuidadora de la plaza|987654321|22222222/);
-    const { GET } = await import("@/app/(portal)/comunitarios/[id]/foto/route");
+    const { GET } = await import("@/app/[municipio]/(portal)/comunitarios/[id]/foto/route");
     expect((await GET(new Request("http://localhost/"), { params: Promise.resolve({ id: perro }) })).status).toBe(200);
   });
 

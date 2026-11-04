@@ -1,0 +1,117 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para vichuquen.",
+  "datos": [
+    {
+      "id": "plaza-de-vichuquen",
+      "nombre": "Plaza de Vichuquén",
+      "tipo": "plaza",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "vichuquen",
+      "lat": -34.8838414,
+      "lng": -71.9934903,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM way 77849835 (otro way 93480838 'Plaza Vichuquén' en -34.8831639, -71.9931325)"
+    },
+    {
+      "id": "ilustre-municipalidad-de-vichuquen",
+      "nombre": "Ilustre Municipalidad de Vichuquén",
+      "tipo": "edificio-municipal",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "vichuquen",
+      "lat": -34.8843072,
+      "lng": -71.9926175,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM node 2296012230; Wikidata Q133837727 (-34.884082854, -71.992322815)"
+    },
+    {
+      "id": "parque-vichuquen",
+      "nombre": "Parque Vichuquén",
+      "tipo": "parque",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "vichuquen",
+      "lat": -34.8855534,
+      "lng": -71.9912174,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM way 220487618"
+    },
+    {
+      "id": "liceo-nuevo-horizonte",
+      "nombre": "Liceo Nuevo Horizonte",
+      "tipo": "establecimiento-educacional",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "vichuquen",
+      "lat": -34.8844285,
+      "lng": -71.9940728,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM node 2296047796"
+    },
+    {
+      "id": "cesfam-vichuquen",
+      "nombre": "CESFAM Vichuquén",
+      "tipo": "centro-de-salud",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "vichuquen",
+      "lat": -34.8783671,
+      "lng": -71.9943335,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM way 220488434"
+    },
+    {
+      "id": "liceo-de-llico",
+      "nombre": "Liceo de Llico",
+      "tipo": "establecimiento-educacional",
+      "sector_id": "llico",
+      "localidad_id": "llico",
+      "lat": -34.763716,
+      "lng": -72.0788046,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM way 693868751"
+    },
+    {
+      "id": "caleta-de-llico",
+      "nombre": "Caleta de Llico",
+      "tipo": "caleta",
+      "sector_id": "llico",
+      "localidad_id": "llico",
+      "lat": -34.7539399,
+      "lng": -72.0863955,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM way 202052550 (name=Caleta)"
+    },
+    {
+      "id": "escuela-aquelarre",
+      "nombre": "Escuela Aquelarre",
+      "tipo": "escuela",
+      "sector_id": "lago",
+      "localidad_id": "aquelarre",
+      "lat": -34.851387,
+      "lng": -72.040202,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM way 135031642"
+    },
+    {
+      "id": "escuela-ema-cornejo-de-cardoen",
+      "nombre": "Escuela Ema Cornejo de Cardoen",
+      "tipo": "escuela",
+      "sector_id": "torca-boyeruca",
+      "localidad_id": "boyeruca",
+      "lat": -34.6890107,
+      "lng": -72.0490024,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM way 444421347"
+    },
+    {
+      "id": "estadio-aquelarre",
+      "nombre": "Estadio Aquelarre",
+      "tipo": "recinto-deportivo",
+      "sector_id": "lago",
+      "localidad_id": "aquelarre",
+      "lat": -34.8504448,
+      "lng": -72.0398821,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM way 135030411"
+    }
+  ]
+}

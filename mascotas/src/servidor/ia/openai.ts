@@ -26,7 +26,7 @@ export const iaConfigurada = () => Boolean(process.env.OPENAI_API_KEY?.trim());
 /** Si la IA está configurada y encendida para este municipio. */
 export async function iaActiva(): Promise<boolean> {
   if (!iaConfigurada()) return false;
-  const m = await db.municipio.findUnique({ where: { id: municipioActivo().id }, select: { iaActiva: true } });
+  const m = await db.municipio.findUnique({ where: { id: (await municipioActivo()).id }, select: { iaActiva: true } });
   return m?.iaActiva ?? false;
 }
 

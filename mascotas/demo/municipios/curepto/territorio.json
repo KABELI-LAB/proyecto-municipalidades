@@ -1,0 +1,479 @@
+{
+  "municipio": {
+    "id": "curepto",
+    "nombre": "Ilustre Municipalidad de Curepto",
+    "region": "Maule",
+    "modo": "demostracion"
+  },
+  "prefijo": "cur",
+  "dominio_correo": "curepto.demo.invalid",
+  "rut_base": 11112000,
+  "desfase_tr": 2000,
+  "fuente": "Sectores: agrupación de distritos censales INE 2017 (propuesta). Localidades y lugares: OpenStreetMap (ODbL). Ver cada «fuente».",
+  "sectores": [
+    {
+      "id": "curepto-urbano",
+      "nombre": "Curepto urbano",
+      "tipo": "urbano-rural",
+      "fuente": "Agrupación de distritos censales INE Censo 2017 (oficial); la agrupación en sector es propuesta por geografía",
+      "localidades": [
+        {
+          "id": "curepto",
+          "nombre": "Curepto",
+          "lat": -35.09372,
+          "lng": -72.01808,
+          "fuente": "OpenStreetMap node 214199010 (place=town), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710301 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "los-olivos",
+          "nombre": "Los Olivos",
+          "lat": -35.09755,
+          "lng": -72.00949,
+          "fuente": "OpenStreetMap node 5923189325 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710301 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "las-vinas",
+          "nombre": "Las Viñas",
+          "lat": -35.1031,
+          "lng": -72.01103,
+          "fuente": "OpenStreetMap node 10138217453 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710301 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "lien",
+          "nombre": "Lien",
+          "lat": -35.09862,
+          "lng": -71.96908,
+          "fuente": "OpenStreetMap node 5923189326 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710301 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "pacilla-de-lien",
+          "nombre": "Pacilla de Lien",
+          "lat": -35.09517,
+          "lng": -71.95671,
+          "fuente": "OpenStreetMap node 5923189327 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710301 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "huelon",
+          "nombre": "Huelón",
+          "lat": -35.08393,
+          "lng": -72.05246,
+          "fuente": "OpenStreetMap node 214225351 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710301 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        }
+      ]
+    },
+    {
+      "id": "calpun",
+      "nombre": "Calpún y ribera del Mataquito",
+      "tipo": "rural",
+      "fuente": "Agrupación de distritos censales INE Censo 2017 (oficial); la agrupación en sector es propuesta por geografía",
+      "localidades": [
+        {
+          "id": "calpun",
+          "nombre": "Calpún",
+          "lat": -35.02204,
+          "lng": -72.04046,
+          "fuente": "OpenStreetMap node 6209650784 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710302 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "rincon-de-calpun",
+          "nombre": "Rincón de Calpún",
+          "lat": -35.03199,
+          "lng": -72.04123,
+          "fuente": "OpenStreetMap node 6209650783 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710302 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "paraguay",
+          "nombre": "Paraguay",
+          "lat": -34.99207,
+          "lng": -72.00429,
+          "fuente": "OpenStreetMap node 6209652186 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710302 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "el-rodeo",
+          "nombre": "El Rodeo",
+          "lat": -35.07258,
+          "lng": -72.02216,
+          "fuente": "OpenStreetMap node 214207529 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710302 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "hornillos",
+          "nombre": "Hornillos",
+          "lat": -35.09095,
+          "lng": -71.97259,
+          "fuente": "OpenStreetMap node 1243681017 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710302 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "monte-grande",
+          "nombre": "Monte Grande",
+          "lat": -35.06495,
+          "lng": -72.03867,
+          "fuente": "OpenStreetMap node 5923189324 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710302 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "el-queni",
+          "nombre": "El Queñi",
+          "lat": -35.06366,
+          "lng": -71.95022,
+          "fuente": "OpenStreetMap node 6209650782 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710302 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        }
+      ]
+    },
+    {
+      "id": "costa",
+      "nombre": "Costa y Huenchullamí",
+      "tipo": "rural",
+      "fuente": "Agrupación de distritos censales INE Censo 2017 (oficial); la agrupación en sector es propuesta por geografía",
+      "localidades": [
+        {
+          "id": "la-orilla",
+          "nombre": "La Orilla",
+          "lat": -35.0499,
+          "lng": -72.06798,
+          "fuente": "OpenStreetMap node 5923189323 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710304 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "huelon-alto",
+          "nombre": "Huelón Alto",
+          "lat": -35.09655,
+          "lng": -72.06247,
+          "fuente": "OpenStreetMap node 5923189322 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710304 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "pununquen",
+          "nombre": "Pununquén",
+          "lat": -35.0512,
+          "lng": -72.11982,
+          "fuente": "OpenStreetMap node 214221663 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710304 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "depun",
+          "nombre": "Depún",
+          "lat": -35.06493,
+          "lng": -72.14121,
+          "fuente": "OpenStreetMap node 10136631842 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710304 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "las-lomas",
+          "nombre": "Las Lomas",
+          "lat": -35.11509,
+          "lng": -72.17542,
+          "fuente": "OpenStreetMap node 214180065 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710304 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "los-rabanos",
+          "nombre": "Los Rábanos",
+          "lat": -35.11186,
+          "lng": -72.18645,
+          "fuente": "OpenStreetMap node 214212397 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710304 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "la-trinchera",
+          "nombre": "La Trinchera",
+          "lat": -35.11012,
+          "lng": -72.2011,
+          "fuente": "OpenStreetMap node 6257020585 (tourism=camp_site \"Camping Municipal La Trinchera\"; no hay nodo place); distrito INE 710304"
+        },
+        {
+          "id": "coipue",
+          "nombre": "Coipué",
+          "lat": -35.24679,
+          "lng": -72.08667,
+          "fuente": "OpenStreetMap node 214183986 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710305 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        }
+      ]
+    },
+    {
+      "id": "gualleco",
+      "nombre": "Gualleco y valle sur",
+      "tipo": "rural",
+      "fuente": "Agrupación de distritos censales INE Censo 2017 (oficial); la agrupación en sector es propuesta por geografía",
+      "localidades": [
+        {
+          "id": "gualleco",
+          "nombre": "Gualleco",
+          "lat": -35.24578,
+          "lng": -71.98172,
+          "fuente": "OpenStreetMap node 5601134912 (place=village), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710306 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "gualleco-alto",
+          "nombre": "Gualleco Alto",
+          "lat": -35.25559,
+          "lng": -71.97808,
+          "fuente": "OpenStreetMap node 5640926744 (place=neighbourhood), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710306 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "tabunco",
+          "nombre": "Tabunco",
+          "lat": -35.19486,
+          "lng": -71.9887,
+          "fuente": "OpenStreetMap node 214218550 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710307 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "deuca",
+          "nombre": "Deuca",
+          "lat": -35.12843,
+          "lng": -71.95509,
+          "fuente": "OpenStreetMap node 1243681032 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710308 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "el-manzano",
+          "nombre": "El Manzano",
+          "lat": -35.14437,
+          "lng": -71.96332,
+          "fuente": "OpenStreetMap node 5923189331 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710308 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "llongocura",
+          "nombre": "Llongocura",
+          "lat": -35.16737,
+          "lng": -71.98758,
+          "fuente": "OpenStreetMap node 5923189320 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710308 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "quebrada-de-reyes",
+          "nombre": "Quebrada de Reyes",
+          "lat": -35.1057,
+          "lng": -71.95088,
+          "fuente": "OpenStreetMap node 5923189328 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710308 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        }
+      ]
+    },
+    {
+      "id": "rapilermo",
+      "nombre": "Rapilermo y Hornillos interior",
+      "tipo": "rural",
+      "fuente": "Agrupación de distritos censales INE Censo 2017 (oficial); la agrupación en sector es propuesta por geografía",
+      "localidades": [
+        {
+          "id": "rapilermo",
+          "nombre": "Rapilermo",
+          "lat": -35.18039,
+          "lng": -71.84516,
+          "fuente": "OpenStreetMap node 214191742 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710309 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "rapilermo-bajo",
+          "nombre": "Rapilermo Bajo",
+          "lat": -35.15412,
+          "lng": -71.87392,
+          "fuente": "OpenStreetMap node 5923197654 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710309 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "estancilla",
+          "nombre": "Estancilla",
+          "lat": -35.1078,
+          "lng": -71.87891,
+          "fuente": "OpenStreetMap node 6209652190 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710309 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "poblacion",
+          "nombre": "Población",
+          "lat": -35.11531,
+          "lng": -71.81645,
+          "fuente": "OpenStreetMap node 6209652191 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710309 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "domulgo",
+          "nombre": "Domulgo",
+          "lat": -35.0491,
+          "lng": -71.90588,
+          "fuente": "OpenStreetMap node 6209650777 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710311 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "el-membrillo",
+          "nombre": "El Membrillo",
+          "lat": -35.08462,
+          "lng": -71.94838,
+          "fuente": "OpenStreetMap node 6209650781 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710311 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "las-garzas",
+          "nombre": "Las Garzas",
+          "lat": -35.08845,
+          "lng": -71.93811,
+          "fuente": "OpenStreetMap node 6209650780 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710311 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "el-guindo",
+          "nombre": "El Guindo",
+          "lat": -35.07278,
+          "lng": -71.93233,
+          "fuente": "OpenStreetMap node 6209650778 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710311 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        }
+      ]
+    },
+    {
+      "id": "huaquen",
+      "nombre": "Huaquén, Limávida y Constantué",
+      "tipo": "rural",
+      "fuente": "Agrupación de distritos censales INE Censo 2017 (oficial); la agrupación en sector es propuesta por geografía",
+      "localidades": [
+        {
+          "id": "huaquen",
+          "nombre": "Huaquén",
+          "lat": -35.11644,
+          "lng": -71.69478,
+          "fuente": "OpenStreetMap node 1982203259 (place=village), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710310 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "limavida",
+          "nombre": "Limávida",
+          "lat": -35.05309,
+          "lng": -71.78627,
+          "fuente": "OpenStreetMap node 6209652193 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710310 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "colin-de-limavida",
+          "nombre": "Colín de Limávida",
+          "lat": -35.0453,
+          "lng": -71.75158,
+          "fuente": "OpenStreetMap node 6209652194 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710310 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "constantue",
+          "nombre": "Constantué",
+          "lat": -35.00996,
+          "lng": -71.79558,
+          "fuente": "OpenStreetMap node 6209652189 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710303 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "docamavida",
+          "nombre": "Docamávida",
+          "lat": -35.01101,
+          "lng": -71.94882,
+          "fuente": "OpenStreetMap node 214218218 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710303 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        },
+        {
+          "id": "paula",
+          "nombre": "Paula",
+          "lat": -34.9892,
+          "lng": -71.84231,
+          "fuente": "OpenStreetMap node 6209652187 (place=hamlet), verificado dentro del límite comunal OSM rel. 252836; distrito INE 2017 710303 por consulta espacial a la capa INE \"Distrito_Densid_Superficie\""
+        }
+      ]
+    }
+  ],
+  "lugares": [
+    {
+      "id": "plaza-de-armas-de-curepto",
+      "nombre": "Plaza de Armas de Curepto",
+      "tipo": "plaza",
+      "localidad": "curepto",
+      "lat": -35.0937277,
+      "lng": -72.0181235,
+      "fuente": "OSM way 482786102"
+    },
+    {
+      "id": "ilustre-municipalidad-de-curepto",
+      "nombre": "Ilustre Municipalidad de Curepto",
+      "tipo": "edificio-municipal",
+      "localidad": "curepto",
+      "lat": -35.0934513,
+      "lng": -72.0176363,
+      "fuente": "OSM way 108242911"
+    },
+    {
+      "id": "estadio-municipal-de-curepto",
+      "nombre": "Estadio Municipal de Curepto",
+      "tipo": "recinto-deportivo",
+      "localidad": "curepto",
+      "lat": -35.0898598,
+      "lng": -72.0287949,
+      "fuente": "OSM way 559223314"
+    },
+    {
+      "id": "liceo-luis-edmundo-correa-rojas",
+      "nombre": "Liceo Luis Edmundo Correa Rojas",
+      "tipo": "establecimiento-educacional",
+      "localidad": "curepto",
+      "lat": -35.092021,
+      "lng": -72.0174127,
+      "fuente": "OSM way 619242076 'Liceo Luis Correa Rojas' (otro way 1209637799 con nombre completo en -35.0895594, -72.0202979)"
+    },
+    {
+      "id": "escuela-pedro-antonio-gonzalez",
+      "nombre": "Escuela Pedro Antonio González",
+      "tipo": "escuela",
+      "localidad": "curepto",
+      "lat": -35.0987843,
+      "lng": -72.0120835,
+      "fuente": "OSM way 482126377"
+    },
+    {
+      "id": "posta-de-salud-rural-gualleco",
+      "nombre": "Posta de Salud Rural Gualleco",
+      "tipo": "posta-rural",
+      "localidad": "gualleco",
+      "lat": -35.2466996,
+      "lng": -71.9812223,
+      "fuente": "OSM way 549346596"
+    },
+    {
+      "id": "museo-gualleco",
+      "nombre": "Museo Gualleco",
+      "tipo": "museo",
+      "localidad": "gualleco",
+      "lat": -35.2452455,
+      "lng": -71.981528,
+      "fuente": "OSM node 13311056156"
+    },
+    {
+      "id": "gimnasio-municipal-de-curepto",
+      "nombre": "Gimnasio Municipal de Curepto",
+      "tipo": "recinto-deportivo",
+      "localidad": "curepto",
+      "lat": -35.0911511,
+      "lng": -72.0178019,
+      "fuente": "OSM way 108259809"
+    },
+    {
+      "id": "posta-de-salud-rural-las-lomas",
+      "nombre": "Posta de Salud Rural Las Lomas",
+      "tipo": "posta-rural",
+      "localidad": "las-lomas",
+      "lat": -35.1146679,
+      "lng": -72.1756517,
+      "fuente": "OSM node 11506591592"
+    },
+    {
+      "id": "posta-de-salud-rural-rapilermo",
+      "nombre": "Posta de Salud Rural Rapilermo",
+      "tipo": "posta-rural",
+      "localidad": "rapilermo",
+      "lat": -35.1826437,
+      "lng": -71.8424896,
+      "fuente": "OSM node 11507053343"
+    }
+  ],
+  "mapa_sectores": {
+    "hualane": [
+      "curepto-urbano",
+      "calpun"
+    ],
+    "patacon": [
+      "rapilermo",
+      "huaquen"
+    ],
+    "los-coipos": [
+      "costa"
+    ],
+    "la-huerta": [
+      "gualleco"
+    ]
+  },
+  "mapa_lugares": {
+    "plaza-de-armas-de-hualane": "plaza-de-armas-de-curepto",
+    "municipalidad-de-hualane": "ilustre-municipalidad-de-curepto",
+    "estadio-municipal-de-hualane": "estadio-municipal-de-curepto",
+    "liceo-bicentenario-de-hualane": "liceo-luis-edmundo-correa-rojas",
+    "escuela-monsenor-manuel-larrain-errazuriz": "escuela-pedro-antonio-gonzalez",
+    "escuela-la-huerta-de-mataquito": "posta-de-salud-rural-gualleco",
+    "escuela-orilla-de-navarro": "museo-gualleco",
+    "escuela-carlos-correa-nunez-mira-rio": "gimnasio-municipal-de-curepto",
+    "escuela-caone": "posta-de-salud-rural-las-lomas",
+    "sala-multiproposito": "posta-de-salud-rural-rapilermo"
+  },
+  "reemplazos": [],
+  "correo_cuenta": "admin@curepto.cl"
+}

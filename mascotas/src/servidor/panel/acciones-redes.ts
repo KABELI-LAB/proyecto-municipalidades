@@ -3,7 +3,7 @@
 // aceptar o publicar el contenido (si la publicación automática está
 // encendida); aquí se publica a mano o se reintenta si falló, y se guarda la
 // configuración (publicación automática y, en pruebas, datos de demostración).
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from "@/servidor/revalidar";
 import { PERMISO_RED, type TipoRed } from "@/dominio/redes";
 import { municipioActivo } from "@/lib/municipio";
 import { autorizar } from "@/servidor/auth";
@@ -22,16 +22,16 @@ export async function publicarEnInstagram(tipo: string, origenId: string): Promi
   const u = await autorizar(PERMISO_RED[tipo as TipoRed]);
   if (!u) return SIN_PERMISO;
   const r = await difundirEnInstagram(tipo as TipoRed, origenId, u.id);
-  revalidatePath(RUTA[tipo as TipoRed]);
-  revalidatePath("/panel/configuracion");
+  await revalidatePath(RUTA[tipo as TipoRed]);
+  await revalidatePath("/panel/configuracion");
   return { ok: r.estado === "publicado" || r.estado === "ya-publicado", mensaje: r.mensaje };
 }
 
 /** Enciende o apaga la publicación automática en Instagram al aprobar o publicar contenido. */
 export async function guardarPublicacionAutomatica(encendida: boolean): Promise<Respuesta> {
   if (!(await autorizar("configurarRedes"))) return SIN_PERMISO;
-  await db.municipio.update({ where: { id: municipioActivo().id }, data: { redesPublicarAuto: encendida } });
-  revalidatePath("/panel/configuracion");
+  await db.municipio.update({ where: { id: (await municipioActivo()).id }, data: { redesPublicarAuto: encendida } });
+  await revalidatePath("/panel/configuracion");
   return {
     ok: true,
     mensaje: encendida
@@ -43,8 +43,8 @@ export async function guardarPublicacionAutomatica(encendida: boolean): Promise<
 /** Enciende o apaga las respuestas automáticas a comentarios y mensajes de Instagram. */
 export async function guardarRespuestasAutomaticas(encendidas: boolean): Promise<Respuesta> {
   if (!(await autorizar("configurarRedes"))) return SIN_PERMISO;
-  await db.municipio.update({ where: { id: municipioActivo().id }, data: { redesResponderAuto: encendidas } });
-  revalidatePath("/panel/configuracion");
+  await db.municipio.update({ where: { id: (await municipioActivo()).id }, data: { redesResponderAuto: encendidas } });
+  await revalidatePath("/panel/configuracion");
   return {
     ok: true,
     mensaje: encendidas

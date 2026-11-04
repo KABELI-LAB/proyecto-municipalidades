@@ -15,6 +15,12 @@ Resultados → Datos). No es un portal de publicaciones.
 - Colores, tipografía, espacios, radios, sombras y movimiento SOLO desde
   `design-system/tokens/*.css` (copiados a `src/estilos/tokens.css` por
   `npm run diseno`). No inventes colores ni tamaños fuera de los tokens.
+- Otros municipios (demostración): su identidad visual va en
+  `design-system/temas/<id>/` (tema.css, logos y README con su fuente) y usa
+  solo los colores y tipografías del sistema de diseño de ese municipio. Actúa
+  con `<html data-tema="<id>">`, que pone el layout según el municipio de la
+  página. El selector de la franja «Datos de demostración» cambia el municipio
+  entero: datos, colores, tipografía y logos.
 - Fondo de página: blanco (`--color-surface`); panel municipal sobre
   `--color-surface-sunken`. Tarjetas: blanco, borde 1 px `--color-border`,
   `--radius-large`, sin sombra en reposo (sombra media solo al pasar el cursor).
@@ -54,6 +60,12 @@ Resultados → Datos). No es un portal de publicaciones.
 - Contacto entre ciudadanos siempre protegido (sin exponer teléfonos).
 - La entidad Municipio es configurable: nada de "Hualañé" escrito en el código;
   nombre, sectores e identidad vienen de configuración.
+- Varios municipios en un sitio: las páginas viven en `src/app/[municipio]/` y
+  `src/proxy.ts` reescribe «/ruta» a «/<municipio>/ruta» según la cookie
+  `pawni-municipio` (o el de la variable MUNICIPIO). En el servidor, el
+  municipio de la solicitud se pide con `await municipioActivo()`; en scripts y
+  tareas sin solicitud, `municipioPredeterminado()` o `conMunicipio(id, …)`.
+  Para renovar páginas, `revalidatePath` de `@/servidor/revalidar` (no el de Next).
 - Los datos simulados viven separados de los reales y se pueden borrar de una vez.
 - Recomendaciones: "se recomienda evaluar", nunca "debe"; mostrar las cifras
   que las explican.
@@ -78,8 +90,8 @@ Resultados → Datos). No es un portal de publicaciones.
   si falta alguna, avisa. El mapa no muestra direcciones ni casas.
 - Mapa de calor: mostrar calor solo donde haya 3 o más registros. Los reportes
   ciudadanos (todos los tipos) se ven solo en el panel municipal. El mapa
-  público muestra únicamente mascotas perdidas y encontradas, por sector, y
-  los perros comunitarios en su lugar de referencia.
+  público muestra únicamente mascotas perdidas y encontradas, adopción y
+  operativos (sin perros comunitarios ni resultados).
 
 ## Principios de interfaz
 - Cada pantalla responde una sola pregunta y tiene una sola acción principal.

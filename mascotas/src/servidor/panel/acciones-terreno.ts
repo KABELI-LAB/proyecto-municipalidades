@@ -2,9 +2,10 @@
 // Registro en terreno el día del operativo: asistencia, atenciones y
 // atenciones espontáneas. Terreno solo opera su operativo asignado y solo
 // mientras está «En curso».
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from "@/servidor/revalidar";
 import { z } from "zod";
 import type { Prisma } from "@/generated/prisma/client";
+import { municipioActivo } from "@/lib/municipio";
 import { autorizar } from "@/servidor/auth";
 import { db } from "@/servidor/db";
 import { puedeOperar } from "@/servidor/panel/operativos";
@@ -21,10 +22,10 @@ async function autorizarEn(operativoId: string) {
   return u;
 }
 
-const refrescar = (operativoId: string) => {
-  revalidatePath(`/panel/operativos/${operativoId}/asistencia`);
-  revalidatePath(`/panel/operativos/${operativoId}`);
-  revalidatePath("/", "layout");
+const refrescar = async (operativoId: string) => {
+  await revalidatePath(`/panel/operativos/${operativoId}/asistencia`);
+  await revalidatePath(`/panel/operativos/${operativoId}`);
+  await revalidatePath("/", "layout");
 };
 
 /** Un servicio realizado actualiza el estado sanitario del animal. */
@@ -49,7 +50,7 @@ export async function marcarAsistencia(cupoId: string, asistio: boolean): Promis
     if (atencion) return { ok: false, mensaje: "Ya tiene una atención registrada; corrígela primero." };
   }
   await db.cupo.update({ where: { id: cupoId }, data: { estado: asistio ? "ASISTIO" : "NO_ASISTIO" } });
-  refrescar(c.operativoId);
+  await refrescar(c.operativoId);
   return { ok: true, mensaje: asistio ? `Registramos la asistencia de ${c.persona.nombre}.` : `Registramos que ${c.persona.nombre} no asistió.` };
 }
 
@@ -87,7 +88,7 @@ export async function registrarAtencion(cupoId: string, valores: unknown): Promi
     });
     if (r.data.resultado === "REALIZADA") await marcarServicio(tx, c.animalId, c.servicioId);
   });
-  refrescar(c.operativoId);
+  await refrescar(c.operativoId);
   return { ok: true, mensaje: `Registramos la atención de ${c.persona.nombre}.` };
 }
 
@@ -98,7 +99,7 @@ export async function deshacerAtencion(cupoId: string): Promise<Respuesta> {
   if (!(await autorizarEn(c.operativoId))) return SIN_PERMISO;
   if (c.operativo.estado !== "EN_CURSO") return NO_EN_CURSO;
   await db.$transaction([db.atencion.deleteMany({ where: { cupoId } }), db.cupo.update({ where: { id: cupoId }, data: { estado: "CONFIRMADO" } })]);
-  refrescar(c.operativoId);
+  await refrescar(c.operativoId);
   return { ok: true, mensaje: "Deshicimos el registro." };
 }
 
@@ -123,7 +124,7 @@ export async function registrarEspontanea(operativoId: string, valores: unknown)
   if (!o.capacidades.some((c) => c.servicioId === d.servicioId)) return { ok: false, mensaje: "Este operativo no ofrece ese servicio." };
 
   await db.$transaction(async (tx) => {
-    const animal = await tx.animal.create({ data: { especie: d.especie, sexo: d.sexo, nombre: d.nombreAnimal || null, loteDemoId: o.loteDemoId } });
+    const animal = await tx.animal.create({ data: { municipioId: (await municipioActivo()).id, especie: d.especie, sexo: d.sexo, nombre: d.nombreAnimal || null, loteDemoId: o.loteDemoId } });
     await tx.atencion.create({
       data: {
         operativoId,
@@ -140,6 +141,6 @@ export async function registrarEspontanea(operativoId: string, valores: unknown)
     });
     if (d.resultado === "REALIZADA") await marcarServicio(tx, animal.id, d.servicioId);
   });
-  refrescar(operativoId);
+  await refrescar(operativoId);
   return { ok: true, mensaje: "Registramos la atención espontánea." };
 }

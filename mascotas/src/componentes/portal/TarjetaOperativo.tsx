@@ -5,7 +5,7 @@ import { EnlaceBoton } from "@/componentes/Boton";
 import { EtiquetaEstado } from "@/componentes/EtiquetaEstado";
 import { Icono, type NombreIcono } from "@/componentes/Icono";
 import type { Estado } from "@/dominio/etiquetas";
-import { municipioActivo } from "@/lib/municipio";
+import { municipioPredeterminado } from "@/lib/municipio";
 import { fechaLarga, numero } from "@/servidor/formato";
 import estilos from "./operativos.module.css";
 
@@ -23,7 +23,7 @@ export function estadoInscripcion(o: { inscripcionAbierta: boolean; servicios: S
 
 /** «oct · 24 · sábado», como hoja de calendario. */
 export function FechaCalendario({ fecha }: { fecha: Date }) {
-  const zona = municipioActivo().zonaHoraria;
+  const zona = municipioPredeterminado().zonaHoraria;
   const parte = (opciones: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat("es-CL", { ...opciones, timeZone: zona }).format(fecha).replace(".", "");
   return (
     <span className={estilos.fecha}>
