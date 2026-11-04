@@ -1,0 +1,87 @@
+/* Franja de demostración sobre el header. Colores del tema activo: acento con texto sobre acento. */
+.franja {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2) var(--space-5);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-accent);
+  color: var(--color-text-on-accent);
+  font-family: var(--font-sans);
+  font-size: var(--type-body-sm-size);
+  line-height: var(--type-body-sm-lh);
+}
+
+.texto {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.texto svg {
+  flex: none;
+}
+
+.selector {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.selector > span {
+  margin-right: var(--space-1);
+}
+
+.opcion {
+  min-height: var(--target-min);
+  padding: 0 var(--space-4);
+  border: var(--border-width-strong) solid var(--color-text-on-accent);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-text-on-accent);
+  font: inherit;
+  font-weight: var(--weight-bold);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-micro) var(--ease-flow),
+    color var(--duration-micro) var(--ease-flow);
+}
+
+.opcion:hover {
+  background: color-mix(in srgb, var(--color-text-on-accent) 10%, transparent);
+}
+
+.opcion[aria-pressed='true'] {
+  background: var(--color-text-on-accent);
+  color: var(--color-accent);
+}
+
+/* Sobre el acento, el anillo de foco del tema puede no contrastar: contorno del color del texto. */
+.opcion:focus-visible {
+  outline: 3px solid var(--color-text-on-accent);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+@media (max-width: 640px) {
+  .selector > span {
+    width: 100%;
+    margin-right: 0;
+    text-align: center;
+  }
+
+  .opcion {
+    flex: 1;
+    padding: 0 var(--space-2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opcion {
+    transition: none;
+  }
+}

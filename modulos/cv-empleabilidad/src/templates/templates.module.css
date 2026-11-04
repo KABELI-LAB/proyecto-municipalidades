@@ -223,3 +223,22 @@
   border-radius: var(--radius-small);
   padding: 1px 8px;
 }
+
+/* ---------- Temas (data-tema en <html>, lo pone el sitio) ----------
+   Curepto y Vichuquén no tienen verde de marca: el segundo color de los diseños es --blue-900. */
+:global([data-tema='curepto']) .modernoMain h2::before,
+:global([data-tema='vichuquen']) .modernoMain h2::before {
+  background: var(--blue-900);
+}
+
+:global([data-tema='curepto']) .compactoHeader,
+:global([data-tema='vichuquen']) .compactoHeader {
+  border-left-color: var(--blue-900);
+}
+
+:global([data-tema='curepto']) .compactoHeader .titular,
+:global([data-tema='curepto']) .compactoRow h2,
+:global([data-tema='vichuquen']) .compactoHeader .titular,
+:global([data-tema='vichuquen']) .compactoRow h2 {
+  color: var(--blue-900);
+}

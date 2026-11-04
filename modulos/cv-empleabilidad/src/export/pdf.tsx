@@ -9,16 +9,18 @@ import { COLOR, contacto, type DisenoId } from './comun'
  * del PDF, con soporte para tildes y ñ.
  */
 
-const base = StyleSheet.create({
-  page: { fontFamily: 'Helvetica', fontSize: 10, lineHeight: 1.4, color: COLOR.grisTexto },
-  bold: { fontFamily: 'Helvetica-Bold' },
-  periodo: { fontSize: 9, color: COLOR.grisMedio },
-  vineta: { flexDirection: 'row', marginTop: 2 },
-  vinetaPunto: { width: 10 },
-  vinetaTexto: { flex: 1 },
-  item: { marginBottom: 8 },
-  itemHeader: { flexDirection: 'row', justifyContent: 'space-between', gap: 8 },
-})
+const crearBase = () =>
+  StyleSheet.create({
+    page: { fontFamily: 'Helvetica', fontSize: 10, lineHeight: 1.4, color: COLOR.grisTexto },
+    bold: { fontFamily: 'Helvetica-Bold' },
+    periodo: { fontSize: 9, color: COLOR.grisMedio },
+    vineta: { flexDirection: 'row', marginTop: 2 },
+    vinetaPunto: { width: 10 },
+    vinetaTexto: { flex: 1 },
+    item: { marginBottom: 8 },
+    itemHeader: { flexDirection: 'row', justifyContent: 'space-between', gap: 8 },
+  })
+let base = crearBase()
 
 function Vinetas({ items }: { items: string[] }) {
   return (
@@ -70,25 +72,27 @@ function Educaciones({ cv }: { cv: CvData }) {
 
 // ---------- Clásico ----------
 
-const clasico = StyleSheet.create({
-  page: { paddingVertical: 48, paddingHorizontal: 56 },
-  header: { alignItems: 'center', marginBottom: 18 },
-  // lineHeight explícito: el heredado se calcula con el fontSize de la página y se superpone.
-  nombre: { fontFamily: 'Helvetica-Bold', fontSize: 22, lineHeight: 1.2, color: COLOR.azul },
-  titular: { fontFamily: 'Helvetica-Bold', fontSize: 11, lineHeight: 1.3, marginTop: 2 },
-  contacto: { fontSize: 9, marginTop: 6 },
-  seccion: { marginBottom: 12 },
-  seccionTitulo: {
-    fontFamily: 'Helvetica-Bold',
-    fontSize: 10,
-    letterSpacing: 1.2,
-    color: COLOR.azul,
-    borderBottomWidth: 1.2,
-    borderBottomColor: COLOR.azul,
-    paddingBottom: 3,
-    marginBottom: 7,
-  },
-})
+const crearClasico = () =>
+  StyleSheet.create({
+    page: { paddingVertical: 48, paddingHorizontal: 56 },
+    header: { alignItems: 'center', marginBottom: 18 },
+    // lineHeight explícito: el heredado se calcula con el fontSize de la página y se superpone.
+    nombre: { fontFamily: 'Helvetica-Bold', fontSize: 22, lineHeight: 1.2, color: COLOR.azul },
+    titular: { fontFamily: 'Helvetica-Bold', fontSize: 11, lineHeight: 1.3, marginTop: 2 },
+    contacto: { fontSize: 9, marginTop: 6 },
+    seccion: { marginBottom: 12 },
+    seccionTitulo: {
+      fontFamily: 'Helvetica-Bold',
+      fontSize: 10,
+      letterSpacing: 1.2,
+      color: COLOR.azul,
+      borderBottomWidth: 1.2,
+      borderBottomColor: COLOR.azul,
+      paddingBottom: 3,
+      marginBottom: 7,
+    },
+  })
+let clasico = crearClasico()
 
 function SeccionClasico({ titulo, children }: { titulo: string; children: ReactNode }) {
   return (
@@ -135,30 +139,32 @@ function ClasicoPdf({ cv }: { cv: CvData }) {
 // ---------- Moderno ----------
 
 const SIDE = 175
-const moderno = StyleSheet.create({
-  page: { flexDirection: 'row' },
-  fondo: { position: 'absolute', top: 0, left: 0, bottom: 0, width: SIDE, backgroundColor: COLOR.azul },
-  side: { width: SIDE, paddingVertical: 40, paddingHorizontal: 20, color: COLOR.marfil },
-  nombre: { fontFamily: 'Helvetica-Bold', fontSize: 18, color: '#FFFFFF', lineHeight: 1.15 },
-  titular: { marginTop: 6 },
-  sideTitulo: {
-    fontFamily: 'Helvetica-Bold',
-    fontSize: 9,
-    letterSpacing: 1.2,
-    color: '#FFFFFF',
-    marginTop: 20,
-    marginBottom: 5,
-    paddingTop: 8,
-    borderTopWidth: 0.6,
-    borderTopColor: '#8FA5B6',
-  },
-  sideItem: { fontSize: 9, marginBottom: 3 },
-  main: { flex: 1, paddingVertical: 40, paddingHorizontal: 30 },
-  mainSeccion: { marginBottom: 14 },
-  mainTituloFila: { flexDirection: 'row', alignItems: 'center', marginBottom: 7 },
-  mainTituloBarra: { width: 18, height: 3, backgroundColor: COLOR.verde, marginRight: 8 },
-  mainTitulo: { fontFamily: 'Helvetica-Bold', fontSize: 13, lineHeight: 1.2, color: COLOR.azul },
-})
+const crearModerno = () =>
+  StyleSheet.create({
+    page: { flexDirection: 'row' },
+    fondo: { position: 'absolute', top: 0, left: 0, bottom: 0, width: SIDE, backgroundColor: COLOR.azul },
+    side: { width: SIDE, paddingVertical: 40, paddingHorizontal: 20, color: COLOR.marfil },
+    nombre: { fontFamily: 'Helvetica-Bold', fontSize: 18, color: '#FFFFFF', lineHeight: 1.15 },
+    titular: { marginTop: 6 },
+    sideTitulo: {
+      fontFamily: 'Helvetica-Bold',
+      fontSize: 9,
+      letterSpacing: 1.2,
+      color: '#FFFFFF',
+      marginTop: 20,
+      marginBottom: 5,
+      paddingTop: 8,
+      borderTopWidth: 0.6,
+      borderTopColor: '#8FA5B6',
+    },
+    sideItem: { fontSize: 9, marginBottom: 3 },
+    main: { flex: 1, paddingVertical: 40, paddingHorizontal: 30 },
+    mainSeccion: { marginBottom: 14 },
+    mainTituloFila: { flexDirection: 'row', alignItems: 'center', marginBottom: 7 },
+    mainTituloBarra: { width: 18, height: 3, backgroundColor: COLOR.verde, marginRight: 8 },
+    mainTitulo: { fontFamily: 'Helvetica-Bold', fontSize: 13, lineHeight: 1.2, color: COLOR.azul },
+  })
+let moderno = crearModerno()
 
 function SeccionModerno({ titulo, children }: { titulo: string; children: ReactNode }) {
   return (
@@ -218,17 +224,19 @@ function ModernoPdf({ cv }: { cv: CvData }) {
 
 // ---------- Compacto ----------
 
-const compacto = StyleSheet.create({
-  page: { paddingVertical: 36, paddingHorizontal: 44, fontSize: 9.5 },
-  header: { flexDirection: 'row', justifyContent: 'space-between', borderLeftWidth: 5, borderLeftColor: COLOR.verde, paddingLeft: 12, marginBottom: 12 },
-  nombre: { fontFamily: 'Helvetica-Bold', fontSize: 19, lineHeight: 1.2 },
-  titular: { color: COLOR.verde, fontFamily: 'Helvetica-Bold' },
-  contacto: { fontSize: 9, textAlign: 'right' },
-  perfil: { backgroundColor: COLOR.grisClaro, padding: 9, borderRadius: 3, marginBottom: 10 },
-  fila: { flexDirection: 'row', paddingVertical: 8, borderTopWidth: 0.8, borderTopColor: COLOR.grisClaro },
-  filaTitulo: { width: 90, fontFamily: 'Helvetica-Bold', fontSize: 8.5, letterSpacing: 1, color: COLOR.verde },
-  filaCuerpo: { flex: 1 },
-})
+const crearCompacto = () =>
+  StyleSheet.create({
+    page: { paddingVertical: 36, paddingHorizontal: 44, fontSize: 9.5 },
+    header: { flexDirection: 'row', justifyContent: 'space-between', borderLeftWidth: 5, borderLeftColor: COLOR.verde, paddingLeft: 12, marginBottom: 12 },
+    nombre: { fontFamily: 'Helvetica-Bold', fontSize: 19, lineHeight: 1.2 },
+    titular: { color: COLOR.verde, fontFamily: 'Helvetica-Bold' },
+    contacto: { fontSize: 9, textAlign: 'right' },
+    perfil: { backgroundColor: COLOR.grisClaro, padding: 9, borderRadius: 3, marginBottom: 10 },
+    fila: { flexDirection: 'row', paddingVertical: 8, borderTopWidth: 0.8, borderTopColor: COLOR.grisClaro },
+    filaTitulo: { width: 90, fontFamily: 'Helvetica-Bold', fontSize: 8.5, letterSpacing: 1, color: COLOR.verde },
+    filaCuerpo: { flex: 1 },
+  })
+let compacto = crearCompacto()
 
 function FilaCompacto({ titulo, children }: { titulo: string; children: ReactNode }) {
   return (
@@ -296,5 +304,10 @@ export function CvPdfDocument({ cv, diseno }: { cv: CvData; diseno: DisenoId }) 
 // Función junto al componente a propósito: este archivo no participa de fast refresh.
 // eslint-disable-next-line react-refresh/only-export-components
 export function renderPdf(cv: CvData, diseno: DisenoId): Promise<Blob> {
+  // Los estilos copian COLOR al crearse: se rehacen con los colores vigentes.
+  base = crearBase()
+  clasico = crearClasico()
+  moderno = crearModerno()
+  compacto = crearCompacto()
   return pdf(<CvPdfDocument cv={cv} diseno={diseno} />).toBlob()
 }

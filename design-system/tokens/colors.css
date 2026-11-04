@@ -14,6 +14,8 @@
 
 /* ---------- semantic aliases ---------- */
 --color-primary:var(--blue-700);--color-primary-hover:var(--blue-800);--color-primary-pressed:var(--blue-900);--color-primary-subtle:var(--blue-50);
+/* Acción principal (botón primario). En Hualañé es el primario; Curepto la cambia a rojo concejo. */
+--color-action:var(--color-primary);--color-action-hover:var(--color-primary-hover);--color-action-pressed:var(--color-primary-pressed);
 --color-secondary:var(--green-700);--color-secondary-hover:var(--green-800);--color-secondary-subtle:var(--green-50);
 --color-accent:var(--yellow-400);--color-accent-strong:var(--yellow-300);--color-accent-subtle:var(--yellow-50);
 --color-river:var(--blue-500);

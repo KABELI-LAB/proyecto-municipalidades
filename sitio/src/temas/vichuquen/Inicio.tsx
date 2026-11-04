@@ -1,7 +1,10 @@
-import { Cauce, Icon } from '@muni/design-system'
+import { Icon, Trazo } from '@muni/design-system'
 import { Link } from 'react-router-dom'
-import { MODULOS } from '../modulos'
-import s from '../sitio.module.css'
+import { MODULOS } from '../../modulos'
+import s from './sitio.module.css'
+
+/** En este tema el verde no es color de marca: las tarjetas usan azul y amarillo. */
+const TONOS: Record<string, 'blue' | 'yellow'> = { cv: 'blue', 'registro-emergencia': 'yellow' }
 
 export function Inicio() {
   return (
@@ -13,10 +16,8 @@ export function Inicio() {
             Hola.
             <span>¿Cómo podemos ayudarte?</span>
           </h1>
-          <p className={s.lead}>Encuentra los servicios de la Municipalidad de Hualañé en un solo lugar.</p>
-        </div>
-        <div className={s.heroCauce} aria-hidden="true">
-          <Cauce colors={['var(--blue-100)', 'var(--green-100)', 'var(--yellow-100)']} thickness={14} gap={56} />
+          <Trazo width={200} className={s.heroTrazo} />
+          <p className={s.lead}>Encuentra los servicios de la Municipalidad de Vichuquén en un solo lugar.</p>
         </div>
       </section>
 
@@ -29,7 +30,7 @@ export function Inicio() {
             <li key={meta.id}>
               {/* Marcado de ServiceTile del design system, con Link del router. */}
               <Link to={meta.path} className={`hds-card hds-card--interactive ${s.tile}`}>
-                <span className={`hds-tile-icon hds-tile-icon--${meta.tono ?? 'blue'}`}>
+                <span className={`hds-tile-icon hds-tile-icon--${TONOS[meta.id] ?? meta.tono ?? 'blue'}`}>
                   <Icon name={meta.icono ?? 'file-text'} size={24} />
                 </span>
                 <div className={s.tileTexto}>

@@ -1,8 +1,9 @@
-import { Icon } from '@muni/design-system'
+import { Icon, useMunicipio } from '@muni/design-system'
 import { Link } from 'react-router-dom'
-import s from '../sitio.module.css'
+import { TEMAS } from '../temas'
 
 export function NoEncontrada() {
+  const s = TEMAS[useMunicipio().id].estilos
   return (
     <section className={`${s.contenedor} ${s.noEncontrada}`}>
       <span className="hds-tile-icon hds-tile-icon--blue">

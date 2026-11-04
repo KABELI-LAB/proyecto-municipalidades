@@ -14,6 +14,9 @@ export { QuickRepliesProps, QuickReplies } from './components/conversational/Qui
 export { CauceProps, Cauce } from './components/core/Cauce';
 export { IconProps, Icon } from './components/core/Icon';
 export { LogoProps, Logo } from './components/core/Logo';
+export { Municipio, MunicipioId, MunicipioProviderProps, MUNICIPIOS, MUNICIPIO_PREDETERMINADO, MunicipioProvider, esMunicipio, useMunicipio } from './components/core/Municipio';
+export { OleajeProps, Oleaje } from './components/core/Oleaje';
+export { TrazoProps, Trazo } from './components/core/Trazo';
 export { BarChartProps, BarChart } from './components/data/BarChart';
 export { DataTableProps, DataTable } from './components/data/DataTable';
 export { DonutChartProps, DonutChart } from './components/data/DonutChart';

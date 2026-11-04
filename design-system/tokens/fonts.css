@@ -10,3 +10,24 @@
 @import '@fontsource/atkinson-hyperlegible-mono/latin-400.css';
 @import '@fontsource/atkinson-hyperlegible-mono/latin-500.css';
 @import '@fontsource/atkinson-hyperlegible-mono/latin-600.css';
+
+/* Fuentes de los otros temas (ver tokens/temas/). @font-face solo descarga el archivo
+   cuando una regla lo usa, así que cada municipio baja únicamente las suyas. */
+/* Curepto: Roboto (texto), Roboto Condensed (títulos, menú, botones) y Roboto Mono. Apache 2.0 */
+@import '@fontsource/roboto/latin-400.css';
+@import '@fontsource/roboto/latin-400-italic.css';
+@import '@fontsource/roboto/latin-500.css';
+@import '@fontsource/roboto/latin-700.css';
+@import '@fontsource/roboto-condensed/latin-400.css';
+@import '@fontsource/roboto-condensed/latin-500.css';
+@import '@fontsource/roboto-condensed/latin-700.css';
+@import '@fontsource/roboto-mono/latin-400.css';
+@import '@fontsource/roboto-mono/latin-500.css';
+/* Vichuquén: Lexend (texto y títulos) e IBM Plex Mono (cifras, RUT, horas). OFL */
+@import '@fontsource/lexend/latin-400.css';
+@import '@fontsource/lexend/latin-500.css';
+@import '@fontsource/lexend/latin-600.css';
+@import '@fontsource/lexend/latin-700.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
+@import '@fontsource/ibm-plex-mono/latin-600.css';

@@ -1,0 +1,116 @@
+/*
+ * Tema Vichuquén: valores del design system de Vichuquén, activos con
+ * <html data-tema="vichuquen">. Sin data-tema rigen los de Hualañé (:root).
+ * Generado desde tokens/{colors,typography,effects,themes}.css del proyecto Vichuquén.
+ */
+/* --- colors --- */
+/* Vichuquén — tokens de color, del design system "Vichuquén — Municipal Design System" (muestreados del escudo).
+   Se mantienen los nombres de rampas del design system anterior (--blue-*, --yellow-*, --green-*)
+   para que los módulos funcionen sin cambios; los valores ahora son los de Vichuquén:
+   --blue-* = teal, --yellow-* = dorado, --green-* = verde funcional (estados positivos). */
+:root[data-tema="vichuquen"]{
+/* Teal Vichuquén (escudo y trazo del lema). 700 = primary y surface-brand (7.1:1 sobre blanco). */
+--teal-50:#E6F2F3;--teal-100:#C9E4E6;--teal-200:#97CBD0;--teal-300:#5FAAB1;--teal-400:#2B8B94;--teal-500:#007E84;--teal-600:#007078;--teal-700:#00626B;--teal-800:#004E55;--teal-900:#003B40;--teal-950:#00282C;
+--blue-50:var(--teal-50);--blue-100:var(--teal-100);--blue-200:var(--teal-200);--blue-300:var(--teal-300);--blue-400:var(--teal-400);--blue-500:var(--teal-500);--blue-600:var(--teal-600);--blue-700:var(--teal-700);--blue-800:var(--teal-800);--blue-900:var(--teal-900);--blue-950:var(--teal-950);
+/* Dorado (estrella y lema). 400 = accent: solo relleno o acento gráfico, nunca texto sobre blanco (2.9:1). Texto dorado = 700. */
+--gold-50:#FCF5EC;--gold-100:#F7E6CF;--gold-200:#EFCFA3;--gold-300:#E2AE6D;--gold-400:#CA893E;--gold-500:#B07330;--gold-600:#935E25;--gold-700:#7A4C1C;--gold-800:#5C3915;--gold-900:#40280F;
+--yellow-50:var(--gold-50);--yellow-100:var(--gold-100);--yellow-200:var(--gold-200);--yellow-300:var(--gold-300);--yellow-400:var(--gold-400);--yellow-500:var(--gold-500);--yellow-600:var(--gold-600);--yellow-700:var(--gold-700);--yellow-800:var(--gold-800);--yellow-900:var(--gold-900);--yellow-950:#2B1A06;
+/* Verde funcional: solo estados positivos (éxito, listo). Vichuquén no tiene verde de marca. */
+--green-50:#E6F4EA;--green-100:#C8E6D0;--green-200:#9BD1AB;--green-300:#6DB985;--green-400:#45A064;--green-500:#2D8A4C;--green-600:#1D7639;--green-700:#186531;--green-800:#134F27;--green-900:#0E3A1D;--green-950:#072210;
+/* Granito: el gris de "VICHUQUÉN" en el logotipo. Solo para la marca; la interfaz usa --neutral-*. */
+--granito:#585A5B;
+/* Neutros levemente teñidos de teal */
+--white:#FFFFFF;--neutral-50:#F3F7F7;--neutral-100:#E7EEEE;--neutral-200:#D3DCDD;--neutral-300:#B4C1C2;--neutral-400:#8C9A9B;--neutral-500:#647172;--neutral-600:#4A5758;--neutral-700:#354243;--neutral-800:#233031;--neutral-900:#172324;--neutral-950:#0B1415;
+/* Base semántica */
+--red-50:#FDECEA;--red-100:#F9D3CF;--red-500:#D0362A;--red-600:#B42318;--red-700:#8A1209;
+--success-600:#1D7639;--success-50:#E6F4EA;
+
+/* ---------- alias semánticos ---------- */
+--color-primary:var(--teal-700);--color-primary-hover:var(--teal-800);--color-primary-pressed:var(--teal-900);--color-primary-subtle:var(--teal-50);
+--color-secondary:var(--teal-900);--color-secondary-hover:var(--teal-950);--color-secondary-subtle:var(--neutral-100);
+--color-action:var(--color-primary);--color-action-hover:var(--color-primary-hover);--color-action-pressed:var(--color-primary-pressed);
+--color-accent:var(--gold-400);--color-accent-strong:var(--gold-500);--color-accent-subtle:var(--gold-50);
+--color-river:var(--teal-500);
+
+--color-surface:var(--white);--color-surface-sunken:var(--neutral-50);--color-surface-muted:var(--neutral-100);--color-surface-inverse:var(--teal-900);--color-surface-brand:var(--teal-700);
+--color-text:var(--neutral-900);--color-text-secondary:var(--neutral-600);--color-text-muted:var(--neutral-500);--color-text-inverse:var(--white);--color-text-brand:var(--teal-700);--color-text-link:var(--teal-700);--color-text-link-hover:var(--teal-900);--color-text-on-accent:#2B1A06;
+--color-border:var(--neutral-200);--color-border-strong:var(--neutral-400);--color-border-input:var(--neutral-500);--color-border-focus:var(--teal-500);
+/* Foco: 3px dorado claro interior (4.8:1 sobre teal) + 2px teal-950 exterior (15.7:1 sobre blanco) */
+--color-focus-ring:var(--teal-950);--color-focus-inner:var(--gold-200);
+
+--color-success:var(--success-600);--color-success-bg:var(--success-50);
+--color-warning:var(--gold-700);--color-warning-bg:#FDF3E1;--color-warning-fill:var(--gold-400);
+--color-error:var(--red-600);--color-error-bg:var(--red-50);
+--color-info:#1B5E9E;--color-info-bg:#E8F1FA;
+
+/* Visualización de datos: orden categórico */
+--data-1:var(--teal-700);--data-2:var(--gold-400);--data-3:var(--teal-300);--data-4:var(--granito);--data-5:#3D7CC9;--data-6:var(--gold-700);--data-muted:var(--teal-200);
+}
+
+/* --- typography --- */
+:root[data-tema="vichuquen"]{
+--font-sans:Lexend,'Segoe UI',system-ui,-apple-system,sans-serif;
+--font-mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+--font-display:var(--font-sans);
+--weight-regular:400;--weight-medium:500;--weight-semibold:600;--weight-bold:700;--weight-black:800;
+
+/* size / line-height / tracking — base body is 18px for older adults */
+--type-display-xl-size:72px;--type-display-xl-lh:1.05;--type-display-xl-track:-0.03em;--type-display-xl-weight:700;
+--type-display-l-size:56px;--type-display-l-lh:1.08;--type-display-l-track:-0.025em;--type-display-l-weight:700;
+--type-h1-size:44px;--type-h1-lh:1.1;--type-h1-track:-0.02em;--type-h1-weight:700;
+--type-h2-size:34px;--type-h2-lh:1.15;--type-h2-track:-0.015em;--type-h2-weight:700;
+--type-h3-size:26px;--type-h3-lh:1.25;--type-h3-track:-0.01em;--type-h3-weight:600;
+--type-h4-size:21px;--type-h4-lh:1.3;--type-h4-track:0;--type-h4-weight:600;
+--type-body-lg-size:21px;--type-body-lg-lh:1.55;
+--type-body-size:18px;--type-body-lh:1.55;
+--type-body-sm-size:16px;--type-body-sm-lh:1.5;
+--type-label-size:16px;--type-label-lh:1.25;--type-label-weight:600;
+--type-caption-size:14px;--type-caption-lh:1.4;
+--type-overline-size:15px;--type-overline-lh:1.33;--type-overline-track:0.01em;--type-overline-weight:600;
+--type-data-size:40px;--type-data-lh:1.0;--type-data-track:-0.02em;
+
+/* shorthand */
+--type-display:var(--type-display-l-weight) var(--type-display-l-size)/var(--type-display-l-lh) var(--font-display);
+--type-heading:var(--type-h2-weight) var(--type-h2-size)/var(--type-h2-lh) var(--font-display);
+--type-body:400 var(--type-body-size)/var(--type-body-lh) var(--font-sans);
+--type-label:var(--type-label-weight) var(--type-label-size)/var(--type-label-lh) var(--font-sans);
+--type-data:500 var(--type-data-size)/var(--type-data-lh) var(--font-mono);
+}
+
+/* --- effects --- */
+:root[data-tema="vichuquen"]{
+--radius-none:0;--radius-small:6px;--radius-medium:12px;--radius-large:20px;--radius-xl:28px;--radius-full:9999px;
+--border-width:1px;--border-width-strong:2px;
+--shadow-small:0 1px 2px rgba(0,40,44,.08),0 1px 1px rgba(0,40,44,.04);
+--shadow-medium:0 6px 16px rgba(0,40,44,.10),0 2px 4px rgba(0,40,44,.06);
+--shadow-large:0 20px 48px rgba(0,40,44,.18);
+--focus-ring:0 0 0 3px var(--color-focus-inner),0 0 0 5px var(--color-focus-ring);
+/* movimiento "oleaje": arranque suave, llegada larga, sin rebote */
+--ease-flow:cubic-bezier(.3,0,0,1);/* @kind other */--ease-enter:cubic-bezier(0,0,.2,1);/* @kind other */--ease-exit:cubic-bezier(.4,0,1,1);/* @kind other */
+--duration-micro:120ms;/* @kind other */--duration-standard:240ms;/* @kind other */--duration-complex:420ms;/* @kind other */--duration-progress:1200ms;/* @kind other */
+/* corte diagonal heredado del design system anterior (sin uso en Vichuquén) */
+--cut-angle:8deg;/* @kind other */
+}
+
+/* --- themes --- */
+:root[data-tema="vichuquen"][data-theme="dark"],[data-tema="vichuquen"] [data-theme="dark"]{
+--color-primary:#5EC0C8;--color-primary-hover:#8AD4DA;--color-primary-pressed:#B3E3E7;--color-primary-subtle:#0F3337;
+--color-secondary:#8AD4DA;--color-secondary-hover:#B3E3E7;--color-secondary-subtle:#132223;
+--color-action:#5EC0C8;--color-action-hover:#8AD4DA;--color-action-pressed:#B3E3E7;
+--color-accent:#E2AE6D;--color-accent-subtle:#33240F;
+--color-surface:#0D191A;--color-surface-sunken:#132223;--color-surface-muted:#1A2C2E;--color-surface-inverse:var(--white);--color-surface-brand:#00474E;
+--color-text:#EBF2F2;--color-text-secondary:#B4C3C4;--color-text-muted:#93A3A4;--color-text-inverse:var(--teal-950);--color-text-brand:#8AD4DA;--color-text-link:#5EC0C8;--color-text-link-hover:#8AD4DA;
+--color-border:#2A3F41;--color-border-strong:#7D9294;--color-border-input:#7D9294;
+--color-focus-ring:var(--gold-200);--color-focus-inner:var(--teal-950);
+--color-success:#72CF90;--color-success-bg:#10301C;--color-warning:#F0C27E;--color-warning-bg:#3A2A0C;--color-error:#FF8B80;--color-error-bg:#3D1512;--color-info:#8CC0F2;--color-info-bg:#11273D;
+color-scheme:dark;
+}
+:root[data-tema="vichuquen"][data-theme="high-contrast"],[data-tema="vichuquen"] [data-theme="high-contrast"]{
+--color-primary:var(--teal-950);--color-primary-hover:#000000;--color-primary-pressed:#000000;--color-primary-subtle:var(--teal-50);
+--color-secondary:#000000;--color-secondary-subtle:#FFFFFF;--color-accent:var(--gold-200);--color-accent-subtle:#FFF4E0;
+--color-action:var(--teal-950);--color-action-hover:#000000;--color-action-pressed:#000000;
+--color-surface:#FFFFFF;--color-surface-sunken:#FFFFFF;--color-surface-muted:#FFFFFF;--color-surface-brand:var(--teal-950);--color-surface-inverse:#000000;
+--color-text:#000000;--color-text-secondary:#1A1A1A;--color-text-muted:#2B2B2B;--color-text-brand:var(--teal-950);--color-text-link:var(--teal-950);--color-text-link-hover:#000000;
+--color-border:#000000;--color-border-strong:#000000;--color-border-input:#000000;--color-focus-ring:#000000;--color-focus-inner:#FFFFFF;
+--color-success:#0B4F22;--color-success-bg:#E6F4EA;--color-warning:#4A300C;--color-warning-bg:#FFF4E0;--color-error:#8A1209;--color-error-bg:#FDECEA;--color-info:#0B3F75;--color-info-bg:#E8F1FA;
+}

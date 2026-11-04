@@ -1,0 +1,113 @@
+/*
+ * Tema Curepto: valores del design system de Curepto, activos con
+ * <html data-tema="curepto">. Sin data-tema rigen los de Hualañé (:root).
+ * Generado desde tokens/{colors,typography,effects,themes}.css del proyecto Curepto.
+ */
+/* --- colors --- */
+/* Curepto — tokens de color. Valores base medidos del sitio publicado (curepto.cl, 03-11-2026).
+   Se mantienen los nombres de rampas del design system anterior (--blue-*, --green-*, --yellow-*)
+   para que los módulos funcionen sin cambios; los valores ahora son los de Curepto. */
+:root[data-tema="curepto"]{
+/* Azul Curepto: 700 = azul-municipal (#00468C, barra de avisos), 900 = azul-noche (#122536, menú y footer),
+   950 = negro-azulado (#09121B). Texto blanco sobre 700: 9.3:1; sobre 900: 15.6:1. */
+--blue-50:#EDF3FA;--blue-100:#D6E4F3;--blue-200:#ADC8E6;--blue-300:#7BA7D6;--blue-400:#4482C2;--blue-500:#1A63AA;--blue-600:#0A5499;--blue-700:#00468C;--blue-800:#003A73;--blue-900:#122536;--blue-950:#09121B;
+/* Rojo concejo: botones de acción tipo píldora. 700 = rojo-concejo (#8C0000), texto blanco 9.9:1. */
+--rojo-50:#FBECEC;--rojo-100:#F5D0D0;--rojo-500:#B31A1A;--rojo-600:#A00A0A;--rojo-700:#8C0000;--rojo-800:#700000;--rojo-900:#520000;
+/* Verde funcional (estados positivos). Curepto no tiene un verde de marca; se usa el del widget de WhatsApp (#4BAE4F) como 500. */
+--green-50:#EEF7EE;--green-100:#D5ECD6;--green-200:#ADD9AF;--green-300:#82C485;--green-400:#63B866;--green-500:#4BAE4F;--green-600:#3B9440;--green-700:#2E7D32;--green-800:#23602A;--green-900:#1A4720;--green-950:#0E2911;
+/* Amarillo Curepto: 400 = amarillo-aviso (#FFCC00), 500 = amarillo-menu (#F5BB00). Siempre sobre azul, nunca como texto sobre blanco (salvo 700+). */
+--yellow-50:#FFFAE0;--yellow-100:#FFF2B3;--yellow-200:#FFE680;--yellow-300:#FFD633;--yellow-400:#FFCC00;--yellow-500:#F5BB00;--yellow-600:#C99400;--yellow-700:#8A6400;--yellow-800:#6B4D00;--yellow-900:#4A3500;--yellow-950:#2B1F00;
+/* Grises de la barra de utilidades (degradado #444444 → #000000) y separador punteado del footer. */
+--gris-barra-inicio:#444444;--gris-barra-fin:#000000;--separador:#C3C3C3;
+/* Neutros fríos, levemente azulados */
+--white:#FFFFFF;--neutral-50:#F6F7F9;--neutral-100:#ECEEF2;--neutral-200:#DCDFE6;--neutral-300:#C2C6D0;--neutral-400:#989EAD;--neutral-500:#6A7182;--neutral-600:#585F70;--neutral-700:#424858;--neutral-800:#2C3242;--neutral-900:#1A1F2C;--neutral-950:#0E121B;
+/* Base semántica */
+--red-50:#FCEAEA;--red-100:#F8D2D2;--red-500:#DC3B3B;--red-600:#C42B2B;--red-700:#9C1F1F;
+--success-600:#2E7D32;--success-50:#E8F5E9;
+
+/* ---------- alias semánticos ---------- */
+--color-primary:var(--blue-700);--color-primary-hover:var(--blue-800);--color-primary-pressed:var(--blue-900);--color-primary-subtle:var(--blue-50);
+--color-secondary:var(--blue-900);--color-secondary-hover:var(--blue-950);--color-secondary-subtle:var(--neutral-100);
+/* Acción principal (botón píldora rojo concejo) */
+--color-action:var(--rojo-700);--color-action-hover:var(--rojo-800);--color-action-pressed:var(--rojo-900);
+--color-accent:var(--yellow-400);--color-accent-strong:var(--yellow-500);--color-accent-subtle:var(--yellow-50);
+--color-river:var(--blue-500);
+
+--color-surface:var(--white);--color-surface-sunken:var(--neutral-50);--color-surface-muted:var(--neutral-100);--color-surface-inverse:var(--blue-900);--color-surface-brand:var(--blue-700);
+--color-text:var(--blue-900);--color-text-secondary:var(--neutral-600);--color-text-muted:var(--neutral-500);--color-text-inverse:var(--white);--color-text-brand:var(--blue-700);--color-text-link:var(--blue-700);--color-text-link-hover:var(--blue-900);--color-text-on-accent:var(--blue-900);
+--color-border:var(--neutral-200);--color-border-strong:var(--neutral-400);--color-border-input:var(--neutral-500);--color-border-focus:var(--blue-500);
+--color-focus-ring:var(--yellow-400);--color-focus-inner:var(--blue-950);
+
+--color-success:var(--success-600);--color-success-bg:var(--success-50);
+--color-warning:var(--yellow-700);--color-warning-bg:var(--yellow-100);--color-warning-fill:var(--yellow-400);
+--color-error:var(--red-600);--color-error-bg:var(--red-50);
+--color-info:var(--blue-600);--color-info-bg:var(--blue-50);
+
+/* Visualización de datos: orden categórico */
+--data-1:var(--blue-700);--data-2:var(--rojo-700);--data-3:var(--yellow-500);--data-4:var(--blue-400);--data-5:var(--blue-900);--data-6:var(--yellow-700);--data-muted:var(--neutral-300);
+}
+
+/* --- typography --- */
+:root[data-tema="curepto"]{
+--font-sans:Roboto,Arial,system-ui,-apple-system,'Segoe UI',sans-serif;
+--font-mono:'Roboto Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+--font-display:'Roboto Condensed','Arial Narrow',Roboto,sans-serif;
+--weight-regular:400;--weight-medium:500;--weight-semibold:600;--weight-bold:700;--weight-black:800;
+
+/* size / line-height / tracking — base body is 18px for older adults */
+--type-display-xl-size:80px;--type-display-xl-lh:1.0;--type-display-xl-track:-0.03em;--type-display-xl-weight:800;
+--type-display-l-size:60px;--type-display-l-lh:1.04;--type-display-l-track:-0.025em;--type-display-l-weight:800;
+--type-h1-size:44px;--type-h1-lh:1.1;--type-h1-track:-0.02em;--type-h1-weight:700;
+--type-h2-size:34px;--type-h2-lh:1.15;--type-h2-track:-0.015em;--type-h2-weight:700;
+--type-h3-size:26px;--type-h3-lh:1.25;--type-h3-track:-0.01em;--type-h3-weight:700;
+--type-h4-size:21px;--type-h4-lh:1.3;--type-h4-track:0;--type-h4-weight:700;
+--type-body-lg-size:21px;--type-body-lg-lh:1.55;
+--type-body-size:18px;--type-body-lh:1.55;
+--type-body-sm-size:16px;--type-body-sm-lh:1.5;
+--type-label-size:16px;--type-label-lh:1.25;--type-label-weight:600;
+--type-caption-size:14px;--type-caption-lh:1.4;
+--type-overline-size:13px;--type-overline-lh:1.2;--type-overline-track:0.1em;--type-overline-weight:700;
+--type-data-size:40px;--type-data-lh:1.0;--type-data-track:-0.02em;
+
+/* shorthand */
+--type-display:var(--type-display-l-weight) var(--type-display-l-size)/var(--type-display-l-lh) var(--font-display);
+--type-heading:var(--type-h2-weight) var(--type-h2-size)/var(--type-h2-lh) var(--font-display);
+--type-body:400 var(--type-body-size)/var(--type-body-lh) var(--font-sans);
+--type-label:var(--type-label-weight) var(--type-label-size)/var(--type-label-lh) var(--font-sans);
+--type-data:500 var(--type-data-size)/var(--type-data-lh) var(--font-mono);
+}
+
+/* --- effects --- */
+:root[data-tema="curepto"]{
+--radius-none:0;--radius-small:4px;--radius-medium:8px;--radius-large:16px;--radius-xl:16px;--radius-full:999px;
+--border-width:1px;--border-width-strong:2px;
+--shadow-small:0 1px 2px rgba(9,18,27,.08),0 1px 1px rgba(9,18,27,.04);
+--shadow-medium:0 4px 12px rgba(9,18,27,.08),0 1px 3px rgba(9,18,27,.06);
+--shadow-large:0 16px 40px rgba(9,18,27,.14),0 4px 10px rgba(9,18,27,.06);--shadow-flotante:0 2px 6px rgba(0,0,0,.3);
+--focus-ring:0 0 0 2px var(--color-focus-inner),0 0 0 5px var(--color-focus-ring);
+/* movimiento: inicio decidido, asentamiento largo */
+--ease-flow:cubic-bezier(.2,0,0,1);/* @kind other */--ease-enter:cubic-bezier(0,0,.2,1);/* @kind other */--ease-exit:cubic-bezier(.4,0,1,1);/* @kind other */
+--duration-micro:120ms;/* @kind other */--duration-standard:240ms;/* @kind other */--duration-complex:420ms;/* @kind other */--duration-progress:1200ms;/* @kind other */
+/* corte diagonal heredado del design system anterior (sin uso en Curepto) */
+--cut-angle:8deg;/* @kind other */
+}
+
+/* --- themes --- */
+:root[data-tema="curepto"][data-theme="dark"],[data-tema="curepto"] [data-theme="dark"]{
+--color-primary:var(--blue-300);--color-primary-hover:var(--blue-200);--color-primary-pressed:var(--blue-100);--color-primary-subtle:#1A2550;
+--color-secondary:var(--green-300);--color-secondary-hover:var(--green-200);--color-secondary-subtle:#14301A;
+--color-accent:var(--yellow-400);--color-accent-subtle:#2E2408;
+--color-surface:#0F1526;--color-surface-sunken:#0A0F1C;--color-surface-muted:#1A2236;--color-surface-inverse:var(--white);--color-surface-brand:var(--blue-800);
+--color-text:#F1F3F7;--color-text-secondary:#B9BFCC;--color-text-muted:#9AA1B1;--color-text-inverse:var(--neutral-950);--color-text-brand:var(--blue-200);--color-text-link:var(--blue-300);--color-text-link-hover:var(--blue-200);
+--color-border:#2A3349;--color-border-strong:#4A5470;--color-border-input:#6B7590;
+--color-success:#6FCF8A;--color-success-bg:#12301C;--color-warning:var(--yellow-400);--color-warning-bg:#2E2408;--color-error:#FF8A8A;--color-error-bg:#3A1416;--color-info:var(--blue-300);--color-info-bg:#1A2550;
+color-scheme:dark;
+}
+:root[data-tema="curepto"][data-theme="high-contrast"],[data-tema="curepto"] [data-theme="high-contrast"]{
+--color-primary:#000000;--color-primary-hover:#000000;--color-primary-pressed:#000000;--color-primary-subtle:#FFFFFF;
+--color-secondary:#000000;--color-secondary-subtle:#FFFFFF;--color-accent:#FFE500;--color-accent-subtle:#FFFFFF;
+--color-surface:#FFFFFF;--color-surface-sunken:#FFFFFF;--color-surface-muted:#FFFFFF;--color-surface-brand:#000000;--color-surface-inverse:#000000;
+--color-text:#000000;--color-text-secondary:#000000;--color-text-muted:#000000;--color-text-brand:#000000;--color-text-link:#0000C8;--color-text-link-hover:#000000;
+--color-border:#000000;--color-border-strong:#000000;--color-border-input:#000000;--color-focus-ring:#FFE500;--color-focus-inner:#000000;
+--color-success:#005A1E;--color-success-bg:#FFFFFF;--color-warning:#000000;--color-warning-bg:#FFE500;--color-error:#B00000;--color-error-bg:#FFFFFF;--color-info:#000000;--color-info-bg:#FFFFFF;
+}

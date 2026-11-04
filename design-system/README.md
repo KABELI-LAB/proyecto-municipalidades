@@ -52,6 +52,12 @@ El export original estaba pensado para prototipos que cargan todo desde CDN. Par
 3. **Logos empaquetables** (`components/core/Logo.jsx`): los archivos se resuelven con `new URL(..., import.meta.url)` para que Vite los incluya.
 4. **Tipos para React 19:** `JSX.Element` → `React.JSX.Element` en los `.d.ts`.
 5. **Punto de entrada** `index.js`/`index.d.ts` (el export solo traía un bundle global para prototipos).
-6. No se incluyeron las fotos ni los archivos originales entregados por la Municipalidad (`uploads/`, `assets/photos/`), ni las piezas estáticas (`applications/`, `slides/`).
+6. **Temas de otros municipios (demostración):** además de Hualañé (predeterminado), el design system trae los temas de **Curepto** y **Vichuquén**, tomados de sus proyectos hermanos (`Proyecto Curepto`, `Proyecto Vichuquen`). Se activan con `data-tema="curepto|vichuquen"` en `<html>` (lo hace el sitio desde la franja "Ver municipio de"):
+   - `tokens/temas/<municipio>.css`: colores, tipografía, radios y modos oscuro/alto contraste, bajo `:root[data-tema="…"]`. Mismos nombres de rampas (`--blue-*`, `--yellow-*`, `--green-*`): en Curepto azul municipal y amarillo aviso; en Vichuquén `--blue-*` = teal y `--yellow-*` = dorado.
+   - `components/hds.css`: reglas `[data-tema="…"] .hds-*` al final (botones píldora de Curepto, kicker y header de Vichuquén). `--color-action` es el fondo del botón primario (en Curepto, rojo concejo).
+   - `MunicipioProvider` / `useMunicipio()` (`components/core/Municipio.jsx`): nombre del municipio activo para textos. `Logo` elige los archivos del municipio activo (`assets/logo/curepto-*`, `assets/logo/vichuquen-*`).
+   - `Oleaje` y `Trazo`: formas propias de Vichuquén.
+   - Los módulos ajustan lo suyo con `:global([data-tema='…']) .clase` en sus CSS Modules y `useMunicipio()` en lo que se dibuja fuera del CSS (canvas, PDF, QR).
+7. No se incluyeron las fotos ni los archivos originales entregados por la Municipalidad (`uploads/`, `assets/photos/`), ni las piezas estáticas (`applications/`, `slides/`).
 
 Cambios al design system: acordarlos en el equipo y, si se actualiza desde Claude Design, volver a aplicar estas adaptaciones.

@@ -7,9 +7,9 @@
 .hds-btn--sm{min-height:40px;padding:0 16px;font-size:15px;border-radius:10px}
 .hds-btn--lg{min-height:var(--target-comfort);padding:0 28px;font-size:19px}
 .hds-btn--block{display:flex;width:100%}
-.hds-btn--primary{background:var(--color-primary);color:var(--color-text-inverse)}
-.hds-btn--primary:hover{background:var(--color-primary-hover);color:var(--color-text-inverse)}
-.hds-btn--primary:active{background:var(--color-primary-pressed)}
+.hds-btn--primary{background:var(--color-action);color:var(--color-text-inverse)}
+.hds-btn--primary:hover{background:var(--color-action-hover);color:var(--color-text-inverse)}
+.hds-btn--primary:active{background:var(--color-action-pressed)}
 .hds-btn--secondary{background:var(--color-surface);color:var(--color-primary);border-color:var(--color-primary)}
 .hds-btn--secondary:hover{background:var(--color-primary-subtle);color:var(--color-primary)}
 .hds-btn--tertiary{background:var(--color-primary-subtle);color:var(--color-primary)}
@@ -224,3 +224,28 @@ textarea.hds-input{min-height:120px;resize:vertical}
 .hds-composer{display:flex;align-items:flex-end;gap:6px;padding:8px;background:var(--color-surface);border:2px solid var(--color-border);border-radius:28px}
 .hds-composer:focus-within{border-color:var(--color-primary)}
 .hds-composer textarea{flex:1;border:0;outline:none;resize:none;font:400 17px/1.4 var(--font-sans);padding:12px 8px;background:transparent;color:var(--color-text);min-height:48px;max-height:140px}
+
+/* ---------- Tema Curepto (<html data-tema="curepto">) ---------- */
+/* Botones píldora en Roboto Condensed (el primario toma --color-action: rojo concejo). */
+[data-tema="curepto"] .hds-btn{font-family:var(--font-display);font-size:18px;letter-spacing:.01em;border-radius:var(--radius-full)}
+[data-tema="curepto"] .hds-btn--sm{font-size:16px;border-radius:var(--radius-full)}
+[data-tema="curepto"] .hds-btn--lg{font-size:19px}
+
+/* ---------- Tema Vichuquén (<html data-tema="vichuquen">) ---------- */
+[data-tema="vichuquen"] .hds-header__gov{background:var(--color-surface-brand);color:var(--white)}
+[data-tema="vichuquen"] .hds-header__link{position:relative}
+[data-tema="vichuquen"] .hds-header__link[aria-current="page"]{font-weight:600;box-shadow:none}
+/* Kicker (categoría sobre un título): sentence case y en primario, nunca en mayúsculas */
+[data-tema="vichuquen"] .hds-overline{font:600 15px/1.33 var(--font-sans);letter-spacing:.01em;text-transform:none;color:var(--color-primary)}
+[data-tema="vichuquen"] .hds-overline::before{content:none}
+
+/* Oleaje: tres ondas del escudo de Vichuquén (primario, teal-300, hilo dorado) */
+.hds-oleaje{display:block;overflow:visible}
+.hds-oleaje path{fill:none;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.hds-oleaje .o1,.hds-oleaje .o2{stroke-width:4px}.hds-oleaje .o3{stroke-width:3px}
+.hds-oleaje--brand .o1{stroke:var(--color-primary)}.hds-oleaje--brand .o2{stroke:var(--blue-300)}.hds-oleaje--brand .o3{stroke:var(--color-accent)}
+.hds-oleaje--onBrand .o1{stroke:var(--white)}.hds-oleaje--onBrand .o2{stroke:var(--blue-300)}.hds-oleaje--onBrand .o3{stroke:var(--color-accent)}
+.hds-oleaje--soft .o1,.hds-oleaje--soft .o2,.hds-oleaje--soft .o3{stroke:var(--blue-200)}
+/* Trazo: curva del lema "Avanzando juntos" de Vichuquén */
+.hds-trazo{display:block}
+.hds-trazo--brand path{fill:var(--color-primary)}.hds-trazo--accent path{fill:var(--color-accent)}.hds-trazo--onBrand path{fill:var(--white)}

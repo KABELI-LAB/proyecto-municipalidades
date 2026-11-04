@@ -1,8 +1,8 @@
 import { Icon, Logo } from '@muni/design-system'
 import { useRef, useState, type FocusEvent, type KeyboardEvent } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { MODULOS } from '../modulos'
-import s from '../sitio.module.css'
+import { MODULOS } from '../../modulos'
+import s from './sitio.module.css'
 
 /**
  * Header ciudadano del design system (franja institucional + logo Nivel B +

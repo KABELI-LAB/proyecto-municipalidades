@@ -1,6 +1,7 @@
-import { Cauce, Icon, Logo } from '@muni/design-system'
+import { Cauce, Icon, Logo, Oleaje, useMunicipio } from '@muni/design-system'
 import { useEffect, useState } from 'react'
 import { fechaTabla } from '../../shared/fechas.ts'
+import { MARCAS } from '../lib/marca'
 import { useQr } from '../lib/qr'
 import s from '../styles/tarjeta.module.css'
 
@@ -30,7 +31,8 @@ interface Props {
  */
 export function TarjetaHogar({ datos, previa = false, entrega = false, menosMovimiento = false, destacada = false }: Props) {
   const [volteada, setVolteada] = useState(false)
-  const qr = useQr(previa ? undefined : datos.codigo)
+  const municipio = useMunicipio()
+  const qr = useQr(previa ? undefined : datos.codigo, MARCAS[municipio.id].colores.blue950)
 
   // Entrega: muestra el frente y luego se voltea sola (≤ 1,2 s en total).
   useEffect(() => {
@@ -51,7 +53,7 @@ export function TarjetaHogar({ datos, previa = false, entrega = false, menosMovi
             </span>
             <span className={s.marca}>
               <span className={s.marcaTitulo}>Hogar Preparado</span>
-              <span className={s.marcaSub}>Hualañé</span>
+              <span className={s.marcaSub}>{municipio.nombre}</span>
             </span>
           </div>
 
@@ -76,7 +78,12 @@ export function TarjetaHogar({ datos, previa = false, entrega = false, menosMovi
             </p>
           )}
           <div className={s.cauce} aria-hidden="true">
-            <Cauce thickness={5} gap={46} colors={['var(--blue-500)', 'rgba(255,255,255,.85)', 'var(--green-500)']} />
+            {/* Ondas del escudo de cada municipio: Cauce (Hualañé, Curepto) u Oleaje (Vichuquén). */}
+            {municipio.id === 'vichuquen' ? (
+              <Oleaje tone="onBrand" height={28} />
+            ) : (
+              <Cauce thickness={5} gap={46} colors={['var(--blue-500)', 'rgba(255,255,255,.85)', municipio.id === 'curepto' ? 'var(--yellow-400)' : 'var(--green-500)']} />
+            )}
           </div>
         </div>
 

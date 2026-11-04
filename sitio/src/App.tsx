@@ -1,24 +1,37 @@
-import { Logo } from '@muni/design-system'
+import { MunicipioProvider, useMunicipio, type MunicipioId } from '@muni/design-system'
 import { useEffect, useRef } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
-import { Header } from './componentes/Header'
+import { FranjaMunicipio } from './componentes/FranjaMunicipio'
+import { useMunicipioElegido } from './municipio'
 import { MODULOS } from './modulos'
-import { Inicio } from './paginas/Inicio'
 import { NoEncontrada } from './paginas/NoEncontrada'
-import s from './sitio.module.css'
-
-const NOMBRE_SITIO = 'Municipalidad de Hualañé'
+import { TEMAS } from './temas'
 
 export function App() {
+  const [municipio, elegir] = useMunicipioElegido()
+  return (
+    <MunicipioProvider municipio={municipio}>
+      <Sitio municipio={municipio} onElegir={elegir} />
+    </MunicipioProvider>
+  )
+}
+
+function Sitio({ municipio, onElegir }: { municipio: MunicipioId; onElegir: (m: MunicipioId) => void }) {
+  const { Header, Inicio, Pie, estilos: s } = TEMAS[municipio]
+  const nombreSitio = `Municipalidad de ${useMunicipio().nombre}`
   const { pathname } = useLocation()
   const mainRef = useRef<HTMLElement>(null)
   const primeraCarga = useRef(true)
 
-  // Al cambiar de pestaña: título del documento, scroll arriba y foco en el
-  // contenido para que lectores de pantalla anuncien la nueva página.
+  // Título del documento: cambia con la pestaña y con el municipio.
   useEffect(() => {
     const modulo = MODULOS.find((m) => pathname === m.meta.path || pathname.startsWith(`${m.meta.path}/`))
-    document.title = modulo ? `${modulo.meta.label} · ${NOMBRE_SITIO}` : NOMBRE_SITIO
+    document.title = modulo ? `${modulo.meta.label} · ${nombreSitio}` : nombreSitio
+  }, [pathname, nombreSitio])
+
+  // Al cambiar de pestaña: scroll arriba y foco en el contenido para que
+  // lectores de pantalla anuncien la nueva página.
+  useEffect(() => {
     if (primeraCarga.current) {
       primeraCarga.current = false
       return
@@ -32,6 +45,7 @@ export function App() {
       <a href="#contenido" className={s.skip}>
         Saltar al contenido
       </a>
+      <FranjaMunicipio municipio={municipio} onElegir={onElegir} />
       <Header />
       <main id="contenido" ref={mainRef} tabIndex={-1} className={s.main}>
         <Routes>
@@ -43,18 +57,8 @@ export function App() {
           <Route path="*" element={<NoEncontrada />} />
         </Routes>
       </main>
-      <footer className={s.footer}>
-        <div className={s.footerIn}>
-          <Logo variant="combined" inverse height={120} />
-          <p>Sitio en desarrollo</p>
-        </div>
-        <div className={s.footerBase}>
-          <div className={s.footerIn}>
-            <span>© 2026 Ilustre Municipalidad de Hualañé</span>
-            <span>Hualañé somos tod@s</span>
-          </div>
-        </div>
-      </footer>
+      <Pie />
     </div>
   )
 }
+

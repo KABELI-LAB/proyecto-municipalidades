@@ -1,4 +1,4 @@
-import { Alert, Button, Icon } from '@muni/design-system'
+import { Alert, Button, Icon, useMunicipio } from '@muni/design-system'
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { InscripcionCreada, MiHogar } from '../../shared/contrato.ts'
@@ -99,6 +99,7 @@ export function Recompensa() {
 }
 
 function Acciones({ hogar }: { hogar: MiHogar }) {
+  const municipio = useMunicipio()
   const [ocupado, setOcupado] = useState<'png' | 'pdf' | null>(null)
   const [aviso, setAviso] = useState<{ tono: 'success' | 'error'; texto: string } | null>(null)
 
@@ -106,8 +107,8 @@ function Acciones({ hogar }: { hogar: MiHogar }) {
     setOcupado(tipo)
     setAviso(null)
     try {
-      if (tipo === 'png') descargar(await tarjetaPng(hogar), `tarjeta-hogar-preparado-${hogar.codigoFamiliar}.png`)
-      else descargar(await planPdf(hogar), `plan-familiar-${hogar.codigoFamiliar}.pdf`)
+      if (tipo === 'png') descargar(await tarjetaPng(hogar, municipio.id), `tarjeta-hogar-preparado-${hogar.codigoFamiliar}.png`)
+      else descargar(await planPdf(hogar, municipio.id), `plan-familiar-${hogar.codigoFamiliar}.pdf`)
     } catch {
       setAviso({ tono: 'error', texto: 'No pudimos generar el archivo. Inténtalo de nuevo.' })
     } finally {
@@ -118,10 +119,10 @@ function Acciones({ hogar }: { hogar: MiHogar }) {
   // El link para compartir no lleva datos personales: invita a inscribirse.
   const compartir = async () => {
     const url = new URL(ruta(), window.location.origin).toString()
-    const texto = 'Inscribe a tu familia en el Registro de Emergencia de Hualañé y recibe tu Tarjeta Hogar Preparado.'
+    const texto = `Inscribe a tu familia en el Registro de Emergencia de ${municipio.nombre} y recibe tu Tarjeta Hogar Preparado.`
     try {
       if (navigator.share) {
-        await navigator.share({ title: 'Registro de Emergencia de Hualañé', text: texto, url })
+        await navigator.share({ title: `Registro de Emergencia de ${municipio.nombre}`, text: texto, url })
         return
       }
       await navigator.clipboard.writeText(`${texto} ${url}`)
