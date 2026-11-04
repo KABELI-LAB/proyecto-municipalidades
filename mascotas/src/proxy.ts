@@ -11,6 +11,17 @@ const IDS = new Set<string>(municipios.ids);
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  // Enlace que elige el municipio («/?municipio=vichuquen», desde el sitio de
+  // cada municipalidad): se guarda como si lo eligiera el selector y se vuelve
+  // a la misma dirección sin el parámetro.
+  const pedido = request.nextUrl.searchParams.get("municipio");
+  if (pedido !== null) {
+    const limpia = request.nextUrl.clone();
+    limpia.searchParams.delete("municipio");
+    const redireccion = NextResponse.redirect(limpia);
+    if (IDS.has(pedido)) redireccion.cookies.set(COOKIE_MUNICIPIO, pedido, { path: "/", maxAge: 365 * 86_400, sameSite: "lax" });
+    return redireccion;
+  }
   const primero = pathname.split("/")[1] ?? "";
   // Dirección que ya trae el municipio (la propia reescritura, o un enlace directo).
   const explicito = IDS.has(primero);
