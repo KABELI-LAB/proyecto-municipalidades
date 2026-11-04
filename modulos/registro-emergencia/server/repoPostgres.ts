@@ -161,6 +161,10 @@ export function crearRepoPostgres(url: string): Repositorio {
             await tx`
               insert into registro.consentimientos (hogar_id, version_texto, texto_hash, ip, user_agent)
               values (${id}, ${n.consentimiento.version}, ${n.consentimiento.hash}, ${n.consentimiento.ip}, ${n.consentimiento.userAgent})`
+            if (h.integrantes.length > 0) {
+              const filas = h.integrantes.map((p) => ({ hogar_id: id, nombre: p.nombre, rut: p.rut }))
+              await tx`insert into registro.integrantes ${tx(filas, 'hogar_id', 'nombre', 'rut')}`
+            }
             return { id }
           })
         } catch (err) {

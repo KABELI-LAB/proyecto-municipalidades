@@ -27,6 +27,15 @@ const celular = z.string().transform((v, ctx) => {
   return n ?? ''
 })
 
+/** Otra persona que vive en la casa (el jefe o jefa de hogar va aparte). */
+export const integranteSchema = z.object({
+  nombre: z.string().trim().min(2, 'Escribe el nombre de esta persona.').max(120),
+  /** null = no tiene RUT o no lo sabes. */
+  rut: rut.nullable().default(null),
+})
+
+export type Integrante = z.output<typeof integranteSchema>
+
 /** Datos del hogar que se piden en el cuestionario (R2). */
 export const hogarSchema = z
   .object({
@@ -52,6 +61,8 @@ export const hogarSchema = z
     contactoEmergenciaNombre: z.string().trim().max(120).nullable(),
     contactoEmergenciaTelefono: celular.nullable(),
     puntoEncuentro: z.string().trim().max(200).nullable(),
+    /** Opcional: el cuestionario todavía no los pide. */
+    integrantes: z.array(integranteSchema).max(29).default([]),
   })
   .superRefine((h, ctx) => {
     if (h.menores18 > h.totalPersonas)
@@ -66,6 +77,16 @@ export const hogarSchema = z
       ctx.addIssue({ code: 'custom', path: ['lat'], message: MENSAJE_FUERA })
     if (h.bebesMenores2 > h.menores18)
       ctx.addIssue({ code: 'custom', path: ['bebesMenores2'], message: 'Hay más bebés que menores de 18.' })
+    // Los integrantes no incluyen al jefe o jefa de hogar.
+    if (h.integrantes.length > h.totalPersonas - 1)
+      ctx.addIssue({ code: 'custom', path: ['integrantes'], message: 'Agregaste más personas que las que viven en la casa.' })
+    const vistos = new Set(h.jefeRut ? [h.jefeRut] : [])
+    h.integrantes.forEach((p, i) => {
+      if (!p.rut) return
+      if (vistos.has(p.rut))
+        ctx.addIssue({ code: 'custom', path: ['integrantes', i, 'rut'], message: 'Este RUT ya está en tu hogar. Revisa que no se repita.' })
+      vistos.add(p.rut)
+    })
   })
 
 export type HogarEntrada = z.input<typeof hogarSchema>
