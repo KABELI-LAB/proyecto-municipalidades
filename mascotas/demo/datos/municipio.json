@@ -1,0 +1,10 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "datos": {
+    "id": "hualane",
+    "nombre": "Ilustre Municipalidad de Hualañé",
+    "region": "Maule",
+    "modo": "demostracion"
+  }
+}

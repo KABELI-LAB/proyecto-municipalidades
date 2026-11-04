@@ -1,0 +1,230 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "datos": [
+    {
+      "id": "hualane",
+      "nombre": "Hualañé",
+      "sector_id": "hualane",
+      "lat": -34.976,
+      "lng": -71.805,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "la-higuera",
+      "nombre": "La Higuera",
+      "sector_id": "hualane",
+      "lat": -34.98,
+      "lng": -71.79,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "el-buche",
+      "nombre": "El Buche",
+      "sector_id": "hualane",
+      "lat": -34.982,
+      "lng": -71.7,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "mira-rio",
+      "nombre": "Mira Río",
+      "sector_id": "hualane",
+      "lat": -34.92,
+      "lng": -71.85,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "barandica",
+      "nombre": "Barandica",
+      "sector_id": "hualane",
+      "lat": -34.95,
+      "lng": -71.82,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "peralillo",
+      "nombre": "Peralillo",
+      "sector_id": "hualane",
+      "lat": -35.015,
+      "lng": -71.69,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "el-rincon",
+      "nombre": "El Rincón",
+      "sector_id": "hualane",
+      "lat": -34.96,
+      "lng": -71.76,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "el-molino",
+      "nombre": "El Molino",
+      "sector_id": "hualane",
+      "lat": -34.95,
+      "lng": -71.775,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "el-porvenir",
+      "nombre": "El Porvenir",
+      "sector_id": "hualane",
+      "lat": -34.97,
+      "lng": -71.785,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "patacon",
+      "nombre": "Patacón",
+      "sector_id": "patacon",
+      "lat": -34.9,
+      "lng": -71.783,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "los-sauces",
+      "nombre": "Los Sauces",
+      "sector_id": "patacon",
+      "lat": -34.917,
+      "lng": -71.867,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "quilico",
+      "nombre": "Quilico",
+      "sector_id": "patacon",
+      "lat": -34.9,
+      "lng": -71.85,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "boquil",
+      "nombre": "Boquil",
+      "sector_id": "patacon",
+      "lat": -34.883,
+      "lng": -71.917,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "tilicura",
+      "nombre": "Tilicura",
+      "sector_id": "patacon",
+      "lat": -34.9,
+      "lng": -71.85,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "los-cristales",
+      "nombre": "Los Cristales",
+      "sector_id": "patacon",
+      "lat": -34.9,
+      "lng": -71.85,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "espinalillo",
+      "nombre": "Espinalillo",
+      "sector_id": "patacon",
+      "lat": -34.9,
+      "lng": -71.95,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "los-coipos",
+      "nombre": "Los Coipos",
+      "sector_id": "los-coipos",
+      "lat": -34.9155,
+      "lng": -71.6611,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "caone",
+      "nombre": "Caone",
+      "sector_id": "los-coipos",
+      "lat": -34.967,
+      "lng": -71.65,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "barba-rubia",
+      "nombre": "Barba Rubia",
+      "sector_id": "los-coipos",
+      "lat": -34.967,
+      "lng": -71.717,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "camarico",
+      "nombre": "Camarico",
+      "sector_id": "los-coipos",
+      "lat": -34.967,
+      "lng": -71.683,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "el-llano",
+      "nombre": "El Llano",
+      "sector_id": "los-coipos",
+      "lat": -34.983,
+      "lng": -71.617,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "el-cobre",
+      "nombre": "El Cobre",
+      "sector_id": "los-coipos",
+      "lat": -34.983,
+      "lng": -71.65,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "alto-de-caone",
+      "nombre": "Alto de Caone",
+      "sector_id": "los-coipos",
+      "lat": -34.967,
+      "lng": -71.65,
+      "coordenadas_estado": "aproximada (usa Caone)"
+    },
+    {
+      "id": "la-huerta",
+      "nombre": "La Huerta",
+      "sector_id": "la-huerta",
+      "lat": -35.0895,
+      "lng": -71.6557,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "orilla-de-valdes",
+      "nombre": "Orilla de Valdés",
+      "sector_id": "la-huerta",
+      "lat": -35.067,
+      "lng": -71.7,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "orilla-de-navarro",
+      "nombre": "Orilla de Navarro",
+      "sector_id": "la-huerta",
+      "lat": -35.067,
+      "lng": -71.617,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "remolino",
+      "nombre": "Remolino",
+      "sector_id": "la-huerta",
+      "lat": -35.1,
+      "lng": -71.683,
+      "coordenadas_estado": "aproximada"
+    },
+    {
+      "id": "parronal",
+      "nombre": "Parronal",
+      "sector_id": "la-huerta",
+      "lat": -35.017,
+      "lng": -71.683,
+      "coordenadas_estado": "aproximada"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "curepto",
+  "nombre": "Curepto",
+  "nombreOficial": "Ilustre Municipalidad de Curepto",
+  "plataforma": "Pawni",
+  "firma": [
+    "Ilustre Municipalidad",
+    "de Curepto"
+  ],
+  "sitioWeb": "www.curepto.cl",
+  "region": "Región del Maule",
+  "zonaHoraria": "America/Santiago",
+  "identidad": {
+    "escudo": "/ds/temas/curepto/logo-azul-noche.png",
+    "logoCiudadano": "/ds/temas/curepto/logo-blanco.png",
+    "logoBlanco": "/ds/temas/curepto/logo-blanco.png",
+    "marcaDigital": "/ds/temas/curepto/logo-azul-noche.png",
+    "logoInstitucional": "/ds/temas/curepto/logo-azul-noche.png"
+  },
+  "parametros": {
+    "limitePorHogar": 2,
+    "invitacionesPrioritarias": false
+  },
+  "_nota": "Municipio de demostración: identidad visual en design-system/temas/<id>/, territorio y datos en demo/municipios/<id>/ (npm run demo:cargar -- --municipio=<id>)."
+}

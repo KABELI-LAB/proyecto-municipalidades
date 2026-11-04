@@ -1,0 +1,135 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para vichuquen.",
+  "datos": [
+    {
+      "id": "vic-com-01",
+      "animal_id": "vic-ani-001",
+      "apodo": "la guardiana de la plaza",
+      "lugar_id": "plaza-de-vichuquen",
+      "sector_id": "vichuquen-pueblo",
+      "cuidadores": "La cuidan locatarios y vecinos de la plaza",
+      "ultimo_control": "2026-02-03",
+      "necesita_atencion": false,
+      "posicion": {
+        "dx_m": 7,
+        "dy_m": 110,
+        "lat": -34.88285,
+        "lng": -71.99341
+      }
+    },
+    {
+      "id": "vic-com-02",
+      "animal_id": "vic-ani-002",
+      "apodo": "la de la esquina",
+      "lugar_id": "plaza-de-vichuquen",
+      "sector_id": "vichuquen-pueblo",
+      "cuidadores": "La alimenta el kiosco de la esquina",
+      "ultimo_control": "2026-03-18",
+      "necesita_atencion": false,
+      "posicion": {
+        "dx_m": 108,
+        "dy_m": -301,
+        "lat": -34.88655,
+        "lng": -71.99231
+      }
+    },
+    {
+      "id": "vic-com-03",
+      "animal_id": "vic-ani-003",
+      "apodo": "el del estadio",
+      "lugar_id": "parque-vichuquen",
+      "sector_id": "vichuquen-pueblo",
+      "cuidadores": "Lo cuidan los encargados del recinto",
+      "ultimo_control": "2026-04-11",
+      "necesita_atencion": true,
+      "posicion": {
+        "dx_m": 125,
+        "dy_m": 20,
+        "lat": -34.88537,
+        "lng": -71.98985
+      }
+    },
+    {
+      "id": "vic-com-04",
+      "animal_id": "vic-ani-004",
+      "apodo": "la mascota del liceo",
+      "lugar_id": "liceo-nuevo-horizonte",
+      "sector_id": "vichuquen-pueblo",
+      "cuidadores": "Lo alimentan estudiantes y apoderados",
+      "ultimo_control": "2026-02-25",
+      "necesita_atencion": true,
+      "posicion": {
+        "dx_m": 54,
+        "dy_m": -31,
+        "lat": -34.88471,
+        "lng": -71.99348
+      }
+    },
+    {
+      "id": "vic-com-05",
+      "animal_id": "vic-ani-005",
+      "apodo": "el vecino del centro",
+      "lugar_id": "ilustre-municipalidad-de-vichuquen",
+      "sector_id": "vichuquen-pueblo",
+      "cuidadores": "Lo conocen funcionarios y vecinos del centro",
+      "ultimo_control": "2026-02-09",
+      "necesita_atencion": false,
+      "posicion": {
+        "dx_m": -90,
+        "dy_m": 17,
+        "lat": -34.88415,
+        "lng": -71.9936
+      }
+    },
+    {
+      "id": "vic-com-06",
+      "animal_id": "vic-ani-006",
+      "apodo": "la regalona de la escuela",
+      "lugar_id": "liceo-de-llico",
+      "sector_id": "llico",
+      "cuidadores": "Lo cuida la comunidad escolar",
+      "ultimo_control": "2026-01-14",
+      "necesita_atencion": false,
+      "posicion": {
+        "dx_m": 27,
+        "dy_m": -76,
+        "lat": -34.7644,
+        "lng": -72.07851
+      }
+    },
+    {
+      "id": "vic-com-07",
+      "animal_id": "vic-ani-007",
+      "apodo": "el de la ruta",
+      "lugar_id": "escuela-ema-cornejo-de-cardoen",
+      "sector_id": "torca-boyeruca",
+      "cuidadores": "Lo alimentan vecinos del sector",
+      "ultimo_control": "2026-03-16",
+      "necesita_atencion": true,
+      "posicion": {
+        "dx_m": 55,
+        "dy_m": -29,
+        "lat": -34.68927,
+        "lng": -72.0484
+      }
+    },
+    {
+      "id": "vic-com-08",
+      "animal_id": "vic-ani-008",
+      "apodo": "el compañero de los niños",
+      "lugar_id": "escuela-aquelarre",
+      "sector_id": "lago",
+      "cuidadores": "Lo cuidan vecinos de El Manzano",
+      "ultimo_control": "2026-05-07",
+      "necesita_atencion": true,
+      "posicion": {
+        "dx_m": -198,
+        "dy_m": 60,
+        "lat": -34.85085,
+        "lng": -72.04237
+      }
+    }
+  ]
+}

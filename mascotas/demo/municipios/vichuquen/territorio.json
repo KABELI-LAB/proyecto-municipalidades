@@ -1,0 +1,503 @@
+{
+  "municipio": {
+    "id": "vichuquen",
+    "nombre": "Ilustre Municipalidad de Vichuquén",
+    "region": "Maule",
+    "modo": "demostracion"
+  },
+  "prefijo": "vic",
+  "dominio_correo": "vichuquen.demo.invalid",
+  "rut_base": 11113000,
+  "desfase_tr": 4000,
+  "fuente": "Sectores: propuesta sobre los 4 distritos censales INE 2017 (PLADECO 2022-2026). Localidades y lugares: OpenStreetMap (ODbL). Ver cada «fuente».",
+  "sectores": [
+    {
+      "id": "vichuquen-pueblo",
+      "nombre": "Vichuquén pueblo",
+      "tipo": "urbano-rural",
+      "fuente": "Propuesta (parte interior del distrito censal 1 Vichuquén)",
+      "localidades": [
+        {
+          "id": "vichuquen",
+          "nombre": "Vichuquén",
+          "lat": -34.8840168,
+          "lng": -71.9923708,
+          "fuente": "OSM node 3242142468 (place=village); distrito por punto en polígono INE"
+        },
+        {
+          "id": "vichuquen-poniente",
+          "nombre": "Vichuquén Poniente",
+          "lat": -34.8863181,
+          "lng": -71.9957069,
+          "fuente": "OSM node 5928000902 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "talquita",
+          "nombre": "Talquita",
+          "lat": -34.8925972,
+          "lng": -71.9946555,
+          "fuente": "OSM node 5928000903 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "el-manzano",
+          "nombre": "El Manzano",
+          "lat": -34.8750524,
+          "lng": -71.9932151,
+          "fuente": "OSM node 5930352041 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "las-juntas",
+          "nombre": "Las Juntas",
+          "lat": -34.8643948,
+          "lng": -72.0080465,
+          "fuente": "OSM node 5099429966 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "los-7-robles",
+          "nombre": "Los 7 Robles",
+          "lat": -34.9231212,
+          "lng": -71.9891462,
+          "fuente": "OSM node 5928000904 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "uraco",
+          "nombre": "Uraco",
+          "lat": -34.9320401,
+          "lng": -72.0098849,
+          "fuente": "OSM node 5099470685 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "las-puertas",
+          "nombre": "Las Puertas",
+          "lat": -34.9505839,
+          "lng": -72.0633399,
+          "fuente": "OSM node 214233734 (place=isolated_dwelling); distrito por punto en polígono INE"
+        }
+      ]
+    },
+    {
+      "id": "lago",
+      "nombre": "Lago Vichuquén",
+      "tipo": "rural",
+      "fuente": "Propuesta (orillas del lago; toma partes de los distritos 1, 2 y 3)",
+      "localidades": [
+        {
+          "id": "aquelarre",
+          "nombre": "Aquelarre",
+          "lat": -34.8506982,
+          "lng": -72.037888,
+          "fuente": "OSM node 2339533287 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "alto-del-puerto",
+          "nombre": "Alto del Puerto",
+          "lat": -34.8528504,
+          "lng": -72.0226247,
+          "fuente": "OSM node 3237981766 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "paula",
+          "nombre": "Paula",
+          "lat": -34.8443572,
+          "lng": -72.0570218,
+          "fuente": "OSM node 3237446380 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "el-villorrio",
+          "nombre": "El Villorrio",
+          "lat": -34.8434591,
+          "lng": -72.0515642,
+          "fuente": "OSM node 3237447762 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "santa-rosa",
+          "nombre": "Santa Rosa",
+          "lat": -34.8408538,
+          "lng": -72.052739,
+          "fuente": "OSM node 3237453816 (place=neighbourhood); distrito por punto en polígono INE"
+        },
+        {
+          "id": "tunquelen",
+          "nombre": "Tunquelén",
+          "lat": -34.8431984,
+          "lng": -72.0617627,
+          "fuente": "OSM node 3238981969 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "merhueves",
+          "nombre": "Merhueves",
+          "lat": -34.8458047,
+          "lng": -72.0671593,
+          "fuente": "OSM node 3238981337 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "cuatro-pantanos",
+          "nombre": "Cuatro Pantanos",
+          "lat": -34.837497,
+          "lng": -72.0721775,
+          "fuente": "OSM node 5099432044 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "bahia-mansa",
+          "nombre": "Bahía Mansa",
+          "lat": -34.8313956,
+          "lng": -72.0710463,
+          "fuente": "OSM node 3242142981 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "piedras-bayas",
+          "nombre": "Piedras Bayas",
+          "lat": -34.8248938,
+          "lng": -72.0680246,
+          "fuente": "OSM node 3242141315 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "la-peninsula",
+          "nombre": "La Península",
+          "lat": -34.8162723,
+          "lng": -72.0500528,
+          "fuente": "OSM node 3237451161 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "jardines-de-la-peninsula",
+          "nombre": "Jardines de la Península",
+          "lat": -34.818604,
+          "lng": -72.0647356,
+          "fuente": "OSM node 7130945999 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "queseria",
+          "nombre": "Quesería",
+          "lat": -34.8178401,
+          "lng": -72.0715856,
+          "fuente": "OSM node 3237453056 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "totorilla",
+          "nombre": "Totorilla",
+          "lat": -34.8337289,
+          "lng": -72.035484,
+          "fuente": "OSM node 3242146585 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "punta-del-arrayan",
+          "nombre": "Punta del Arrayán",
+          "lat": -34.8247339,
+          "lng": -72.0423317,
+          "fuente": "OSM node 5930352040 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "el-durazno",
+          "nombre": "El Durazno",
+          "lat": -34.8214487,
+          "lng": -72.0310235,
+          "fuente": "OSM node 5930352039 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "la-madera",
+          "nombre": "La Madera",
+          "lat": -34.8163401,
+          "lng": -72.0351005,
+          "fuente": "OSM node 5930352038 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "los-palitos",
+          "nombre": "Los Palitos",
+          "lat": -34.8087999,
+          "lng": -72.0444346,
+          "fuente": "OSM node 5930352037 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "la-punta",
+          "nombre": "La Punta",
+          "lat": -34.7963078,
+          "lng": -72.0470309,
+          "fuente": "OSM node 5930352036 (place=hamlet); distrito por punto en polígono INE"
+        }
+      ]
+    },
+    {
+      "id": "llico",
+      "nombre": "Llico y costa",
+      "tipo": "urbano-rural",
+      "fuente": "Propuesta (distrito censal 2 Llico, sin la orilla del lago)",
+      "localidades": [
+        {
+          "id": "llico",
+          "nombre": "Llico",
+          "lat": -34.7664408,
+          "lng": -72.0746267,
+          "fuente": "OSM node 214223342 (place=village); distrito por punto en polígono INE"
+        },
+        {
+          "id": "culenmapu",
+          "nombre": "Culenmapu",
+          "lat": -34.796618,
+          "lng": -72.0789205,
+          "fuente": "OSM node 5129905768 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "el-rodeo",
+          "nombre": "El Rodeo",
+          "lat": -34.783333,
+          "lng": -72.083333,
+          "fuente": "OSM node 214194797 (place=locality); distrito por punto en polígono INE"
+        },
+        {
+          "id": "la-barca",
+          "nombre": "La Barca",
+          "lat": -34.8049787,
+          "lng": -72.1264779,
+          "fuente": "OSM node 4419453904 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "trilco",
+          "nombre": "Trilco",
+          "lat": -34.8150269,
+          "lng": -72.1355926,
+          "fuente": "OSM node 4419453903 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "los-lobos",
+          "nombre": "Los Lobos",
+          "lat": -34.816667,
+          "lng": -72.133333,
+          "fuente": "OSM node 214219924 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "infiernillo",
+          "nombre": "Infiernillo",
+          "lat": -34.8385585,
+          "lng": -72.142484,
+          "fuente": "OSM node 2528443423 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "lipimavida",
+          "nombre": "Lipimávida",
+          "lat": -34.8478234,
+          "lng": -72.1414395,
+          "fuente": "OSM node 214195795 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "pichibudi",
+          "nombre": "Pichibudi",
+          "lat": -34.872926,
+          "lng": -72.1518593,
+          "fuente": "OSM node 214206802 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "higuerilla",
+          "nombre": "Higuerilla",
+          "lat": -34.868093,
+          "lng": -72.1017724,
+          "fuente": "OSM node 214194493 (place=locality); distrito por punto en polígono INE"
+        }
+      ]
+    },
+    {
+      "id": "torca-boyeruca",
+      "nombre": "Torca y Boyeruca",
+      "tipo": "rural",
+      "fuente": "Propuesta (distrito censal 3 Zapallar, sin la orilla del lago)",
+      "localidades": [
+        {
+          "id": "torca",
+          "nombre": "Torca",
+          "lat": -34.7778052,
+          "lng": -72.0437988,
+          "fuente": "OSM node 3242144724 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "las-conchas",
+          "nombre": "Las Conchas",
+          "lat": -34.7759251,
+          "lng": -72.0561785,
+          "fuente": "OSM node 214213281 (place=neighbourhood); distrito por punto en polígono INE"
+        },
+        {
+          "id": "los-cardos",
+          "nombre": "Los Cardos",
+          "lat": -34.7732566,
+          "lng": -72.0268393,
+          "fuente": "OSM node 5930352035 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "las-garzas",
+          "nombre": "Las Garzas",
+          "lat": -34.7369309,
+          "lng": -72.0122159,
+          "fuente": "OSM node 5930352032 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "molhuen",
+          "nombre": "Molhuén",
+          "lat": -34.7168573,
+          "lng": -71.9974744,
+          "fuente": "OSM node 5930352033 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "yoncaven",
+          "nombre": "Yoncavén",
+          "lat": -34.7024924,
+          "lng": -72.0319918,
+          "fuente": "OSM node 5930352034 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "boyeruca",
+          "nombre": "Boyeruca",
+          "lat": -34.6884508,
+          "lng": -72.0502723,
+          "fuente": "OSM node 214230051 (place=hamlet); distrito por punto en polígono INE"
+        }
+      ]
+    },
+    {
+      "id": "tilicura",
+      "nombre": "Tilicura",
+      "tipo": "rural",
+      "fuente": "Coincide con el distrito censal 4 Tilicura (oficial); usarlo como sector es propuesta",
+      "localidades": [
+        {
+          "id": "tilicura",
+          "nombre": "Tilicura",
+          "lat": -34.8244609,
+          "lng": -71.9621015,
+          "fuente": "OSM node 214229076 (place=hamlet); distrito por punto en polígono INE"
+        },
+        {
+          "id": "pajonal",
+          "nombre": "Pajonal",
+          "lat": -34.7680912,
+          "lng": -71.9926371,
+          "fuente": "OSM node 214204966 (place=hamlet); distrito por punto en polígono INE"
+        }
+      ]
+    }
+  ],
+  "lugares": [
+    {
+      "id": "plaza-de-vichuquen",
+      "nombre": "Plaza de Vichuquén",
+      "tipo": "plaza",
+      "localidad": "vichuquen",
+      "lat": -34.8838414,
+      "lng": -71.9934903,
+      "fuente": "OSM way 77849835 (otro way 93480838 'Plaza Vichuquén' en -34.8831639, -71.9931325)"
+    },
+    {
+      "id": "ilustre-municipalidad-de-vichuquen",
+      "nombre": "Ilustre Municipalidad de Vichuquén",
+      "tipo": "edificio-municipal",
+      "localidad": "vichuquen",
+      "lat": -34.8843072,
+      "lng": -71.9926175,
+      "fuente": "OSM node 2296012230; Wikidata Q133837727 (-34.884082854, -71.992322815)"
+    },
+    {
+      "id": "parque-vichuquen",
+      "nombre": "Parque Vichuquén",
+      "tipo": "parque",
+      "localidad": "vichuquen",
+      "lat": -34.8855534,
+      "lng": -71.9912174,
+      "fuente": "OSM way 220487618"
+    },
+    {
+      "id": "liceo-nuevo-horizonte",
+      "nombre": "Liceo Nuevo Horizonte",
+      "tipo": "establecimiento-educacional",
+      "localidad": "vichuquen",
+      "lat": -34.8844285,
+      "lng": -71.9940728,
+      "fuente": "OSM node 2296047796"
+    },
+    {
+      "id": "cesfam-vichuquen",
+      "nombre": "CESFAM Vichuquén",
+      "tipo": "centro-de-salud",
+      "localidad": "vichuquen",
+      "lat": -34.8783671,
+      "lng": -71.9943335,
+      "fuente": "OSM way 220488434"
+    },
+    {
+      "id": "liceo-de-llico",
+      "nombre": "Liceo de Llico",
+      "tipo": "establecimiento-educacional",
+      "localidad": "llico",
+      "lat": -34.763716,
+      "lng": -72.0788046,
+      "fuente": "OSM way 693868751"
+    },
+    {
+      "id": "caleta-de-llico",
+      "nombre": "Caleta de Llico",
+      "tipo": "caleta",
+      "localidad": "llico",
+      "lat": -34.7539399,
+      "lng": -72.0863955,
+      "fuente": "OSM way 202052550 (name=Caleta)"
+    },
+    {
+      "id": "escuela-aquelarre",
+      "nombre": "Escuela Aquelarre",
+      "tipo": "escuela",
+      "localidad": "aquelarre",
+      "lat": -34.851387,
+      "lng": -72.040202,
+      "fuente": "OSM way 135031642"
+    },
+    {
+      "id": "escuela-ema-cornejo-de-cardoen",
+      "nombre": "Escuela Ema Cornejo de Cardoen",
+      "tipo": "escuela",
+      "localidad": "boyeruca",
+      "lat": -34.6890107,
+      "lng": -72.0490024,
+      "fuente": "OSM way 444421347"
+    },
+    {
+      "id": "estadio-aquelarre",
+      "nombre": "Estadio Aquelarre",
+      "tipo": "recinto-deportivo",
+      "localidad": "aquelarre",
+      "lat": -34.8504448,
+      "lng": -72.0398821,
+      "fuente": "OSM way 135030411"
+    }
+  ],
+  "mapa_sectores": {
+    "hualane": [
+      "vichuquen-pueblo"
+    ],
+    "patacon": [
+      "lago"
+    ],
+    "los-coipos": [
+      "torca-boyeruca",
+      "tilicura"
+    ],
+    "la-huerta": [
+      "llico"
+    ]
+  },
+  "mapa_lugares": {
+    "plaza-de-armas-de-hualane": "plaza-de-vichuquen",
+    "municipalidad-de-hualane": "ilustre-municipalidad-de-vichuquen",
+    "estadio-municipal-de-hualane": "parque-vichuquen",
+    "liceo-bicentenario-de-hualane": "liceo-nuevo-horizonte",
+    "escuela-monsenor-manuel-larrain-errazuriz": "cesfam-vichuquen",
+    "escuela-la-huerta-de-mataquito": "liceo-de-llico",
+    "escuela-orilla-de-navarro": "caleta-de-llico",
+    "escuela-carlos-correa-nunez-mira-rio": "escuela-aquelarre",
+    "escuela-caone": "escuela-ema-cornejo-de-cardoen",
+    "sala-multiproposito": "estadio-aquelarre"
+  },
+  "reemplazos": [
+    [
+      "cerca del estadio",
+      "cerca del parque"
+    ]
+  ],
+  "correo_cuenta": "admin@vichuquen.cl"
+}

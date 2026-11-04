@@ -1,0 +1,19 @@
+/* Theme scopes. Light is the default (:root). */
+[data-theme="dark"]{
+--color-primary:var(--blue-300);--color-primary-hover:var(--blue-200);--color-primary-pressed:var(--blue-100);--color-primary-subtle:#1A2550;
+--color-secondary:var(--green-300);--color-secondary-hover:var(--green-200);--color-secondary-subtle:#14301A;
+--color-accent:var(--yellow-400);--color-accent-subtle:#2E2408;
+--color-surface:#0F1526;--color-surface-sunken:#0A0F1C;--color-surface-muted:#1A2236;--color-surface-inverse:var(--white);--color-surface-brand:var(--blue-800);
+--color-text:#F1F3F7;--color-text-secondary:#B9BFCC;--color-text-muted:#9AA1B1;--color-text-inverse:var(--neutral-950);--color-text-brand:var(--blue-200);--color-text-link:var(--blue-300);--color-text-link-hover:var(--blue-200);
+--color-border:#2A3349;--color-border-strong:#4A5470;--color-border-input:#6B7590;
+--color-success:#6FCF8A;--color-success-bg:#12301C;--color-warning:var(--yellow-400);--color-warning-bg:#2E2408;--color-error:#FF8A8A;--color-error-bg:#3A1416;--color-info:var(--blue-300);--color-info-bg:#1A2550;
+color-scheme:dark;
+}
+[data-theme="high-contrast"]{
+--color-primary:#000000;--color-primary-hover:#000000;--color-primary-pressed:#000000;--color-primary-subtle:#FFFFFF;
+--color-secondary:#000000;--color-secondary-subtle:#FFFFFF;--color-accent:#FFE500;--color-accent-subtle:#FFFFFF;
+--color-surface:#FFFFFF;--color-surface-sunken:#FFFFFF;--color-surface-muted:#FFFFFF;--color-surface-brand:#000000;--color-surface-inverse:#000000;
+--color-text:#000000;--color-text-secondary:#000000;--color-text-muted:#000000;--color-text-brand:#000000;--color-text-link:#0000C8;--color-text-link-hover:#000000;
+--color-border:#000000;--color-border-strong:#000000;--color-border-input:#000000;--color-focus-ring:#FFE500;--color-focus-inner:#000000;
+--color-success:#005A1E;--color-success-bg:#FFFFFF;--color-warning:#000000;--color-warning-bg:#FFE500;--color-error:#B00000;--color-error-bg:#FFFFFF;--color-info:#000000;--color-info-bg:#FFFFFF;
+}

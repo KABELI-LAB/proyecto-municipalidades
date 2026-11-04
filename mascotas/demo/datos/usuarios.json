@@ -1,0 +1,15 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "datos": [
+    {
+      "id": "usr-01",
+      "nombre": "Cuenta de demostración",
+      "rol": "administrador",
+      "correo": "admin@hualane.cl",
+      "operativos_asignados": [
+        "ope-05"
+      ]
+    }
+  ]
+}

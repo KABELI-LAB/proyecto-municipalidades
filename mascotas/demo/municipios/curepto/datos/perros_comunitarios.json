@@ -1,0 +1,135 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para curepto.",
+  "datos": [
+    {
+      "id": "cur-com-01",
+      "animal_id": "cur-ani-001",
+      "apodo": "la guardiana de la plaza",
+      "lugar_id": "plaza-de-armas-de-curepto",
+      "sector_id": "curepto-urbano",
+      "cuidadores": "La cuidan locatarios y vecinos de la plaza",
+      "ultimo_control": "2026-02-03",
+      "necesita_atencion": false,
+      "posicion": {
+        "dx_m": 7,
+        "dy_m": 110,
+        "lat": -35.09274,
+        "lng": -72.01805
+      }
+    },
+    {
+      "id": "cur-com-02",
+      "animal_id": "cur-ani-002",
+      "apodo": "la de la esquina",
+      "lugar_id": "plaza-de-armas-de-curepto",
+      "sector_id": "curepto-urbano",
+      "cuidadores": "La alimenta el kiosco de la esquina",
+      "ultimo_control": "2026-03-18",
+      "necesita_atencion": false,
+      "posicion": {
+        "dx_m": 108,
+        "dy_m": -301,
+        "lat": -35.09643,
+        "lng": -72.01694
+      }
+    },
+    {
+      "id": "cur-com-03",
+      "animal_id": "cur-ani-003",
+      "apodo": "el del estadio",
+      "lugar_id": "estadio-municipal-de-curepto",
+      "sector_id": "curepto-urbano",
+      "cuidadores": "Lo cuidan los encargados del recinto",
+      "ultimo_control": "2026-04-11",
+      "necesita_atencion": true,
+      "posicion": {
+        "dx_m": 125,
+        "dy_m": 20,
+        "lat": -35.08968,
+        "lng": -72.02742
+      }
+    },
+    {
+      "id": "cur-com-04",
+      "animal_id": "cur-ani-004",
+      "apodo": "la mascota del liceo",
+      "lugar_id": "liceo-luis-edmundo-correa-rojas",
+      "sector_id": "curepto-urbano",
+      "cuidadores": "Lo alimentan estudiantes y apoderados",
+      "ultimo_control": "2026-02-25",
+      "necesita_atencion": true,
+      "posicion": {
+        "dx_m": 54,
+        "dy_m": -31,
+        "lat": -35.0923,
+        "lng": -72.01682
+      }
+    },
+    {
+      "id": "cur-com-05",
+      "animal_id": "cur-ani-005",
+      "apodo": "el vecino del centro",
+      "lugar_id": "ilustre-municipalidad-de-curepto",
+      "sector_id": "curepto-urbano",
+      "cuidadores": "Lo conocen funcionarios y vecinos del centro",
+      "ultimo_control": "2026-02-09",
+      "necesita_atencion": false,
+      "posicion": {
+        "dx_m": -90,
+        "dy_m": 17,
+        "lat": -35.0933,
+        "lng": -72.01862
+      }
+    },
+    {
+      "id": "cur-com-06",
+      "animal_id": "cur-ani-006",
+      "apodo": "la regalona de la escuela",
+      "lugar_id": "posta-de-salud-rural-gualleco",
+      "sector_id": "gualleco",
+      "cuidadores": "Lo cuida la comunidad escolar",
+      "ultimo_control": "2026-01-14",
+      "necesita_atencion": false,
+      "posicion": {
+        "dx_m": 27,
+        "dy_m": -76,
+        "lat": -35.24738,
+        "lng": -71.98093
+      }
+    },
+    {
+      "id": "cur-com-07",
+      "animal_id": "cur-ani-007",
+      "apodo": "el de la ruta",
+      "lugar_id": "posta-de-salud-rural-las-lomas",
+      "sector_id": "costa",
+      "cuidadores": "Lo alimentan vecinos del sector",
+      "ultimo_control": "2026-03-16",
+      "necesita_atencion": true,
+      "posicion": {
+        "dx_m": 55,
+        "dy_m": -29,
+        "lat": -35.11493,
+        "lng": -72.17505
+      }
+    },
+    {
+      "id": "cur-com-08",
+      "animal_id": "cur-ani-008",
+      "apodo": "el compañero de los niños",
+      "lugar_id": "gimnasio-municipal-de-curepto",
+      "sector_id": "curepto-urbano",
+      "cuidadores": "Lo cuidan vecinos de Rincón de Calpún",
+      "ultimo_control": "2026-05-07",
+      "necesita_atencion": true,
+      "posicion": {
+        "dx_m": -198,
+        "dy_m": 60,
+        "lat": -35.09061,
+        "lng": -72.01998
+      }
+    }
+  ]
+}

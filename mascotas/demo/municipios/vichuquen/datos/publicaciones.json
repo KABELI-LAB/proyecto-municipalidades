@@ -1,0 +1,1059 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para vichuquen.",
+  "datos": [
+    {
+      "id": "vic-pub-001",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-035",
+      "sector_id": "llico",
+      "localidad_id": "culenmapu",
+      "fecha": "2026-09-07",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 64,
+        "dy_m": 153,
+        "lat": -34.79524,
+        "lng": -72.07822
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-031",
+      "resuelta": "2026-09-10",
+      "via_coincidencia": true
+    },
+    {
+      "id": "vic-pub-002",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-035",
+      "sector_id": "llico",
+      "localidad_id": "culenmapu",
+      "fecha": "2026-09-08",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -599,
+        "dy_m": 359,
+        "lat": -34.79339,
+        "lng": -72.08547
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-032",
+      "par_id": "vic-pub-001"
+    },
+    {
+      "id": "vic-pub-003",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-036",
+      "sector_id": "llico",
+      "localidad_id": "llico",
+      "fecha": "2026-03-08",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -581,
+        "dy_m": 769,
+        "lat": -34.75953,
+        "lng": -72.08098
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-033",
+      "resuelta": "2026-03-10",
+      "via_coincidencia": true
+    },
+    {
+      "id": "vic-pub-004",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-036",
+      "sector_id": "llico",
+      "localidad_id": "el-rodeo",
+      "fecha": "2026-03-10",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 13,
+        "dy_m": -299,
+        "lat": -34.78602,
+        "lng": -72.08319
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-034",
+      "par_id": "vic-pub-003"
+    },
+    {
+      "id": "vic-pub-005",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-037",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "vichuquen-poniente",
+      "fecha": "2026-01-16",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 691,
+        "dy_m": -139,
+        "lat": -34.88757,
+        "lng": -71.98814
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-035",
+      "resuelta": "2026-01-20",
+      "via_coincidencia": false
+    },
+    {
+      "id": "vic-pub-006",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-037",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "las-puertas",
+      "fecha": "2026-01-20",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -172,
+        "dy_m": -136,
+        "lat": -34.95181,
+        "lng": -72.06522
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-036",
+      "par_id": "vic-pub-005"
+    },
+    {
+      "id": "vic-pub-007",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-038",
+      "sector_id": "llico",
+      "localidad_id": "culenmapu",
+      "fecha": "2025-12-03",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -1034,
+        "dy_m": -137,
+        "lat": -34.79785,
+        "lng": -72.09023
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-037",
+      "resuelta": "2025-12-11",
+      "via_coincidencia": true
+    },
+    {
+      "id": "vic-pub-008",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-038",
+      "sector_id": "llico",
+      "localidad_id": "el-rodeo",
+      "fecha": "2025-12-06",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 237,
+        "dy_m": -23,
+        "lat": -34.78354,
+        "lng": -72.08074
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-038",
+      "par_id": "vic-pub-007"
+    },
+    {
+      "id": "vic-pub-009",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-039",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "el-manzano",
+      "fecha": "2026-09-14",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -59,
+        "dy_m": 196,
+        "lat": -34.87329,
+        "lng": -71.99386
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-039",
+      "resuelta": "2026-09-19",
+      "via_coincidencia": false
+    },
+    {
+      "id": "vic-pub-010",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-039",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "vichuquen",
+      "fecha": "2026-09-14",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -541,
+        "dy_m": -95,
+        "lat": -34.88487,
+        "lng": -71.9983
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-040",
+      "par_id": "vic-pub-009"
+    },
+    {
+      "id": "vic-pub-011",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-040",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "las-puertas",
+      "fecha": "2025-10-17",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 941,
+        "dy_m": 880,
+        "lat": -34.94268,
+        "lng": -72.05303
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-041",
+      "resuelta": "2025-10-26",
+      "via_coincidencia": false
+    },
+    {
+      "id": "vic-pub-012",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-040",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "los-7-robles",
+      "fecha": "2025-10-18",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -198,
+        "dy_m": 528,
+        "lat": -34.91838,
+        "lng": -71.99132
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-042",
+      "par_id": "vic-pub-011"
+    },
+    {
+      "id": "vic-pub-013",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-041",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "las-puertas",
+      "fecha": "2026-09-24",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -90,
+        "dy_m": 10,
+        "lat": -34.95049,
+        "lng": -72.06433
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-043",
+      "resuelta": "2026-10-01",
+      "via_coincidencia": true
+    },
+    {
+      "id": "vic-pub-014",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-041",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "el-manzano",
+      "fecha": "2026-09-27",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -76,
+        "dy_m": -609,
+        "lat": -34.88052,
+        "lng": -71.99405
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-044",
+      "par_id": "vic-pub-013"
+    },
+    {
+      "id": "vic-pub-015",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-042",
+      "sector_id": "llico",
+      "localidad_id": "el-rodeo",
+      "fecha": "2026-03-15",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -201,
+        "dy_m": 136,
+        "lat": -34.78211,
+        "lng": -72.08553
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-045",
+      "resuelta": "2026-03-23",
+      "via_coincidencia": true
+    },
+    {
+      "id": "vic-pub-016",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-042",
+      "sector_id": "llico",
+      "localidad_id": "llico",
+      "fecha": "2026-03-18",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -44,
+        "dy_m": 31,
+        "lat": -34.76616,
+        "lng": -72.07511
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-046",
+      "par_id": "vic-pub-015"
+    },
+    {
+      "id": "vic-pub-017",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-043",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "las-juntas",
+      "fecha": "2026-04-15",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -91,
+        "dy_m": -97,
+        "lat": -34.86527,
+        "lng": -72.00904
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-047",
+      "resuelta": "2026-04-24",
+      "via_coincidencia": false
+    },
+    {
+      "id": "vic-pub-018",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-043",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "el-manzano",
+      "fecha": "2026-04-18",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 209,
+        "dy_m": 64,
+        "lat": -34.87448,
+        "lng": -71.99093
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-048",
+      "par_id": "vic-pub-017"
+    },
+    {
+      "id": "vic-pub-019",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-044",
+      "sector_id": "torca-boyeruca",
+      "localidad_id": "las-conchas",
+      "fecha": "2026-01-18",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 267,
+        "dy_m": -565,
+        "lat": -34.781,
+        "lng": -72.05326
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-049",
+      "resuelta": "2026-01-26",
+      "via_coincidencia": true
+    },
+    {
+      "id": "vic-pub-020",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-044",
+      "sector_id": "tilicura",
+      "localidad_id": "tilicura",
+      "fecha": "2026-01-22",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -167,
+        "dy_m": 133,
+        "lat": -34.82327,
+        "lng": -71.96393
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-050",
+      "par_id": "vic-pub-019"
+    },
+    {
+      "id": "vic-pub-021",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-045",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "uraco",
+      "fecha": "2026-01-05",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 642,
+        "dy_m": -77,
+        "lat": -34.93273,
+        "lng": -72.00285
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-051",
+      "resuelta": "2026-01-08",
+      "via_coincidencia": false
+    },
+    {
+      "id": "vic-pub-022",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-045",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "vichuquen",
+      "fecha": "2026-01-06",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 250,
+        "dy_m": -509,
+        "lat": -34.88859,
+        "lng": -71.98963
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-052",
+      "par_id": "vic-pub-021"
+    },
+    {
+      "id": "vic-pub-023",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-046",
+      "sector_id": "torca-boyeruca",
+      "localidad_id": "las-garzas",
+      "fecha": "2026-03-20",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -31,
+        "dy_m": -668,
+        "lat": -34.74293,
+        "lng": -72.01255
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-053",
+      "resuelta": "2026-03-22",
+      "via_coincidencia": false
+    },
+    {
+      "id": "vic-pub-024",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-046",
+      "sector_id": "torca-boyeruca",
+      "localidad_id": "las-garzas",
+      "fecha": "2026-03-22",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 37,
+        "dy_m": 485,
+        "lat": -34.73257,
+        "lng": -72.01181
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-054",
+      "par_id": "vic-pub-023"
+    },
+    {
+      "id": "vic-pub-025",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-047",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "las-juntas",
+      "fecha": "2026-09-19",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -462,
+        "dy_m": -369,
+        "lat": -34.86771,
+        "lng": -72.0131
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-055",
+      "resuelta": "2026-09-22",
+      "via_coincidencia": false
+    },
+    {
+      "id": "vic-pub-026",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-047",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "las-puertas",
+      "fecha": "2026-09-19",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 41,
+        "dy_m": 18,
+        "lat": -34.95042,
+        "lng": -72.06289
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-056",
+      "par_id": "vic-pub-025"
+    },
+    {
+      "id": "vic-pub-027",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-048",
+      "sector_id": "lago",
+      "localidad_id": "alto-del-puerto",
+      "fecha": "2025-12-07",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -973,
+        "dy_m": 189,
+        "lat": -34.85115,
+        "lng": -72.03328
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-057",
+      "resuelta": "2025-12-14",
+      "via_coincidencia": true
+    },
+    {
+      "id": "vic-pub-028",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-048",
+      "sector_id": "lago",
+      "localidad_id": "merhueves",
+      "fecha": "2025-12-08",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 506,
+        "dy_m": 376,
+        "lat": -34.84243,
+        "lng": -72.06162
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-058",
+      "par_id": "vic-pub-027"
+    },
+    {
+      "id": "vic-pub-029",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-049",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "las-juntas",
+      "fecha": "2026-04-30",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -204,
+        "dy_m": 591,
+        "lat": -34.85909,
+        "lng": -72.01028
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-059",
+      "resuelta": "2026-05-09",
+      "via_coincidencia": true
+    },
+    {
+      "id": "vic-pub-030",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-049",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "uraco",
+      "fecha": "2026-05-02",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -650,
+        "dy_m": 924,
+        "lat": -34.92374,
+        "lng": -72.01701
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-060",
+      "par_id": "vic-pub-029"
+    },
+    {
+      "id": "vic-pub-031",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-050",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "vichuquen",
+      "fecha": "2026-03-09",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -68,
+        "dy_m": -894,
+        "lat": -34.89205,
+        "lng": -71.99312
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-061",
+      "resuelta": "2026-03-14",
+      "via_coincidencia": false
+    },
+    {
+      "id": "vic-pub-032",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-050",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "vichuquen",
+      "fecha": "2026-03-11",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -881,
+        "dy_m": -360,
+        "lat": -34.88725,
+        "lng": -72.00202
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-062",
+      "par_id": "vic-pub-031"
+    },
+    {
+      "id": "vic-pub-033",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-051",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "vichuquen",
+      "fecha": "2026-09-17",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -792,
+        "dy_m": 908,
+        "lat": -34.87586,
+        "lng": -72.00104
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-063",
+      "resguardado": null
+    },
+    {
+      "id": "vic-pub-034",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-052",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "uraco",
+      "fecha": "2026-10-05",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -298,
+        "dy_m": 128,
+        "lat": -34.93089,
+        "lng": -72.01315
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-064",
+      "resguardado": null
+    },
+    {
+      "id": "vic-pub-035",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-053",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "vichuquen-poniente",
+      "fecha": "2026-09-11",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 54,
+        "dy_m": -731,
+        "lat": -34.89288,
+        "lng": -71.99512
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-065",
+      "resguardado": null
+    },
+    {
+      "id": "vic-pub-036",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-054",
+      "sector_id": "lago",
+      "localidad_id": "el-villorrio",
+      "fecha": "2026-09-28",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -1149,
+        "dy_m": 427,
+        "lat": -34.83962,
+        "lng": -72.06414
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-066",
+      "resguardado": null
+    },
+    {
+      "id": "vic-pub-037",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-055",
+      "sector_id": "llico",
+      "localidad_id": "trilco",
+      "fecha": "2026-10-02",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -819,
+        "dy_m": 127,
+        "lat": -34.81389,
+        "lng": -72.14455
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-067",
+      "resguardado": null
+    },
+    {
+      "id": "vic-pub-038",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-056",
+      "sector_id": "llico",
+      "localidad_id": "la-barca",
+      "fecha": "2026-09-21",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 99,
+        "dy_m": -374,
+        "lat": -34.80834,
+        "lng": -72.12539
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-068",
+      "resguardado": null
+    },
+    {
+      "id": "vic-pub-039",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-057",
+      "sector_id": "llico",
+      "localidad_id": "llico",
+      "fecha": "2026-09-15",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -307,
+        "dy_m": 763,
+        "lat": -34.75959,
+        "lng": -72.07798
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-069",
+      "resguardado": null
+    },
+    {
+      "id": "vic-pub-040",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-058",
+      "sector_id": "lago",
+      "localidad_id": "alto-del-puerto",
+      "fecha": "2026-09-21",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -378,
+        "dy_m": 470,
+        "lat": -34.84863,
+        "lng": -72.02676
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-070",
+      "resguardado": true
+    },
+    {
+      "id": "vic-pub-041",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-059",
+      "sector_id": "llico",
+      "localidad_id": "el-rodeo",
+      "fecha": "2026-10-05",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -415,
+        "dy_m": -549,
+        "lat": -34.78826,
+        "lng": -72.08787
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-071",
+      "resguardado": null
+    },
+    {
+      "id": "vic-pub-042",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-060",
+      "sector_id": "lago",
+      "localidad_id": "tunquelen",
+      "fecha": "2026-09-19",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 230,
+        "dy_m": -842,
+        "lat": -34.85076,
+        "lng": -72.05925
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-072",
+      "resguardado": null
+    },
+    {
+      "id": "vic-pub-043",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-061",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "uraco",
+      "fecha": "2026-09-09",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 351,
+        "dy_m": 5,
+        "lat": -34.932,
+        "lng": -72.00604
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-073",
+      "resguardado": null
+    },
+    {
+      "id": "vic-pub-044",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-062",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "talquita",
+      "fecha": "2026-09-30",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 744,
+        "dy_m": -487,
+        "lat": -34.89697,
+        "lng": -71.98651
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-074",
+      "resguardado": null
+    },
+    {
+      "id": "vic-pub-045",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-063",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "uraco",
+      "fecha": "2026-09-12",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -245,
+        "dy_m": 145,
+        "lat": -34.93074,
+        "lng": -72.01257
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-075",
+      "resguardado": null
+    },
+    {
+      "id": "vic-pub-046",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-064",
+      "sector_id": "torca-boyeruca",
+      "localidad_id": "los-cardos",
+      "fecha": "2026-09-27",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 39,
+        "dy_m": -219,
+        "lat": -34.77522,
+        "lng": -72.02641
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-076",
+      "resguardado": null
+    },
+    {
+      "id": "vic-pub-047",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-065",
+      "sector_id": "llico",
+      "localidad_id": "culenmapu",
+      "fecha": "2026-10-02",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 62,
+        "dy_m": -762,
+        "lat": -34.80346,
+        "lng": -72.07824
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-077",
+      "nota_demo": "Escena demo: coincidencia sugerida"
+    },
+    {
+      "id": "vic-pub-048",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-066",
+      "sector_id": "llico",
+      "localidad_id": "llico",
+      "fecha": "2026-10-04",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -500,
+        "dy_m": 552,
+        "lat": -34.76148,
+        "lng": -72.08009
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-078",
+      "resguardado": true,
+      "nota_demo": "Escena demo: coincidencia sugerida",
+      "coincidencia_con": "vic-pub-047"
+    },
+    {
+      "id": "vic-pub-049",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-067",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "talquita",
+      "fecha": "2026-01-26",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 374,
+        "dy_m": 512,
+        "lat": -34.888,
+        "lng": -71.99056
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-079"
+    },
+    {
+      "id": "vic-pub-050",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-068",
+      "sector_id": "torca-boyeruca",
+      "localidad_id": "molhuen",
+      "fecha": "2026-04-23",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 614,
+        "dy_m": -72,
+        "lat": -34.7175,
+        "lng": -71.99076
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-080"
+    },
+    {
+      "id": "vic-pub-051",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-069",
+      "sector_id": "llico",
+      "localidad_id": "culenmapu",
+      "fecha": "2026-01-29",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": -135,
+        "dy_m": 362,
+        "lat": -34.79337,
+        "lng": -72.0804
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-081"
+    },
+    {
+      "id": "vic-pub-052",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-070",
+      "sector_id": "torca-boyeruca",
+      "localidad_id": "torca",
+      "fecha": "2026-05-06",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 427,
+        "dy_m": 82,
+        "lat": -34.77707,
+        "lng": -72.03913
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-082"
+    },
+    {
+      "id": "vic-pub-053",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-071",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "las-puertas",
+      "fecha": "2026-03-18",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 534,
+        "dy_m": -225,
+        "lat": -34.95261,
+        "lng": -72.05749
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-083"
+    },
+    {
+      "id": "vic-pub-054",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-072",
+      "sector_id": "lago",
+      "localidad_id": "tunquelen",
+      "fecha": "2026-04-09",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 639,
+        "dy_m": 218,
+        "lat": -34.84124,
+        "lng": -72.05477
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-084"
+    },
+    {
+      "id": "vic-pub-055",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-073",
+      "sector_id": "lago",
+      "localidad_id": "paula",
+      "fecha": "2026-02-18",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 503,
+        "dy_m": 953,
+        "lat": -34.8358,
+        "lng": -72.05152
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-085"
+    },
+    {
+      "id": "vic-pub-056",
+      "tipo": "encontrada",
+      "animal_id": "vic-ani-074",
+      "sector_id": "llico",
+      "localidad_id": "el-rodeo",
+      "fecha": "2026-01-16",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 366,
+        "dy_m": -50,
+        "lat": -34.78378,
+        "lng": -72.07933
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-086"
+    },
+    {
+      "id": "vic-pub-057",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-075",
+      "sector_id": "llico",
+      "localidad_id": "el-rodeo",
+      "fecha": "2026-01-13",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": -243,
+        "dy_m": -663,
+        "lat": -34.78929,
+        "lng": -72.08599
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-087"
+    },
+    {
+      "id": "vic-pub-058",
+      "tipo": "perdida",
+      "animal_id": "vic-ani-076",
+      "sector_id": "vichuquen-pueblo",
+      "localidad_id": "talquita",
+      "fecha": "2026-02-26",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": -366,
+        "dy_m": -161,
+        "lat": -34.89404,
+        "lng": -71.99866
+      },
+      "contacto": "protegido",
+      "persona_id": "vic-per-088"
+    }
+  ]
+}

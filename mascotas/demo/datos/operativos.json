@@ -1,0 +1,154 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "datos": [
+    {
+      "id": "ope-01",
+      "nombre": "Operativo La Huerta",
+      "sector_id": "la-huerta",
+      "lugar_id": "escuela-la-huerta-de-mataquito",
+      "fecha": "2026-03-06",
+      "horario": "09:00 a 14:00",
+      "servicios": [
+        "esterilizacion",
+        "vacunacion",
+        "microchip"
+      ],
+      "estado": "cerrado",
+      "resultados": {
+        "esterilizacion": {
+          "cupos": 6,
+          "inscritos": 6,
+          "asistieron": 5
+        },
+        "vacunacion": {
+          "cupos": 8,
+          "inscritos": 8,
+          "asistieron": 7
+        },
+        "microchip": {
+          "cupos": 6,
+          "inscritos": 6,
+          "asistieron": 6
+        }
+      },
+      "lista_espera_no_cubierta": 9
+    },
+    {
+      "id": "ope-02",
+      "nombre": "Operativo Los Coipos",
+      "sector_id": "los-coipos",
+      "lugar_id": "escuela-caone",
+      "fecha": "2026-05-09",
+      "horario": "09:00 a 14:00",
+      "servicios": [
+        "esterilizacion",
+        "vacunacion",
+        "microchip"
+      ],
+      "estado": "cerrado",
+      "resultados": {
+        "esterilizacion": {
+          "cupos": 5,
+          "inscritos": 5,
+          "asistieron": 5
+        },
+        "vacunacion": {
+          "cupos": 6,
+          "inscritos": 6,
+          "asistieron": 6
+        },
+        "microchip": {
+          "cupos": 5,
+          "inscritos": 5,
+          "asistieron": 3
+        }
+      },
+      "lista_espera_no_cubierta": 3
+    },
+    {
+      "id": "ope-03",
+      "nombre": "Operativo Patacón",
+      "sector_id": "patacon",
+      "lugar_id": "sala-multiproposito",
+      "fecha": "2026-07-03",
+      "horario": "09:00 a 14:00",
+      "servicios": [
+        "esterilizacion",
+        "vacunacion",
+        "microchip"
+      ],
+      "estado": "cerrado",
+      "resultados": {
+        "esterilizacion": {
+          "cupos": 5,
+          "inscritos": 4,
+          "asistieron": 4
+        },
+        "vacunacion": {
+          "cupos": 6,
+          "inscritos": 6,
+          "asistieron": 4
+        },
+        "microchip": {
+          "cupos": 5,
+          "inscritos": 5,
+          "asistieron": 5
+        }
+      },
+      "lista_espera_no_cubierta": 3
+    },
+    {
+      "id": "ope-04",
+      "nombre": "Operativo Hualañé",
+      "sector_id": "hualane",
+      "lugar_id": "estadio-municipal-de-hualane",
+      "fecha": "2026-09-15",
+      "horario": "09:00 a 14:00",
+      "servicios": [
+        "esterilizacion",
+        "vacunacion",
+        "microchip"
+      ],
+      "estado": "cerrado",
+      "resultados": {
+        "esterilizacion": {
+          "cupos": 8,
+          "inscritos": 8,
+          "asistieron": 7
+        },
+        "vacunacion": {
+          "cupos": 10,
+          "inscritos": 10,
+          "asistieron": 10
+        },
+        "microchip": {
+          "cupos": 8,
+          "inscritos": 7,
+          "asistieron": 7
+        }
+      },
+      "lista_espera_no_cubierta": 3
+    },
+    {
+      "id": "ope-05",
+      "nombre": "Operativo La Huerta",
+      "sector_id": "la-huerta",
+      "lugar_id": "escuela-la-huerta-de-mataquito",
+      "fecha": "2026-10-24",
+      "horario": "09:00 a 14:00",
+      "servicios": [
+        "esterilizacion",
+        "vacunacion",
+        "microchip"
+      ],
+      "cupos": {
+        "esterilizacion": 20,
+        "vacunacion": 40,
+        "microchip": 40
+      },
+      "estado": "borrador",
+      "nota_demo": "Se crea en vivo durante la demostración a partir de la recomendación."
+    }
+  ]
+}

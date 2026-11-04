@@ -1,0 +1,117 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para curepto.",
+  "datos": [
+    {
+      "id": "plaza-de-armas-de-curepto",
+      "nombre": "Plaza de Armas de Curepto",
+      "tipo": "plaza",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "curepto",
+      "lat": -35.0937277,
+      "lng": -72.0181235,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM way 482786102"
+    },
+    {
+      "id": "ilustre-municipalidad-de-curepto",
+      "nombre": "Ilustre Municipalidad de Curepto",
+      "tipo": "edificio-municipal",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "curepto",
+      "lat": -35.0934513,
+      "lng": -72.0176363,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM way 108242911"
+    },
+    {
+      "id": "estadio-municipal-de-curepto",
+      "nombre": "Estadio Municipal de Curepto",
+      "tipo": "recinto-deportivo",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "curepto",
+      "lat": -35.0898598,
+      "lng": -72.0287949,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM way 559223314"
+    },
+    {
+      "id": "liceo-luis-edmundo-correa-rojas",
+      "nombre": "Liceo Luis Edmundo Correa Rojas",
+      "tipo": "establecimiento-educacional",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "curepto",
+      "lat": -35.092021,
+      "lng": -72.0174127,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM way 619242076 'Liceo Luis Correa Rojas' (otro way 1209637799 con nombre completo en -35.0895594, -72.0202979)"
+    },
+    {
+      "id": "escuela-pedro-antonio-gonzalez",
+      "nombre": "Escuela Pedro Antonio González",
+      "tipo": "escuela",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "curepto",
+      "lat": -35.0987843,
+      "lng": -72.0120835,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM way 482126377"
+    },
+    {
+      "id": "posta-de-salud-rural-gualleco",
+      "nombre": "Posta de Salud Rural Gualleco",
+      "tipo": "posta-rural",
+      "sector_id": "gualleco",
+      "localidad_id": "gualleco",
+      "lat": -35.2466996,
+      "lng": -71.9812223,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM way 549346596"
+    },
+    {
+      "id": "museo-gualleco",
+      "nombre": "Museo Gualleco",
+      "tipo": "museo",
+      "sector_id": "gualleco",
+      "localidad_id": "gualleco",
+      "lat": -35.2452455,
+      "lng": -71.981528,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM node 13311056156"
+    },
+    {
+      "id": "gimnasio-municipal-de-curepto",
+      "nombre": "Gimnasio Municipal de Curepto",
+      "tipo": "recinto-deportivo",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "curepto",
+      "lat": -35.0911511,
+      "lng": -72.0178019,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM way 108259809"
+    },
+    {
+      "id": "posta-de-salud-rural-las-lomas",
+      "nombre": "Posta de Salud Rural Las Lomas",
+      "tipo": "posta-rural",
+      "sector_id": "costa",
+      "localidad_id": "las-lomas",
+      "lat": -35.1146679,
+      "lng": -72.1756517,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM node 11506591592"
+    },
+    {
+      "id": "posta-de-salud-rural-rapilermo",
+      "nombre": "Posta de Salud Rural Rapilermo",
+      "tipo": "posta-rural",
+      "sector_id": "rapilermo",
+      "localidad_id": "rapilermo",
+      "lat": -35.1826437,
+      "lng": -71.8424896,
+      "coordenadas_estado": "propia (OpenStreetMap)",
+      "fuente": "OSM node 11507053343"
+    }
+  ]
+}

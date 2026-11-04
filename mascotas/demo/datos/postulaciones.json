@@ -1,0 +1,204 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "datos": [
+    {
+      "id": "pos-001",
+      "adopcion_id": "adp-01",
+      "persona_id": "per-001",
+      "fecha": "2026-06-13",
+      "estado": "en evaluacion",
+      "tipo_vivienda": "parcela",
+      "experiencia_previa": true,
+      "otros_animales": false,
+      "acepta_compartir_contacto": true
+    },
+    {
+      "id": "pos-002",
+      "adopcion_id": "adp-01",
+      "persona_id": "per-002",
+      "fecha": "2026-08-16",
+      "estado": "recibida",
+      "tipo_vivienda": "departamento",
+      "experiencia_previa": true,
+      "otros_animales": false,
+      "acepta_compartir_contacto": true
+    },
+    {
+      "id": "pos-003",
+      "adopcion_id": "adp-03",
+      "persona_id": "per-003",
+      "fecha": "2026-10-04",
+      "estado": "en evaluacion",
+      "tipo_vivienda": "parcela",
+      "experiencia_previa": false,
+      "otros_animales": true,
+      "acepta_compartir_contacto": true
+    },
+    {
+      "id": "pos-004",
+      "adopcion_id": "adp-03",
+      "persona_id": "per-004",
+      "fecha": "2026-09-21",
+      "estado": "en evaluacion",
+      "tipo_vivienda": "parcela",
+      "experiencia_previa": false,
+      "otros_animales": true,
+      "acepta_compartir_contacto": true
+    },
+    {
+      "id": "pos-005",
+      "adopcion_id": "adp-04",
+      "persona_id": "per-005",
+      "fecha": "2026-08-22",
+      "estado": "recibida",
+      "tipo_vivienda": "parcela",
+      "experiencia_previa": true,
+      "otros_animales": false,
+      "acepta_compartir_contacto": true
+    },
+    {
+      "id": "pos-006",
+      "adopcion_id": "adp-04",
+      "persona_id": "per-006",
+      "fecha": "2026-08-01",
+      "estado": "recibida",
+      "tipo_vivienda": "departamento",
+      "experiencia_previa": true,
+      "otros_animales": true,
+      "acepta_compartir_contacto": true
+    },
+    {
+      "id": "pos-007",
+      "adopcion_id": "adp-04",
+      "persona_id": "per-007",
+      "fecha": "2026-09-20",
+      "estado": "en evaluacion",
+      "tipo_vivienda": "casa sin patio",
+      "experiencia_previa": true,
+      "otros_animales": true,
+      "acepta_compartir_contacto": true
+    },
+    {
+      "id": "pos-008",
+      "adopcion_id": "adp-06",
+      "persona_id": "per-008",
+      "fecha": "2026-10-05",
+      "estado": "en evaluacion",
+      "tipo_vivienda": "parcela",
+      "experiencia_previa": true,
+      "otros_animales": false,
+      "acepta_compartir_contacto": true
+    },
+    {
+      "id": "pos-009",
+      "adopcion_id": "adp-08",
+      "persona_id": "per-009",
+      "fecha": "2026-09-23",
+      "estado": "en evaluacion",
+      "tipo_vivienda": "casa con patio",
+      "experiencia_previa": true,
+      "otros_animales": true,
+      "acepta_compartir_contacto": true
+    },
+    {
+      "id": "pos-010",
+      "adopcion_id": "adp-09",
+      "persona_id": "per-010",
+      "fecha": "2026-09-30",
+      "estado": "recibida",
+      "tipo_vivienda": "casa con patio",
+      "experiencia_previa": true,
+      "otros_animales": false,
+      "acepta_compartir_contacto": true
+    },
+    {
+      "id": "pos-011",
+      "adopcion_id": "adp-10",
+      "persona_id": "per-011",
+      "fecha": "2026-06-10",
+      "estado": "en evaluacion",
+      "tipo_vivienda": "departamento",
+      "experiencia_previa": true,
+      "otros_animales": false,
+      "acepta_compartir_contacto": true
+    },
+    {
+      "id": "pos-012",
+      "adopcion_id": "adp-10",
+      "persona_id": "per-012",
+      "fecha": "2026-10-06",
+      "estado": "recibida",
+      "tipo_vivienda": "casa con patio",
+      "experiencia_previa": true,
+      "otros_animales": true,
+      "acepta_compartir_contacto": true
+    },
+    {
+      "id": "pos-013",
+      "adopcion_id": "adp-10",
+      "persona_id": "per-013",
+      "fecha": "2026-06-10",
+      "estado": "recibida",
+      "tipo_vivienda": "casa sin patio",
+      "experiencia_previa": false,
+      "otros_animales": true,
+      "acepta_compartir_contacto": true
+    },
+    {
+      "id": "pos-014",
+      "adopcion_id": "adp-11",
+      "persona_id": "per-014",
+      "fecha": "2026-06-29",
+      "estado": "recibida",
+      "tipo_vivienda": "departamento",
+      "experiencia_previa": false,
+      "otros_animales": true,
+      "acepta_compartir_contacto": true
+    },
+    {
+      "id": "pos-015",
+      "adopcion_id": "adp-12",
+      "persona_id": "per-015",
+      "fecha": "2026-07-06",
+      "estado": "recibida",
+      "tipo_vivienda": "parcela",
+      "experiencia_previa": true,
+      "otros_animales": true,
+      "acepta_compartir_contacto": true
+    },
+    {
+      "id": "pos-016",
+      "adopcion_id": "adp-12",
+      "persona_id": "per-016",
+      "fecha": "2026-09-26",
+      "estado": "recibida",
+      "tipo_vivienda": "parcela",
+      "experiencia_previa": true,
+      "otros_animales": true,
+      "acepta_compartir_contacto": true
+    },
+    {
+      "id": "pos-017",
+      "adopcion_id": "adp-13",
+      "persona_id": "per-017",
+      "fecha": "2026-06-16",
+      "estado": "recibida",
+      "tipo_vivienda": "parcela",
+      "experiencia_previa": true,
+      "otros_animales": false,
+      "acepta_compartir_contacto": true
+    },
+    {
+      "id": "pos-018",
+      "adopcion_id": "adp-13",
+      "persona_id": "per-018",
+      "fecha": "2026-07-21",
+      "estado": "en evaluacion",
+      "tipo_vivienda": "casa con patio",
+      "experiencia_previa": true,
+      "otros_animales": false,
+      "acepta_compartir_contacto": true
+    }
+  ]
+}

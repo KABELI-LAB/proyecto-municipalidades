@@ -1,0 +1,17 @@
+{
+  "_nota": "Coordenadas aproximadas entregadas por el equipo. Alto de Caone sin dato: usa Caone. Los lugares de referencia usan la coordenada de su localidad hasta tener la propia.",
+  "localidades": {
+    "hualane": [-34.976, -71.805], "la-higuera": [-34.980, -71.790], "el-buche": [-34.982, -71.700],
+    "mira-rio": [-34.920, -71.850], "barandica": [-34.950, -71.820], "peralillo": [-35.015, -71.690],
+    "el-rincon": [-34.960, -71.760], "el-molino": [-34.950, -71.775], "el-porvenir": [-34.970, -71.785],
+    "patacon": [-34.900, -71.783], "los-sauces": [-34.917, -71.867], "quilico": [-34.900, -71.850],
+    "boquil": [-34.883, -71.917], "tilicura": [-34.900, -71.850], "los-cristales": [-34.900, -71.850],
+    "espinalillo": [-34.900, -71.950],
+    "los-coipos": [-34.9155, -71.6611], "caone": [-34.967, -71.650], "barba-rubia": [-34.967, -71.717],
+    "camarico": [-34.967, -71.683], "el-llano": [-34.983, -71.617], "el-cobre": [-34.983, -71.650],
+    "alto-de-caone": null,
+    "la-huerta": [-35.0895, -71.6557], "orilla-de-valdes": [-35.067, -71.700], "orilla-de-navarro": [-35.067, -71.617],
+    "remolino": [-35.100, -71.683], "parronal": [-35.017, -71.683]
+  },
+  "lugares": {}
+}

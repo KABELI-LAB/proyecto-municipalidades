@@ -1,0 +1,150 @@
+/* Barra superior blanca: logotipo ciudadano y «Mis solicitudes». */
+.encabezado {
+  background: var(--color-surface);
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+.barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 72px;
+  padding-block: var(--space-3);
+}
+.inicio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  text-decoration: none;
+  border-radius: var(--radius-small);
+}
+/* Nombre de la plataforma (Pawni), junto al logotipo municipal. */
+.programa {
+  padding-left: var(--space-4);
+  border-left: var(--border-width) solid var(--color-border);
+  color: var(--color-primary);
+  font-size: var(--type-h4-size);
+  font-weight: var(--weight-black);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.solicitudes {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--target-min);
+  padding-inline: var(--space-4);
+  border-radius: var(--radius-medium);
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+  font-size: var(--type-label-size);
+  font-weight: var(--weight-bold);
+  text-decoration: none;
+  transition: background var(--duration-micro) var(--ease-flow);
+}
+.solicitudes:hover {
+  background: var(--blue-100);
+  color: var(--color-primary);
+}
+@media (max-width: 640px) {
+  .inicio {
+    gap: var(--space-3);
+  }
+  .inicio img {
+    height: 36px;
+  }
+  .programa {
+    padding-left: var(--space-3);
+    font-size: var(--type-body-size);
+  }
+  /* En celular, «Mis solicitudes» en dos líneas para que todo quepa en una fila. */
+  .solicitudes {
+    max-width: 8.5em;
+    padding-inline: var(--space-3);
+    font-size: var(--type-body-sm-size);
+    line-height: 1.15;
+  }
+}
+
+.principal {
+  padding-block: var(--space-5) var(--space-10);
+}
+/* Títulos de página moderados: el contenido se ve sin desplazarse. */
+.principal :global(h1) {
+  font-size: var(--web-h2-tamano);
+  line-height: var(--type-h2-lh);
+}
+
+.principal :global(a),
+.pie :global(a) {
+  text-decoration: none;
+}
+.principal :global(p a) {
+  font-weight: var(--weight-bold);
+  text-decoration: underline;
+}
+
+/* Pie azul de la institución, con el Cauce como transición. */
+.pie {
+  position: relative;
+  overflow: hidden;
+  padding-block: 136px var(--space-6);
+  background: var(--blue-900);
+  color: var(--color-text-inverse);
+}
+.caucePie {
+  position: absolute;
+  inset: 0 0 auto;
+  width: 100%;
+  height: 120px;
+  opacity: 0.9;
+}
+.filaPie {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-6);
+}
+.filaPie p {
+  flex: 1;
+  font-size: var(--type-body-sm-size);
+  color: var(--blue-100);
+}
+.filaPie b {
+  color: var(--color-text-inverse);
+  font-weight: var(--weight-bold);
+}
+/* Acceso al panel: presente pero discreto (no compite con las funciones de vecinos). */
+.accesoPanel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--target-min);
+  color: var(--color-text-inverse);
+  font-size: var(--type-body-sm-size);
+  text-decoration: underline;
+}
+.pie .accesoPanel {
+  text-decoration: underline;
+}
+.accesoPanel:hover {
+  color: var(--yellow-300);
+}
+
+/* El portal usa todo el ancho de la ventana, con márgenes laterales generosos.
+   Los textos largos mantienen su propio ancho máximo para seguir siendo legibles. */
+.encabezado :global(.contenedor),
+.principal :global(.contenedor),
+.pie :global(.contenedor) {
+  max-width: var(--container-max);
+}
+@media (min-width: 900px) {
+  .encabezado :global(.contenedor),
+  .principal :global(.contenedor),
+  .pie :global(.contenedor) {
+    padding-inline: var(--space-8);
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "_fuente": "Sistema de diseño «Vichuquén — Municipal Design System» (design-system/temas/vichuquen/README.md): teal-700, teal-300, teal-950, gold-400, on-accent, success, danger, neutral-900.",
+  "azul": "#00626B",
+  "azulNoche": "#00282C",
+  "verde": "#1D7639",
+  "verdeHoja": "#5FAAB1",
+  "amarillo": "#CA893E",
+  "tintaAmarillo": "#2B1A06",
+  "rojo": "#B42318",
+  "texto": "#172324",
+  "barra": "#00626B",
+  "cauce": [
+    "#00626B",
+    "#5FAAB1",
+    "#CA893E"
+  ],
+  "forma": "franjas"
+}

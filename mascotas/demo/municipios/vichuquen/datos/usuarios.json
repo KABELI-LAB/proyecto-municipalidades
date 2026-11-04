@@ -1,0 +1,16 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para vichuquen.",
+  "datos": [
+    {
+      "id": "vic-usr-01",
+      "nombre": "Cuenta de demostración",
+      "rol": "administrador",
+      "correo": "admin@vichuquen.cl",
+      "operativos_asignados": [
+        "vic-ope-05"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "datos": [
+    {
+      "id": "hualane",
+      "nombre": "Hualañé",
+      "tipo": "urbano-rural",
+      "poblacion": null,
+      "viviendas": null,
+      "centro": {
+        "lat": -34.967,
+        "lng": -71.775
+      },
+      "coordenadas_estado": "promedio de sus localidades"
+    },
+    {
+      "id": "patacon",
+      "nombre": "Patacón",
+      "tipo": "rural",
+      "poblacion": null,
+      "viviendas": null,
+      "centro": {
+        "lat": -34.9,
+        "lng": -71.8667
+      },
+      "coordenadas_estado": "promedio de sus localidades"
+    },
+    {
+      "id": "los-coipos",
+      "nombre": "Los Coipos",
+      "tipo": "rural",
+      "poblacion": null,
+      "viviendas": null,
+      "centro": {
+        "lat": -34.9642,
+        "lng": -71.6612
+      },
+      "coordenadas_estado": "promedio de sus localidades"
+    },
+    {
+      "id": "la-huerta",
+      "nombre": "La Huerta",
+      "tipo": "rural",
+      "poblacion": null,
+      "viviendas": null,
+      "centro": {
+        "lat": -35.0681,
+        "lng": -71.6677
+      },
+      "coordenadas_estado": "promedio de sus localidades"
+    }
+  ]
+}

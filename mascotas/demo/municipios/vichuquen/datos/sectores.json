@@ -1,0 +1,72 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para vichuquen.",
+  "datos": [
+    {
+      "id": "vichuquen-pueblo",
+      "nombre": "Vichuquén pueblo",
+      "tipo": "urbano-rural",
+      "poblacion": null,
+      "viviendas": null,
+      "centro": {
+        "lat": -34.901,
+        "lng": -72.0058
+      },
+      "coordenadas_estado": "promedio de sus localidades",
+      "fuente": "Propuesta (parte interior del distrito censal 1 Vichuquén)"
+    },
+    {
+      "id": "lago",
+      "nombre": "Lago Vichuquén",
+      "tipo": "rural",
+      "poblacion": null,
+      "viviendas": null,
+      "centro": {
+        "lat": -34.83,
+        "lng": -72.0518
+      },
+      "coordenadas_estado": "promedio de sus localidades",
+      "fuente": "Propuesta (orillas del lago; toma partes de los distritos 1, 2 y 3)"
+    },
+    {
+      "id": "llico",
+      "nombre": "Llico y costa",
+      "tipo": "urbano-rural",
+      "poblacion": null,
+      "viviendas": null,
+      "centro": {
+        "lat": -34.821,
+        "lng": -72.117
+      },
+      "coordenadas_estado": "promedio de sus localidades",
+      "fuente": "Propuesta (distrito censal 2 Llico, sin la orilla del lago)"
+    },
+    {
+      "id": "torca-boyeruca",
+      "nombre": "Torca y Boyeruca",
+      "tipo": "rural",
+      "poblacion": null,
+      "viviendas": null,
+      "centro": {
+        "lat": -34.7388,
+        "lng": -72.0313
+      },
+      "coordenadas_estado": "promedio de sus localidades",
+      "fuente": "Propuesta (distrito censal 3 Zapallar, sin la orilla del lago)"
+    },
+    {
+      "id": "tilicura",
+      "nombre": "Tilicura",
+      "tipo": "rural",
+      "poblacion": null,
+      "viviendas": null,
+      "centro": {
+        "lat": -34.7963,
+        "lng": -71.9774
+      },
+      "coordenadas_estado": "promedio de sus localidades",
+      "fuente": "Coincide con el distrito censal 4 Tilicura (oficial); usarlo como sector es propuesta"
+    }
+  ]
+}

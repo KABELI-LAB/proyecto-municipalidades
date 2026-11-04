@@ -1,0 +1,11 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para vichuquen.",
+  "datos": {
+    "id": "vichuquen",
+    "nombre": "Ilustre Municipalidad de Vichuquén",
+    "region": "Maule",
+    "modo": "demostracion"
+  }
+}

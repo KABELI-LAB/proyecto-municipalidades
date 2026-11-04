@@ -1,0 +1,14 @@
+# Netlify: este proyecto vive en una carpeta propia dentro del repositorio
+# compartido. En Netlify, «Base directory» = esa carpeta.
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Next.js con servidor (páginas dinámicas, acciones y rutas): se declara el
+# adaptador de Netlify explícitamente, porque en un monorepo con «Base
+# directory» configurado a mano Netlify no siempre detecta el framework.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

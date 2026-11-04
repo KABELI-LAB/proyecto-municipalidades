@@ -1,0 +1,134 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "datos": [
+    {
+      "id": "com-01",
+      "animal_id": "ani-001",
+      "apodo": "la guardiana de la plaza",
+      "lugar_id": "plaza-de-armas-de-hualane",
+      "sector_id": "hualane",
+      "cuidadores": "La cuidan locatarios y vecinos de la plaza",
+      "ultimo_control": "2026-02-03",
+      "necesita_atencion": false,
+      "posicion": {
+        "dx_m": 7,
+        "dy_m": 110,
+        "lat": -34.97501,
+        "lng": -71.80492
+      }
+    },
+    {
+      "id": "com-02",
+      "animal_id": "ani-002",
+      "apodo": "la de la esquina",
+      "lugar_id": "plaza-de-armas-de-hualane",
+      "sector_id": "hualane",
+      "cuidadores": "La alimenta el kiosco de la esquina",
+      "ultimo_control": "2026-03-18",
+      "necesita_atencion": false,
+      "posicion": {
+        "dx_m": 108,
+        "dy_m": -301,
+        "lat": -34.9787,
+        "lng": -71.80382
+      }
+    },
+    {
+      "id": "com-03",
+      "animal_id": "ani-003",
+      "apodo": "el del estadio",
+      "lugar_id": "estadio-municipal-de-hualane",
+      "sector_id": "hualane",
+      "cuidadores": "Lo cuidan los encargados del recinto",
+      "ultimo_control": "2026-04-11",
+      "necesita_atencion": true,
+      "posicion": {
+        "dx_m": 125,
+        "dy_m": 20,
+        "lat": -34.97582,
+        "lng": -71.80363
+      }
+    },
+    {
+      "id": "com-04",
+      "animal_id": "ani-004",
+      "apodo": "la mascota del liceo",
+      "lugar_id": "liceo-bicentenario-de-hualane",
+      "sector_id": "hualane",
+      "cuidadores": "Lo alimentan estudiantes y apoderados",
+      "ultimo_control": "2026-02-25",
+      "necesita_atencion": true,
+      "posicion": {
+        "dx_m": 54,
+        "dy_m": -31,
+        "lat": -34.97628,
+        "lng": -71.80441
+      }
+    },
+    {
+      "id": "com-05",
+      "animal_id": "ani-005",
+      "apodo": "el vecino del centro",
+      "lugar_id": "municipalidad-de-hualane",
+      "sector_id": "hualane",
+      "cuidadores": "Lo conocen funcionarios y vecinos del centro",
+      "ultimo_control": "2026-02-09",
+      "necesita_atencion": false,
+      "posicion": {
+        "dx_m": -90,
+        "dy_m": 17,
+        "lat": -34.97585,
+        "lng": -71.80599
+      }
+    },
+    {
+      "id": "com-06",
+      "animal_id": "ani-006",
+      "apodo": "la regalona de la escuela",
+      "lugar_id": "escuela-la-huerta-de-mataquito",
+      "sector_id": "la-huerta",
+      "cuidadores": "Lo cuida la comunidad escolar",
+      "ultimo_control": "2026-01-14",
+      "necesita_atencion": false,
+      "posicion": {
+        "dx_m": 27,
+        "dy_m": -76,
+        "lat": -35.09018,
+        "lng": -71.6554
+      }
+    },
+    {
+      "id": "com-07",
+      "animal_id": "ani-007",
+      "apodo": "el de la ruta",
+      "lugar_id": "escuela-caone",
+      "sector_id": "los-coipos",
+      "cuidadores": "Lo alimentan vecinos del sector",
+      "ultimo_control": "2026-03-16",
+      "necesita_atencion": true,
+      "posicion": {
+        "dx_m": 55,
+        "dy_m": -29,
+        "lat": -34.96726,
+        "lng": -71.6494
+      }
+    },
+    {
+      "id": "com-08",
+      "animal_id": "ani-008",
+      "apodo": "el compañero de los niños",
+      "lugar_id": "escuela-carlos-correa-nunez-mira-rio",
+      "sector_id": "hualane",
+      "cuidadores": "Lo cuidan vecinos de Mira Río",
+      "ultimo_control": "2026-05-07",
+      "necesita_atencion": true,
+      "posicion": {
+        "dx_m": -198,
+        "dy_m": 60,
+        "lat": -34.91946,
+        "lng": -71.85217
+      }
+    }
+  ]
+}

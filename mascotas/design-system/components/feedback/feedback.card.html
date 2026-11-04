@@ -1,0 +1,18 @@
+<!-- @dsCard group="Components" viewport="700x600" name="Feedback" subtitle="Alerts, badges, service status, loading, empty state" -->
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{padding:24px;background:var(--color-surface)}.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}.col{display:flex;flex-direction:column;gap:16px}.lab{font:700 12px/1 var(--font-sans);letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-muted);margin:4px 0 -4px}.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}</style>
+</head><body><div id="root"></div><script type="text/babel">
+const NS = window.HualaDesignSystem_c0b80f;
+const {Alert,Badge,StatusBadge,Loader,EmptyState,Button}=NS;
+function App(){return <div className="col">
+<Alert tone="success" title="Solicitud enviada">Te avisaremos por WhatsApp cuando tu certificado esté listo.</Alert>
+<Alert tone="error" title="No pudimos leer tu archivo">Sube una foto más nítida o un PDF de menos de 10 MB.</Alert>
+<div className="g2"><Alert tone="warning" title="Quedan 3 días">El plazo para postular vence el 30 de octubre.</Alert><Alert tone="info" title="Atención en terreno">El jueves estaremos en Quilpoco.</Alert></div>
+<div className="row"><StatusBadge status="operativo"/><StatusBadge status="intermitente"/><StatusBadge status="suspendido"/><StatusBadge status="finalizado"/><StatusBadge status="en-revision"/><Badge tone="blue" icon="laptop">En línea</Badge><Badge tone="green" solid>Gratis</Badge><Badge tone="yellow" solid>Nuevo</Badge></div>
+<div className="g2" style={{alignItems:'center'}}><div className="col"><Loader label="Buscando tu solicitud…"/><Loader kind="skeleton"/></div><div style={{border:'1px solid var(--color-border)',borderRadius:20}}><EmptyState title="No encontramos «patente feria»" action={<Button variant="secondary" size="sm" iconLeft="message-circle">Pregúntale al Asistente</Button>}>Prueba con otras palabras.</EmptyState></div></div>
+</div>}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);</script></body></html>

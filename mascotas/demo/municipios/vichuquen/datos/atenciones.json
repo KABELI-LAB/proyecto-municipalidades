@@ -1,0 +1,768 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para vichuquen.",
+  "datos": [
+    {
+      "id": "vic-ate-001",
+      "operativo_id": "vic-ope-01",
+      "servicio": "esterilizacion",
+      "sector_id": "llico",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-002",
+      "operativo_id": "vic-ope-01",
+      "servicio": "esterilizacion",
+      "sector_id": "llico",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-003",
+      "operativo_id": "vic-ope-01",
+      "servicio": "esterilizacion",
+      "sector_id": "llico",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-004",
+      "operativo_id": "vic-ope-01",
+      "servicio": "esterilizacion",
+      "sector_id": "llico",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-005",
+      "operativo_id": "vic-ope-01",
+      "servicio": "esterilizacion",
+      "sector_id": "llico",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-006",
+      "operativo_id": "vic-ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "llico",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-007",
+      "operativo_id": "vic-ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "llico",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-008",
+      "operativo_id": "vic-ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "llico",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-009",
+      "operativo_id": "vic-ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "llico",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-010",
+      "operativo_id": "vic-ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "llico",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-011",
+      "operativo_id": "vic-ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "llico",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-012",
+      "operativo_id": "vic-ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "llico",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-013",
+      "operativo_id": "vic-ope-01",
+      "servicio": "microchip",
+      "sector_id": "llico",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-014",
+      "operativo_id": "vic-ope-01",
+      "servicio": "microchip",
+      "sector_id": "llico",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-015",
+      "operativo_id": "vic-ope-01",
+      "servicio": "microchip",
+      "sector_id": "llico",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-016",
+      "operativo_id": "vic-ope-01",
+      "servicio": "microchip",
+      "sector_id": "llico",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-017",
+      "operativo_id": "vic-ope-01",
+      "servicio": "microchip",
+      "sector_id": "llico",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-018",
+      "operativo_id": "vic-ope-01",
+      "servicio": "microchip",
+      "sector_id": "llico",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-019",
+      "operativo_id": "vic-ope-02",
+      "servicio": "esterilizacion",
+      "sector_id": "torca-boyeruca",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-020",
+      "operativo_id": "vic-ope-02",
+      "servicio": "esterilizacion",
+      "sector_id": "torca-boyeruca",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-021",
+      "operativo_id": "vic-ope-02",
+      "servicio": "esterilizacion",
+      "sector_id": "torca-boyeruca",
+      "fecha": "2026-05-09",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-022",
+      "operativo_id": "vic-ope-02",
+      "servicio": "esterilizacion",
+      "sector_id": "torca-boyeruca",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-023",
+      "operativo_id": "vic-ope-02",
+      "servicio": "esterilizacion",
+      "sector_id": "torca-boyeruca",
+      "fecha": "2026-05-09",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-024",
+      "operativo_id": "vic-ope-02",
+      "servicio": "vacunacion",
+      "sector_id": "torca-boyeruca",
+      "fecha": "2026-05-09",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-025",
+      "operativo_id": "vic-ope-02",
+      "servicio": "vacunacion",
+      "sector_id": "torca-boyeruca",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-026",
+      "operativo_id": "vic-ope-02",
+      "servicio": "vacunacion",
+      "sector_id": "torca-boyeruca",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-027",
+      "operativo_id": "vic-ope-02",
+      "servicio": "vacunacion",
+      "sector_id": "torca-boyeruca",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-028",
+      "operativo_id": "vic-ope-02",
+      "servicio": "vacunacion",
+      "sector_id": "torca-boyeruca",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-029",
+      "operativo_id": "vic-ope-02",
+      "servicio": "vacunacion",
+      "sector_id": "torca-boyeruca",
+      "fecha": "2026-05-09",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-030",
+      "operativo_id": "vic-ope-02",
+      "servicio": "microchip",
+      "sector_id": "torca-boyeruca",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-031",
+      "operativo_id": "vic-ope-02",
+      "servicio": "microchip",
+      "sector_id": "torca-boyeruca",
+      "fecha": "2026-05-09",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-032",
+      "operativo_id": "vic-ope-02",
+      "servicio": "microchip",
+      "sector_id": "torca-boyeruca",
+      "fecha": "2026-05-09",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-033",
+      "operativo_id": "vic-ope-03",
+      "servicio": "esterilizacion",
+      "sector_id": "lago",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-034",
+      "operativo_id": "vic-ope-03",
+      "servicio": "esterilizacion",
+      "sector_id": "lago",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-035",
+      "operativo_id": "vic-ope-03",
+      "servicio": "esterilizacion",
+      "sector_id": "lago",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-036",
+      "operativo_id": "vic-ope-03",
+      "servicio": "esterilizacion",
+      "sector_id": "lago",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-037",
+      "operativo_id": "vic-ope-03",
+      "servicio": "vacunacion",
+      "sector_id": "lago",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-038",
+      "operativo_id": "vic-ope-03",
+      "servicio": "vacunacion",
+      "sector_id": "lago",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-039",
+      "operativo_id": "vic-ope-03",
+      "servicio": "vacunacion",
+      "sector_id": "lago",
+      "fecha": "2026-07-03",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-040",
+      "operativo_id": "vic-ope-03",
+      "servicio": "vacunacion",
+      "sector_id": "lago",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-041",
+      "operativo_id": "vic-ope-03",
+      "servicio": "microchip",
+      "sector_id": "lago",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-042",
+      "operativo_id": "vic-ope-03",
+      "servicio": "microchip",
+      "sector_id": "lago",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-043",
+      "operativo_id": "vic-ope-03",
+      "servicio": "microchip",
+      "sector_id": "lago",
+      "fecha": "2026-07-03",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-044",
+      "operativo_id": "vic-ope-03",
+      "servicio": "microchip",
+      "sector_id": "lago",
+      "fecha": "2026-07-03",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-045",
+      "operativo_id": "vic-ope-03",
+      "servicio": "microchip",
+      "sector_id": "lago",
+      "fecha": "2026-07-03",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-046",
+      "operativo_id": "vic-ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-047",
+      "operativo_id": "vic-ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-048",
+      "operativo_id": "vic-ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-049",
+      "operativo_id": "vic-ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-050",
+      "operativo_id": "vic-ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-051",
+      "operativo_id": "vic-ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-052",
+      "operativo_id": "vic-ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-053",
+      "operativo_id": "vic-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-054",
+      "operativo_id": "vic-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-055",
+      "operativo_id": "vic-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-056",
+      "operativo_id": "vic-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-057",
+      "operativo_id": "vic-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-058",
+      "operativo_id": "vic-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-059",
+      "operativo_id": "vic-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-060",
+      "operativo_id": "vic-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-061",
+      "operativo_id": "vic-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-062",
+      "operativo_id": "vic-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-063",
+      "operativo_id": "vic-ope-04",
+      "servicio": "microchip",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-064",
+      "operativo_id": "vic-ope-04",
+      "servicio": "microchip",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-065",
+      "operativo_id": "vic-ope-04",
+      "servicio": "microchip",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-066",
+      "operativo_id": "vic-ope-04",
+      "servicio": "microchip",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-067",
+      "operativo_id": "vic-ope-04",
+      "servicio": "microchip",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-068",
+      "operativo_id": "vic-ope-04",
+      "servicio": "microchip",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-069",
+      "operativo_id": "vic-ope-04",
+      "servicio": "microchip",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "vic-ate-070",
+      "operativo_id": null,
+      "servicio": "esterilizacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-01-10",
+      "especie": "perro",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-vichuquen"
+    },
+    {
+      "id": "vic-ate-071",
+      "operativo_id": null,
+      "servicio": "microchip",
+      "sector_id": "llico",
+      "fecha": "2026-09-10",
+      "especie": "perro",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-vichuquen"
+    },
+    {
+      "id": "vic-ate-072",
+      "operativo_id": null,
+      "servicio": "vacunacion",
+      "sector_id": "llico",
+      "fecha": "2025-11-21",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-vichuquen"
+    },
+    {
+      "id": "vic-ate-073",
+      "operativo_id": null,
+      "servicio": "vacunacion",
+      "sector_id": "llico",
+      "fecha": "2026-04-19",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-vichuquen"
+    },
+    {
+      "id": "vic-ate-074",
+      "operativo_id": null,
+      "servicio": "microchip",
+      "sector_id": "llico",
+      "fecha": "2025-12-08",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-vichuquen"
+    },
+    {
+      "id": "vic-ate-075",
+      "operativo_id": null,
+      "servicio": "vacunacion",
+      "sector_id": "llico",
+      "fecha": "2026-03-07",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-vichuquen"
+    },
+    {
+      "id": "vic-ate-076",
+      "operativo_id": null,
+      "servicio": "esterilizacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-06-10",
+      "especie": "perro",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-vichuquen"
+    },
+    {
+      "id": "vic-ate-077",
+      "operativo_id": null,
+      "servicio": "vacunacion",
+      "sector_id": "lago",
+      "fecha": "2026-02-18",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-vichuquen"
+    },
+    {
+      "id": "vic-ate-078",
+      "operativo_id": null,
+      "servicio": "microchip",
+      "sector_id": "torca-boyeruca",
+      "fecha": "2026-01-19",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-vichuquen"
+    },
+    {
+      "id": "vic-ate-079",
+      "operativo_id": null,
+      "servicio": "esterilizacion",
+      "sector_id": "lago",
+      "fecha": "2026-01-31",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-vichuquen"
+    },
+    {
+      "id": "vic-ate-080",
+      "operativo_id": null,
+      "servicio": "vacunacion",
+      "sector_id": "vichuquen-pueblo",
+      "fecha": "2026-06-06",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-vichuquen"
+    },
+    {
+      "id": "vic-ate-081",
+      "operativo_id": null,
+      "servicio": "esterilizacion",
+      "sector_id": "lago",
+      "fecha": "2026-02-05",
+      "especie": "perro",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-vichuquen"
+    },
+    {
+      "id": "vic-ate-082",
+      "operativo_id": null,
+      "servicio": "microchip",
+      "sector_id": "llico",
+      "fecha": "2026-02-07",
+      "especie": "perro",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-vichuquen"
+    },
+    {
+      "id": "vic-ate-083",
+      "operativo_id": null,
+      "servicio": "microchip",
+      "sector_id": "torca-boyeruca",
+      "fecha": "2026-01-17",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-vichuquen"
+    }
+  ]
+}

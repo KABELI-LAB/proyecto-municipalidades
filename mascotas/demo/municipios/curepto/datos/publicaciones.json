@@ -1,0 +1,1059 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para curepto.",
+  "datos": [
+    {
+      "id": "cur-pub-001",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-035",
+      "sector_id": "gualleco",
+      "localidad_id": "gualleco-alto",
+      "fecha": "2026-09-07",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 64,
+        "dy_m": 153,
+        "lat": -35.25422,
+        "lng": -71.97738
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-031",
+      "resuelta": "2026-09-10",
+      "via_coincidencia": true
+    },
+    {
+      "id": "cur-pub-002",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-035",
+      "sector_id": "gualleco",
+      "localidad_id": "gualleco-alto",
+      "fecha": "2026-09-08",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -599,
+        "dy_m": 359,
+        "lat": -35.25237,
+        "lng": -71.98467
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-032",
+      "par_id": "cur-pub-001"
+    },
+    {
+      "id": "cur-pub-003",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-036",
+      "sector_id": "gualleco",
+      "localidad_id": "gualleco",
+      "fecha": "2026-03-08",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -581,
+        "dy_m": 769,
+        "lat": -35.23887,
+        "lng": -71.98811
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-033",
+      "resuelta": "2026-03-10",
+      "via_coincidencia": true
+    },
+    {
+      "id": "cur-pub-004",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-036",
+      "sector_id": "gualleco",
+      "localidad_id": "tabunco",
+      "fecha": "2026-03-10",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 13,
+        "dy_m": -299,
+        "lat": -35.19755,
+        "lng": -71.98856
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-034",
+      "par_id": "cur-pub-003"
+    },
+    {
+      "id": "cur-pub-005",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-037",
+      "sector_id": "calpun",
+      "localidad_id": "calpun",
+      "fecha": "2026-01-16",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 691,
+        "dy_m": -139,
+        "lat": -35.02329,
+        "lng": -72.03288
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-035",
+      "resuelta": "2026-01-20",
+      "via_coincidencia": false
+    },
+    {
+      "id": "cur-pub-006",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-037",
+      "sector_id": "calpun",
+      "localidad_id": "el-rodeo",
+      "fecha": "2026-01-20",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -172,
+        "dy_m": -136,
+        "lat": -35.0738,
+        "lng": -72.02405
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-036",
+      "par_id": "cur-pub-005"
+    },
+    {
+      "id": "cur-pub-007",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-038",
+      "sector_id": "gualleco",
+      "localidad_id": "gualleco-alto",
+      "fecha": "2025-12-03",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -1034,
+        "dy_m": -137,
+        "lat": -35.25682,
+        "lng": -71.98945
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-037",
+      "resuelta": "2025-12-11",
+      "via_coincidencia": true
+    },
+    {
+      "id": "cur-pub-008",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-038",
+      "sector_id": "gualleco",
+      "localidad_id": "tabunco",
+      "fecha": "2025-12-06",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 237,
+        "dy_m": -23,
+        "lat": -35.19507,
+        "lng": -71.98609
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-038",
+      "par_id": "cur-pub-007"
+    },
+    {
+      "id": "cur-pub-009",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-039",
+      "sector_id": "calpun",
+      "localidad_id": "rincon-de-calpun",
+      "fecha": "2026-09-14",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -59,
+        "dy_m": 196,
+        "lat": -35.03023,
+        "lng": -72.04188
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-039",
+      "resuelta": "2026-09-19",
+      "via_coincidencia": false
+    },
+    {
+      "id": "cur-pub-010",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-039",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "curepto",
+      "fecha": "2026-09-14",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -541,
+        "dy_m": -95,
+        "lat": -35.09457,
+        "lng": -72.02402
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-040",
+      "par_id": "cur-pub-009"
+    },
+    {
+      "id": "cur-pub-011",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-040",
+      "sector_id": "calpun",
+      "localidad_id": "el-rodeo",
+      "fecha": "2025-10-17",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 941,
+        "dy_m": 880,
+        "lat": -35.06467,
+        "lng": -72.01183
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-041",
+      "resuelta": "2025-10-26",
+      "via_coincidencia": false
+    },
+    {
+      "id": "cur-pub-012",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-040",
+      "sector_id": "calpun",
+      "localidad_id": "paraguay",
+      "fecha": "2025-10-18",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -198,
+        "dy_m": 528,
+        "lat": -34.98733,
+        "lng": -72.00646
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-042",
+      "par_id": "cur-pub-011"
+    },
+    {
+      "id": "cur-pub-013",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-041",
+      "sector_id": "calpun",
+      "localidad_id": "el-rodeo",
+      "fecha": "2026-09-24",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -90,
+        "dy_m": 10,
+        "lat": -35.07249,
+        "lng": -72.02315
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-043",
+      "resuelta": "2026-10-01",
+      "via_coincidencia": true
+    },
+    {
+      "id": "cur-pub-014",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-041",
+      "sector_id": "calpun",
+      "localidad_id": "rincon-de-calpun",
+      "fecha": "2026-09-27",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -76,
+        "dy_m": -609,
+        "lat": -35.03746,
+        "lng": -72.04206
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-044",
+      "par_id": "cur-pub-013"
+    },
+    {
+      "id": "cur-pub-015",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-042",
+      "sector_id": "gualleco",
+      "localidad_id": "tabunco",
+      "fecha": "2026-03-15",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -201,
+        "dy_m": 136,
+        "lat": -35.19364,
+        "lng": -71.99091
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-045",
+      "resuelta": "2026-03-23",
+      "via_coincidencia": true
+    },
+    {
+      "id": "cur-pub-016",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-042",
+      "sector_id": "gualleco",
+      "localidad_id": "gualleco",
+      "fecha": "2026-03-18",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -44,
+        "dy_m": 31,
+        "lat": -35.2455,
+        "lng": -71.9822
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-046",
+      "par_id": "cur-pub-015"
+    },
+    {
+      "id": "cur-pub-017",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-043",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "las-vinas",
+      "fecha": "2026-04-15",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -91,
+        "dy_m": -97,
+        "lat": -35.10397,
+        "lng": -72.01203
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-047",
+      "resuelta": "2026-04-24",
+      "via_coincidencia": false
+    },
+    {
+      "id": "cur-pub-018",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-043",
+      "sector_id": "calpun",
+      "localidad_id": "rincon-de-calpun",
+      "fecha": "2026-04-18",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 209,
+        "dy_m": 64,
+        "lat": -35.03142,
+        "lng": -72.03894
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-048",
+      "par_id": "cur-pub-017"
+    },
+    {
+      "id": "cur-pub-019",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-044",
+      "sector_id": "costa",
+      "localidad_id": "pununquen",
+      "fecha": "2026-01-18",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 267,
+        "dy_m": -565,
+        "lat": -35.05628,
+        "lng": -72.11689
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-049",
+      "resuelta": "2026-01-26",
+      "via_coincidencia": true
+    },
+    {
+      "id": "cur-pub-020",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-044",
+      "sector_id": "costa",
+      "localidad_id": "huelon-alto",
+      "fecha": "2026-01-22",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -167,
+        "dy_m": 133,
+        "lat": -35.09536,
+        "lng": -72.0643
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-050",
+      "par_id": "cur-pub-019"
+    },
+    {
+      "id": "cur-pub-021",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-045",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "lien",
+      "fecha": "2026-01-05",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 642,
+        "dy_m": -77,
+        "lat": -35.09931,
+        "lng": -71.96203
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-051",
+      "resuelta": "2026-01-08",
+      "via_coincidencia": false
+    },
+    {
+      "id": "cur-pub-022",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-045",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "pacilla-de-lien",
+      "fecha": "2026-01-06",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 250,
+        "dy_m": -509,
+        "lat": -35.09974,
+        "lng": -71.95397
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-052",
+      "par_id": "cur-pub-021"
+    },
+    {
+      "id": "cur-pub-023",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-046",
+      "sector_id": "costa",
+      "localidad_id": "los-rabanos",
+      "fecha": "2026-03-20",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -31,
+        "dy_m": -668,
+        "lat": -35.11786,
+        "lng": -72.18679
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-053",
+      "resuelta": "2026-03-22",
+      "via_coincidencia": false
+    },
+    {
+      "id": "cur-pub-024",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-046",
+      "sector_id": "costa",
+      "localidad_id": "los-rabanos",
+      "fecha": "2026-03-22",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 37,
+        "dy_m": 485,
+        "lat": -35.1075,
+        "lng": -72.18604
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-054",
+      "par_id": "cur-pub-023"
+    },
+    {
+      "id": "cur-pub-025",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-047",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "las-vinas",
+      "fecha": "2026-09-19",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -462,
+        "dy_m": -369,
+        "lat": -35.10641,
+        "lng": -72.0161
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-055",
+      "resuelta": "2026-09-22",
+      "via_coincidencia": false
+    },
+    {
+      "id": "cur-pub-026",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-047",
+      "sector_id": "calpun",
+      "localidad_id": "el-rodeo",
+      "fecha": "2026-09-19",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 41,
+        "dy_m": 18,
+        "lat": -35.07242,
+        "lng": -72.02171
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-056",
+      "par_id": "cur-pub-025"
+    },
+    {
+      "id": "cur-pub-027",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-048",
+      "sector_id": "huaquen",
+      "localidad_id": "huaquen",
+      "fecha": "2025-12-07",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -973,
+        "dy_m": 189,
+        "lat": -35.11474,
+        "lng": -71.70547
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-057",
+      "resuelta": "2025-12-14",
+      "via_coincidencia": true
+    },
+    {
+      "id": "cur-pub-028",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-048",
+      "sector_id": "rapilermo",
+      "localidad_id": "poblacion",
+      "fecha": "2025-12-08",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": 506,
+        "dy_m": 376,
+        "lat": -35.11193,
+        "lng": -71.81089
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-058",
+      "par_id": "cur-pub-027"
+    },
+    {
+      "id": "cur-pub-029",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-049",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "las-vinas",
+      "fecha": "2026-04-30",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -204,
+        "dy_m": 591,
+        "lat": -35.09779,
+        "lng": -72.01327
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-059",
+      "resuelta": "2026-05-09",
+      "via_coincidencia": true
+    },
+    {
+      "id": "cur-pub-030",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-049",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "lien",
+      "fecha": "2026-05-02",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -650,
+        "dy_m": 924,
+        "lat": -35.09032,
+        "lng": -71.97622
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-060",
+      "par_id": "cur-pub-029"
+    },
+    {
+      "id": "cur-pub-031",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-050",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "pacilla-de-lien",
+      "fecha": "2026-03-09",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -68,
+        "dy_m": -894,
+        "lat": -35.1032,
+        "lng": -71.95746
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-061",
+      "resuelta": "2026-03-14",
+      "via_coincidencia": false
+    },
+    {
+      "id": "cur-pub-032",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-050",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "pacilla-de-lien",
+      "fecha": "2026-03-11",
+      "estado": "reencontrada",
+      "posicion": {
+        "dx_m": -881,
+        "dy_m": -360,
+        "lat": -35.0984,
+        "lng": -71.96638
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-062",
+      "par_id": "cur-pub-031"
+    },
+    {
+      "id": "cur-pub-033",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-051",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "pacilla-de-lien",
+      "fecha": "2026-09-17",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -792,
+        "dy_m": 908,
+        "lat": -35.08701,
+        "lng": -71.96541
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-063",
+      "resguardado": null
+    },
+    {
+      "id": "cur-pub-034",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-052",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "lien",
+      "fecha": "2026-10-05",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -298,
+        "dy_m": 128,
+        "lat": -35.09747,
+        "lng": -71.97235
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-064",
+      "resguardado": null
+    },
+    {
+      "id": "cur-pub-035",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-053",
+      "sector_id": "calpun",
+      "localidad_id": "calpun",
+      "fecha": "2026-09-11",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 54,
+        "dy_m": -731,
+        "lat": -35.02861,
+        "lng": -72.03987
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-065",
+      "resguardado": null
+    },
+    {
+      "id": "cur-pub-036",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-054",
+      "sector_id": "huaquen",
+      "localidad_id": "limavida",
+      "fecha": "2026-09-28",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -1149,
+        "dy_m": 427,
+        "lat": -35.04925,
+        "lng": -71.79888
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-066",
+      "resguardado": null
+    },
+    {
+      "id": "cur-pub-037",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-055",
+      "sector_id": "gualleco",
+      "localidad_id": "el-manzano",
+      "fecha": "2026-10-02",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -819,
+        "dy_m": 127,
+        "lat": -35.14323,
+        "lng": -71.97232
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-067",
+      "resguardado": null
+    },
+    {
+      "id": "cur-pub-038",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-056",
+      "sector_id": "gualleco",
+      "localidad_id": "deuca",
+      "fecha": "2026-09-21",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 99,
+        "dy_m": -374,
+        "lat": -35.13179,
+        "lng": -71.954
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-068",
+      "resguardado": null
+    },
+    {
+      "id": "cur-pub-039",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-057",
+      "sector_id": "gualleco",
+      "localidad_id": "gualleco",
+      "fecha": "2026-09-15",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -307,
+        "dy_m": 763,
+        "lat": -35.23893,
+        "lng": -71.9851
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-069",
+      "resguardado": null
+    },
+    {
+      "id": "cur-pub-040",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-058",
+      "sector_id": "huaquen",
+      "localidad_id": "huaquen",
+      "fecha": "2026-09-21",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -378,
+        "dy_m": 470,
+        "lat": -35.11222,
+        "lng": -71.69893
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-070",
+      "resguardado": true
+    },
+    {
+      "id": "cur-pub-041",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-059",
+      "sector_id": "gualleco",
+      "localidad_id": "tabunco",
+      "fecha": "2026-10-05",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -415,
+        "dy_m": -549,
+        "lat": -35.19979,
+        "lng": -71.99326
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-071",
+      "resguardado": null
+    },
+    {
+      "id": "cur-pub-042",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-060",
+      "sector_id": "huaquen",
+      "localidad_id": "colin-de-limavida",
+      "fecha": "2026-09-19",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 230,
+        "dy_m": -842,
+        "lat": -35.05286,
+        "lng": -71.74906
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-072",
+      "resguardado": null
+    },
+    {
+      "id": "cur-pub-043",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-061",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "lien",
+      "fecha": "2026-09-09",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 351,
+        "dy_m": 5,
+        "lat": -35.09858,
+        "lng": -71.96523
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-073",
+      "resguardado": null
+    },
+    {
+      "id": "cur-pub-044",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-062",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "los-olivos",
+      "fecha": "2026-09-30",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 744,
+        "dy_m": -487,
+        "lat": -35.10192,
+        "lng": -72.00132
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-074",
+      "resguardado": null
+    },
+    {
+      "id": "cur-pub-045",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-063",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "lien",
+      "fecha": "2026-09-12",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -245,
+        "dy_m": 145,
+        "lat": -35.09732,
+        "lng": -71.97177
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-075",
+      "resguardado": null
+    },
+    {
+      "id": "cur-pub-046",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-064",
+      "sector_id": "costa",
+      "localidad_id": "las-lomas",
+      "fecha": "2026-09-27",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 39,
+        "dy_m": -219,
+        "lat": -35.11706,
+        "lng": -72.17499
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-076",
+      "resguardado": null
+    },
+    {
+      "id": "cur-pub-047",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-065",
+      "sector_id": "gualleco",
+      "localidad_id": "gualleco-alto",
+      "fecha": "2026-10-02",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": 62,
+        "dy_m": -762,
+        "lat": -35.26244,
+        "lng": -71.9774
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-077",
+      "nota_demo": "Escena demo: coincidencia sugerida"
+    },
+    {
+      "id": "cur-pub-048",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-066",
+      "sector_id": "gualleco",
+      "localidad_id": "gualleco",
+      "fecha": "2026-10-04",
+      "estado": "activa",
+      "posicion": {
+        "dx_m": -500,
+        "dy_m": 552,
+        "lat": -35.24082,
+        "lng": -71.98722
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-078",
+      "resguardado": true,
+      "nota_demo": "Escena demo: coincidencia sugerida",
+      "coincidencia_con": "cur-pub-047"
+    },
+    {
+      "id": "cur-pub-049",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-067",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "los-olivos",
+      "fecha": "2026-01-26",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 374,
+        "dy_m": 512,
+        "lat": -35.09295,
+        "lng": -72.00538
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-079"
+    },
+    {
+      "id": "cur-pub-050",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-068",
+      "sector_id": "costa",
+      "localidad_id": "la-trinchera",
+      "fecha": "2026-04-23",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 614,
+        "dy_m": -72,
+        "lat": -35.11077,
+        "lng": -72.19436
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-080"
+    },
+    {
+      "id": "cur-pub-051",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-069",
+      "sector_id": "gualleco",
+      "localidad_id": "gualleco-alto",
+      "fecha": "2026-01-29",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": -135,
+        "dy_m": 362,
+        "lat": -35.25234,
+        "lng": -71.97957
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-081"
+    },
+    {
+      "id": "cur-pub-052",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-070",
+      "sector_id": "costa",
+      "localidad_id": "la-orilla",
+      "fecha": "2026-05-06",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 427,
+        "dy_m": 82,
+        "lat": -35.04916,
+        "lng": -72.06329
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-082"
+    },
+    {
+      "id": "cur-pub-053",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-071",
+      "sector_id": "calpun",
+      "localidad_id": "el-rodeo",
+      "fecha": "2026-03-18",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 534,
+        "dy_m": -225,
+        "lat": -35.0746,
+        "lng": -72.0163
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-083"
+    },
+    {
+      "id": "cur-pub-054",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-072",
+      "sector_id": "huaquen",
+      "localidad_id": "colin-de-limavida",
+      "fecha": "2026-04-09",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 639,
+        "dy_m": 218,
+        "lat": -35.04334,
+        "lng": -71.74457
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-084"
+    },
+    {
+      "id": "cur-pub-055",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-073",
+      "sector_id": "rapilermo",
+      "localidad_id": "rapilermo-bajo",
+      "fecha": "2026-02-18",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 503,
+        "dy_m": 953,
+        "lat": -35.14556,
+        "lng": -71.86839
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-085"
+    },
+    {
+      "id": "cur-pub-056",
+      "tipo": "encontrada",
+      "animal_id": "cur-ani-074",
+      "sector_id": "gualleco",
+      "localidad_id": "tabunco",
+      "fecha": "2026-01-16",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": 366,
+        "dy_m": -50,
+        "lat": -35.19531,
+        "lng": -71.98468
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-086"
+    },
+    {
+      "id": "cur-pub-057",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-075",
+      "sector_id": "gualleco",
+      "localidad_id": "tabunco",
+      "fecha": "2026-01-13",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": -243,
+        "dy_m": -663,
+        "lat": -35.20082,
+        "lng": -71.99137
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-087"
+    },
+    {
+      "id": "cur-pub-058",
+      "tipo": "perdida",
+      "animal_id": "cur-ani-076",
+      "sector_id": "curepto-urbano",
+      "localidad_id": "los-olivos",
+      "fecha": "2026-02-26",
+      "estado": "archivada",
+      "posicion": {
+        "dx_m": -366,
+        "dy_m": -161,
+        "lat": -35.099,
+        "lng": -72.01351
+      },
+      "contacto": "protegido",
+      "persona_id": "cur-per-088"
+    }
+  ]
+}

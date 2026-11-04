@@ -1,0 +1,81 @@
+.conversacion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.sobre {
+  margin: 0;
+  font-size: var(--type-body-sm-size);
+  color: var(--color-text-secondary);
+}
+
+/* Burbujas: las tuyas a la derecha, las de la otra persona a la izquierda. */
+.mensajes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mio,
+.otro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-width: 85%;
+  padding: var(--space-3) var(--space-4);
+}
+.mio p,
+.otro p {
+  margin: 0;
+  white-space: pre-line;
+}
+.mio {
+  align-self: flex-end;
+  background: var(--color-primary-subtle);
+  border-radius: var(--radius-large) 4px var(--radius-large) var(--radius-large);
+}
+.otro {
+  align-self: flex-start;
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: 4px var(--radius-large) var(--radius-large) var(--radius-large);
+}
+.autor {
+  font-size: var(--type-caption-size);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-secondary);
+}
+
+/* El contacto que la otra persona decidió compartir. */
+.contacto {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-success-bg);
+  border-radius: var(--radius-medium);
+  color: var(--color-success);
+}
+.contacto span {
+  color: var(--color-text);
+}
+
+.botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+.confirmar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-medium);
+}
+.confirmar p {
+  margin: 0;
+}

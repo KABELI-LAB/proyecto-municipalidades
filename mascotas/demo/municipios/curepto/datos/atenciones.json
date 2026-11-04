@@ -1,0 +1,768 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para curepto.",
+  "datos": [
+    {
+      "id": "cur-ate-001",
+      "operativo_id": "cur-ope-01",
+      "servicio": "esterilizacion",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-002",
+      "operativo_id": "cur-ope-01",
+      "servicio": "esterilizacion",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-003",
+      "operativo_id": "cur-ope-01",
+      "servicio": "esterilizacion",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-004",
+      "operativo_id": "cur-ope-01",
+      "servicio": "esterilizacion",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-005",
+      "operativo_id": "cur-ope-01",
+      "servicio": "esterilizacion",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-006",
+      "operativo_id": "cur-ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-007",
+      "operativo_id": "cur-ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-008",
+      "operativo_id": "cur-ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-009",
+      "operativo_id": "cur-ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-010",
+      "operativo_id": "cur-ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-011",
+      "operativo_id": "cur-ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-012",
+      "operativo_id": "cur-ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-013",
+      "operativo_id": "cur-ope-01",
+      "servicio": "microchip",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-014",
+      "operativo_id": "cur-ope-01",
+      "servicio": "microchip",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-015",
+      "operativo_id": "cur-ope-01",
+      "servicio": "microchip",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-016",
+      "operativo_id": "cur-ope-01",
+      "servicio": "microchip",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-017",
+      "operativo_id": "cur-ope-01",
+      "servicio": "microchip",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-018",
+      "operativo_id": "cur-ope-01",
+      "servicio": "microchip",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-019",
+      "operativo_id": "cur-ope-02",
+      "servicio": "esterilizacion",
+      "sector_id": "costa",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-020",
+      "operativo_id": "cur-ope-02",
+      "servicio": "esterilizacion",
+      "sector_id": "costa",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-021",
+      "operativo_id": "cur-ope-02",
+      "servicio": "esterilizacion",
+      "sector_id": "costa",
+      "fecha": "2026-05-09",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-022",
+      "operativo_id": "cur-ope-02",
+      "servicio": "esterilizacion",
+      "sector_id": "costa",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-023",
+      "operativo_id": "cur-ope-02",
+      "servicio": "esterilizacion",
+      "sector_id": "costa",
+      "fecha": "2026-05-09",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-024",
+      "operativo_id": "cur-ope-02",
+      "servicio": "vacunacion",
+      "sector_id": "costa",
+      "fecha": "2026-05-09",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-025",
+      "operativo_id": "cur-ope-02",
+      "servicio": "vacunacion",
+      "sector_id": "costa",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-026",
+      "operativo_id": "cur-ope-02",
+      "servicio": "vacunacion",
+      "sector_id": "costa",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-027",
+      "operativo_id": "cur-ope-02",
+      "servicio": "vacunacion",
+      "sector_id": "costa",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-028",
+      "operativo_id": "cur-ope-02",
+      "servicio": "vacunacion",
+      "sector_id": "costa",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-029",
+      "operativo_id": "cur-ope-02",
+      "servicio": "vacunacion",
+      "sector_id": "costa",
+      "fecha": "2026-05-09",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-030",
+      "operativo_id": "cur-ope-02",
+      "servicio": "microchip",
+      "sector_id": "costa",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-031",
+      "operativo_id": "cur-ope-02",
+      "servicio": "microchip",
+      "sector_id": "costa",
+      "fecha": "2026-05-09",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-032",
+      "operativo_id": "cur-ope-02",
+      "servicio": "microchip",
+      "sector_id": "costa",
+      "fecha": "2026-05-09",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-033",
+      "operativo_id": "cur-ope-03",
+      "servicio": "esterilizacion",
+      "sector_id": "rapilermo",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-034",
+      "operativo_id": "cur-ope-03",
+      "servicio": "esterilizacion",
+      "sector_id": "rapilermo",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-035",
+      "operativo_id": "cur-ope-03",
+      "servicio": "esterilizacion",
+      "sector_id": "rapilermo",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-036",
+      "operativo_id": "cur-ope-03",
+      "servicio": "esterilizacion",
+      "sector_id": "rapilermo",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-037",
+      "operativo_id": "cur-ope-03",
+      "servicio": "vacunacion",
+      "sector_id": "rapilermo",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-038",
+      "operativo_id": "cur-ope-03",
+      "servicio": "vacunacion",
+      "sector_id": "rapilermo",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-039",
+      "operativo_id": "cur-ope-03",
+      "servicio": "vacunacion",
+      "sector_id": "rapilermo",
+      "fecha": "2026-07-03",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-040",
+      "operativo_id": "cur-ope-03",
+      "servicio": "vacunacion",
+      "sector_id": "rapilermo",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-041",
+      "operativo_id": "cur-ope-03",
+      "servicio": "microchip",
+      "sector_id": "rapilermo",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-042",
+      "operativo_id": "cur-ope-03",
+      "servicio": "microchip",
+      "sector_id": "rapilermo",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-043",
+      "operativo_id": "cur-ope-03",
+      "servicio": "microchip",
+      "sector_id": "rapilermo",
+      "fecha": "2026-07-03",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-044",
+      "operativo_id": "cur-ope-03",
+      "servicio": "microchip",
+      "sector_id": "rapilermo",
+      "fecha": "2026-07-03",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-045",
+      "operativo_id": "cur-ope-03",
+      "servicio": "microchip",
+      "sector_id": "rapilermo",
+      "fecha": "2026-07-03",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-046",
+      "operativo_id": "cur-ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-047",
+      "operativo_id": "cur-ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-048",
+      "operativo_id": "cur-ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-049",
+      "operativo_id": "cur-ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-050",
+      "operativo_id": "cur-ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-051",
+      "operativo_id": "cur-ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-052",
+      "operativo_id": "cur-ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-053",
+      "operativo_id": "cur-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-054",
+      "operativo_id": "cur-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-055",
+      "operativo_id": "cur-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-056",
+      "operativo_id": "cur-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-057",
+      "operativo_id": "cur-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-058",
+      "operativo_id": "cur-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-059",
+      "operativo_id": "cur-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-060",
+      "operativo_id": "cur-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-061",
+      "operativo_id": "cur-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-062",
+      "operativo_id": "cur-ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-063",
+      "operativo_id": "cur-ope-04",
+      "servicio": "microchip",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-064",
+      "operativo_id": "cur-ope-04",
+      "servicio": "microchip",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-065",
+      "operativo_id": "cur-ope-04",
+      "servicio": "microchip",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-066",
+      "operativo_id": "cur-ope-04",
+      "servicio": "microchip",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-067",
+      "operativo_id": "cur-ope-04",
+      "servicio": "microchip",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-068",
+      "operativo_id": "cur-ope-04",
+      "servicio": "microchip",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-069",
+      "operativo_id": "cur-ope-04",
+      "servicio": "microchip",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "cur-ate-070",
+      "operativo_id": null,
+      "servicio": "esterilizacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-01-10",
+      "especie": "perro",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-curepto"
+    },
+    {
+      "id": "cur-ate-071",
+      "operativo_id": null,
+      "servicio": "microchip",
+      "sector_id": "gualleco",
+      "fecha": "2026-09-10",
+      "especie": "perro",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-curepto"
+    },
+    {
+      "id": "cur-ate-072",
+      "operativo_id": null,
+      "servicio": "vacunacion",
+      "sector_id": "gualleco",
+      "fecha": "2025-11-21",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-curepto"
+    },
+    {
+      "id": "cur-ate-073",
+      "operativo_id": null,
+      "servicio": "vacunacion",
+      "sector_id": "gualleco",
+      "fecha": "2026-04-19",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-curepto"
+    },
+    {
+      "id": "cur-ate-074",
+      "operativo_id": null,
+      "servicio": "microchip",
+      "sector_id": "gualleco",
+      "fecha": "2025-12-08",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-curepto"
+    },
+    {
+      "id": "cur-ate-075",
+      "operativo_id": null,
+      "servicio": "vacunacion",
+      "sector_id": "gualleco",
+      "fecha": "2026-03-07",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-curepto"
+    },
+    {
+      "id": "cur-ate-076",
+      "operativo_id": null,
+      "servicio": "esterilizacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-06-10",
+      "especie": "perro",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-curepto"
+    },
+    {
+      "id": "cur-ate-077",
+      "operativo_id": null,
+      "servicio": "vacunacion",
+      "sector_id": "rapilermo",
+      "fecha": "2026-02-18",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-curepto"
+    },
+    {
+      "id": "cur-ate-078",
+      "operativo_id": null,
+      "servicio": "microchip",
+      "sector_id": "costa",
+      "fecha": "2026-01-19",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-curepto"
+    },
+    {
+      "id": "cur-ate-079",
+      "operativo_id": null,
+      "servicio": "esterilizacion",
+      "sector_id": "rapilermo",
+      "fecha": "2026-01-31",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-curepto"
+    },
+    {
+      "id": "cur-ate-080",
+      "operativo_id": null,
+      "servicio": "vacunacion",
+      "sector_id": "curepto-urbano",
+      "fecha": "2026-06-06",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-curepto"
+    },
+    {
+      "id": "cur-ate-081",
+      "operativo_id": null,
+      "servicio": "esterilizacion",
+      "sector_id": "rapilermo",
+      "fecha": "2026-02-05",
+      "especie": "perro",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-curepto"
+    },
+    {
+      "id": "cur-ate-082",
+      "operativo_id": null,
+      "servicio": "microchip",
+      "sector_id": "gualleco",
+      "fecha": "2026-02-07",
+      "especie": "perro",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-curepto"
+    },
+    {
+      "id": "cur-ate-083",
+      "operativo_id": null,
+      "servicio": "microchip",
+      "sector_id": "costa",
+      "fecha": "2026-01-17",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "ilustre-municipalidad-de-curepto"
+    }
+  ]
+}

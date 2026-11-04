@@ -1,0 +1,767 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "datos": [
+    {
+      "id": "ate-001",
+      "operativo_id": "ope-01",
+      "servicio": "esterilizacion",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-002",
+      "operativo_id": "ope-01",
+      "servicio": "esterilizacion",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-003",
+      "operativo_id": "ope-01",
+      "servicio": "esterilizacion",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-004",
+      "operativo_id": "ope-01",
+      "servicio": "esterilizacion",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-005",
+      "operativo_id": "ope-01",
+      "servicio": "esterilizacion",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-006",
+      "operativo_id": "ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-007",
+      "operativo_id": "ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-008",
+      "operativo_id": "ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-009",
+      "operativo_id": "ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-010",
+      "operativo_id": "ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-011",
+      "operativo_id": "ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-012",
+      "operativo_id": "ope-01",
+      "servicio": "vacunacion",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-013",
+      "operativo_id": "ope-01",
+      "servicio": "microchip",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-014",
+      "operativo_id": "ope-01",
+      "servicio": "microchip",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-015",
+      "operativo_id": "ope-01",
+      "servicio": "microchip",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-016",
+      "operativo_id": "ope-01",
+      "servicio": "microchip",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-017",
+      "operativo_id": "ope-01",
+      "servicio": "microchip",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-06",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-018",
+      "operativo_id": "ope-01",
+      "servicio": "microchip",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-06",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-019",
+      "operativo_id": "ope-02",
+      "servicio": "esterilizacion",
+      "sector_id": "los-coipos",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-020",
+      "operativo_id": "ope-02",
+      "servicio": "esterilizacion",
+      "sector_id": "los-coipos",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-021",
+      "operativo_id": "ope-02",
+      "servicio": "esterilizacion",
+      "sector_id": "los-coipos",
+      "fecha": "2026-05-09",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-022",
+      "operativo_id": "ope-02",
+      "servicio": "esterilizacion",
+      "sector_id": "los-coipos",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-023",
+      "operativo_id": "ope-02",
+      "servicio": "esterilizacion",
+      "sector_id": "los-coipos",
+      "fecha": "2026-05-09",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-024",
+      "operativo_id": "ope-02",
+      "servicio": "vacunacion",
+      "sector_id": "los-coipos",
+      "fecha": "2026-05-09",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-025",
+      "operativo_id": "ope-02",
+      "servicio": "vacunacion",
+      "sector_id": "los-coipos",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-026",
+      "operativo_id": "ope-02",
+      "servicio": "vacunacion",
+      "sector_id": "los-coipos",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-027",
+      "operativo_id": "ope-02",
+      "servicio": "vacunacion",
+      "sector_id": "los-coipos",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-028",
+      "operativo_id": "ope-02",
+      "servicio": "vacunacion",
+      "sector_id": "los-coipos",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-029",
+      "operativo_id": "ope-02",
+      "servicio": "vacunacion",
+      "sector_id": "los-coipos",
+      "fecha": "2026-05-09",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-030",
+      "operativo_id": "ope-02",
+      "servicio": "microchip",
+      "sector_id": "los-coipos",
+      "fecha": "2026-05-09",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-031",
+      "operativo_id": "ope-02",
+      "servicio": "microchip",
+      "sector_id": "los-coipos",
+      "fecha": "2026-05-09",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-032",
+      "operativo_id": "ope-02",
+      "servicio": "microchip",
+      "sector_id": "los-coipos",
+      "fecha": "2026-05-09",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-033",
+      "operativo_id": "ope-03",
+      "servicio": "esterilizacion",
+      "sector_id": "patacon",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-034",
+      "operativo_id": "ope-03",
+      "servicio": "esterilizacion",
+      "sector_id": "patacon",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-035",
+      "operativo_id": "ope-03",
+      "servicio": "esterilizacion",
+      "sector_id": "patacon",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-036",
+      "operativo_id": "ope-03",
+      "servicio": "esterilizacion",
+      "sector_id": "patacon",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-037",
+      "operativo_id": "ope-03",
+      "servicio": "vacunacion",
+      "sector_id": "patacon",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-038",
+      "operativo_id": "ope-03",
+      "servicio": "vacunacion",
+      "sector_id": "patacon",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-039",
+      "operativo_id": "ope-03",
+      "servicio": "vacunacion",
+      "sector_id": "patacon",
+      "fecha": "2026-07-03",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-040",
+      "operativo_id": "ope-03",
+      "servicio": "vacunacion",
+      "sector_id": "patacon",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-041",
+      "operativo_id": "ope-03",
+      "servicio": "microchip",
+      "sector_id": "patacon",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-042",
+      "operativo_id": "ope-03",
+      "servicio": "microchip",
+      "sector_id": "patacon",
+      "fecha": "2026-07-03",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-043",
+      "operativo_id": "ope-03",
+      "servicio": "microchip",
+      "sector_id": "patacon",
+      "fecha": "2026-07-03",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-044",
+      "operativo_id": "ope-03",
+      "servicio": "microchip",
+      "sector_id": "patacon",
+      "fecha": "2026-07-03",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-045",
+      "operativo_id": "ope-03",
+      "servicio": "microchip",
+      "sector_id": "patacon",
+      "fecha": "2026-07-03",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-046",
+      "operativo_id": "ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-047",
+      "operativo_id": "ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-048",
+      "operativo_id": "ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-049",
+      "operativo_id": "ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-050",
+      "operativo_id": "ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-051",
+      "operativo_id": "ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-052",
+      "operativo_id": "ope-04",
+      "servicio": "esterilizacion",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-053",
+      "operativo_id": "ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-054",
+      "operativo_id": "ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-055",
+      "operativo_id": "ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-056",
+      "operativo_id": "ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-057",
+      "operativo_id": "ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-058",
+      "operativo_id": "ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-059",
+      "operativo_id": "ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-060",
+      "operativo_id": "ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-061",
+      "operativo_id": "ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-062",
+      "operativo_id": "ope-04",
+      "servicio": "vacunacion",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-063",
+      "operativo_id": "ope-04",
+      "servicio": "microchip",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-064",
+      "operativo_id": "ope-04",
+      "servicio": "microchip",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-065",
+      "operativo_id": "ope-04",
+      "servicio": "microchip",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-066",
+      "operativo_id": "ope-04",
+      "servicio": "microchip",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-067",
+      "operativo_id": "ope-04",
+      "servicio": "microchip",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-068",
+      "operativo_id": "ope-04",
+      "servicio": "microchip",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "perro",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-069",
+      "operativo_id": "ope-04",
+      "servicio": "microchip",
+      "sector_id": "hualane",
+      "fecha": "2026-09-15",
+      "especie": "gato",
+      "resultado": "realizado"
+    },
+    {
+      "id": "ate-070",
+      "operativo_id": null,
+      "servicio": "esterilizacion",
+      "sector_id": "hualane",
+      "fecha": "2026-01-10",
+      "especie": "perro",
+      "resultado": "realizado",
+      "lugar_id": "municipalidad-de-hualane"
+    },
+    {
+      "id": "ate-071",
+      "operativo_id": null,
+      "servicio": "microchip",
+      "sector_id": "la-huerta",
+      "fecha": "2026-09-10",
+      "especie": "perro",
+      "resultado": "realizado",
+      "lugar_id": "municipalidad-de-hualane"
+    },
+    {
+      "id": "ate-072",
+      "operativo_id": null,
+      "servicio": "vacunacion",
+      "sector_id": "la-huerta",
+      "fecha": "2025-11-21",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "municipalidad-de-hualane"
+    },
+    {
+      "id": "ate-073",
+      "operativo_id": null,
+      "servicio": "vacunacion",
+      "sector_id": "la-huerta",
+      "fecha": "2026-04-19",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "municipalidad-de-hualane"
+    },
+    {
+      "id": "ate-074",
+      "operativo_id": null,
+      "servicio": "microchip",
+      "sector_id": "la-huerta",
+      "fecha": "2025-12-08",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "municipalidad-de-hualane"
+    },
+    {
+      "id": "ate-075",
+      "operativo_id": null,
+      "servicio": "vacunacion",
+      "sector_id": "la-huerta",
+      "fecha": "2026-03-07",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "municipalidad-de-hualane"
+    },
+    {
+      "id": "ate-076",
+      "operativo_id": null,
+      "servicio": "esterilizacion",
+      "sector_id": "hualane",
+      "fecha": "2026-06-10",
+      "especie": "perro",
+      "resultado": "realizado",
+      "lugar_id": "municipalidad-de-hualane"
+    },
+    {
+      "id": "ate-077",
+      "operativo_id": null,
+      "servicio": "vacunacion",
+      "sector_id": "patacon",
+      "fecha": "2026-02-18",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "municipalidad-de-hualane"
+    },
+    {
+      "id": "ate-078",
+      "operativo_id": null,
+      "servicio": "microchip",
+      "sector_id": "los-coipos",
+      "fecha": "2026-01-19",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "municipalidad-de-hualane"
+    },
+    {
+      "id": "ate-079",
+      "operativo_id": null,
+      "servicio": "esterilizacion",
+      "sector_id": "patacon",
+      "fecha": "2026-01-31",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "municipalidad-de-hualane"
+    },
+    {
+      "id": "ate-080",
+      "operativo_id": null,
+      "servicio": "vacunacion",
+      "sector_id": "hualane",
+      "fecha": "2026-06-06",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "municipalidad-de-hualane"
+    },
+    {
+      "id": "ate-081",
+      "operativo_id": null,
+      "servicio": "esterilizacion",
+      "sector_id": "patacon",
+      "fecha": "2026-02-05",
+      "especie": "perro",
+      "resultado": "realizado",
+      "lugar_id": "municipalidad-de-hualane"
+    },
+    {
+      "id": "ate-082",
+      "operativo_id": null,
+      "servicio": "microchip",
+      "sector_id": "la-huerta",
+      "fecha": "2026-02-07",
+      "especie": "perro",
+      "resultado": "realizado",
+      "lugar_id": "municipalidad-de-hualane"
+    },
+    {
+      "id": "ate-083",
+      "operativo_id": null,
+      "servicio": "microchip",
+      "sector_id": "los-coipos",
+      "fecha": "2026-01-17",
+      "especie": "gato",
+      "resultado": "realizado",
+      "lugar_id": "municipalidad-de-hualane"
+    }
+  ]
+}

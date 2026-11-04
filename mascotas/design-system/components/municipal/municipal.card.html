@@ -1,0 +1,17 @@
+<!-- @dsCard group="Components" viewport="700x640" name="Municipal service components" subtitle="Trámite, beneficio, emergencia, estado de servicio" -->
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{padding:24px;background:var(--color-surface)}.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}.col{display:flex;flex-direction:column;gap:16px}.lab{font:700 12px/1 var(--font-sans);letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-muted);margin:4px 0 -4px}.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}</style>
+</head><body><div id="root"></div><script type="text/babel">
+const NS = window.HualaDesignSystem_c0b80f;
+const {TramiteCard,BeneficioCard,EmergencyAlert,ServiceStatus}=NS;
+function App(){return <div className="g2">
+<div className="col"><TramiteCard category="Tránsito" icon="car" title="Permiso de circulación" description="Renueva el permiso de tu vehículo sin ir a la Municipalidad." requirements={['Revisión técnica vigente','SOAP 2026','Permiso anterior']} cost="Según avalúo" duration="10 min" modality="En línea"/>
+<div><ServiceStatus name="Recolección de basura" status="intermitente" detail="La Huerta con 1 día de retraso" updated="09:12"/><ServiceStatus name="Agua potable rural" status="operativo" updated="08:40"/><ServiceStatus name="Ruta Hualañé–Licantén" status="suspendido" detail="Corte por trabajos" updated="07:55"/></div></div>
+<div className="col"><EmergencyAlert level="roja" title="Evacuación preventiva" zone="Ribera del Mataquito, sector Los Coipos" message="Por crecida del río, dirígete a la Escuela de Hualañé. Lleva documentos y medicamentos." time="14:35" secondaryLabel="Llamar"/>
+<BeneficioCard title="Subsidio de agua potable" amount="Hasta 100% del consumo" audience="Hogares del 40% más vulnerable según el Registro Social de Hogares." requirements={['Cédula de identidad','Última boleta de agua']} deadline="30 de octubre" daysLeft={5}/></div>
+</div>}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);</script></body></html>

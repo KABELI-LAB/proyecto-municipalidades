@@ -1,0 +1,18 @@
+{
+  "_fuente": "Sistema de diseño «Municipalidad de Curepto» (design-system/temas/curepto/README.md). Magenta #8C0172 medido de curepto.cl (3-11-2026).",
+  "azul": "#00468C",
+  "azulNoche": "#122536",
+  "verde": "#8C0172",
+  "verdeHoja": "#00468C",
+  "amarillo": "#FFCC00",
+  "tintaAmarillo": "#122536",
+  "rojo": "#8C0000",
+  "texto": "#09121B",
+  "barra": "#122536",
+  "cauce": [
+    "#00468C",
+    "#122536",
+    "#FFCC00"
+  ],
+  "forma": "franjas"
+}

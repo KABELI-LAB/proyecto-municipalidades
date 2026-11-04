@@ -1,0 +1,126 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "datos": [
+    {
+      "id": "adr-01",
+      "animal_id": "ani-023",
+      "publicado": "2026-02-23",
+      "adoptado": "2026-03-30",
+      "sector_adoptante_id": "hualane",
+      "adoptante_id": "per-019",
+      "dias_en_espera": 35,
+      "genero_solicitud_esterilizacion": true
+    },
+    {
+      "id": "adr-02",
+      "animal_id": "ani-024",
+      "publicado": "2026-04-08",
+      "adoptado": "2026-06-06",
+      "sector_adoptante_id": "la-huerta",
+      "adoptante_id": "per-020",
+      "dias_en_espera": 59,
+      "genero_solicitud_esterilizacion": false
+    },
+    {
+      "id": "adr-03",
+      "animal_id": "ani-025",
+      "publicado": "2026-02-22",
+      "adoptado": "2026-03-19",
+      "sector_adoptante_id": "patacon",
+      "adoptante_id": "per-021",
+      "dias_en_espera": 25,
+      "genero_solicitud_esterilizacion": true
+    },
+    {
+      "id": "adr-04",
+      "animal_id": "ani-026",
+      "publicado": "2026-05-08",
+      "adoptado": "2026-06-27",
+      "sector_adoptante_id": "hualane",
+      "adoptante_id": "per-022",
+      "dias_en_espera": 50,
+      "genero_solicitud_esterilizacion": true
+    },
+    {
+      "id": "adr-05",
+      "animal_id": "ani-027",
+      "publicado": "2026-08-20",
+      "adoptado": "2026-10-06",
+      "sector_adoptante_id": "la-huerta",
+      "adoptante_id": "per-023",
+      "dias_en_espera": 47,
+      "genero_solicitud_esterilizacion": false
+    },
+    {
+      "id": "adr-06",
+      "animal_id": "ani-028",
+      "publicado": "2026-08-25",
+      "adoptado": "2026-10-06",
+      "sector_adoptante_id": "hualane",
+      "adoptante_id": "per-024",
+      "dias_en_espera": 42,
+      "genero_solicitud_esterilizacion": false
+    },
+    {
+      "id": "adr-07",
+      "animal_id": "ani-029",
+      "publicado": "2026-07-28",
+      "adoptado": "2026-09-26",
+      "sector_adoptante_id": "los-coipos",
+      "adoptante_id": "per-025",
+      "dias_en_espera": 60,
+      "genero_solicitud_esterilizacion": false
+    },
+    {
+      "id": "adr-08",
+      "animal_id": "ani-030",
+      "publicado": "2026-04-03",
+      "adoptado": "2026-05-23",
+      "sector_adoptante_id": "hualane",
+      "adoptante_id": "per-026",
+      "dias_en_espera": 50,
+      "genero_solicitud_esterilizacion": true
+    },
+    {
+      "id": "adr-09",
+      "animal_id": "ani-031",
+      "publicado": "2026-01-20",
+      "adoptado": "2026-03-15",
+      "sector_adoptante_id": "hualane",
+      "adoptante_id": "per-027",
+      "dias_en_espera": 54,
+      "genero_solicitud_esterilizacion": false
+    },
+    {
+      "id": "adr-10",
+      "animal_id": "ani-032",
+      "publicado": "2026-03-26",
+      "adoptado": "2026-06-03",
+      "sector_adoptante_id": "hualane",
+      "adoptante_id": "per-028",
+      "dias_en_espera": 69,
+      "genero_solicitud_esterilizacion": true
+    },
+    {
+      "id": "adr-11",
+      "animal_id": "ani-033",
+      "publicado": "2026-02-11",
+      "adoptado": "2026-03-16",
+      "sector_adoptante_id": "patacon",
+      "adoptante_id": "per-029",
+      "dias_en_espera": 33,
+      "genero_solicitud_esterilizacion": false
+    },
+    {
+      "id": "adr-12",
+      "animal_id": "ani-034",
+      "publicado": "2026-01-15",
+      "adoptado": "2026-02-10",
+      "sector_adoptante_id": "patacon",
+      "adoptante_id": "per-030",
+      "dias_en_espera": 26,
+      "genero_solicitud_esterilizacion": true
+    }
+  ]
+}

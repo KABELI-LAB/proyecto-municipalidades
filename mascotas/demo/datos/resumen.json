@@ -1,0 +1,41 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "datos": {
+    "fecha_corte": "2026-10-06",
+    "situacion_actual": {
+      "solicitudes_pendientes": 46,
+      "reportes_recientes_30_dias": 34,
+      "atenciones_realizadas_12_meses": 83,
+      "adopciones_12_meses": 12
+    },
+    "retrato_comuna": {
+      "animales_en_plataforma": 152,
+      "perros": 81,
+      "gatos": 71,
+      "esterilizados": 49,
+      "con_microchip": 43,
+      "reencuentros_12_meses": 16,
+      "perros_comunitarios": 8,
+      "comunitarios_que_necesitan_atencion": 4,
+      "nota": "Cifras sobre animales registrados en la plataforma de demostración, no sobre la población total de la comuna."
+    },
+    "perdidas_por_mes": {
+      "2025-10": 1,
+      "2025-12": 2,
+      "2026-01": 4,
+      "2026-02": 1,
+      "2026-03": 4,
+      "2026-04": 2,
+      "2026-09": 12,
+      "2026-10": 4
+    },
+    "pesos_prioridad": {
+      "D": 0.4,
+      "R": 0.25,
+      "T": 0.2,
+      "E": 0.15
+    },
+    "sector_prioritario": "la-huerta"
+  }
+}

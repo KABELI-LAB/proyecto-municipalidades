@@ -1,0 +1,155 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para vichuquen.",
+  "datos": [
+    {
+      "id": "vic-ope-01",
+      "nombre": "Operativo Llico y costa",
+      "sector_id": "llico",
+      "lugar_id": "liceo-de-llico",
+      "fecha": "2026-03-06",
+      "horario": "09:00 a 14:00",
+      "servicios": [
+        "esterilizacion",
+        "vacunacion",
+        "microchip"
+      ],
+      "estado": "cerrado",
+      "resultados": {
+        "esterilizacion": {
+          "cupos": 6,
+          "inscritos": 6,
+          "asistieron": 5
+        },
+        "vacunacion": {
+          "cupos": 8,
+          "inscritos": 8,
+          "asistieron": 7
+        },
+        "microchip": {
+          "cupos": 6,
+          "inscritos": 6,
+          "asistieron": 6
+        }
+      },
+      "lista_espera_no_cubierta": 9
+    },
+    {
+      "id": "vic-ope-02",
+      "nombre": "Operativo Torca y Boyeruca",
+      "sector_id": "torca-boyeruca",
+      "lugar_id": "escuela-ema-cornejo-de-cardoen",
+      "fecha": "2026-05-09",
+      "horario": "09:00 a 14:00",
+      "servicios": [
+        "esterilizacion",
+        "vacunacion",
+        "microchip"
+      ],
+      "estado": "cerrado",
+      "resultados": {
+        "esterilizacion": {
+          "cupos": 5,
+          "inscritos": 5,
+          "asistieron": 5
+        },
+        "vacunacion": {
+          "cupos": 6,
+          "inscritos": 6,
+          "asistieron": 6
+        },
+        "microchip": {
+          "cupos": 5,
+          "inscritos": 5,
+          "asistieron": 3
+        }
+      },
+      "lista_espera_no_cubierta": 3
+    },
+    {
+      "id": "vic-ope-03",
+      "nombre": "Operativo Lago Vichuquén",
+      "sector_id": "lago",
+      "lugar_id": "estadio-aquelarre",
+      "fecha": "2026-07-03",
+      "horario": "09:00 a 14:00",
+      "servicios": [
+        "esterilizacion",
+        "vacunacion",
+        "microchip"
+      ],
+      "estado": "cerrado",
+      "resultados": {
+        "esterilizacion": {
+          "cupos": 5,
+          "inscritos": 4,
+          "asistieron": 4
+        },
+        "vacunacion": {
+          "cupos": 6,
+          "inscritos": 6,
+          "asistieron": 4
+        },
+        "microchip": {
+          "cupos": 5,
+          "inscritos": 5,
+          "asistieron": 5
+        }
+      },
+      "lista_espera_no_cubierta": 3
+    },
+    {
+      "id": "vic-ope-04",
+      "nombre": "Operativo Vichuquén pueblo",
+      "sector_id": "vichuquen-pueblo",
+      "lugar_id": "parque-vichuquen",
+      "fecha": "2026-09-15",
+      "horario": "09:00 a 14:00",
+      "servicios": [
+        "esterilizacion",
+        "vacunacion",
+        "microchip"
+      ],
+      "estado": "cerrado",
+      "resultados": {
+        "esterilizacion": {
+          "cupos": 8,
+          "inscritos": 8,
+          "asistieron": 7
+        },
+        "vacunacion": {
+          "cupos": 10,
+          "inscritos": 10,
+          "asistieron": 10
+        },
+        "microchip": {
+          "cupos": 8,
+          "inscritos": 7,
+          "asistieron": 7
+        }
+      },
+      "lista_espera_no_cubierta": 3
+    },
+    {
+      "id": "vic-ope-05",
+      "nombre": "Operativo Llico y costa",
+      "sector_id": "llico",
+      "lugar_id": "liceo-de-llico",
+      "fecha": "2026-10-24",
+      "horario": "09:00 a 14:00",
+      "servicios": [
+        "esterilizacion",
+        "vacunacion",
+        "microchip"
+      ],
+      "cupos": {
+        "esterilizacion": 20,
+        "vacunacion": 40,
+        "microchip": 40
+      },
+      "estado": "borrador",
+      "nota_demo": "Se crea en vivo durante la demostración a partir de la recomendación."
+    }
+  ]
+}

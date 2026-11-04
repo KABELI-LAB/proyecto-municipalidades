@@ -1,0 +1,163 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para vichuquen.",
+  "datos": [
+    {
+      "adopcion_id": "vic-adp-01",
+      "persona_id": "vic-per-031",
+      "codigo": "TR-4101",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "vic-adp-02",
+      "persona_id": "vic-per-042",
+      "codigo": "TR-4102",
+      "relacion": "RESCATADO"
+    },
+    {
+      "adopcion_id": "vic-adp-03",
+      "persona_id": "vic-per-053",
+      "codigo": "TR-4103",
+      "relacion": "HOGAR_TEMPORAL"
+    },
+    {
+      "adopcion_id": "vic-adp-04",
+      "persona_id": "vic-per-064",
+      "codigo": "TR-4104",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "vic-adp-05",
+      "persona_id": "vic-per-075",
+      "codigo": "TR-4105",
+      "relacion": "COMUNITARIO"
+    },
+    {
+      "adopcion_id": "vic-adp-06",
+      "persona_id": "vic-per-086",
+      "codigo": "TR-4106",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "vic-adp-07",
+      "persona_id": "vic-per-097",
+      "codigo": "TR-4107",
+      "relacion": "RESCATADO"
+    },
+    {
+      "adopcion_id": "vic-adp-08",
+      "persona_id": "vic-per-108",
+      "codigo": "TR-4108",
+      "relacion": "HOGAR_TEMPORAL"
+    },
+    {
+      "adopcion_id": "vic-adp-09",
+      "persona_id": "vic-per-119",
+      "codigo": "TR-4109",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "vic-adp-10",
+      "persona_id": "vic-per-130",
+      "codigo": "TR-4110",
+      "relacion": "COMUNITARIO"
+    },
+    {
+      "adopcion_id": "vic-adp-11",
+      "persona_id": "vic-per-141",
+      "codigo": "TR-4111",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "vic-adp-12",
+      "persona_id": "vic-per-152",
+      "codigo": "TR-4112",
+      "relacion": "RESCATADO"
+    },
+    {
+      "adopcion_id": "vic-adp-13",
+      "persona_id": "vic-per-163",
+      "codigo": "TR-4113",
+      "relacion": "HOGAR_TEMPORAL"
+    },
+    {
+      "adopcion_id": "vic-adp-14",
+      "persona_id": "vic-per-040",
+      "codigo": "TR-4114",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "vic-adr-01",
+      "persona_id": "vic-per-051",
+      "codigo": "TR-4115",
+      "relacion": "COMUNITARIO"
+    },
+    {
+      "adopcion_id": "vic-adr-02",
+      "persona_id": "vic-per-062",
+      "codigo": "TR-4116",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "vic-adr-03",
+      "persona_id": "vic-per-073",
+      "codigo": "TR-4117",
+      "relacion": "RESCATADO"
+    },
+    {
+      "adopcion_id": "vic-adr-04",
+      "persona_id": "vic-per-084",
+      "codigo": "TR-4118",
+      "relacion": "HOGAR_TEMPORAL"
+    },
+    {
+      "adopcion_id": "vic-adr-05",
+      "persona_id": "vic-per-095",
+      "codigo": "TR-4119",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "vic-adr-06",
+      "persona_id": "vic-per-106",
+      "codigo": "TR-4120",
+      "relacion": "COMUNITARIO"
+    },
+    {
+      "adopcion_id": "vic-adr-07",
+      "persona_id": "vic-per-117",
+      "codigo": "TR-4121",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "vic-adr-08",
+      "persona_id": "vic-per-128",
+      "codigo": "TR-4122",
+      "relacion": "RESCATADO"
+    },
+    {
+      "adopcion_id": "vic-adr-09",
+      "persona_id": "vic-per-139",
+      "codigo": "TR-4123",
+      "relacion": "HOGAR_TEMPORAL"
+    },
+    {
+      "adopcion_id": "vic-adr-10",
+      "persona_id": "vic-per-150",
+      "codigo": "TR-4124",
+      "relacion": "PROPIO"
+    },
+    {
+      "adopcion_id": "vic-adr-11",
+      "persona_id": "vic-per-161",
+      "codigo": "TR-4125",
+      "relacion": "COMUNITARIO"
+    },
+    {
+      "adopcion_id": "vic-adr-12",
+      "persona_id": "vic-per-038",
+      "codigo": "TR-4126",
+      "relacion": "PROPIO"
+    }
+  ]
+}

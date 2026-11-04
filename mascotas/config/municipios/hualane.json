@@ -1,0 +1,25 @@
+{
+  "id": "hualane",
+  "nombre": "Hualañé",
+  "nombreOficial": "Ilustre Municipalidad de Hualañé",
+  "plataforma": "Pawni",
+  "firma": [
+    "Ilustre Municipalidad",
+    "de Hualañé"
+  ],
+  "sitioWeb": "www.hualane.cl",
+  "region": "Región del Maule",
+  "zonaHoraria": "America/Santiago",
+  "identidad": {
+    "escudo": "/ds/logo/escudo.png",
+    "logoCiudadano": "/ds/logo/wordmark-somos-todos.png",
+    "logoBlanco": "/ds/logo/logo-vertical-white.png",
+    "marcaDigital": "/ds/logo/digital-mark.svg"
+  },
+  "parametros": {
+    "limitePorHogar": 2,
+    "invitacionesPrioritarias": false
+  },
+  "_nota": "Identidad y parámetros del municipio. Territorio, servicios, catálogos y pesos de prioridad se cargan desde demo/datos/ (npm run demo:cargar).",
+  "_nota_invitaciones": "invitacionesPrioritarias: si es true, al publicar un operativo se invita primero a quienes solicitaron el servicio y se les retiene un cupo. Apagado: las solicitudes solo sirven para medir la necesidad de la comuna."
+}

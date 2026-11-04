@@ -1,0 +1,58 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "datos": [
+    {
+      "sector_id": "la-huerta",
+      "indice": 1.0,
+      "nivel": "alta",
+      "factores": {
+        "demanda_pendiente": 22,
+        "reportes_90_dias": 23,
+        "dias_sin_intervencion": 214,
+        "demanda_no_cubierta": 9
+      },
+      "explicacion": "18 solicitudes de esterilización pendientes, 23 reportes en 90 días y 214 días desde el último operativo.",
+      "recomendacion": "Se recomienda evaluar un operativo territorial con énfasis en esterilización."
+    },
+    {
+      "sector_id": "hualane",
+      "indice": 0.36,
+      "nivel": "media",
+      "factores": {
+        "demanda_pendiente": 12,
+        "reportes_90_dias": 18,
+        "dias_sin_intervencion": 21,
+        "demanda_no_cubierta": 3
+      },
+      "explicacion": "6 solicitudes de esterilización pendientes, 18 reportes en 90 días y 21 días desde el último operativo.",
+      "recomendacion": "Se recomienda mantener seguimiento."
+    },
+    {
+      "sector_id": "los-coipos",
+      "indice": 0.19,
+      "nivel": "baja",
+      "factores": {
+        "demanda_pendiente": 5,
+        "reportes_90_dias": 6,
+        "dias_sin_intervencion": 150,
+        "demanda_no_cubierta": 3
+      },
+      "explicacion": "3 solicitudes de esterilización pendientes, 6 reportes en 90 días y 150 días desde el último operativo.",
+      "recomendacion": "Sin acción recomendada por ahora."
+    },
+    {
+      "sector_id": "patacon",
+      "indice": 0.12,
+      "nivel": "baja",
+      "factores": {
+        "demanda_pendiente": 7,
+        "reportes_90_dias": 1,
+        "dias_sin_intervencion": 95,
+        "demanda_no_cubierta": 3
+      },
+      "explicacion": "4 solicitudes de esterilización pendientes, 1 reportes en 90 días y 95 días desde el último operativo.",
+      "recomendacion": "Sin acción recomendada por ahora."
+    }
+  ]
+}

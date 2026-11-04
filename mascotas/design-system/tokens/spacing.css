@@ -1,0 +1,13 @@
+:root{
+/* 8px base, with 2/4/12 half-steps */
+--space-0:0;--space-px:2px;--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:24px;--space-6:32px;--space-7:40px;--space-8:48px;--space-9:64px;--space-10:80px;--space-11:96px;--space-12:128px;
+/* layout */
+--container-max:1280px;--container-text:720px;
+--grid-desktop-cols:12;/* @kind other */--grid-desktop-gutter:24px;--grid-desktop-margin:80px;
+--grid-laptop-cols:12;/* @kind other */--grid-laptop-gutter:24px;--grid-laptop-margin:48px;
+--grid-tablet-cols:8;/* @kind other */--grid-tablet-gutter:16px;--grid-tablet-margin:32px;
+--grid-mobile-cols:4;/* @kind other */--grid-mobile-gutter:16px;--grid-mobile-margin:16px;
+--bp-mobile:390px;--bp-tablet:768px;--bp-laptop:1280px;--bp-desktop:1440px;
+/* touch */
+--target-min:48px;--target-comfort:56px;
+}

@@ -1,0 +1,421 @@
+{
+  "_demo": true,
+  "_aviso": "Datos de demostración. No corresponden a registros reales de la Municipalidad.",
+  "_origen": "Derivado de demo/datos/ con demo/municipios/derivar.py para vichuquen.",
+  "datos": [
+    {
+      "id": "vichuquen",
+      "nombre": "Vichuquén",
+      "sector_id": "vichuquen-pueblo",
+      "lat": -34.8840168,
+      "lng": -71.9923708,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 3242142468 (place=village); distrito por punto en polígono INE"
+    },
+    {
+      "id": "vichuquen-poniente",
+      "nombre": "Vichuquén Poniente",
+      "sector_id": "vichuquen-pueblo",
+      "lat": -34.8863181,
+      "lng": -71.9957069,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 5928000902 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "talquita",
+      "nombre": "Talquita",
+      "sector_id": "vichuquen-pueblo",
+      "lat": -34.8925972,
+      "lng": -71.9946555,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 5928000903 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "el-manzano",
+      "nombre": "El Manzano",
+      "sector_id": "vichuquen-pueblo",
+      "lat": -34.8750524,
+      "lng": -71.9932151,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 5930352041 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "las-juntas",
+      "nombre": "Las Juntas",
+      "sector_id": "vichuquen-pueblo",
+      "lat": -34.8643948,
+      "lng": -72.0080465,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 5099429966 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "los-7-robles",
+      "nombre": "Los 7 Robles",
+      "sector_id": "vichuquen-pueblo",
+      "lat": -34.9231212,
+      "lng": -71.9891462,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 5928000904 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "uraco",
+      "nombre": "Uraco",
+      "sector_id": "vichuquen-pueblo",
+      "lat": -34.9320401,
+      "lng": -72.0098849,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 5099470685 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "las-puertas",
+      "nombre": "Las Puertas",
+      "sector_id": "vichuquen-pueblo",
+      "lat": -34.9505839,
+      "lng": -72.0633399,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 214233734 (place=isolated_dwelling); distrito por punto en polígono INE"
+    },
+    {
+      "id": "aquelarre",
+      "nombre": "Aquelarre",
+      "sector_id": "lago",
+      "lat": -34.8506982,
+      "lng": -72.037888,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 2339533287 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "alto-del-puerto",
+      "nombre": "Alto del Puerto",
+      "sector_id": "lago",
+      "lat": -34.8528504,
+      "lng": -72.0226247,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 3237981766 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "paula",
+      "nombre": "Paula",
+      "sector_id": "lago",
+      "lat": -34.8443572,
+      "lng": -72.0570218,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 3237446380 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "el-villorrio",
+      "nombre": "El Villorrio",
+      "sector_id": "lago",
+      "lat": -34.8434591,
+      "lng": -72.0515642,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 3237447762 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "santa-rosa",
+      "nombre": "Santa Rosa",
+      "sector_id": "lago",
+      "lat": -34.8408538,
+      "lng": -72.052739,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 3237453816 (place=neighbourhood); distrito por punto en polígono INE"
+    },
+    {
+      "id": "tunquelen",
+      "nombre": "Tunquelén",
+      "sector_id": "lago",
+      "lat": -34.8431984,
+      "lng": -72.0617627,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 3238981969 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "merhueves",
+      "nombre": "Merhueves",
+      "sector_id": "lago",
+      "lat": -34.8458047,
+      "lng": -72.0671593,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 3238981337 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "cuatro-pantanos",
+      "nombre": "Cuatro Pantanos",
+      "sector_id": "lago",
+      "lat": -34.837497,
+      "lng": -72.0721775,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 5099432044 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "bahia-mansa",
+      "nombre": "Bahía Mansa",
+      "sector_id": "lago",
+      "lat": -34.8313956,
+      "lng": -72.0710463,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 3242142981 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "piedras-bayas",
+      "nombre": "Piedras Bayas",
+      "sector_id": "lago",
+      "lat": -34.8248938,
+      "lng": -72.0680246,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 3242141315 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "la-peninsula",
+      "nombre": "La Península",
+      "sector_id": "lago",
+      "lat": -34.8162723,
+      "lng": -72.0500528,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 3237451161 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "jardines-de-la-peninsula",
+      "nombre": "Jardines de la Península",
+      "sector_id": "lago",
+      "lat": -34.818604,
+      "lng": -72.0647356,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 7130945999 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "queseria",
+      "nombre": "Quesería",
+      "sector_id": "lago",
+      "lat": -34.8178401,
+      "lng": -72.0715856,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 3237453056 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "totorilla",
+      "nombre": "Totorilla",
+      "sector_id": "lago",
+      "lat": -34.8337289,
+      "lng": -72.035484,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 3242146585 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "punta-del-arrayan",
+      "nombre": "Punta del Arrayán",
+      "sector_id": "lago",
+      "lat": -34.8247339,
+      "lng": -72.0423317,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 5930352040 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "el-durazno",
+      "nombre": "El Durazno",
+      "sector_id": "lago",
+      "lat": -34.8214487,
+      "lng": -72.0310235,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 5930352039 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "la-madera",
+      "nombre": "La Madera",
+      "sector_id": "lago",
+      "lat": -34.8163401,
+      "lng": -72.0351005,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 5930352038 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "los-palitos",
+      "nombre": "Los Palitos",
+      "sector_id": "lago",
+      "lat": -34.8087999,
+      "lng": -72.0444346,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 5930352037 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "la-punta",
+      "nombre": "La Punta",
+      "sector_id": "lago",
+      "lat": -34.7963078,
+      "lng": -72.0470309,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 5930352036 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "llico",
+      "nombre": "Llico",
+      "sector_id": "llico",
+      "lat": -34.7664408,
+      "lng": -72.0746267,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 214223342 (place=village); distrito por punto en polígono INE"
+    },
+    {
+      "id": "culenmapu",
+      "nombre": "Culenmapu",
+      "sector_id": "llico",
+      "lat": -34.796618,
+      "lng": -72.0789205,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 5129905768 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "el-rodeo",
+      "nombre": "El Rodeo",
+      "sector_id": "llico",
+      "lat": -34.783333,
+      "lng": -72.083333,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 214194797 (place=locality); distrito por punto en polígono INE"
+    },
+    {
+      "id": "la-barca",
+      "nombre": "La Barca",
+      "sector_id": "llico",
+      "lat": -34.8049787,
+      "lng": -72.1264779,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 4419453904 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "trilco",
+      "nombre": "Trilco",
+      "sector_id": "llico",
+      "lat": -34.8150269,
+      "lng": -72.1355926,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 4419453903 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "los-lobos",
+      "nombre": "Los Lobos",
+      "sector_id": "llico",
+      "lat": -34.816667,
+      "lng": -72.133333,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 214219924 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "infiernillo",
+      "nombre": "Infiernillo",
+      "sector_id": "llico",
+      "lat": -34.8385585,
+      "lng": -72.142484,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 2528443423 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "lipimavida",
+      "nombre": "Lipimávida",
+      "sector_id": "llico",
+      "lat": -34.8478234,
+      "lng": -72.1414395,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 214195795 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "pichibudi",
+      "nombre": "Pichibudi",
+      "sector_id": "llico",
+      "lat": -34.872926,
+      "lng": -72.1518593,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 214206802 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "higuerilla",
+      "nombre": "Higuerilla",
+      "sector_id": "llico",
+      "lat": -34.868093,
+      "lng": -72.1017724,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 214194493 (place=locality); distrito por punto en polígono INE"
+    },
+    {
+      "id": "torca",
+      "nombre": "Torca",
+      "sector_id": "torca-boyeruca",
+      "lat": -34.7778052,
+      "lng": -72.0437988,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 3242144724 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "las-conchas",
+      "nombre": "Las Conchas",
+      "sector_id": "torca-boyeruca",
+      "lat": -34.7759251,
+      "lng": -72.0561785,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 214213281 (place=neighbourhood); distrito por punto en polígono INE"
+    },
+    {
+      "id": "los-cardos",
+      "nombre": "Los Cardos",
+      "sector_id": "torca-boyeruca",
+      "lat": -34.7732566,
+      "lng": -72.0268393,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 5930352035 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "las-garzas",
+      "nombre": "Las Garzas",
+      "sector_id": "torca-boyeruca",
+      "lat": -34.7369309,
+      "lng": -72.0122159,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 5930352032 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "molhuen",
+      "nombre": "Molhuén",
+      "sector_id": "torca-boyeruca",
+      "lat": -34.7168573,
+      "lng": -71.9974744,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 5930352033 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "yoncaven",
+      "nombre": "Yoncavén",
+      "sector_id": "torca-boyeruca",
+      "lat": -34.7024924,
+      "lng": -72.0319918,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 5930352034 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "boyeruca",
+      "nombre": "Boyeruca",
+      "sector_id": "torca-boyeruca",
+      "lat": -34.6884508,
+      "lng": -72.0502723,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 214230051 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "tilicura",
+      "nombre": "Tilicura",
+      "sector_id": "tilicura",
+      "lat": -34.8244609,
+      "lng": -71.9621015,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 214229076 (place=hamlet); distrito por punto en polígono INE"
+    },
+    {
+      "id": "pajonal",
+      "nombre": "Pajonal",
+      "sector_id": "tilicura",
+      "lat": -34.7680912,
+      "lng": -71.9926371,
+      "coordenadas_estado": "aproximada (OpenStreetMap)",
+      "fuente": "OSM node 214204966 (place=hamlet); distrito por punto en polígono INE"
+    }
+  ]
+}

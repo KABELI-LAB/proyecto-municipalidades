@@ -1,0 +1,33 @@
+/* Hualañé — color tokens. Base values sampled from the official escudo + logotipo. */
+:root{
+/* Hualañé Blue — institución, agua, río Mataquito, confianza, información */
+--blue-50:#EEF3FB;--blue-100:#D9E4F5;--blue-200:#B4C9EA;--blue-300:#83A6DA;--blue-400:#4C83C9;--blue-500:#1270B7;--blue-600:#1A58A0;--blue-700:#253786;--blue-800:#1D2C6C;--blue-900:#162253;--blue-950:#0D1533;
+/* Hualañé Green — territorio, valle, agricultura, comunidad, bienestar */
+--green-50:#EEF8EE;--green-100:#D7EFD5;--green-200:#AFDEAB;--green-300:#80CA7B;--green-400:#55B850;--green-500:#3AAA35;--green-600:#2A8227;--green-700:#316B2C;--green-800:#255522;--green-900:#1B3F19;--green-950:#0F260E;
+/* Hualañé Yellow — energía, actividad, atención, oportunidad. Never text on white below 700. */
+--yellow-50:#FFFBE6;--yellow-100:#FEF4BF;--yellow-200:#FCEB80;--yellow-300:#F8E71E;--yellow-400:#FAC22F;--yellow-500:#F8B432;--yellow-600:#D98B0E;--yellow-700:#9E5F05;--yellow-800:#7A4706;--yellow-900:#553207;--yellow-950:#331E04;
+/* Neutrals — cool, tinted toward Hualañé Blue */
+--white:#FFFFFF;--neutral-50:#F6F7F9;--neutral-100:#ECEEF2;--neutral-200:#DCDFE6;--neutral-300:#C2C6D0;--neutral-400:#989EAD;--neutral-500:#6A7182;--neutral-600:#585F70;--neutral-700:#424858;--neutral-800:#2C3242;--neutral-900:#1A1F2C;--neutral-950:#0E121B;
+/* Semantic base */
+--red-50:#FCEAEA;--red-100:#F8D2D2;--red-500:#DC3B3B;--red-600:#C42B2B;--red-700:#9C1F1F;
+--success-600:#1F7A36;--success-50:#E6F4EA;
+
+/* ---------- semantic aliases ---------- */
+--color-primary:var(--blue-700);--color-primary-hover:var(--blue-800);--color-primary-pressed:var(--blue-900);--color-primary-subtle:var(--blue-50);
+--color-secondary:var(--green-700);--color-secondary-hover:var(--green-800);--color-secondary-subtle:var(--green-50);
+--color-accent:var(--yellow-400);--color-accent-strong:var(--yellow-300);--color-accent-subtle:var(--yellow-50);
+--color-river:var(--blue-500);
+
+--color-surface:var(--white);--color-surface-sunken:var(--neutral-50);--color-surface-muted:var(--neutral-100);--color-surface-inverse:var(--blue-900);--color-surface-brand:var(--blue-700);
+--color-text:var(--neutral-950);--color-text-secondary:var(--neutral-600);--color-text-muted:var(--neutral-500);--color-text-inverse:var(--white);--color-text-brand:var(--blue-700);--color-text-link:var(--blue-600);--color-text-link-hover:var(--blue-800);--color-text-on-accent:var(--blue-950);
+--color-border:var(--neutral-200);--color-border-strong:var(--neutral-400);--color-border-input:var(--neutral-500);--color-border-focus:var(--blue-500);
+--color-focus-ring:var(--yellow-400);--color-focus-inner:var(--blue-950);
+
+--color-success:var(--success-600);--color-success-bg:var(--success-50);
+--color-warning:var(--yellow-700);--color-warning-bg:var(--yellow-100);--color-warning-fill:var(--yellow-400);
+--color-error:var(--red-600);--color-error-bg:var(--red-50);
+--color-info:var(--blue-600);--color-info-bg:var(--blue-50);
+
+/* Data visualization — categorical order */
+--data-1:var(--blue-700);--data-2:var(--green-500);--data-3:var(--yellow-500);--data-4:var(--blue-400);--data-5:var(--green-800);--data-6:var(--yellow-700);--data-muted:var(--neutral-300);
+}
