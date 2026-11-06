@@ -1,5 +1,6 @@
 import { createContext, useContext } from 'react'
 import type { EmergenciaApi } from '../servicios/api'
+import type { PreferenciasAccesibilidad } from './accesibilidad'
 
 export interface CtxEmergencia {
   api: EmergenciaApi
@@ -7,6 +8,9 @@ export interface CtxEmergencia {
   menosMovimiento: boolean
   preferenciaMovimiento: boolean
   setMenosMovimiento: (v: boolean) => void
+  /** Opciones del panel "Accesibilidad" (incluye menosMovimiento). */
+  accesibilidad: PreferenciasAccesibilidad
+  cambiarAccesibilidad: (cambios: Partial<PreferenciasAccesibilidad>) => void
 }
 
 export const ContextoEmergencia = createContext<CtxEmergencia | null>(null)

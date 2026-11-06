@@ -70,7 +70,7 @@ export function generarPlanFamiliar(h: DatosPlan): PlanFamiliar {
     },
   ]
   if (h.bebesMenores2 > 0)
-    mochila.push({ titulo: 'Para la guagua', items: ['Pañales para 3 días', 'Leche y mamadera', 'Toallitas húmedas', 'Una manta'] })
+    mochila.push({ titulo: 'Para bebés', items: ['Pañales para 3 días', 'Leche y mamadera', 'Toallitas húmedas', 'Una manta'] })
   else if (h.menores18 > 0)
     mochila.push({ titulo: 'Para niñas y niños', items: ['Un juguete o libro pequeño', 'Snacks que les gusten', 'Ropa de cambio'] })
   if (h.mayores65 > 0)

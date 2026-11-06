@@ -1,11 +1,12 @@
 import { Icon, IconButton, Loader, Tabs } from '@muni/design-system'
-import { useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ComponentType } from 'react'
 import { renderOriginal, type VistaOriginal } from '../lib/renderOriginal'
-import { PAGE_HEIGHT, useFitScale } from '../lib/useFitScale'
 import type { CvFileKind } from '../lib/validateFile'
 import type { CvData } from '../services/types'
 import s from '../styles/ui.module.css'
 import type { TemplateProps } from '../templates'
+import { useZoom } from '../lib/zoom'
+import { ControlZoom, VistaPagina } from './Zoom'
 
 interface Props {
   abierto: boolean
@@ -26,6 +27,7 @@ type Lado = 'original' | 'mejorado'
 export function Comparacion({ abierto, onCerrar, original, cv, nombreDiseno, Diseno }: Props) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const [lado, setLado] = useState<Lado>('original')
+  const zoom = useZoom()
 
   useEffect(() => {
     const d = dialogRef.current
@@ -61,6 +63,9 @@ export function Comparacion({ abierto, onCerrar, original, cv, nombreDiseno, Dis
           onChange={(id) => setLado(id as Lado)}
         />
         </div>
+        <div className={s.comparacionZoom}>
+          <ControlZoom zoom={zoom} etiqueta="Zoom de ambos CV" />
+        </div>
       </div>
 
       {/* aria-live: en móvil, avisa qué lado se muestra al cambiar de pestaña. */}
@@ -71,15 +76,17 @@ export function Comparacion({ abierto, onCerrar, original, cv, nombreDiseno, Dis
               <Icon name="file" size={18} /> Tu CV original
               <span className={s.fileName}>{original.archivo.name}</span>
             </h3>
-            <Original archivo={original.archivo} tipo={original.tipo} />
+            <Original archivo={original.archivo} tipo={original.tipo} nivel={zoom.nivel} />
           </section>
           <section className={`${s.comparacionCol} ${lado === 'mejorado' ? s.colActiva : ''}`} aria-label={`Diseño ${nombreDiseno} sugerido`}>
             <h3 className={s.comparacionColTitulo}>
               <Icon name="sparkles" size={18} /> Diseño {nombreDiseno} sugerido
             </h3>
-            <Pagina>
-              <Diseno cv={cv} />
-            </Pagina>
+            <div className={s.previewFrame}>
+              <VistaPagina nivel={zoom.nivel} etiqueta={`Diseño ${nombreDiseno}`}>
+                <Diseno cv={cv} />
+              </VistaPagina>
+            </div>
           </section>
         </div>
       )}
@@ -87,20 +94,7 @@ export function Comparacion({ abierto, onCerrar, original, cv, nombreDiseno, Dis
   )
 }
 
-function Pagina({ children }: { children: ReactNode }) {
-  const { ref, scale } = useFitScale()
-  return (
-    <div className={s.previewFrame}>
-      <div ref={ref} style={{ height: PAGE_HEIGHT * scale }}>
-        <div className={s.previewPage} style={{ transform: `scale(${scale})` }}>
-          {children}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function Original({ archivo, tipo }: { archivo: File; tipo: CvFileKind }) {
+function Original({ archivo, tipo, nivel }: { archivo: File; tipo: CvFileKind; nivel: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const [vista, setVista] = useState<VistaOriginal | 'error' | null>(null)
 
@@ -118,18 +112,33 @@ function Original({ archivo, tipo }: { archivo: File; tipo: CvFileKind }) {
     }
   }, [archivo, tipo])
 
+  const ampliada = nivel > 1
   return (
     <div ref={ref} className={s.previewFrame}>
       {vista === null && <Loader label="Abriendo tu CV…" />}
       {vista === 'error' && <p className={s.nota}>No pudimos mostrar tu archivo original.</p>}
-      {vista && vista !== 'error' && vista.tipo === 'pdf' &&
-        vista.paginas.map((src, i) => (
-          <img key={i} src={src} alt={`Página ${i + 1} de ${vista.paginas.length} de tu CV original`} className={s.paginaOriginal} />
-        ))}
+      {vista && vista !== 'error' && vista.tipo === 'pdf' && (
+        <div
+          className={`${s.zoomArea} ${ampliada ? s.zoomAmpliada : ''}`}
+          {...(ampliada ? { tabIndex: 0, role: 'region', 'aria-label': 'Tu CV original ampliado. Usa las flechas para moverte.' } : {})}
+        >
+          {vista.paginas.map((src, i) => (
+            <img
+              key={i}
+              src={src}
+              alt={`Página ${i + 1} de ${vista.paginas.length} de tu CV original`}
+              className={s.paginaOriginal}
+              style={ampliada ? { width: `${nivel * 100}%`, maxWidth: 'none' } : undefined}
+            />
+          ))}
+        </div>
+      )}
       {vista && vista !== 'error' && vista.tipo === 'docx' && (
-        // sandbox="" : el documento no puede ejecutar scripts ni acceder al sitio.
-        <iframe title="Tu CV original" sandbox="" srcDoc={vista.html} className={s.docxOriginal} />
+        // sandbox="" : el documento no puede ejecutar scripts ni acceder al sitio. El zoom va como CSS dentro del documento.
+        <iframe title="Tu CV original" sandbox="" srcDoc={conZoom(vista.html, nivel)} className={s.docxOriginal} />
       )}
     </div>
   )
 }
+
+const conZoom = (html: string, nivel: number) => (nivel === 1 ? html : html.replace('</head>', `<style>html{zoom:${nivel}}</style></head>`))

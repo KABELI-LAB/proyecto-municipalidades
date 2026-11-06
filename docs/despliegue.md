@@ -27,7 +27,7 @@ Si una clave se filtra por error: **rótela de inmediato** en el proveedor (Azur
    | `SMTP_PORT` | `465` (TLS directo) o `587` (STARTTLS) | No |
    | `SMTP_USER` | Cuenta que envía, ej. `cv@su-dominio.cl`. Es también la dirección del remitente | No |
    | `SMTP_PASS` | Contraseña de aplicación de esa cuenta | **Sí** |
-   | `CV_EMAIL_FROM_NAME` | (Opcional) nombre visible del remitente. Por defecto "Municipalidad de Hualañé" | No |
+   | `CV_EMAIL_FROM_NAME` | (Opcional) nombre visible del remitente (Hualañé). Por defecto "Municipalidad de Hualañé". Con Curepto o Vichuquén elegido en el sitio, el correo usa el nombre de ese municipio | No |
    | `CV_EMAIL_REPLY_TO` | (Opcional) dirección que recibe las respuestas | No |
    | `SUPABASEKEY` | Registro de emergencia: cadena de conexión del *Transaction pooler* de Supabase (`postgresql://…:6543/postgres`). También se acepta `DATABASE_URL` | **Sí** |
    | `EMERGENCIA_URL_BASE` | URL pública de la pestaña, ej. `https://su-sitio.netlify.app/emergencia` | No |

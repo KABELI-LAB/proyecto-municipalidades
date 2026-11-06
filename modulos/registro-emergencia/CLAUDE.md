@@ -14,6 +14,7 @@ Registro de hogares para emergencias de la Municipalidad de Hualañé. Antes de 
 - **Integrantes del hogar: solo backend.** Tabla `integrantes` y campo opcional `hogar.integrantes` en `POST /inscripcion` (se guardan en la misma transacción). El cuestionario todavía no los pide, y el texto del consentimiento debe mencionar los datos de terceros antes de hacerlo.
 - **Pendiente:** R4 recordatorios, R5 edición de datos, R6 recuperar código, y endurecimiento (accesibilidad, e2e, rendimiento). Sus rutas muestran "Estamos preparando esta sección".
 - **Temas de municipio (demo):** con Curepto o Vichuquén elegido en el sitio cambian el diseño, los nombres en pantalla, la tarjeta, el PNG, el PDF y el QR (`src/lib/marca.ts`). El registro sigue siendo de Hualañé: mapa y validación de ubicación, sectores, consentimiento y base de datos no cambian.
+- **Opciones de accesibilidad:** botón "Accesibilidad" (`componentes/PanelAccesibilidad.tsx`) arriba a la derecha; en el cuestionario va junto a "Pregunta X de Y" (celular) y junto a "Menos movimiento" (escritorio). "Menos movimiento" es una de esas opciones (el interruptor y el panel comparten estado en el contexto). Archivos copiados de cv-empleabilidad (mantener idénticos; ver su CLAUDE.md). La tarjeta lleva `data-a11y-fijo` y el mapa anula el zoom de texto (Leaflet).
 - WhatsApp usa `ConsoleProvider` (no envía nada): el proveedor real está pendiente de decisión.
 
 ## Arquitectura

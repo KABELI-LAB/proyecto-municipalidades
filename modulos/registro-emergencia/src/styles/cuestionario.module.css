@@ -24,8 +24,8 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-/* Celular: pregunta → panel "Tu hogar" → "Menos movimiento".
-   Escritorio: pregunta y "Menos movimiento" a la izquierda, panel fijo a la derecha. */
+/* Celular: pregunta → panel "Tu hogar" (el botón Accesibilidad va junto a "Pregunta X de Y").
+   Escritorio: pregunta, "Menos movimiento" y Accesibilidad a la izquierda, panel fijo a la derecha. */
 .panel {
   order: 2;
 }
@@ -873,12 +873,6 @@
 
   .movimientoMovil {
     display: flex;
-  }
-
-  .movimientoMovil :global(.hds-switch) {
-    gap: var(--space-2);
-    font-size: var(--type-caption-size);
-    white-space: nowrap;
   }
 
   /* Atrás: solo la flecha (el nombre accesible sigue siendo "Atrás"). */

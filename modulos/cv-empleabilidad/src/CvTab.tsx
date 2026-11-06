@@ -2,8 +2,10 @@ import { Alert, Button } from '@muni/design-system'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { DesignGallery } from './components/DesignGallery'
 import { Sugerencias, Veredicto } from './components/FeedbackPanel'
+import { PanelAccesibilidad } from './components/PanelAccesibilidad'
 import { Progreso } from './components/Progreso'
 import { UploadZone } from './components/UploadZone'
+import { propsRaiz, usePreferenciasAccesibilidad } from './lib/accesibilidad'
 import { extractText } from './lib/extractText'
 import { validateCvFile, type CvFileKind } from './lib/validateFile'
 import { createDefaultAnalyzer } from './services/analyzer'
@@ -37,6 +39,8 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
   const activeAnalyzer = useMemo(() => analyzer ?? createDefaultAnalyzer(), [analyzer])
   const activeMailer = useMemo(() => mailer ?? createDefaultMailer(), [mailer])
   const [estado, setEstado] = useState<Estado>({ tipo: 'inicio' })
+  const [accesibilidad, cambiarAccesibilidad] = usePreferenciasAccesibilidad()
+  const raiz = propsRaiz(accesibilidad)
   const abortRef = useRef<AbortController | null>(null)
   const resultRef = useRef<HTMLParagraphElement>(null)
   // El módulo aporta el <h1> de su página: el sitio anfitrión no agrega otro.
@@ -93,7 +97,10 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
   const ocupado = estado.tipo === 'leyendo' || estado.tipo === 'analizando'
 
   return (
-    <div className={`${s.root} ${estado.tipo === 'listo' ? s.rootCompacto : ''}`}>
+    <div {...raiz} className={`${s.root} ${estado.tipo === 'listo' ? s.rootCompacto : ''} ${raiz.className}`}>
+      <div className={s.barraAccesibilidad}>
+        <PanelAccesibilidad preferencias={accesibilidad} onCambiar={cambiarAccesibilidad} />
+      </div>
       {estado.tipo === 'listo' ? (
         // Con resultados, la cabecera se reduce a una línea para que el contenido quede arriba.
         <header className={s.cabeceraCompacta}>
@@ -149,7 +156,7 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
               <Veredicto analysis={estado.analysis} />
             </div>
             <div className={s.areaCv}>
-              <DesignGallery cv={estado.analysis.cvMejorado} mailer={activeMailer} original={estado.original} />
+              <DesignGallery cv={estado.analysis.cvMejorado} mailer={activeMailer} original={estado.original} menosMovimiento={accesibilidad.menosMovimiento} />
             </div>
             <div className={s.areaIdeas}>
               <Sugerencias analysis={estado.analysis} />

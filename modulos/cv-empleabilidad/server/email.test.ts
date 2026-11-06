@@ -76,6 +76,34 @@ describe('handleEnviarRequest', () => {
     expect(m.text).toContain('Moderno')
   })
 
+  it('usa la marca del municipio elegido: remitente, asunto, logo y textos', async () => {
+    const { fn, enviados } = enviador()
+    expect((await handleEnviarRequest(post({ ...valido, municipio: 'vichuquen' }), ENV, fn)).status).toBe(200)
+    const m = enviados[0]!
+    expect(m.from).toBe('"Municipalidad de Vichuquén" <cv@example.com>')
+    expect(m.subject).toBe('Tu currículum · Municipalidad de Vichuquén')
+    const logo = m.attachments.find((a) => a.cid === 'logo-vichuquen')
+    expect(logo?.content.subarray(1, 4).toString()).toBe('PNG')
+    expect(m.html).toContain('src="cid:logo-vichuquen"')
+    expect(m.html).toContain('#00626B') // teal-700
+    expect(m.html).not.toMatch(/Hualañé|#253786/)
+    expect(m.text).toContain('sitio de la Municipalidad de Vichuquén')
+  })
+
+  it('Curepto lleva su logo blanco sobre azul-municipal', () => {
+    const { html, subject } = contenidoCorreo('Ana', 'clasico', { municipio: 'curepto' })
+    expect(subject).toBe('Tu currículum · Municipalidad de Curepto')
+    expect(html).toContain('background:#00468C"><img src="cid:logo-curepto"')
+    expect(html).not.toContain('Hualañé')
+  })
+
+  it('sin municipio (o con uno desconocido) responde como Hualañé o rechaza', async () => {
+    const { fn, enviados } = enviador()
+    await handleEnviarRequest(post(valido), ENV, fn)
+    expect(enviados[0]!.subject).toBe('Tu currículum · Municipalidad de Hualañé')
+    expect((await handleEnviarRequest(post({ ...valido, municipio: 'otro' }), ENV, fn)).status).toBe(400)
+  })
+
   it('rechaza correos inválidos con un mensaje claro', async () => {
     const { fn } = enviador()
     const res = await handleEnviarRequest(post({ ...valido, email: 'no-es-correo' }), ENV, fn)

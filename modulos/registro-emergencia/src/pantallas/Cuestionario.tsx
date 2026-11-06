@@ -10,6 +10,7 @@ import { dentroDeHualane, MENSAJE_FUERA } from '../../shared/ubicacion.ts'
 import { CasaEnVivo } from '../componentes/CasaEnVivo'
 import { Campo, CampoRut, Contador, OpcionMultiple, Opciones } from '../componentes/controles'
 import { InterruptorMovimiento } from '../componentes/InterruptorMovimiento'
+import { PanelAccesibilidad } from '../componentes/PanelAccesibilidad'
 import { TarjetaHogar } from '../componentes/TarjetaHogar'
 import { CLAVES, borrar, guardar, leer } from '../lib/almacen'
 import { aInscripcion, ajustarConteos, BORRADOR_VACIO, validar, type Borrador } from '../lib/borrador'
@@ -433,6 +434,7 @@ export function Cuestionario() {
 
         <div className={s.pieFormulario}>
           <InterruptorMovimiento />
+          <BotonAccesibilidad />
           {asistido && <span className={s.etiquetaAsistido}>Modo asistido</span>}
         </div>
       </div>
@@ -513,8 +515,9 @@ function Encabezado({ bloqueActual, celebracion, pregunta, total, restantes }: {
             {pregunta} de {total} · {tiempo.corto}
           </span>
         </span>
+        {/* Celular: el botón de accesibilidad (incluye "Menos movimiento") va en esta fila. */}
         <span className={s.movimientoMovil}>
-          <InterruptorMovimiento />
+          <BotonAccesibilidad compacto />
         </span>
       </div>
     </div>
@@ -669,7 +672,7 @@ function ContenidoPaso(p: ContenidoProps) {
 
     case 'bebes':
       return (
-        <Pregunta titulo="¿Alguna es guagua menor de 2 años?" ayuda="Así sumamos pañales y leche a tu plan de emergencia." tituloRef={tituloRef}>
+        <Pregunta titulo="¿Cuántas son menores de 2 años?" ayuda="Así sumamos pañales y leche a tu plan de emergencia." tituloRef={tituloRef}>
           <Contador etiqueta="Menores de 2 años" valor={b.bebesMenores2} max={b.menores18} onChange={(v) => actualizar({ bebesMenores2: v })} />
         </Pregunta>
       )
@@ -894,7 +897,7 @@ function PasoResumen({ b, territorio, tituloRef, onCambiar }: ContenidoProps) {
   const personas = [
     `${b.totalPersonas} ${b.totalPersonas === 1 ? 'persona' : 'personas'}`,
     b.menores18 > 0 && `${b.menores18} ${b.menores18 === 1 ? 'menor' : 'menores'} de 18`,
-    b.bebesMenores2 > 0 && `${b.bebesMenores2} ${b.bebesMenores2 === 1 ? 'guagua' : 'guaguas'}`,
+    b.bebesMenores2 > 0 && `${b.bebesMenores2} ${b.bebesMenores2 === 1 ? 'menor' : 'menores'} de 2 años`,
     b.mayores65 > 0 && `${b.mayores65} ${b.mayores65 === 1 ? 'mayor' : 'mayores'} de 65`,
   ]
   const animales = [b.mascotas > 0 && `${b.mascotas} ${b.mascotas === 1 ? 'mascota' : 'mascotas'}`, b.tieneAnimales && (b.ganadoTexto.trim() || 'ganado u otros animales')]
@@ -950,4 +953,9 @@ function PasoResumen({ b, territorio, tituloRef, onCambiar }: ContenidoProps) {
       </dl>
     </Pregunta>
   )
+}
+
+function BotonAccesibilidad({ compacto = false }: { compacto?: boolean }) {
+  const { accesibilidad, cambiarAccesibilidad } = useEmergencia()
+  return <PanelAccesibilidad preferencias={accesibilidad} onCambiar={cambiarAccesibilidad} compacto={compacto} />
 }

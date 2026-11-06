@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import type { EmergenciaApi } from '../servicios/api'
-import { CLAVES, guardar, leer } from './almacen'
+import { usePreferenciasAccesibilidad } from './accesibilidad'
 import { ContextoEmergencia } from './contexto'
 
 export function ProveedorEmergencia({ api, children }: { api: EmergenciaApi; children: ReactNode }) {
-  const [preferencia, setPreferencia] = useState(() => leer<boolean>(CLAVES.menosMovimiento) ?? false)
+  const [accesibilidad, cambiarAccesibilidad] = usePreferenciasAccesibilidad()
   const [sistema, setSistema] = useState(() => consultaMovimiento()?.matches ?? false)
 
   useEffect(() => {
@@ -15,13 +15,18 @@ export function ProveedorEmergencia({ api, children }: { api: EmergenciaApi; chi
     return () => mq.removeEventListener('change', cambio)
   }, [])
 
-  const setMenosMovimiento = useCallback((v: boolean) => {
-    setPreferencia(v)
-    guardar(CLAVES.menosMovimiento, v)
-  }, [])
+  // "Menos movimiento" es una de las opciones de accesibilidad (el interruptor y el panel la comparten).
+  const setMenosMovimiento = useCallback((v: boolean) => cambiarAccesibilidad({ menosMovimiento: v }), [cambiarAccesibilidad])
 
   return (
-    <ContextoEmergencia.Provider value={{ api, menosMovimiento: preferencia || sistema, preferenciaMovimiento: preferencia, setMenosMovimiento }}>
+    <ContextoEmergencia.Provider value={{
+        api,
+        menosMovimiento: accesibilidad.menosMovimiento || sistema,
+        preferenciaMovimiento: accesibilidad.menosMovimiento,
+        setMenosMovimiento,
+        accesibilidad,
+        cambiarAccesibilidad,
+      }}>
       {children}
     </ContextoEmergencia.Provider>
   )

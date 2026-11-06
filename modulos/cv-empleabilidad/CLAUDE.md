@@ -8,6 +8,9 @@ Pestaña donde una persona sube su CV (PDF o DOCX), recibe feedback para mejorar
 - Sin `VITE_CV_API_URL` (ej. sin `.env` local) se usa `mockAnalyzer` (reglas heurísticas) y la UI muestra "Modo demostración".
 - La extracción de texto ocurre en el navegador (pdfjs-dist / mammoth, cargados bajo demanda) y **cuenta** las imágenes; al servidor solo viajan el texto y ese número, nunca las imágenes.
 - Antes de analizar se decide si el documento es un CV (`CvResultado` con `esCv`); si no lo es, la UI muestra el aviso "no parece ser un currículum" y no hay diseños.
+- **Temas de municipio (demo):** con Curepto o Vichuquén elegido en el sitio cambian los colores de los diseños y de los archivos exportados (`src/export/comun.ts`) y la marca del correo: logo, colores, tipografía, asunto y remitente (`MARCAS_CORREO` en `server/email.ts`). La dirección del remitente es siempre `SMTP_USER`.
+- **Zoom del CV:** Alejar / Acercar / Ajustar al ancho (100 % a 300 %) en la vista previa y en "Compara tu CV" (ambos lados). `src/lib/zoom.ts` + `src/components/Zoom.tsx`.
+- **Opciones de accesibilidad:** botón "Accesibilidad" arriba a la derecha (`PanelAccesibilidad`): tamaño del texto (zoom de la pestaña), alto contraste (`data-theme="high-contrast"` del design system), subrayar enlaces, espaciado WCAG 1.4.12 y menos movimiento. Se guardan en sessionStorage (`muni:accesibilidad`, compartida con registro-emergencia). `lib/accesibilidad.ts`, `components/PanelAccesibilidad.tsx` y `styles/accesibilidad.module.css` son **copias idénticas** en ambos módulos: cambiarlos en los dos. Lo marcado con `data-a11y-fijo` (la hoja del CV) conserva su diseño. Medidas en `vw`/`dvh` se dividen por `var(--a11y-zoom, 1)`.
 - Pendiente de decisión del equipo: leer CVs escaneados enviando las páginas como imagen al modelo (implica actualizar el aviso de privacidad).
 
 ## Flujo
