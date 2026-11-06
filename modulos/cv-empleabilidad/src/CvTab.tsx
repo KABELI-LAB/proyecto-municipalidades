@@ -95,12 +95,12 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
   }
 
   const ocupado = estado.tipo === 'leyendo' || estado.tipo === 'analizando'
+  const panelAccesibilidad = <PanelAccesibilidad preferencias={accesibilidad} onCambiar={cambiarAccesibilidad} />
 
   return (
     <div {...raiz} className={`${s.root} ${estado.tipo === 'listo' ? s.rootCompacto : ''} ${raiz.className}`}>
-      <div className={s.barraAccesibilidad}>
-        <PanelAccesibilidad preferencias={accesibilidad} onCambiar={cambiarAccesibilidad} />
-      </div>
+      {/* Con resultados, el botón va en la cabecera compacta (una fila menos sobre el CV). */}
+      {estado.tipo !== 'listo' && <div className={s.barraAccesibilidad}>{panelAccesibilidad}</div>}
       {estado.tipo === 'listo' ? (
         // Con resultados, la cabecera se reduce a una línea para que el contenido quede arriba.
         <header className={s.cabeceraCompacta}>
@@ -109,9 +109,12 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
           <p ref={resultRef} tabIndex={-1} className={s.resultArchivo}>
             {estado.archivo}
           </p>
-          <Button variant="ghost" size="sm" iconLeft="rotate-ccw" onClick={reiniciar}>
-            Otro CV
-          </Button>
+          <div className={s.cabeceraBotones}>
+            <Button variant="ghost" iconLeft="rotate-ccw" onClick={reiniciar}>
+              Otro CV
+            </Button>
+            {panelAccesibilidad}
+          </div>
         </header>
       ) : (
         <header className={s.intro}>
@@ -150,14 +153,13 @@ export function CvTab({ analyzer, mailer }: CvTabProps) {
           {estado.analysis.origen === 'mock' && (
             <p className={s.notaDemo}>Modo demostración: análisis con reglas automáticas, sin inteligencia artificial.</p>
           )}
-          {/* Orden: veredicto → CV mejorado (lo principal) → ideas. En escritorio, el CV va a la izquierda. */}
+          {/* Orden: veredicto → CV mejorado (lo principal) → descarga → ideas. En escritorio, el CV va a la izquierda. */}
           <div className={s.results}>
             <div className={s.areaVeredicto}>
               <Veredicto analysis={estado.analysis} />
             </div>
-            <div className={s.areaCv}>
-              <DesignGallery cv={estado.analysis.cvMejorado} mailer={activeMailer} original={estado.original} menosMovimiento={accesibilidad.menosMovimiento} />
-            </div>
+            {/* La galería aporta dos áreas: la hoja (cv) y "Descarga tu CV" (acciones). */}
+            <DesignGallery cv={estado.analysis.cvMejorado} mailer={activeMailer} original={estado.original} menosMovimiento={accesibilidad.menosMovimiento} />
             <div className={s.areaIdeas}>
               <Sugerencias analysis={estado.analysis} />
             </div>

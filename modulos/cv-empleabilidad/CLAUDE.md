@@ -19,6 +19,8 @@ Pestaña donde una persona sube su CV (PDF o DOCX), recibe feedback para mejorar
 
 `DesignGallery` → botón "Comparar con mi CV original" → `Comparacion` (diálogo: lado a lado en escritorio, pestañas en móvil) → `renderOriginal()` (PDF a imágenes con pdfjs; Word a HTML en iframe `sandbox`). El archivo subido vive solo en memoria, en el estado `listo` de `CvTab`.
 
+Diseño de resultados (`.results` en `ui.module.css`): en escritorio, la hoja a la izquierda ajustada al alto de la ventana (`useFitScale(true)`) y a la derecha veredicto → "Descarga tu CV" → ideas, para que la hoja y las descargas se vean sin bajar. `DesignGallery` aporta dos áreas de esa grilla (`areaCv` y `areaAcciones`). En móvil: veredicto → hoja → ideas, con la barra fija de descarga abajo.
+
 El estado vive en `CvTab.tsx` como unión discriminada (`inicio | leyendo | analizando | listo | error`).
 
 ## Mapa de archivos
