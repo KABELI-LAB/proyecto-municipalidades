@@ -59,3 +59,10 @@
     padding-bottom: var(--space-3);
   }
 }
+
+/* Botón de accesibilidad: arriba a la derecha de la pestaña. */
+.barraAccesibilidad {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: calc(-1 * var(--space-2));
+}

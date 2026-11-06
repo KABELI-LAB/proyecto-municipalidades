@@ -1,4 +1,4 @@
-import { Alert, Icon } from '@muni/design-system'
+import { Alert, Icon, useMunicipio } from '@muni/design-system'
 import { useId, useState, type FormEvent } from 'react'
 import type { ArchivoCv, DisenoId } from '../export'
 import type { CvMailer } from '../services/mailer'
@@ -29,6 +29,7 @@ export function EnvioCorreo({ mailer, diseno, nombreDiseno, nombrePersona, email
   const [email, setEmail] = useState(emailSugerido ?? '')
   const [sitioWeb, setSitioWeb] = useState('')
   const [estado, setEstado] = useState<Estado>({ tipo: 'editando' })
+  const municipio = useMunicipio().id
   const ids = { titulo: useId(), email: useId(), ayuda: useId(), error: useId() }
 
   const enviando = estado.tipo === 'enviando'
@@ -45,7 +46,7 @@ export function EnvioCorreo({ mailer, diseno, nombreDiseno, nombrePersona, email
     setEstado({ tipo: 'enviando' })
     try {
       const adjuntos = await generar()
-      await mailer.enviar({ email: destino, nombre: nombrePersona, diseno, adjuntos, sitioWeb })
+      await mailer.enviar({ email: destino, nombre: nombrePersona, diseno, adjuntos, municipio, sitioWeb })
       setEstado({ tipo: 'enviado', email: destino })
     } catch (err) {
       const mensaje = err instanceof AnalisisError ? err.message : 'No pudimos enviar el correo. Inténtalo de nuevo.'

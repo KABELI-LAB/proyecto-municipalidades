@@ -35,5 +35,4 @@ export const CLAVES = {
   borrador: 'borrador',
   sesion: 'sesion',
   resultado: 'resultado',
-  menosMovimiento: 'menos-movimiento',
 } as const

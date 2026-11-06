@@ -77,7 +77,7 @@ describe('R2 · Cuestionario', () => {
 
     await user.click(screen.getByRole('button', { name: 'Agregar uno: Menores de 18' }))
     await siguiente(user)
-    // Hay un menor: pregunta por guaguas.
+    // Hay un menor: pregunta por menores de 2 años.
     await user.click(screen.getByRole('button', { name: 'Agregar uno: Menores de 2 años' }))
     await siguiente(user)
     await siguiente(user) // mayores: 0
@@ -90,7 +90,7 @@ describe('R2 · Cuestionario', () => {
 
     const resumen = await screen.findByRole('heading', { name: 'Revisa tu hogar', level: 1 })
     expect(resumen).toBeInTheDocument()
-    expect(screen.getByText('3 personas · 1 menor de 18 · 1 guagua')).toBeInTheDocument()
+    expect(screen.getByText('3 personas · 1 menor de 18 · 1 menor de 2 años')).toBeInTheDocument()
     await siguiente(user, 'Todo está bien')
 
     // Sin consentimiento no se activa.
@@ -194,5 +194,24 @@ describe('R3 sin datos', () => {
   it('ofrece recuperar la tarjeta si no hay inscripción en el dispositivo', () => {
     montar('/emergencia/listo')
     expect(screen.getByRole('heading', { name: 'No encontramos tu tarjeta en este dispositivo' })).toBeInTheDocument()
+  })
+})
+
+describe('Opciones de accesibilidad', () => {
+  it('están en la landing y en el cuestionario, y comparten "Menos movimiento" con el interruptor', async () => {
+    const user = userEvent.setup()
+    const { container, unmount } = montar('/emergencia')
+    await user.click(screen.getByRole('button', { name: 'Accesibilidad' }))
+    await user.click(screen.getByRole('switch', { name: 'Alto contraste' }))
+    expect(container.firstElementChild).toHaveAttribute('data-theme', 'high-contrast')
+    unmount()
+
+    // En el cuestionario (otra pantalla) siguen activas; el interruptor visible y el del panel son el mismo.
+    const otro = montar('/emergencia/inscripcion')
+    expect(otro.container.firstElementChild).toHaveAttribute('data-theme', 'high-contrast')
+    const [interruptor] = screen.getAllByRole('switch', { name: 'Menos movimiento' })
+    await user.click(interruptor!)
+    await user.click(screen.getAllByRole('button', { name: /^Accesibilidad/ })[0]!)
+    expect(screen.getAllByRole('switch', { name: 'Menos movimiento' }).every((s) => (s as HTMLInputElement).checked)).toBe(true)
   })
 })

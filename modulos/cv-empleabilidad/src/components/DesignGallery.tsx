@@ -1,7 +1,6 @@
 import { Alert, Icon, useMunicipio } from '@muni/design-system'
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { descargar, generarArchivos, type ArchivoCv } from '../export'
-import { PAGE_HEIGHT, useFitScale } from '../lib/useFitScale'
 import type { CvFileKind } from '../lib/validateFile'
 import type { CvMailer } from '../services/mailer'
 import type { CvData } from '../services/types'
@@ -9,15 +8,19 @@ import s from '../styles/ui.module.css'
 import { TEMPLATES, type CvTemplate } from '../templates'
 import { Comparacion } from './Comparacion'
 import { EnvioCorreo } from './EnvioCorreo'
+import { useZoom } from '../lib/zoom'
+import { ControlZoom, VistaPagina } from './Zoom'
 
 interface Props {
   cv: CvData
   mailer: CvMailer
   /** Archivo que subió la persona, para compararlo con el diseño sugerido. */
   original: { archivo: File; tipo: CvFileKind }
+  /** Opción "Menos movimiento": sin desplazamiento suave. */
+  menosMovimiento?: boolean
 }
 
-export function DesignGallery({ cv, mailer, original }: Props) {
+export function DesignGallery({ cv, mailer, original, menosMovimiento = false }: Props) {
   const [activo, setActivo] = useState<CvTemplate['id']>('clasico')
   const [preparando, setPreparando] = useState<'pdf' | 'docx' | null>(null)
   const [errorDescarga, setErrorDescarga] = useState(false)
@@ -25,7 +28,8 @@ export function DesignGallery({ cv, mailer, original }: Props) {
   const [correoAbierto, setCorreoAbierto] = useState(false)
   const [opciones, setOpciones] = useState(false)
   const cache = useRef(new Map<string, Promise<ArchivoCv[]>>())
-  const { ref, scale } = useFitScale()
+  const zoom = useZoom()
+  const ampliada = zoom.nivel > 1
   const municipio = useMunicipio().id
   const template = TEMPLATES.find((t) => t.id === activo)!
   const { Component } = template
@@ -76,7 +80,7 @@ export function DesignGallery({ cv, mailer, original }: Props) {
     setOpciones(false)
     setCorreoAbierto(true)
     requestAnimationFrame(() => {
-      correoRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      correoRef.current?.scrollIntoView({ behavior: menosMovimiento ? 'auto' : 'smooth', block: 'center' })
       correoRef.current?.querySelector<HTMLInputElement>('input[type="email"]')?.focus({ preventScroll: true })
     })
   }
@@ -112,17 +116,22 @@ export function DesignGallery({ cv, mailer, original }: Props) {
         ))}
       </div>
 
-      {/* La hoja se puede tocar para verla en grande (en móvil se muestra recortada). */}
-      <div id="cv-design-preview" role="tabpanel" aria-labelledby={`cv-tab-${activo}`} className={`${s.previewFrame} ${s.previewRecorte}`}>
-        <div ref={ref} style={{ height: PAGE_HEIGHT * scale }} onClick={() => setComparando(true)} className={s.previewTocable}>
-          <div className={s.previewPage} style={{ transform: `scale(${scale})` }}>
+      <ControlZoom zoom={zoom} />
+
+      {/* Sin zoom, la hoja se puede tocar para verla en grande (en móvil se muestra recortada).
+          Con zoom, se desplaza dentro del marco y el toque ya no abre la comparación. */}
+      <div id="cv-design-preview" role="tabpanel" aria-labelledby={`cv-tab-${activo}`} className={`${s.previewFrame} ${ampliada ? '' : s.previewRecorte}`}>
+        <div onClick={ampliada ? undefined : () => setComparando(true)} className={ampliada ? undefined : s.previewTocable}>
+          <VistaPagina nivel={zoom.nivel} etiqueta={`CV en diseño ${template.nombre}`}>
             <Component cv={cv} />
-          </div>
+          </VistaPagina>
         </div>
-        <button type="button" className={`hds-btn hds-btn--inverse hds-btn--sm ${s.previewAmpliar}`} onClick={() => setComparando(true)}>
-          <Icon name="columns-2" size={18} />
-          <span>Ver en grande</span>
-        </button>
+        {!ampliada && (
+          <button type="button" className={`hds-btn hds-btn--inverse hds-btn--sm ${s.previewAmpliar}`} onClick={() => setComparando(true)}>
+            <Icon name="columns-2" size={18} />
+            <span>Ver en grande</span>
+          </button>
+        )}
       </div>
 
       {faltanDatos && (

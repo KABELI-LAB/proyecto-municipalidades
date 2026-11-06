@@ -1,3 +1,4 @@
+import type { MunicipioId } from '@muni/design-system'
 import { aBase64, type ArchivoCv, type DisenoId } from '../export'
 import { AnalisisError } from './types'
 
@@ -6,6 +7,8 @@ export interface EnvioCv {
   nombre: string
   diseno: DisenoId
   adjuntos: ArchivoCv[]
+  /** Municipio elegido en el sitio: el correo sale con su marca. Sin él, Hualañé. */
+  municipio?: MunicipioId
   /** Honeypot anti-bots (campo oculto del formulario). */
   sitioWeb?: string
 }

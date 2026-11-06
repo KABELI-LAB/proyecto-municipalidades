@@ -23,7 +23,8 @@ async function pdfAImagenes(buffer: ArrayBuffer, anchoCss: number): Promise<stri
 
   const task = pdfjs.getDocument({ data: new Uint8Array(buffer) })
   const doc = await task.promise
-  const densidad = Math.min(2, window.devicePixelRatio || 1)
+  // Más resolución que la pantalla para que el zoom (hasta 300 %) no se vea borroso.
+  const densidad = 3
   const paginas: string[] = []
   try {
     for (let i = 1; i <= Math.min(doc.numPages, MAX_PAGINAS); i++) {

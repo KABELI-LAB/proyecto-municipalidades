@@ -109,7 +109,7 @@ describe('tarjeta y plan familiar', () => {
   }
   const items = (d: DatosPlan) => generarPlanFamiliar(d).mochila.flatMap((g) => g.items).join(' | ')
 
-  it('agrega pañales y leche si hay guagua', () => {
+  it('agrega pañales y leche si hay un bebé', () => {
     expect(items({ ...base, menores18: 1, bebesMenores2: 1 })).toMatch(/Pañales.*Leche/)
     expect(items(base)).not.toMatch(/Pañales/)
   })

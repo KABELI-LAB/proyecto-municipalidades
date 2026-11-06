@@ -44,7 +44,8 @@ export function TarjetaHogar({ datos, previa = false, entrega = false, menosMovi
   const clases = [s.tarjeta, previa && s.previa, menosMovimiento && s.quieta, volteada && s.volteada].filter(Boolean).join(' ')
 
   return (
-    <div className={`${s.envoltorio} ${entrega && !menosMovimiento ? s.entrega : ''} ${destacada ? s.destacada : ''}`}>
+    // data-a11y-fijo: la tarjeta conserva su diseño con "Más espacio entre letras" (se mide en cqw).
+    <div className={`${s.envoltorio} ${entrega && !menosMovimiento ? s.entrega : ''} ${destacada ? s.destacada : ''}`} data-a11y-fijo="">
       <div className={clases} data-testid="tarjeta-hogar">
         <div className={s.cara} aria-hidden={volteada}>
           <div className={s.cabecera}>

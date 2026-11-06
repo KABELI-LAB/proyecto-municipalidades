@@ -634,9 +634,9 @@ li[data-estado='listo'] .progresoMarca {
 
 /* ---------- Comparación (diálogo) ---------- */
 .comparacion {
-  width: min(1240px, calc(100vw - 32px));
+  width: min(1240px, calc((100vw - 32px) / var(--a11y-zoom, 1)));
   max-width: none;
-  max-height: calc(100dvh - 32px);
+  max-height: calc((100dvh - 32px) / var(--a11y-zoom, 1));
   margin: auto;
   padding: 0;
   border: 0;
@@ -654,9 +654,9 @@ li[data-estado='listo'] .progresoMarca {
 
 @media (max-width: 767px) {
   .comparacion {
-    width: 100vw;
-    max-height: 100dvh;
-    height: 100dvh;
+    width: calc(100vw / var(--a11y-zoom, 1));
+    max-height: calc(100dvh / var(--a11y-zoom, 1));
+    height: calc(100dvh / var(--a11y-zoom, 1));
     border-radius: 0;
   }
 }
@@ -751,8 +751,64 @@ li[data-estado='listo'] .progresoMarca {
 .docxOriginal {
   display: block;
   width: 100%;
-  height: min(1123px, 75dvh);
+  height: min(1123px, calc(75dvh / var(--a11y-zoom, 1)));
   border: 0;
   background: var(--white);
   box-shadow: var(--shadow-medium);
+}
+
+/* ---------- Zoom del CV ---------- */
+.zoom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.zoomValor {
+  min-width: 5ch;
+  text-align: center;
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.zoomArea {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* La página no se encoge cuando el área tiene alto máximo. */
+.zoomArea > * {
+  flex-shrink: 0;
+}
+
+/* Con zoom, la hoja se recorre dentro del marco (arrastrando o con las flechas). */
+.zoomAmpliada {
+  overflow: auto;
+  max-height: min(calc(75dvh / var(--a11y-zoom, 1)), 900px);
+  overscroll-behavior: contain;
+  border-radius: var(--radius-small);
+}
+
+.zoomAmpliada:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.comparacionZoom {
+  padding: 0 var(--space-5) var(--space-3);
+}
+
+@media (max-width: 599px) {
+  .comparacionZoom {
+    padding: 0 var(--space-4) var(--space-3);
+  }
+}
+
+/* Botón de accesibilidad: arriba a la derecha de la pestaña. */
+.barraAccesibilidad {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: calc(-1 * var(--space-2));
 }

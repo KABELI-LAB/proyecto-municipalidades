@@ -77,6 +77,7 @@ Variables: `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_DEPLOY
     { "nombre": "CV-Maria-Jose-Fuentes-moderno.pdf", "contenido": "<base64>" },
     { "nombre": "CV-Maria-Jose-Fuentes-moderno.docx", "contenido": "<base64>" }
   ],
+  "municipio": "vichuquen",
   "sitioWeb": ""
 }
 ```
@@ -86,11 +87,12 @@ Respuesta `200 { "ok": true }` o `{ "error": "<mensaje para mostrar>" }` con `40
 Protecciones contra abuso (el endpoint envía correos a direcciones arbitrarias):
 
 - Asunto y cuerpo **fijos** (`contenidoCorreo`); el nombre solo se usa para el saludo y se escapa en el HTML.
+- `municipio` (opcional, `hualane` | `curepto` | `vichuquen`; por defecto `hualane`) solo elige una de las marcas fijas (`MARCAS_CORREO`: logo, colores, tipografía y nombre en asunto, remitente y textos). Cualquier otro valor responde `400`.
 - Máximo 2 adjuntos, 2 MB cada uno, uno PDF y uno DOCX, verificados por **firma de archivo** (`%PDF` / `PK`), no solo por la extensión.
 - Honeypot `sitioWeb`: si viene lleno, se responde `200` sin enviar.
 - No se guarda el correo ni el CV; los logs solo registran códigos de estado.
 
-Envío por SMTP con `nodemailer` (`crearEnviadorSmtp`); el handler recibe el enviador inyectado para poder probarlo sin red. El remitente es siempre `SMTP_USER`; los logs solo registran el código de error SMTP.
+Envío por SMTP con `nodemailer` (`crearEnviadorSmtp`); el handler recibe el enviador inyectado para poder probarlo sin red. El remitente es siempre `SMTP_USER`. El nombre visible es `CV_EMAIL_FROM_NAME` para Hualañé y "Municipalidad de Curepto" o "de Vichuquén" para los otros temas; los logs solo registran el código de error SMTP.
 
 Variables: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` y, opcionales, `CV_EMAIL_FROM_NAME` y `CV_EMAIL_REPLY_TO`.
 

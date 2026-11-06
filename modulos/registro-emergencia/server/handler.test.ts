@@ -84,7 +84,7 @@ describe('POST /inscripcion', () => {
     expect(repo.estado.tokens[0]?.tokenHash).toMatch(/^[0-9a-f]{64}$/)
   })
 
-  it('el plan familiar refleja el hogar (guagua → pañales, mascotas → alimento)', async () => {
+  it('el plan familiar refleja el hogar (bebé → pañales, mascotas → alimento)', async () => {
     const c = (await (await llamar('POST', '/inscripcion', inscripcion())).json()) as InscripcionCreada
     const texto = c.hogar.plan.mochila.flatMap((g) => g.items).join(' ')
     expect(texto).toMatch(/Pañales/)

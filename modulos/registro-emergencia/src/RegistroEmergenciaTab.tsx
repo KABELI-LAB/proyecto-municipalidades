@@ -1,6 +1,9 @@
 import { Alert } from '@muni/design-system'
-import { useMemo } from 'react'
-import { Link, Route, Routes } from 'react-router-dom'
+import { useMemo, type ReactNode } from 'react'
+import { Link, Route, Routes, useLocation } from 'react-router-dom'
+import { PanelAccesibilidad } from './componentes/PanelAccesibilidad'
+import { propsRaiz } from './lib/accesibilidad'
+import { useEmergencia } from './lib/contexto'
 import { ProveedorEmergencia } from './lib/Proveedor'
 import { ruta } from './lib/rutas'
 import { Beneficios } from './pantallas/Beneficios'
@@ -23,7 +26,7 @@ export function RegistroEmergenciaTab({ api }: RegistroEmergenciaTabProps) {
   const backend = useMemo(() => api ?? crearApiHttp(), [api])
   return (
     <ProveedorEmergencia api={backend}>
-      <div className={s.root}>
+      <Raiz>
         <Routes>
           <Route index element={<Landing />} />
           <Route path="inscripcion" element={<Cuestionario />} />
@@ -32,8 +35,29 @@ export function RegistroEmergenciaTab({ api }: RegistroEmergenciaTabProps) {
           <Route path="recuperar" element={<EnConstruccion titulo="Recuperar mi código" />} />
           <Route path="*" element={<EnConstruccion titulo="No encontramos esta página" />} />
         </Routes>
-      </div>
+      </Raiz>
     </ProveedorEmergencia>
+  )
+}
+
+/**
+ * Contenedor de la pestaña con las opciones de accesibilidad aplicadas. El cuestionario
+ * trae su propio botón (junto a "Pregunta X de Y") para que cada pregunta siga entrando
+ * en la pantalla del celular.
+ */
+function Raiz({ children }: { children: ReactNode }) {
+  const { accesibilidad, cambiarAccesibilidad } = useEmergencia()
+  const enCuestionario = /\/inscripcion\/?$/.test(useLocation().pathname)
+  const raiz = propsRaiz(accesibilidad)
+  return (
+    <div {...raiz} className={`${s.root} ${raiz.className}`}>
+      {!enCuestionario && (
+        <div className={s.barraAccesibilidad}>
+          <PanelAccesibilidad preferencias={accesibilidad} onCambiar={cambiarAccesibilidad} />
+        </div>
+      )}
+      {children}
+    </div>
   )
 }
 
