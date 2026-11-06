@@ -166,8 +166,26 @@
   line-height: var(--type-h3-lh);
 }
 
-.cabeceraCompacta :global(.hds-btn) {
+.cabeceraBotones {
   grid-area: boton;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Celular: el título no se parte; los botones bajan a su propia fila. */
+@media (max-width: 599px) {
+  .cabeceraCompacta {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'titulo' 'archivo' 'boton';
+    row-gap: var(--space-2);
+  }
+
+  .cabeceraBotones {
+    justify-content: space-between;
+  }
 }
 
 .resultArchivo {
@@ -191,22 +209,24 @@
   box-shadow: none;
 }
 
-/* Móvil: veredicto → CV → ideas. Escritorio: CV a la izquierda; veredicto e ideas a la derecha. */
+/* Móvil: veredicto → CV → descarga → ideas.
+   Escritorio: CV a la izquierda; veredicto, "Descarga tu CV" e ideas a la derecha. */
 .results {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-areas: 'veredicto' 'cv' 'ideas';
+  grid-template-areas: 'veredicto' 'cv' 'acciones' 'ideas';
   gap: var(--space-4);
   align-items: start;
 }
 
 @media (min-width: 1024px) {
   .results {
-    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-areas:
       'cv veredicto'
+      'cv acciones'
       'cv ideas';
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto auto 1fr;
     gap: var(--space-4) var(--space-5);
   }
 }
@@ -221,8 +241,58 @@
   min-width: 0;
 }
 
+.areaAcciones {
+  grid-area: acciones;
+  min-width: 0;
+}
+
 .areaIdeas {
   grid-area: ideas;
+  min-width: 0;
+}
+
+/* En móvil este bloque solo trae el formulario de correo (las acciones van en la barra fija). */
+.panelAcciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+@media (min-width: 1024px) {
+  .panelAcciones {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-large);
+    padding: var(--space-5);
+  }
+
+  .soloMovil {
+    display: none !important;
+  }
+}
+
+/* Título del panel a la izquierda y zoom a la derecha (debajo, si no cabe). */
+.panelHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.botonesDescarga {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+/* Descargar PDF, la acción principal, a todo el ancho. */
+.botonesDescarga > :first-child {
+  grid-column: 1 / -1;
+}
+
+.botonesDescarga :global(.hds-btn) {
+  width: 100%;
   min-width: 0;
 }
 
@@ -417,11 +487,11 @@
   box-shadow: var(--shadow-medium);
 }
 
-/* Escritorio: acciones en una fila. Móvil: barra fija abajo + hoja de opciones. */
+/* Escritorio: bloque "Descarga tu CV". Móvil: barra fija abajo + hoja de opciones. */
 .accionesEscritorio {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
 .barraMovil {
@@ -781,6 +851,11 @@ li[data-estado='listo'] .progresoMarca {
 /* La página no se encoge cuando el área tiene alto máximo. */
 .zoomArea > * {
   flex-shrink: 0;
+}
+
+/* Hoja más angosta que el marco (ajustada al alto): centrada. Si es más ancha, margin auto vale 0. */
+.zoomArea > div {
+  margin-inline: auto;
 }
 
 /* Con zoom, la hoja se recorre dentro del marco (arrastrando o con las flechas). */

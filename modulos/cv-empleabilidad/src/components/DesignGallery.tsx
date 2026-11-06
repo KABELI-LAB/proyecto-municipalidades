@@ -92,11 +92,21 @@ export function DesignGallery({ cv, mailer, original, menosMovimiento = false }:
     </button>
   )
 
+  /*
+   * Dos bloques, cada uno en su área de la grilla de CvTab:
+   * - Escritorio: la hoja a la izquierda (ajustada al alto de la ventana) y "Descarga tu CV"
+   *   a la derecha, bajo el veredicto, para que las acciones se vean sin bajar.
+   * - Móvil: hoja → formulario de correo; las acciones van en la barra fija de abajo.
+   */
   return (
-    <section className={`${s.panel} ${s.cvPanel}`} aria-labelledby="cv-designs-title">
+    <>
+    <section className={`${s.panel} ${s.cvPanel} ${s.areaCv}`} aria-labelledby="cv-designs-title">
       <div className={s.panelHead}>
-        <h2 id="cv-designs-title">Tu CV mejorado</h2>
-        <p className={s.textoSecundario}>Elige el diseño que más te guste.</p>
+        <div>
+          <h2 id="cv-designs-title">Tu CV mejorado</h2>
+          <p className={s.textoSecundario}>Elige el diseño que más te guste.</p>
+        </div>
+        <ControlZoom zoom={zoom} />
       </div>
 
       <div ref={tabsRef} className={s.designTabs} role="tablist" aria-label="Diseños de CV" onKeyDown={onTabsKeyDown}>
@@ -116,13 +126,11 @@ export function DesignGallery({ cv, mailer, original, menosMovimiento = false }:
         ))}
       </div>
 
-      <ControlZoom zoom={zoom} />
-
       {/* Sin zoom, la hoja se puede tocar para verla en grande (en móvil se muestra recortada).
           Con zoom, se desplaza dentro del marco y el toque ya no abre la comparación. */}
       <div id="cv-design-preview" role="tabpanel" aria-labelledby={`cv-tab-${activo}`} className={`${s.previewFrame} ${ampliada ? '' : s.previewRecorte}`}>
         <div onClick={ampliada ? undefined : () => setComparando(true)} className={ampliada ? undefined : s.previewTocable}>
-          <VistaPagina nivel={zoom.nivel} etiqueta={`CV en diseño ${template.nombre}`}>
+          <VistaPagina nivel={zoom.nivel} etiqueta={`CV en diseño ${template.nombre}`} ajustarAlto>
             <Component cv={cv} />
           </VistaPagina>
         </div>
@@ -135,23 +143,37 @@ export function DesignGallery({ cv, mailer, original, menosMovimiento = false }:
       </div>
 
       {faltanDatos && (
-        <p className={s.notaIcono}>
+        <p className={`${s.notaIcono} ${s.soloMovil}`}>
           <Icon name="info" size={18} />
           Completa lo que está entre [ ] en el archivo Word.
         </p>
       )}
+    </section>
 
-      {/* Escritorio: todas las acciones en una fila. aria-disabled para no perder el foco al preparar. */}
+    <section className={`${s.areaAcciones} ${s.panelAcciones}`} aria-labelledby="cv-descarga-titulo">
+      {/* Escritorio: acciones apiladas junto a la hoja. aria-disabled para no perder el foco al preparar. */}
       <div className={s.accionesEscritorio}>
-        {botonPdf}
-        <button type="button" className="hds-btn hds-btn--secondary" onClick={() => bajar('docx')} aria-disabled={preparando !== null || undefined}>
-          {preparando === 'docx' ? <span className="hds-spinner" aria-hidden="true" /> : <Icon name="file-text" size={20} />}
-          <span>{preparando === 'docx' ? 'Preparando…' : 'Descargar Word'}</span>
-        </button>
-        <button type="button" className="hds-btn hds-btn--secondary" aria-expanded={correoAbierto} onClick={() => setCorreoAbierto((x) => !x)}>
-          <Icon name="mail" size={20} />
-          <span>Enviar a mi correo</span>
-        </button>
+        <div>
+          <h2 id="cv-descarga-titulo">Descarga tu CV</h2>
+          <p className={s.textoSecundario}>Diseño {template.nombre}, listo para postular.</p>
+        </div>
+        <div className={s.botonesDescarga}>
+          {botonPdf}
+          <button type="button" className="hds-btn hds-btn--secondary" onClick={() => bajar('docx')} aria-disabled={preparando !== null || undefined}>
+            {preparando === 'docx' ? <span className="hds-spinner" aria-hidden="true" /> : <Icon name="file-text" size={20} />}
+            <span>{preparando === 'docx' ? 'Preparando…' : 'Descargar Word'}</span>
+          </button>
+          <button type="button" className="hds-btn hds-btn--secondary" aria-expanded={correoAbierto} onClick={() => setCorreoAbierto((x) => !x)}>
+            <Icon name="mail" size={20} />
+            <span>Enviar a mi correo</span>
+          </button>
+        </div>
+        {faltanDatos && (
+          <p className={s.notaIcono}>
+            <Icon name="info" size={18} />
+            Completa lo que está entre [ ] en el archivo Word.
+          </p>
+        )}
       </div>
 
       {/* Móvil: barra fija abajo, al alcance del pulgar. */}
@@ -186,6 +208,7 @@ export function DesignGallery({ cv, mailer, original, menosMovimiento = false }:
           />
         </div>
       )}
+    </section>
 
       <HojaOpciones
         abierta={opciones}
@@ -209,7 +232,7 @@ export function DesignGallery({ cv, mailer, original, menosMovimiento = false }:
         nombreDiseno={template.nombre}
         Diseno={Component}
       />
-    </section>
+    </>
   )
 }
 

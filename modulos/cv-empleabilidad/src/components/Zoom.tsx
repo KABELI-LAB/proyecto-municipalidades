@@ -26,11 +26,11 @@ export function ControlZoom({ zoom, etiqueta = 'Zoom del CV' }: { zoom: Zoom; et
 }
 
 /**
- * Página A4 escalada al ancho del contenedor y multiplicada por el zoom. Con zoom,
+ * Página A4 escalada al ancho del contenedor (y al alto de la ventana con ajustarAlto) y multiplicada por el zoom. Con zoom,
  * el área se desplaza en ambos sentidos y recibe foco para moverse con las flechas.
  */
-export function VistaPagina({ nivel, etiqueta, children }: { nivel: number; etiqueta: string; children: ReactNode }) {
-  const { ref, scale } = useFitScale()
+export function VistaPagina({ nivel, etiqueta, ajustarAlto = false, children }: { nivel: number; etiqueta: string; ajustarAlto?: boolean; children: ReactNode }) {
+  const { ref, scale } = useFitScale(ajustarAlto)
   const escala = scale * nivel
   const ampliada = nivel > 1
   return (
