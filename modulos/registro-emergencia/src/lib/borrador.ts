@@ -3,6 +3,7 @@
  * Funciones puras: se prueban sin renderizar.
  */
 import type { InscripcionEntrada, Tenencia } from '../../shared/esquemas.ts'
+import type { ComunaId } from '../../shared/ubicacion.ts'
 import { normalizarRut } from '../../shared/rut.ts'
 import { normalizarCelular } from '../../shared/telefono.ts'
 
@@ -82,7 +83,7 @@ export function ajustarConteos(b: Borrador): Borrador {
 
 const textoONull = (v: string) => (v.trim() ? v.trim() : null)
 
-export function aInscripcion(b: Borrador, origen: 'autorregistro' | 'asistido'): InscripcionEntrada {
+export function aInscripcion(b: Borrador, origen: 'autorregistro' | 'asistido', comuna: ComunaId = 'hualane'): InscripcionEntrada {
   const e = b.especiales
   const sinDatos = e.noResponde
   return {
@@ -107,6 +108,7 @@ export function aInscripcion(b: Borrador, origen: 'autorregistro' | 'asistido'):
       contactoEmergenciaNombre: textoONull(b.contactoNombre),
       contactoEmergenciaTelefono: b.contactoTelefono.trim() ? b.contactoTelefono : null,
       puntoEncuentro: textoONull(b.puntoEncuentro),
+      comuna,
     },
     consentimiento: { acepta: b.consentimiento as true, version: 'cliente' },
     aceptaRecordatorios: b.recordatorios,

@@ -1,6 +1,7 @@
 import { Icon, useMunicipio } from '@muni/design-system'
 import { Link } from 'react-router-dom'
 import { AVISO_CONFIANZA } from '../../shared/textos.ts'
+import { BeneficioFarmacia, SelloFarmacia } from '../componentes/BeneficioFarmacia'
 import { PorDefinir } from '../componentes/PorDefinir'
 import { TarjetaHogar } from '../componentes/TarjetaHogar'
 import { ruta } from '../lib/rutas'
@@ -22,8 +23,9 @@ export function Landing() {
             Inscribe a tu familia y recibe tu <span className={s.heroeBeneficio}>Tarjeta Hogar Preparado</span>
           </h1>
           <p className={s.heroeSub}>2 minutos. Si hay una emergencia en {nombre}, la ayuda llega más rápido.</p>
+          <SelloFarmacia />
           <Link to={ruta('inscripcion')} className={`hds-btn hds-btn--accent hds-btn--lg ${s.heroeCta}`}>
-            Quiero mi Tarjeta Hogar Preparado
+            Obtén tu tarjeta y tu descuento
             <Icon name="arrow-right" size={20} />
           </Link>
           {/* Dato vivo; bajo el mínimo configurado no se muestra. */}
@@ -45,7 +47,8 @@ export function Landing() {
             Lo que ganas con tu tarjeta
           </h2>
         </div>
-        <PorDefinir titulo="Beneficios por definir" texto="Estamos definiendo los beneficios de la Tarjeta Hogar Preparado." />
+        <BeneficioFarmacia tituloId="re-beneficio-farmacia" />
+        <PorDefinir titulo="Más beneficios en camino" texto="Estamos sumando otros beneficios a la Tarjeta Hogar Preparado." />
       </section>
 
       <section className={s.seccion} aria-labelledby="re-como">

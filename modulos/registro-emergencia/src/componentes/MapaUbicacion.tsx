@@ -4,41 +4,43 @@
  * leaflet.css es global pero todas sus clases llevan el prefijo `leaflet-`.
  *
  * El mapa no se mueve cuando tocas: el pin cae donde tocaste. Solo se centra
- * cuando la ubicación llega del GPS (`enfocar` cambia).
+ * cuando el punto llega del GPS o de una sugerencia (`enfocar` cambia).
  */
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useEffect, useRef } from 'react'
-import { CENTRO_HUALANE, dentroDeHualane, LIMITES_HUALANE } from '../../shared/ubicacion.ts'
+import { COMUNAS, dentroDeComuna, type ComunaId } from '../../shared/ubicacion.ts'
 import s from '../styles/cuestionario.module.css'
 
 interface Props {
+  /** Comuna del municipio elegido en el sitio: centro, límites y nombre del mapa. */
+  comuna: ComunaId
   lat: number | null
   lng: number | null
   onChange: (lat: number, lng: number) => void
   /** Se tocó o arrastró fuera de la comuna. */
   onFuera: () => void
-  /** Cambia cada vez que el GPS entrega una ubicación: el mapa se centra en ella. */
+  /** Cambia cada vez que llega un punto del GPS o de una sugerencia: el mapa se centra en él. */
   enfocar: number
   menosMovimiento: boolean
 }
 
-export default function MapaUbicacion({ lat, lng, onChange, onFuera, enfocar, menosMovimiento }: Props) {
+export default function MapaUbicacion({ comuna, lat, lng, onChange, onFuera, enfocar, menosMovimiento }: Props) {
   const contenedor = useRef<HTMLDivElement>(null)
   const mapa = useRef<L.Map | null>(null)
   const pin = useRef<L.Marker | null>(null)
-  const callbacks = useRef({ onChange, onFuera })
+  const callbacks = useRef({ onChange, onFuera, comuna })
   useEffect(() => {
-    callbacks.current = { onChange, onFuera }
+    callbacks.current = { onChange, onFuera, comuna }
   })
 
   // Crear el mapa una sola vez.
   useEffect(() => {
     if (!contenedor.current || mapa.current) return
-    const l = LIMITES_HUALANE
+    const { limites: l, centro } = COMUNAS[comuna]
     const limites = L.latLngBounds([l.sur, l.oeste], [l.norte, l.este])
     const m = L.map(contenedor.current, { maxBounds: limites.pad(0.1), maxBoundsViscosity: 1, minZoom: 11 }).setView(
-      lat !== null && lng !== null ? [lat, lng] : CENTRO_HUALANE,
+      lat !== null && lng !== null ? [lat, lng] : centro,
       lat !== null ? 17 : 14,
     )
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -59,12 +61,12 @@ export default function MapaUbicacion({ lat, lng, onChange, onFuera, enfocar, me
       mapa.current = null
       pin.current = null
     }
-    // lat/lng solo importan para la vista inicial.
+    // lat/lng solo importan para la vista inicial; la comuna no cambia durante el cuestionario.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function elegir(p: L.LatLng) {
-    if (!dentroDeHualane(p.lat, p.lng)) {
+    if (!dentroDeComuna(callbacks.current.comuna, p.lat, p.lng)) {
       callbacks.current.onFuera()
       return
     }
@@ -92,7 +94,7 @@ export default function MapaUbicacion({ lat, lng, onChange, onFuera, enfocar, me
     }
   }, [lat, lng])
 
-  // GPS: centrar en la ubicación recibida.
+  // GPS o sugerencia: centrar en el punto recibido.
   useEffect(() => {
     if (!enfocar || lat === null || lng === null) return
     mapa.current?.setView([lat, lng], 17, { animate: !menosMovimiento })
@@ -100,7 +102,7 @@ export default function MapaUbicacion({ lat, lng, onChange, onFuera, enfocar, me
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enfocar])
 
-  return <div ref={contenedor} className={s.mapa} role="application" aria-label="Mapa de Hualañé. Toca tu casa o arrastra el pin para ajustar la ubicación." />
+  return <div ref={contenedor} className={s.mapa} role="application" aria-label={`Mapa de ${COMUNAS[comuna].nombre}. Toca tu casa o arrastra el pin para ajustar la ubicación.`} />
 }
 
 /** 6 decimales (~10 cm), como la columna numeric(9,6). */

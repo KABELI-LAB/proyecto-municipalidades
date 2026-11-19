@@ -145,6 +145,15 @@ describe('POST /inscripcion', () => {
     })
   })
 
+  it('valida la ubicación según la comuna del municipio elegido en el sitio', async () => {
+    const enVichuquen = { lat: -34.8594, lng: -72.0074 }
+    // Sin comuna rige Hualañé: un punto de Vichuquén queda fuera.
+    expect((await llamar('POST', '/inscripcion', inscripcion(enVichuquen))).status).toBe(400)
+    const r = await llamar('POST', '/inscripcion', inscripcion({ ...enVichuquen, comuna: 'vichuquen', jefeRut: '45.000.002-7' }))
+    expect(r.status).toBe(201)
+    expect((await llamar('POST', '/inscripcion', inscripcion({ ...enVichuquen, comuna: 'otra' as 'hualane' }))).status).toBe(400)
+  })
+
   it('un RUT repetido no duplica el hogar', async () => {
     await llamar('POST', '/inscripcion', inscripcion())
     const antes = repo.estado.hogares.length

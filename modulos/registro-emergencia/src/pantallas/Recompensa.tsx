@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import type { InscripcionCreada, MiHogar } from '../../shared/contrato.ts'
 import { fechaLegible } from '../../shared/fechas.ts'
 import { PlanFamiliarVista } from '../componentes/PlanFamiliarVista'
+import { BeneficioFarmacia } from '../componentes/BeneficioFarmacia'
 import { PorDefinir } from '../componentes/PorDefinir'
 import { TarjetaHogar } from '../componentes/TarjetaHogar'
 import { CLAVES, leer } from '../lib/almacen'
@@ -79,10 +80,11 @@ export function Recompensa() {
         <div className={s.seccionCabecera}>
           <p className={s.rotulo}>Beneficios</p>
           <h2 id="re-beneficios" className={s.h2}>
-            Lo que ganas con tu tarjeta
+            Tu tarjeta ya tiene beneficios
           </h2>
         </div>
-        <PorDefinir titulo="Beneficios por definir" texto="Te avisaremos por WhatsApp cuando estén disponibles." />
+        <BeneficioFarmacia activo tituloId="re-beneficio-farmacia" />
+        <PorDefinir titulo="Más beneficios en camino" texto="Te avisaremos por WhatsApp cuando haya nuevos." />
       </section>
 
       <section className={s.seccion} aria-labelledby="re-plan">

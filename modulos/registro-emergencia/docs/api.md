@@ -9,6 +9,8 @@ Tipos en [`shared/contrato.ts`](../shared/contrato.ts). Errores: `{ error, codig
 | `POST /inscripcion` | `InscripcionEntrada` | `201 InscripcionCreada` | `409 rut_existente` si el RUT ya tiene tarjeta. `400 validacion` con `campos`. Máx. 20 intentos por IP y hora |
 
 **Integrantes** (`hogar.integrantes`, opcional, por defecto `[]`): las demás personas del hogar, sin contar al jefe o jefa. Cada una es `{ nombre, rut? }`; `rut` es opcional (`null` si no tiene o no se sabe). Reglas: máximo `totalPersonas - 1` integrantes, y ningún RUT se repite dentro del hogar (incluido el del jefe). Un mismo RUT sí puede aparecer en hogares distintos, para que nadie bloquee la inscripción de otra persona. La respuesta **nunca** devuelve los integrantes.
+
+**Comuna** (`hogar.comuna`, opcional: `hualane` | `curepto` | `vichuquen`, por defecto `hualane`): el municipio elegido en el sitio (demostración). Solo sirve para validar que `lat`/`lng` estén dentro de esa comuna; **no se guarda**. Otro valor responde `400`.
 | `POST /mi-hogar` | `{ token }` | `MiHogar` | `401 token_invalido`. Token por POST (nunca en la URL) |
 | `POST /eventos` | `{ sesion, paso, evento }` | `204` | Métrica anónima del cuestionario (abandono por paso). La sesión se guarda como hash |
 
