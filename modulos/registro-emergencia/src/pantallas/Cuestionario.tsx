@@ -1,4 +1,4 @@
-import { Alert, Button, Icon, Loader } from '@muni/design-system'
+import { Alert, Button, Icon, Loader, useMunicipio } from '@muni/design-system'
 import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import type { Territorio } from '../../shared/contrato.ts'
@@ -6,15 +6,17 @@ import type { Tenencia } from '../../shared/esquemas.ts'
 import { formatearRut } from '../../shared/rut.ts'
 import { formatearCelular, normalizarCelular } from '../../shared/telefono.ts'
 import { CONSENTIMIENTO } from '../../shared/textos.ts'
-import { dentroDeHualane, MENSAJE_FUERA } from '../../shared/ubicacion.ts'
+import { COMUNAS, dentroDeComuna, mensajeFuera } from '../../shared/ubicacion.ts'
 import { CasaEnVivo } from '../componentes/CasaEnVivo'
 import { Campo, CampoRut, Contador, OpcionMultiple, Opciones } from '../componentes/controles'
+import { CampoDireccion } from '../componentes/CampoDireccion'
 import { InterruptorMovimiento } from '../componentes/InterruptorMovimiento'
 import { PanelAccesibilidad } from '../componentes/PanelAccesibilidad'
 import { TarjetaHogar } from '../componentes/TarjetaHogar'
 import { CLAVES, borrar, guardar, leer } from '../lib/almacen'
 import { aInscripcion, ajustarConteos, BORRADOR_VACIO, validar, type Borrador } from '../lib/borrador'
 import { useEmergencia } from '../lib/contexto'
+import { cargarLugares, direccionCercana, normalizar, type IndiceLugares, type Sugerencia } from '../lib/lugares'
 import { ruta } from '../lib/rutas'
 import { ApiError } from '../servicios/api'
 import s from '../styles/cuestionario.module.css'
@@ -93,6 +95,7 @@ type Envio = { estado: 'inactivo' } | { estado: 'enviando' } | { estado: 'error'
 
 export function Cuestionario() {
   const { api, menosMovimiento: menosMovSistema } = useEmergencia()
+  const comunaSitio = useMunicipio().id
   const navigate = useNavigate()
   const [params] = useSearchParams()
   const asistido = params.get('modo') === 'asistido'
@@ -252,7 +255,7 @@ export function Cuestionario() {
     }
     setEnvio({ estado: 'enviando' })
     try {
-      const creada = await api.inscribir(aInscripcion(b, asistido ? 'asistido' : 'autorregistro'))
+      const creada = await api.inscribir(aInscripcion(b, asistido ? 'asistido' : 'autorregistro', comunaSitio))
       api.evento(sesion, 'activar', 'enviado')
       guardar(CLAVES.resultado, creada)
       borrar(CLAVES.borrador)
@@ -769,11 +772,39 @@ function ContenidoPaso(p: ContenidoProps) {
 }
 
 function PasoDireccion({ b, actualizar, tituloRef, error, menosMovimiento }: ContenidoProps) {
+  const comuna = useMunicipio().id
+  const { nombre } = COMUNAS[comuna]
   const [verMapa, setVerMapa] = useState(b.lat !== null)
   const [ubicando, setUbicando] = useState(false)
   const [avisoGeo, setAvisoGeo] = useState<string | null>(null)
-  // Cambia con cada lectura del GPS para que el mapa se centre en ella.
+  // Cambia cada vez que el mapa debe centrarse (GPS o sugerencia elegida).
   const [enfocar, setEnfocar] = useState(0)
+  const [indice, setIndice] = useState<IndiceLugares | null>(null)
+  // true si el texto lo puso el mapa o una sugerencia: un nuevo punto lo puede reemplazar.
+  // Lo que la persona escribe a mano nunca se pisa.
+  const [direccionAuto, setDireccionAuto] = useState(false)
+  // Dirección del punto marcado, ofrecida cuando ya había texto escrito a mano.
+  const [propuesta, setPropuesta] = useState<string | null>(null)
+
+  useEffect(() => {
+    let vivo = true
+    cargarLugares(comuna)
+      .then((i) => vivo && setIndice(i))
+      .catch(() => {}) // Sin índice el campo sigue funcionando, solo sin sugerencias.
+    return () => {
+      vivo = false
+    }
+  }, [comuna])
+
+  /** Nuevo punto (mapa o GPS): guarda la ubicación y completa la dirección. */
+  const marcar = (lat: number, lng: number, aviso: string | null = null) => {
+    const cercana = indice ? direccionCercana(indice, lat, lng) : null
+    const vacio = !b.direccion.trim() || direccionAuto
+    actualizar({ lat, lng, ...(cercana && vacio ? { direccion: cercana.texto } : {}) })
+    if (cercana && vacio) setDireccionAuto(true)
+    setPropuesta(cercana && !vacio && normalizar(cercana.texto) !== normalizar(b.direccion) ? cercana.texto : null)
+    setAvisoGeo(aviso ?? (cercana?.tipo === 'calle' && vacio ? 'Completamos la calle. Agrega el número de tu casa.' : null))
+  }
 
   const usarUbicacion = () => {
     setAvisoGeo(null)
@@ -787,13 +818,12 @@ function PasoDireccion({ b, actualizar, tituloRef, error, menosMovimiento }: Con
       (pos) => {
         setUbicando(false)
         const { latitude: lat, longitude: lng, accuracy } = pos.coords
-        if (!dentroDeHualane(lat, lng)) {
-          setAvisoGeo('Tu ubicación actual está fuera de Hualañé. Si no estás en tu casa, tócala en el mapa o deja solo la dirección.')
+        if (!dentroDeComuna(comuna, lat, lng)) {
+          setAvisoGeo(`Tu ubicación actual está fuera de ${nombre}. Si no estás en tu casa, tócala en el mapa o deja solo la dirección.`)
           return
         }
-        actualizar({ lat: Math.round(lat * 1e6) / 1e6, lng: Math.round(lng * 1e6) / 1e6 })
+        marcar(Math.round(lat * 1e6) / 1e6, Math.round(lng * 1e6) / 1e6, accuracy > 150 ? 'Tu ubicación es aproximada. Arrastra el pin hasta tu casa.' : null)
         setEnfocar((n) => n + 1)
-        if (accuracy > 150) setAvisoGeo('Tu ubicación es aproximada. Arrastra el pin hasta tu casa.')
       },
       (err) => {
         setUbicando(false)
@@ -807,9 +837,49 @@ function PasoDireccion({ b, actualizar, tituloRef, error, menosMovimiento }: Con
     )
   }
 
+  const elegirSugerencia = (sug: Sugerencia) => {
+    actualizar({ direccion: sug.texto, lat: sug.lat, lng: sug.lng })
+    setDireccionAuto(true)
+    setPropuesta(null)
+    setVerMapa(true)
+    setEnfocar((n) => n + 1)
+    const sinNumero = sug.tipo === 'calle' && !/\d/.test(sug.texto)
+    setAvisoGeo(sinNumero ? 'Agrega el número de tu casa y mueve el pin hasta ella.' : 'Mueve el pin hasta tu casa si no quedó justo.')
+  }
+
   return (
-    <Pregunta titulo="¿Dónde vives?" ayuda="Escribe la dirección o una referencia para llegar." tituloRef={tituloRef}>
-      <Campo id="re-direccion" etiqueta="Dirección" valor={b.direccion} onChange={(v) => actualizar({ direccion: v })} autoComplete="street-address" error={error} placeholder="Ej: Pasaje Los Aromos 123" maxLength={200} />
+    <Pregunta titulo="¿Dónde vives?" ayuda="Escribe tu calle y elige una sugerencia, o una referencia para llegar." tituloRef={tituloRef}>
+      <CampoDireccion
+        id="re-direccion"
+        valor={b.direccion}
+        onChange={(v) => {
+          actualizar({ direccion: v })
+          setDireccionAuto(false)
+          setPropuesta(null)
+        }}
+        onElegir={elegirSugerencia}
+        indice={indice}
+        error={error}
+      />
+      {propuesta && (
+        <p className={s.propuestaDireccion} role="status">
+          <Icon name="map-pin" size={20} />
+          <span>
+            El punto que marcaste está en <strong>{propuesta}</strong>.
+          </span>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              actualizar({ direccion: propuesta })
+              setDireccionAuto(true)
+              setPropuesta(null)
+            }}
+          >
+            Usar esta dirección
+          </Button>
+        </p>
+      )}
       <div className={s.accionesUbicacion}>
         <Button variant="secondary" iconLeft="locate-fixed" loading={ubicando} onClick={usarUbicacion}>
           Usar mi ubicación
@@ -820,7 +890,14 @@ function PasoDireccion({ b, actualizar, tituloRef, error, menosMovimiento }: Con
           </Button>
         )}
         {b.lat !== null && (
-          <Button variant="ghost" iconLeft="x" onClick={() => actualizar({ lat: null, lng: null })}>
+          <Button
+            variant="ghost"
+            iconLeft="x"
+            onClick={() => {
+              actualizar({ lat: null, lng: null })
+              setPropuesta(null)
+            }}
+          >
             Quitar
           </Button>
         )}
@@ -834,13 +911,11 @@ function PasoDireccion({ b, actualizar, tituloRef, error, menosMovimiento }: Con
       {verMapa && (
         <Suspense fallback={<Loader label="Cargando mapa…" />}>
           <MapaUbicacion
+            comuna={comuna}
             lat={b.lat}
             lng={b.lng}
-            onChange={(lat, lng) => {
-              setAvisoGeo(null)
-              actualizar({ lat, lng })
-            }}
-            onFuera={() => setAvisoGeo(MENSAJE_FUERA)}
+            onChange={(lat, lng) => marcar(lat, lng)}
+            onFuera={() => setAvisoGeo(mensajeFuera(comuna))}
             enfocar={enfocar}
             menosMovimiento={menosMovimiento}
           />

@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { normalizarRut } from './rut.ts'
 import { normalizarCelular } from './telefono.ts'
-import { dentroDeHualane, MENSAJE_FUERA } from './ubicacion.ts'
+import { COMUNA_IDS, dentroDeComuna, mensajeFuera, type ComunaId } from './ubicacion.ts'
 
 /**
  * Validación compartida entre el cuestionario (navegador) y el servidor.
@@ -63,6 +63,8 @@ export const hogarSchema = z
     puntoEncuentro: z.string().trim().max(200).nullable(),
     /** Opcional: el cuestionario todavía no los pide. */
     integrantes: z.array(integranteSchema).max(29).default([]),
+    /** Comuna del municipio elegido en el sitio (demo). Solo valida la ubicación: no se guarda. */
+    comuna: z.enum(COMUNA_IDS as [ComunaId, ...ComunaId[]]).default('hualane'),
   })
   .superRefine((h, ctx) => {
     if (h.menores18 > h.totalPersonas)
@@ -73,8 +75,8 @@ export const hogarSchema = z
       ctx.addIssue({ code: 'custom', path: ['mayores65'], message: 'Menores y mayores suman más que el total de personas.' })
     if ((h.lat === null) !== (h.lng === null))
       ctx.addIssue({ code: 'custom', path: ['lat'], message: 'La ubicación está incompleta. Márcala de nuevo en el mapa.' })
-    if (h.lat !== null && h.lng !== null && !dentroDeHualane(h.lat, h.lng))
-      ctx.addIssue({ code: 'custom', path: ['lat'], message: MENSAJE_FUERA })
+    if (h.lat !== null && h.lng !== null && !dentroDeComuna(h.comuna, h.lat, h.lng))
+      ctx.addIssue({ code: 'custom', path: ['lat'], message: mensajeFuera(h.comuna) })
     if (h.bebesMenores2 > h.menores18)
       ctx.addIssue({ code: 'custom', path: ['bebesMenores2'], message: 'Hay más bebés que menores de 18.' })
     // Los integrantes no incluyen al jefe o jefa de hogar.

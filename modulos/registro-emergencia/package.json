@@ -17,7 +17,8 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "seed": "node scripts/generar-seed.ts"
+    "seed": "node scripts/generar-seed.ts",
+    "lugares": "node scripts/generar-lugares.ts"
   },
   "peerDependencies": {
     "react": "^19.3.0",

@@ -34,12 +34,15 @@ const siguiente = (user: ReturnType<typeof userEvent.setup>, nombre: string | Re
   user.click(screen.getByRole('button', { name: nombre }))
 
 describe('R1 · Landing', () => {
-  it('pone la tarjeta como héroe, deja los beneficios por definir y lleva al cuestionario', async () => {
+  it('pone la tarjeta como héroe, destaca el descuento en farmacia y lleva al cuestionario', async () => {
     montar('/emergencia')
     expect(screen.getByRole('heading', { level: 1, name: /Inscribe a tu familia y recibe tu Tarjeta Hogar Preparado/ })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /Quiero mi Tarjeta Hogar Preparado/ })).toHaveAttribute('href', '/emergencia/inscripcion')
-    expect(screen.getByText('Beneficios por definir')).toBeInTheDocument()
-    expect(screen.queryByText(/descuento/i)).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Obtén tu tarjeta y tu descuento/ })).toHaveAttribute('href', '/emergencia/inscripcion')
+    // El beneficio está en el héroe y en su propia tarjeta, que invita a obtener la tarjeta.
+    expect(screen.getByText(/de descuento en farmacia/, { selector: 'span' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 3, name: '30 % de descuento en farmacia' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Obtener mi tarjeta/ })).toHaveAttribute('href', '/emergencia/inscripcion')
+    expect(screen.getByText('Más beneficios en camino')).toBeInTheDocument()
     // Con 20 hogares (< 50) no se muestra el contador.
     expect(screen.queryByText(/hogares de Hualañé ya están preparados/)).not.toBeInTheDocument()
   })
@@ -108,7 +111,9 @@ describe('R2 · Cuestionario', () => {
     expect(screen.getByText('Pañales para 3 días')).toBeInTheDocument()
     expect(screen.getByText('Agua y alimento para 3 días')).toBeInTheDocument()
     expect(screen.getByText('Cancha de La Huerta')).toBeInTheDocument()
-    expect(screen.getByText('Beneficios por definir')).toBeInTheDocument()
+    // Con la tarjeta, el descuento ya es suyo (sin invitar a inscribirse de nuevo).
+    expect(screen.getByText('Ya es tuyo')).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /Obtener mi tarjeta/ })).not.toBeInTheDocument()
     expect(screen.queryByText(/Nivel 1/)).not.toBeInTheDocument()
 
     // Se creó un solo hogar y el borrador ya no está.
@@ -183,10 +188,11 @@ describe('R2 · Cuestionario', () => {
 })
 
 describe('B1 · Beneficios', () => {
-  it('muestra el espacio por definir', () => {
+  it('muestra el descuento en farmacia y deja el resto por definir', () => {
     montar('/emergencia/beneficios')
     expect(screen.getByRole('heading', { level: 1, name: 'Beneficios' })).toBeInTheDocument()
-    expect(screen.getByText('Beneficios por definir')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 3, name: '30 % de descuento en farmacia' })).toBeInTheDocument()
+    expect(screen.getByText('Más beneficios en camino')).toBeInTheDocument()
   })
 })
 
@@ -213,5 +219,29 @@ describe('Opciones de accesibilidad', () => {
     await user.click(interruptor!)
     await user.click(screen.getAllByRole('button', { name: /^Accesibilidad/ })[0]!)
     expect(screen.getAllByRole('switch', { name: 'Menos movimiento' }).every((s) => (s as HTMLInputElement).checked)).toBe(true)
+  })
+})
+
+describe('Dirección con sugerencias', () => {
+  it('sugiere calles de la comuna mientras escribes y se eligen con el teclado', async () => {
+    const user = userEvent.setup()
+    sessionStorage.setItem(
+      'emergencia:borrador',
+      JSON.stringify({ paso: 'direccion', borrador: { jefeNombre: 'Rosa Ficticia', sinRut: true, rut: '', whatsapp: '900009999', sectorId: '00000000-0000-4000-8000-000100000002' } }),
+    )
+    montar('/emergencia/inscripcion')
+    await user.click(await screen.findByRole('button', { name: 'Seguir donde quedé' }))
+    const campo = await screen.findByRole('combobox', { name: 'Dirección' })
+    await user.type(campo, 'arturo prat 45')
+    const [opcion] = await screen.findAllByRole('option', { name: /Arturo Prat 45/ })
+    expect(screen.getByText(/sugerencias?\. Usa las flechas/)).toBeInTheDocument()
+
+    await user.keyboard('{ArrowDown}')
+    expect(campo).toHaveAttribute('aria-activedescendant', opcion!.id)
+    await user.keyboard('{Enter}')
+    expect(campo).toHaveValue('Arturo Prat 45')
+    expect(screen.queryByRole('option')).not.toBeInTheDocument()
+    // La sugerencia trae su punto: el mapa se abre y se ofrece "Quitar" la ubicación.
+    expect(await screen.findByRole('button', { name: 'Quitar' })).toBeInTheDocument()
   })
 })
