@@ -80,7 +80,7 @@ export function Recompensa() {
         <div className={s.seccionCabecera}>
           <p className={s.rotulo}>Beneficios</p>
           <h2 id="re-beneficios" className={s.h2}>
-            Tu tarjeta ya tiene beneficios
+            Así podrían ser tus beneficios
           </h2>
         </div>
         <BeneficioFarmacia activo tituloId="re-beneficio-farmacia" />

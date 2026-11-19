@@ -1,18 +1,41 @@
-/* Beneficio destacado (30 % en farmacia). Mismos tokens que .hds-btn--accent:
+/* Beneficio de ejemplo (15 % en farmacia). Mismos tokens que .hds-btn--accent:
    amarillo de marca con texto oscuro, que cambian solos con el tema del municipio. */
 
 /* ── Sello del héroe ────────────────────────────────────────────────────── */
 /* Translúcido sobre el fondo de marca: no compite con el botón amarillo de abajo. */
 .sello {
-  display: inline-flex;
+  display: inline-grid;
+  grid-template-columns: auto auto;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-1) var(--space-3);
   margin: 0;
   padding: var(--space-2) var(--space-4) var(--space-2) var(--space-3);
   border: 1px solid rgb(255 255 255 / 0.4);
   border-radius: var(--radius-large);
   background: rgb(255 255 255 / 0.1);
   color: var(--color-text-inverse);
+}
+
+/* "Ejemplo" arriba, en su propia fila: se lee antes que el número. */
+.selloEtiqueta {
+  grid-column: 1 / -1;
+  justify-self: start;
+  padding: 2px var(--space-2);
+  border: 1px solid rgb(255 255 255 / 0.6);
+  border-radius: var(--radius-full);
+  font-size: var(--type-caption-size);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 .selloPorcentaje {
@@ -103,7 +126,8 @@
 
 .condiciones {
   margin: 0;
-  font-size: var(--type-caption-size);
-  line-height: var(--type-caption-lh);
-  color: var(--color-text-secondary);
+  font-size: var(--type-body-sm-size);
+  line-height: var(--type-body-sm-lh);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
 }

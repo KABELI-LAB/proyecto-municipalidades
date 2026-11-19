@@ -11,7 +11,7 @@ export const registroEmergenciaTabMeta = {
   label: 'Registro de emergencia',
   // Debe coincidir con BASE en src/lib/rutas.ts.
   path: '/emergencia',
-  descripcion: 'Inscribe a tu familia y obtén 30 % de descuento en farmacia con tu Tarjeta Hogar Preparado.',
+  descripcion: 'Inscribe a tu familia y recibe tu Tarjeta Hogar Preparado. Incluye un ejemplo de beneficio en farmacia.',
   icono: 'siren',
   tono: 'green',
 } as const

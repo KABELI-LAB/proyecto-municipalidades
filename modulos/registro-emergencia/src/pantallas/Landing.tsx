@@ -25,7 +25,7 @@ export function Landing() {
           <p className={s.heroeSub}>2 minutos. Si hay una emergencia en {nombre}, la ayuda llega más rápido.</p>
           <SelloFarmacia />
           <Link to={ruta('inscripcion')} className={`hds-btn hds-btn--accent hds-btn--lg ${s.heroeCta}`}>
-            Obtén tu tarjeta y tu descuento
+            Obtén tu Tarjeta Hogar Preparado
             <Icon name="arrow-right" size={20} />
           </Link>
           {/* Dato vivo; bajo el mínimo configurado no se muestra. */}
@@ -44,7 +44,7 @@ export function Landing() {
         <div className={s.seccionCabecera}>
           <p className={s.rotulo}>Beneficios</p>
           <h2 id="re-beneficios" className={s.h2}>
-            Lo que ganas con tu tarjeta
+            Así podrían ser los beneficios
           </h2>
         </div>
         <BeneficioFarmacia tituloId="re-beneficio-farmacia" />

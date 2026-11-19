@@ -34,13 +34,17 @@ const siguiente = (user: ReturnType<typeof userEvent.setup>, nombre: string | Re
   user.click(screen.getByRole('button', { name: nombre }))
 
 describe('R1 · Landing', () => {
-  it('pone la tarjeta como héroe, destaca el descuento en farmacia y lleva al cuestionario', async () => {
+  it('pone la tarjeta como héroe, destaca el beneficio de ejemplo en farmacia y lleva al cuestionario', async () => {
     montar('/emergencia')
     expect(screen.getByRole('heading', { level: 1, name: /Inscribe a tu familia y recibe tu Tarjeta Hogar Preparado/ })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /Obtén tu tarjeta y tu descuento/ })).toHaveAttribute('href', '/emergencia/inscripcion')
+    expect(screen.getByRole('link', { name: /Obtén tu Tarjeta Hogar Preparado/ })).toHaveAttribute('href', '/emergencia/inscripcion')
     // El beneficio está en el héroe y en su propia tarjeta, que invita a obtener la tarjeta.
     expect(screen.getByText(/de descuento en farmacia/, { selector: 'span' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { level: 3, name: '30 % de descuento en farmacia' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 3, name: '15 % de descuento en farmacia' })).toBeInTheDocument()
+    // Se ve a la vista que es un ejemplo, no un beneficio real.
+    expect(screen.getByText('Ejemplo')).toBeInTheDocument()
+    expect(screen.getByText('Beneficio de ejemplo')).toBeInTheDocument()
+    expect(screen.getByText(/No es real/)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Obtener mi tarjeta/ })).toHaveAttribute('href', '/emergencia/inscripcion')
     expect(screen.getByText('Más beneficios en camino')).toBeInTheDocument()
     // Con 20 hogares (< 50) no se muestra el contador.
@@ -111,8 +115,8 @@ describe('R2 · Cuestionario', () => {
     expect(screen.getByText('Pañales para 3 días')).toBeInTheDocument()
     expect(screen.getByText('Agua y alimento para 3 días')).toBeInTheDocument()
     expect(screen.getByText('Cancha de La Huerta')).toBeInTheDocument()
-    // Con la tarjeta, el descuento ya es suyo (sin invitar a inscribirse de nuevo).
-    expect(screen.getByText('Ya es tuyo')).toBeInTheDocument()
+    // Con la tarjeta, el ejemplo se muestra sin invitar a inscribirse de nuevo.
+    expect(screen.getByText('Beneficio de ejemplo')).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /Obtener mi tarjeta/ })).not.toBeInTheDocument()
     expect(screen.queryByText(/Nivel 1/)).not.toBeInTheDocument()
 
@@ -188,10 +192,10 @@ describe('R2 · Cuestionario', () => {
 })
 
 describe('B1 · Beneficios', () => {
-  it('muestra el descuento en farmacia y deja el resto por definir', () => {
+  it('muestra el beneficio de ejemplo en farmacia y deja el resto por definir', () => {
     montar('/emergencia/beneficios')
     expect(screen.getByRole('heading', { level: 1, name: 'Beneficios' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { level: 3, name: '30 % de descuento en farmacia' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 3, name: '15 % de descuento en farmacia' })).toBeInTheDocument()
     expect(screen.getByText('Más beneficios en camino')).toBeInTheDocument()
   })
 })

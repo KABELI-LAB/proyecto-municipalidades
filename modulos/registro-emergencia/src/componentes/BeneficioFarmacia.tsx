@@ -4,24 +4,27 @@ import { ruta } from '../lib/rutas'
 import s from '../styles/beneficio.module.css'
 
 /*
- * Beneficio destacado de la Tarjeta Hogar Preparado: 30 % de descuento en farmacia.
- * Es el primer beneficio de la demostración; locales y condiciones están por confirmar
- * con la Municipalidad (lo dice la letra chica). El resto del catálogo sigue por definir.
+ * Beneficio de EJEMPLO de la Tarjeta Hogar Preparado: 15 % de descuento en farmacia.
+ * Solo muestra cómo se verían los beneficios en esta demostración: no es real, no hay
+ * farmacias adheridas ni descuentos vigentes. Todas sus versiones lo dicen a la vista
+ * (etiqueta "Beneficio de ejemplo", textos en condicional y letra chica).
  */
 
-export const DESCUENTO_FARMACIA = 30
+export const DESCUENTO_FARMACIA = 15
 
-const CONDICIONES = 'Beneficio de demostración. Locales y condiciones por confirmar.'
+const AVISO_EJEMPLO = 'Beneficio de ejemplo para esta demostración. No es real: no hay farmacias adheridas ni descuentos vigentes.'
 
 /** Sello compacto para el héroe de la landing (sobre fondo de marca). */
 export function SelloFarmacia() {
   return (
     <p className={s.sello}>
+      <span className={s.selloEtiqueta}>Ejemplo</span>
       <span className={s.selloPorcentaje}>{DESCUENTO_FARMACIA} %</span>
       <span className={s.selloTexto}>
         de descuento en farmacia
         <br />
         con tu tarjeta
+        <span className={s.srOnly}> (beneficio de ejemplo, no es real)</span>
       </span>
     </p>
   )
@@ -41,18 +44,16 @@ export function BeneficioFarmacia({ activo = false, tituloId }: { activo?: boole
         <span className={s.porcentajeTexto}>de descuento</span>
       </div>
       <div className={s.cuerpo}>
-        {activo && (
-          <Badge tone="green" icon="circle-check">
-            Ya es tuyo
-          </Badge>
-        )}
+        <Badge tone="yellow" icon="info">
+          Beneficio de ejemplo
+        </Badge>
         <h3 id={tituloId} className={s.titulo}>
           {DESCUENTO_FARMACIA} % de descuento en farmacia
         </h3>
         <p className={s.texto}>
           {activo
-            ? 'Muestra tu Tarjeta Hogar Preparado al pagar en las farmacias adheridas y te hacen el descuento.'
-            : `Obtén tu Tarjeta Hogar Preparado y accede al descuento en medicamentos en farmacias adheridas de ${nombre}.`}
+            ? 'Así podría funcionar un beneficio de tu tarjeta: la mostrarías al pagar y te harían el descuento. Por ahora es solo un ejemplo.'
+            : `Así podría ser un beneficio de la Tarjeta Hogar Preparado en ${nombre}. Por ahora es solo un ejemplo.`}
         </p>
         {!activo && (
           <Link to={ruta('inscripcion')} className={`hds-btn hds-btn--primary ${s.cta}`}>
@@ -60,7 +61,7 @@ export function BeneficioFarmacia({ activo = false, tituloId }: { activo?: boole
             <Icon name="arrow-right" size={20} />
           </Link>
         )}
-        <p className={s.condiciones}>{CONDICIONES}</p>
+        <p className={s.condiciones}>{AVISO_EJEMPLO}</p>
       </div>
     </article>
   )
